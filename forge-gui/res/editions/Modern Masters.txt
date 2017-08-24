@@ -1,0 +1,240 @@
+[metadata]
+Name=Modern Masters
+Code=MMA
+Date=2013-06-07
+MciCode=mma
+Type=Reprint
+BoosterCovers=3
+Booster=11 Common, 3 Uncommon, 1 RareMythic
+FoilChanceInBooster=100
+
+[cards]
+1 R Adarkar Valkyrie
+2 C Amrou Scout
+3 C Amrou Seekers
+4 R Angel's Grace
+5 R Auriok Salvagers
+6 C Avian Changeling
+7 C Blinding Beam
+8 C Bound in Silence
+9 C Cenn's Enlistment
+10 U Cloudgoat Ranger
+11 C Court Homunculus
+12 C Dispeller's Capsule
+13 M Elspeth, Knight-Errant
+14 R Ethersworn Canonist
+15 U Feudkiller's Verdict
+16 U Flickerwisp
+17 C Gleam of Resistance
+18 C Hillcomber Giant
+19 C Ivory Giant
+20 R Kataki, War's Wage
+21 C Kithkin Greatheart
+22 U Meadowboon
+23 C Otherworldly Journey
+24 C Pallid Mycoderm
+25 U Path to Exile
+26 R Reveillark
+27 C Saltfield Recluse
+28 C Sanctum Gargoyle
+29 U Sandsower
+30 U Stir the Pride
+31 R Stonehewer Giant
+32 U Terashi's Grasp
+33 C Test of Faith
+34 C Veteran Armorer
+35 M Yosei, the Morning Star
+36 C AEthersnipe
+37 U Careful Consideration
+38 R Cryptic Command
+39 C Dampen Thought
+40 C Echoing Truth
+41 C Errant Ephemeron
+42 C Erratic Mutation
+43 U Esperzoa
+44 C Etherium Sculptor
+45 C Faerie Mechanist
+46 R Gifts Ungiven
+47 R Glen Elendra Archmage
+48 M Keiga, the Tide Star
+49 R Kira, Great Glass-Spinner
+50 C Latchkey Faerie
+51 C Logic Knot
+52 R Meloku the Clouded Mirror
+53 C Mothdust Changeling
+54 U Mulldrifter
+55 U Narcomoeba
+56 R Pact of Negation
+57 C Peer Through Depths
+58 C Perilous Research
+59 C Pestermite
+60 C Petals of Insight
+61 C Reach Through Mists
+62 U Riftwing Cloudskate
+63 R Scion of Oona
+64 U Spell Snare
+65 C Spellstutter Sprite
+66 U Take Possession
+67 U Thirst for Knowledge
+68 C Traumatic Visions
+69 C Vedalken Dismisser
+70 M Vendilion Clique
+71 C Absorb Vis
+72 U Auntie's Snitch
+73 C Blightspeaker
+74 R Bridge from Below
+75 M Dark Confidant
+76 R Death Cloud
+77 C Death Denied
+78 U Death Rattle
+79 C Deepcavern Imp
+80 C Drag Down
+81 C Dreamspoiler Witches
+82 R Earwig Squad
+83 U Executioner's Capsule
+84 R Extirpate
+85 C Facevaulter
+86 C Faerie Macabre
+87 C Festering Goblin
+88 U Horobi's Whisper
+89 M Kokusho, the Evening Star
+90 U Mad Auntie
+91 U Marsh Flitter
+92 C Peppersmoke
+93 U Phthisis
+94 C Rathi Trapper
+95 C Raven's Crime
+96 R Skeletal Vampire
+97 R Slaughter Pact
+98 C Stinkweed Imp
+99 C Street Wraith
+100 C Syphon Life
+101 C Thieving Sprite
+102 R Tombstalker
+103 C Warren Pilferers
+104 C Warren Weirding
+105 C Blind-Spot Giant
+106 R Blood Moon
+107 C Brute Force
+108 R Countryside Crusher
+109 C Crush Underfoot
+110 U Desperate Ritual
+111 R Dragonstorm
+112 C Empty the Warrens
+113 C Fiery Fall
+114 C Fury Charm
+115 C Glacial Ray
+116 C Grapeshot
+117 R Greater Gargadon
+118 U Grinning Ignus
+119 C Hammerheim Deadeye
+120 M Kiki-Jiki, Mirror Breaker
+121 C Lava Spike
+122 C Mogg War Marshal
+123 R Molten Disaster
+124 U Pardic Dragon
+125 R Pyromancer's Swath
+126 C Rift Bolt
+127 C Rift Elemental
+128 M Ryusei, the Falling Star
+129 U Shrapnel Blast
+130 R Squee, Goblin Nabob
+131 C Stingscourger
+132 C Stinkdrinker Daredevil
+133 U Sudden Shock
+134 U Tar Pitcher
+135 U Thundercloud Shaman
+136 C Thundering Giant
+137 C Torrent of Stone
+138 U Tribal Flames
+139 C War-Spike Changeling
+140 C Citanul Woodreaders
+141 R Doubling Season
+142 C Durkwood Baloth
+143 C Echoing Courage
+144 U Eternal Witness
+145 C Giant Dustwasp
+146 C Greater Mossdog
+147 C Hana Kami
+148 C Imperiosaur
+149 U Incremental Growth
+150 M Jugan, the Rising Star
+151 C Kodama's Reach
+152 U Krosan Grip
+153 R Life from the Loam
+154 U Masked Admirers
+155 C Moldervine Cloak
+156 C Nantuko Shaman
+157 C Penumbra Spider
+158 U Reach of Branches
+159 U Riftsweeper
+160 R Rude Awakening
+161 C Search for Tomorrow
+162 U Sporesower Thallid
+163 C Sporoloth Ancient
+164 R Summoner's Pact
+165 C Sylvan Bounty
+166 M Tarmogoyf
+167 C Thallid
+168 C Thallid Germinator
+169 C Thallid Shell-Dweller
+170 R Tooth and Nail
+171 U Tromp the Domains
+172 R Verdeloth the Ancient
+173 C Walker of the Grove
+174 R Woodfall Primus
+175 U Electrolyze
+176 R Grand Arbiter Augustin IV
+177 R Jhoira of the Ghitu
+178 R Knight of the Reliquary
+179 U Lightning Helix
+180 R Maelstrom Pulse
+181 U Mind Funeral
+182 M Progenitus
+183 M Sarkhan Vol
+184 U Tidehollow Sculler
+185 U Trygon Predator
+186 R Cold-Eyed Selkie
+187 R Demigod of Revenge
+188 R Divinity of Pride
+189 R Figure of Destiny
+190 U Kitchen Finks
+191 U Manamorphose
+192 U Murderous Redcap
+193 R Oona, Queen of the Fae
+194 U Plumeveil
+195 U Worm Harvest
+196 C AEther Spellbomb
+197 R AEther Vial
+198 R Arcbound Ravager
+199 C Arcbound Stinger
+200 C Arcbound Wanderer
+201 C Arcbound Worker
+202 C Bonesplitter
+203 R Chalice of the Void
+204 R Engineered Explosives
+205 U Epochrasite
+206 U Etched Oracle
+207 C Frogmite
+208 R Lotus Bloom
+209 C Myr Enforcer
+210 U Myr Retriever
+211 U Paradise Mantle
+212 C Pyrite Spellbomb
+213 U Relic of Progenitus
+214 C Runed Stalactite
+215 C Skyreach Manta
+216 M Sword of Fire and Ice
+217 M Sword of Light and Shadow
+218 M Vedalken Shackles
+219 R Academy Ruins
+220 R Blinkmoth Nexus
+221 R City of Brass
+222 U Dakmor Salvage
+223 R Glimmervoid
+224 C Terramorphic Expanse
+225 U Vivid Crag
+226 U Vivid Creek
+227 U Vivid Grove
+228 U Vivid Marsh
+229 U Vivid Meadow

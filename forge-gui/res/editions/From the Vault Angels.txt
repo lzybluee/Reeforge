@@ -1,0 +1,23 @@
+[metadata]
+Code=V15
+Date=2015-08-21
+Name=From the Vault: Angels
+MciCode=v15
+Type=From_the_Vault
+
+[cards]
+1 M Akroma, Angel of Fury
+2 M Akroma, Angel of Wrath
+3 M Archangel of Strife
+4 M Aurelia, the Warleader
+5 M Avacyn, Angel of Hope
+6 M Baneslayer Angel
+7 M Entreat the Angels
+8 M Exalted Angel
+9 M Iona, Shield of Emeria
+10 M Iridescent Angel
+11 M Jenara, Asura of War
+12 M Lightning Angel
+13 M Platinum Angel
+14 M Serra Angel
+15 M Tariel, Reckoner of Souls

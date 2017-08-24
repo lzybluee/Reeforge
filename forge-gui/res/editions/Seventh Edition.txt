@@ -1,0 +1,364 @@
+[metadata]
+Code=7ED
+Date=2001-04-11
+Name=Seventh Edition
+Code2=7E
+MciCode=7e
+Type=Core
+Border=White
+BoosterCovers=5
+Booster=10 Common, 3 Uncommon, 1 Rare, 1 BasicLand
+Foil=OldStyle
+FoilAlwaysInCommonSlot=False
+
+[cards]
+172 U AEther Flash
+115 R Abyssal Horror
+116 U Abyssal Specter
+325 R Adarkar Wastes
+117 U Agonizing Memories
+58 U Air Elemental
+286 R Aladdin's Ring
+229 U Anaconda
+59 R Ancestral Memories
+230 R Ancient Silverback
+1 C Angelic Page
+60 U Arcane Laboratory
+61 R Archivist
+2 U Ardent Militia
+173 C Balduvian Barbarians
+62 U Baleful Stare
+287 R Beast of Burden
+174 R Bedlam
+118 U Befoul
+119 R Bellowing Fiend
+63 R Benthic Behemoth
+120 U Bereavement
+231 R Birds of Paradise
+232 U Blanchwood Armor
+175 U Blaze
+3 R Blessed Reversal
+121 C Blood Pet
+176 R Bloodshot Cyclops
+122 C Bog Imp
+123 U Bog Wraith
+177 U Boil
+64 C Boomerang
+4 U Breath of Life
+326 R Brushland
+233 U Bull Hippo
+288 U Caltrops
+234 C Canopy Spider
+5 U Castle
+289 U Charcoal Diamond
+6 C Circle of Protection: Black
+7 C Circle of Protection: Blue
+8 C Circle of Protection: Green
+9 C Circle of Protection: Red
+10 C Circle of Protection: White
+327 R City of Brass
+11 C Cloudchaser Eagle
+290 R Coat of Arms
+235 U Compost
+65 U Confiscate
+66 C Coral Merfolk
+124 C Corrupt
+67 C Counterspell
+236 U Creeping Mold
+178 R Crimson Hellkite
+12 C Crossbow Infantry
+125 U Crypt Rats
+291 U Crystal Rod
+126 U Dakmor Lancer
+68 R Daring Apprentice
+127 C Dark Banishing
+128 R Darkest Hour
+69 R Deflection
+70 R Delusions of Mediocrity
+292 R Dingus Egg
+13 C Disenchant
+179 U Disorder
+293 R Disrupting Scepter
+129 R Dregs of Sorrow
+130 C Drudge Skeletons
+131 C Duress
+14 C Eager Cadet
+237 R Early Harvest
+180 R Earthquake
+132 R Eastern Paladin
+238 R Elder Druid
+15 R Elite Archers
+239 R Elvish Archers
+240 R Elvish Champion
+241 U Elvish Lyrist
+242 R Elvish Piper
+133 U Engineered Plague
+294 R Ensnaring Bridge
+71 R Equilibrium
+72 R Evacuation
+134 R Fallen Angel
+243 U Familiar Ground
+135 C Fear
+244 U Femeref Archers
+295 R Feroz's Ban
+181 R Fervor
+73 U Fighting Drake
+182 R Final Fortune
+296 U Fire Diamond
+183 U Fire Elemental
+74 R Fleeting Image
+75 C Flight
+297 R Flying Carpet
+245 C Fog
+76 C Force Spike
+328 L Forest
+328 L Forest
+328 L Forest
+328 L Forest
+136 U Foul Imp
+137 U Fugue
+246 U Fyndhorn Elder
+247 U Gang of Elk
+16 U Gerrard's Wisdom
+184 U Ghitu Fire-Eater
+138 C Giant Cockroach
+248 C Giant Growth
+77 C Giant Octopus
+249 C Giant Spider
+78 U Glacial Wall
+17 R Glorious Anthem
+185 C Goblin Chariot
+186 C Goblin Digging Team
+187 C Goblin Elite Infantry
+188 C Goblin Gardener
+189 U Goblin Glider
+190 R Goblin King
+191 U Goblin Matron
+192 C Goblin Raider
+193 C Goblin Spelunkers
+194 U Goblin War Drums
+250 C Gorilla Chieftain
+298 R Grafted Skullcap
+195 C Granite Grip
+299 U Grapeshot Catapult
+139 C Gravedigger
+140 R Greed
+251 C Grizzly Bears
+18 C Healing Salve
+19 U Heavy Ballista
+79 U Hibernation
+196 C Hill Giant
+141 C Hollow Dogs
+20 C Holy Strength
+21 C Honor Guard
+80 C Horned Turtle
+142 C Howl from Beyond
+300 R Howling Mine
+252 R Hurricane
+197 R Impatience
+143 R Infernal Contract
+198 R Inferno
+81 C Inspiration
+22 R Intrepid Hero
+301 U Iron Star
+332 L Island
+332 L Island
+332 L Island
+332 L Island
+302 U Ivory Cup
+303 R Jalum Tome
+304 R Jandor's Saddlebags
+305 R Jayemdae Tome
+336 R Karplusan Forest
+23 R Kjeldoran Royal Guard
+24 C Knight Errant
+25 U Knighthood
+199 C Lava Axe
+144 U Leshrac's Rite
+82 U Levitation
+200 C Lightning Blast
+201 C Lightning Elemental
+253 C Llanowar Elves
+254 C Lone Wolf
+26 U Longbow Archer
+145 C Looming Shade
+83 R Lord of Atlantis
+255 U Lure
+84 R Mahamoti Djinn
+85 U Mana Breach
+202 R Mana Clash
+86 R Mana Short
+306 U Marble Diamond
+256 R Maro
+27 R Master Healer
+87 R Mawcor
+307 R Meekstone
+146 U Megrim
+88 C Memory Lapse
+89 U Merfolk Looter
+90 C Merfolk of the Pearl Trident
+257 R Might of Oaks
+308 R Millstone
+147 C Mind Rot
+258 C Monstrous Growth
+309 U Moss Diamond
+338 L Mountain
+338 L Mountain
+338 L Mountain
+338 L Mountain
+259 R Nature's Resurgence
+260 R Nature's Revolt
+148 C Nausea
+149 U Necrologia
+150 R Nightmare
+151 U Nocturnal Raid
+28 R Northern Paladin
+203 U Ogre Taskmaster
+204 R Okk
+91 U Opportunity
+92 R Opposition
+152 R Oppression
+205 U Orcish Artillery
+206 U Orcish Oriflamme
+153 C Ostracize
+29 C Pacifism
+30 R Pariah
+310 U Patagia Golem
+154 R Persecute
+93 U Phantom Warrior
+311 R Phyrexian Colossus
+312 U Phyrexian Hulk
+207 U Pillage
+313 U Pit Trap
+155 C Plague Beetle
+343 L Plains
+343 L Plains
+343 L Plains
+343 L Plains
+261 U Pride of Lions
+94 C Prodigal Sorcerer
+31 R Purify
+208 C Pygmy Pyrosaur
+209 U Pyroclasm
+210 U Pyrotechnics
+156 R Rag Man
+211 C Raging Goblin
+157 C Raise Dead
+262 C Rampant Growth
+32 C Razorfoot Griffin
+158 C Razortooth Rats
+212 R Reckless Embermage
+263 C Reclaim
+264 C Redwood Treefolk
+213 C Reflexes
+265 C Regeneration
+214 R Relentless Assault
+95 C Remove Soul
+33 U Reprisal
+159 R Reprocess
+160 R Revenant
+34 R Reverse Damage
+314 U Rod of Ruin
+35 R Rolling Stones
+266 R Rowen
+215 C Sabretooth Tiger
+36 R Sacred Ground
+37 C Sacred Nectar
+96 C Sage Owl
+38 C Samite Healer
+39 U Sanctimony
+161 C Scathe Zombies
+267 U Scavenger Folk
+97 C Sea Monster
+40 U Seasoned Marshal
+268 C Seeker of Skybreak
+216 R Seismic Assault
+162 C Serpent Warrior
+41 U Serra Advocate
+42 R Serra Angel
+43 U Serra's Embrace
+269 C Shanodin Dryads
+217 C Shatter
+44 C Shield Wall
+218 R Shivan Dragon
+219 C Shock
+315 U Sisay's Ring
+316 U Sky Diamond
+45 C Skyshroud Falcon
+98 C Sleight of Hand
+163 U Soul Feast
+317 U Soul Net
+46 R Southern Paladin
+318 U Spellbook
+270 C Spined Wurm
+164 C Spineless Thug
+47 U Spirit Link
+220 C Spitting Earth
+271 C Squall
+48 C Standing Troops
+49 U Starlight
+319 R Static Orb
+50 U Staunch Defenders
+99 U Steal Artifact
+221 C Stone Rain
+320 R Storm Cauldron
+100 C Storm Crow
+222 U Storm Shaman
+165 U Strands of Night
+272 C Stream of Life
+166 R Stronghold Assassin
+223 U Sudden Impact
+345 R Sulfurous Springs
+51 R Sunweb
+52 U Sustainer of the Realm
+346 L Swamp
+346 L Swamp
+346 L Swamp
+346 L Swamp
+167 R Tainted AEther
+321 R Teferi's Puzzle Box
+101 C Telepathic Spies
+102 U Telepathy
+103 R Temporal Adept
+104 U Thieving Magpie
+273 R Thorn Elemental
+274 U Thoughtleech
+322 U Throne of Bone
+105 C Tolarian Winds
+275 C Trained Armodon
+224 R Trained Orgg
+276 C Tranquility
+106 U Treasure Trove
+277 U Treefolk Seedlings
+225 C Tremor
+107 C Twiddle
+278 R Uktabi Wildcats
+350 R Underground River
+168 C Unholy Strength
+108 C Unsummon
+279 U Untamed Wilds
+53 C Venerable Monk
+54 U Vengeance
+280 R Verduran Enchantress
+281 R Vernal Bloom
+109 C Vigilant Drake
+110 R Vizzerdrix
+226 C Volcanic Hammer
+111 U Wall of Air
+169 U Wall of Bone
+227 U Wall of Fire
+323 U Wall of Spears
+55 U Wall of Swords
+112 R Wall of Wonder
+170 R Western Paladin
+282 C Wild Growth
+228 R Wildfire
+113 U Wind Dancer
+114 C Wind Drake
+283 U Wing Snare
+284 C Wood Elves
+324 U Wooden Sphere
+56 R Worship
+57 R Wrath of God
+285 U Yavimaya Enchantress
+171 U Yawgmoth's Edict

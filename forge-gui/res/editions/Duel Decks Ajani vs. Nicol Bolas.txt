@@ -1,0 +1,88 @@
+[metadata]
+Code=DDH
+Date=2011-09-02
+Name=Duel Decks: Ajani vs. Nicol Bolas
+MciCode=ddh
+Type=Duel_Decks
+
+[cards]
+18 R Ageless Entity
+66 C Agonizing Demise
+1 M Ajani Vengeant
+22 C Ajani's Mantra
+9 U Ajani's Pridemate
+28 U Behemoth Sledge
+52 R Blazing Specter
+46 C Brackwater Elemental
+14 U Briarhorn
+6 C Canyon Wildcat
+59 U Countersquall
+69 R Cruel Ultimatum
+74 U Crumbling Necropolis
+65 U Deep Analysis
+49 R Dimir Cutpurse
+68 U Elder Mastery
+3 C Essence Warden
+32 C Evolving Wilds
+53 U Fire-Field Ogre
+21 R Firemane Angel
+12 U Fleetfoot Panther
+38 L Forest
+38 L Forest
+33 U Graypelt Refuge
+11 C Grazing Gladehart
+25 U Griffin Guide
+63 U Grixis Charm
+48 U Hellfire Mongrel
+64 U Icy Manipulator
+57 C Igneous Pouncer
+79 L Island
+7 U Jade Mage
+56 C Jhessian Zombies
+34 U Jungle Shrine
+35 U Kazandu Refuge
+2 U Kird Ape
+24 U Lead the Stampede
+23 U Lightning Helix
+5 U Loam Lion
+15 R Loxodon Hierarch
+17 U Marisi's Twinclaws
+47 C Morgue Toad
+51 U Moroii
+41 L Mountain
+41 L Mountain
+20 U Nacatl Hunt-Pride
+29 U Naya Charm
+42 M Nicol Bolas, Planeswalker
+44 C Nightscape Familiar
+60 C Obelisk of Grixis
+55 C Ogre Savant
+72 U Pain // Suffering
+40 L Plains
+19 U Pride of Lions
+70 R Profane Command
+10 C Qasali Pridemage
+61 C Recoil
+26 C Recumbent Bliss
+73 U Rise // Fall
+75 C Rupture Spire
+36 U Sapseep Forest
+27 R Searing Meditation
+54 U Shriekmaw
+67 U Slave of Bolas
+45 U Slavering Nulls
+71 U Spite // Malice
+16 U Spitemare
+50 C Steamcore Weird
+43 C Surveilling Sprite
+78 L Swamp
+78 L Swamp
+30 C Sylvan Bounty
+8 C Sylvan Ranger
+76 C Terramorphic Expanse
+31 R Titanic Ultimatum
+62 R Undermine
+58 C Vapor Snag
+37 U Vitu-Ghazi, the City-Tree
+4 C Wild Nacatl
+13 U Woolly Thoctar

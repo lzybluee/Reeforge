@@ -1,0 +1,96 @@
+[metadata]
+Code=DDM
+Date=2014-03-14
+Name=Duel Decks: Jace vs. Vraska
+MciCode=ddm
+Type=Duel_Decks
+
+[cards]
+1 M Jace, Architect of Thought
+2 U Chronomaton
+3 U Jace's Phantasm
+4 C Phantasmal Bear
+5 U AEther Figment
+6 C Crosstown Courier
+7 C Dream Stalker
+8 C Krovikan Mist
+9 U Merfolk Wayfinder
+10 C Sea Gate Oracle
+11 C Stealer of Secrets
+12 C AEther Adept
+13 C Archaeomancer
+14 U Phantasmal Dragon
+15 R Body Double
+16 C Leyline Phantom
+17 R Aeon Chronicler
+18 U Riftwing Cloudskate
+19 R Jace's Mindseeker
+20 C Errant Ephemeron
+21 C Thought Scour
+22 U Agoraphobia
+23 C Into the Roil
+24 C Memory Lapse
+25 C Prohibit
+26 U Remand
+27 C Claustrophobia
+28 C Griptide
+29 C Ray of Command
+30 U Control Magic
+31 U Summoner's Bane
+32 U Jace's Ingenuity
+33 R Future Sight
+34 R Spelltwine
+35 U Dread Statuary
+36 C Halimar Depths
+38 L Island
+38 L Island
+38 L Island
+38 L Island
+38 L Island
+42 M Vraska the Unseen
+43 C Pulse Tracker
+44 C Shadow Alley Denizen
+45 U Tavern Swindler
+46 U Wight of Precinct Six
+47 C Death-Hood Cobra
+48 C Gatecreeper Vine
+49 U River Boa
+50 R Vinelasher Kudzu
+51 C Putrid Leech
+52 C Sadistic Augermage
+53 C Slate Street Ruffian
+54 C Oran-Rief Recluse
+55 R Spawnwrithe
+56 C Stonefare Crocodile
+57 R Ohran Viper
+58 U Corpse Traders
+59 C Festerhide Boar
+60 C Mold Shambler
+61 C Highway Robber
+62 U Nekrataal
+63 R Reaper of the Wilds
+64 U Acidic Slime
+65 U Drooling Groodion
+66 C Tragic Slip
+67 C Hypnotic Cloud
+68 U Night's Whisper
+69 U Marsh Casualties
+70 U Treasured Find
+71 C Last Kiss
+72 C Stab Wound
+73 R Underworld Connections
+74 C Consume Strength
+75 C Grisly Spectacle
+76 C Golgari Guildgate
+77 U Rogue's Passage
+78 U Tainted Wood
+83 L Swamp
+83 L Swamp
+83 L Swamp
+83 L Swamp
+83 L Swamp
+84 L Forest
+84 L Forest
+84 L Forest
+84 L Forest
+84 L Forest

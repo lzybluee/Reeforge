@@ -1,0 +1,318 @@
+[metadata]
+Code=MRD
+Date=2003-10-02
+Name=Mirrodin
+Code2=MR
+MciCode=mi
+Type=Expansion
+BoosterCovers=5
+Booster=11 Common, 3 Uncommon, 1 Rare
+FoilAlwaysInCommonSlot=False
+
+[cards]
+141 C AEther Spellbomb
+142 C Alpha Myr
+143 R Altar of Shadows
+1 U Altar's Light
+278 C Ancient Den
+29 C Annul
+85 R Arc-Slogger
+2 C Arrest
+30 U Assert Authority
+86 U Atog
+3 U Auriok Bladewarden
+4 R Auriok Steelshaper
+5 C Auriok Transfixer
+6 C Awe Strike
+144 U Banshee's Blade
+57 U Barter in Blood
+113 C Battlegrowth
+58 U Betrayal of Flesh
+7 C Blinding Beam
+145 R Blinkmoth Urn
+279 U Blinkmoth Well
+114 U Bloodscent
+146 C Bonesplitter
+147 R Bosh, Iron Golem
+148 U Bottle Gnomes
+31 R Broodstar
+115 U Brown Ouphe
+149 U Cathodion
+150 R Chalice of the Void
+59 C Chimney Imp
+151 C Chromatic Sphere
+152 R Chrome Mox
+153 C Clockwork Beetle
+154 C Clockwork Condor
+155 R Clockwork Dragon
+156 U Clockwork Vorrac
+280 C Cloudpost
+157 C Cobalt Golem
+87 R Confusion in the Ranks
+60 C Consume Spirit
+61 C Contaminated Bond
+158 C Copper Myr
+116 R Copperhoof Vorrac
+117 U Creeping Mold
+159 U Crystal Shard
+160 R Culling Scales
+161 R Damping Matrix
+162 U Dead-Iron Sledge
+118 C Deconstruct
+88 U Detonate
+32 C Disarm
+62 C Disciple of the Vault
+33 U Domineer
+163 U Dragon Blood
+34 C Dream's Grip
+63 R Dross Harvester
+64 C Dross Prowler
+164 C Dross Scorpion
+165 R Duplicant
+166 U Duskworker
+89 C Electrostatic Bolt
+167 C Elf Replica
+168 R Empyrial Plate
+169 R Extraplanar Lens
+35 U Fabricate
+119 C Fangren Hunter
+170 U Farsight Mask
+36 R Fatespinner
+90 R Fiery Gambit
+171 U Fireshrieker
+91 C Fists of the Anvil
+65 U Flayed Nim
+305 L Forest
+305 L Forest
+305 L Forest
+305 L Forest
+92 U Forge Armor
+93 U Fractured Loyalty
+172 C Frogmite
+173 C Galvanic Key
+174 R Gate to the AEther
+175 R Gilded Lotus
+281 R Glimmervoid
+120 R Glissa Sunseeker
+176 R Goblin Charbelcher
+177 U Goblin Dirigible
+178 C Goblin Replica
+94 C Goblin Striker
+179 C Goblin War Wagon
+180 C Gold Myr
+181 U Golem-Skin Gauntlets
+95 U Grab the Reins
+182 U Granite Shard
+282 C Great Furnace
+183 R Grid Monitor
+66 R Grim Reminder
+121 C Groffskithur
+184 U Heartwood Shard
+185 C Hematite Golem
+122 R Hum of the Radix
+186 U Icy Manipulator
+96 C Incite War
+37 C Inertia Bubble
+187 C Iron Myr
+67 C Irradiate
+291 L Island
+291 L Island
+291 L Island
+291 L Island
+188 U Isochron Scepter
+189 R Jinxed Choker
+123 C Journey of Discovery
+190 R Krark's Thumb
+97 C Krark-Clan Grunt
+98 C Krark-Clan Shaman
+191 C Leaden Myr
+8 R Leonin Abunas
+192 U Leonin Bladetrap
+9 C Leonin Den-Guard
+10 C Leonin Elder
+193 C Leonin Scimitar
+11 U Leonin Skyhunter
+194 R Leonin Sun Standard
+195 R Leveler
+196 R Liar's Pendulum
+197 C Lifespark Spellbomb
+198 R Lightning Coils
+199 U Lightning Greaves
+124 R Living Hive
+200 R Lodestone Myr
+38 U Looming Hoverguard
+12 C Loxodon Mender
+13 R Loxodon Peacekeeper
+14 R Loxodon Punisher
+201 U Loxodon Warhammer
+39 R Lumengrid Augur
+40 U Lumengrid Sentinel
+41 C Lumengrid Warden
+15 R Luminous Angel
+202 C Malachite Golem
+42 R March of the Machines
+203 U Mask of Memory
+99 R Mass Hysteria
+100 R Megatog
+204 R Mesmeric Orb
+205 R Mind's Eye
+206 R Mindslaver
+207 U Mindstorm Crown
+208 U Mirror Golem
+125 R Molder Slug
+101 C Molten Rain
+68 C Moriok Scavenger
+300 L Mountain
+300 L Mountain
+300 L Mountain
+300 L Mountain
+209 U Mourner's Shield
+210 C Myr Adapter
+211 C Myr Enforcer
+212 R Myr Incubator
+213 U Myr Mindservant
+214 U Myr Prototype
+215 U Myr Retriever
+69 R Necrogen Mists
+216 C Necrogen Spellbomb
+217 U Needlebug
+43 C Neurok Familiar
+218 C Neurok Hoversail
+44 C Neurok Spy
+219 R Nightmare Lash
+70 R Nim Devourer
+71 C Nim Lasher
+220 C Nim Replica
+72 U Nim Shambler
+73 C Nim Shrieker
+221 U Nuisance Engine
+222 R Oblivion Stone
+102 C Ogre Leadfoot
+223 C Omega Myr
+126 U One Dozen Eyes
+224 U Ornithopter
+45 C Override
+225 U Pearl Shard
+226 R Pentavus
+227 C Pewter Golem
+288 L Plains
+288 L Plains
+288 L Plains
+288 L Plains
+127 R Plated Slagwurm
+228 R Platinum Angel
+229 U Power Conduit
+128 C Predator's Strike
+74 R Promise of Power
+230 R Proteus Staff
+46 U Psychic Membrane
+231 R Psychogenic Probe
+232 C Pyrite Spellbomb
+47 R Quicksilver Elemental
+233 R Quicksilver Fountain
+16 C Raise the Alarm
+17 C Razor Barrier
+48 C Regress
+75 R Reiver Demon
+76 U Relic Bane
+18 U Roar of the Kha
+19 R Rule of Law
+234 U Rust Elemental
+103 U Rustmouth Ogre
+235 U Rustspore Ram
+236 C Scale of Chiss-Goria
+237 U Scrabbling Claws
+238 R Sculpting Steel
+239 R Scythe of the Wretched
+283 C Seat of the Synod
+20 R Second Sunrise
+104 C Seething Song
+240 U Serum Tank
+49 R Shared Fate
+105 C Shatter
+106 U Shrapnel Blast
+241 C Silver Myr
+242 U Skeleton Shard
+21 C Skyhunter Cub
+22 C Skyhunter Patrol
+243 C Slagwurm Armor
+23 U Slith Ascendant
+77 U Slith Bloodletter
+107 U Slith Firewalker
+129 U Slith Predator
+50 U Slith Strider
+24 R Solar Tide
+244 C Soldier Replica
+245 R Solemn Simulacrum
+51 C Somber Hoverguard
+246 R Soul Foundry
+25 U Soul Nova
+247 R Spellweaver Helix
+26 C Sphere of Purity
+108 C Spikeshot Goblin
+78 R Spoils of the Vault
+284 U Stalking Stones
+248 C Steel Wall
+249 U Sun Droplet
+250 C Sunbeam Spellbomb
+295 L Swamp
+295 L Swamp
+295 L Swamp
+295 L Swamp
+251 R Sword of Kaldra
+130 U Sylvan Scrying
+252 U Synod Sanctum
+27 U Taj-Nar Swordsmith
+253 U Talisman of Dominance
+254 U Talisman of Impulse
+255 U Talisman of Indulgence
+256 U Talisman of Progress
+257 U Talisman of Unity
+258 C Tanglebloom
+259 R Tangleroot
+131 C Tel-Jilad Archers
+132 C Tel-Jilad Chosen
+133 C Tel-Jilad Exile
+260 U Tel-Jilad Stylus
+28 U Tempest of Light
+52 R Temporal Cascade
+79 C Terror
+53 U Thirst for Knowledge
+261 U Thought Prison
+54 C Thoughtcast
+262 R Timesifter
+263 C Titanium Golem
+134 R Tooth and Nail
+264 C Tooth of Chiss-Goria
+265 R Tower of Champions
+266 R Tower of Eons
+267 R Tower of Fortunes
+268 R Tower of Murmurs
+109 R Trash for Treasure
+285 C Tree of Tales
+269 R Triskelion
+135 R Troll Ascetic
+136 U Trolls of Tel-Jilad
+137 C Turn to Dust
+286 C Vault of Whispers
+55 R Vedalken Archmage
+80 R Vermiculos
+138 C Viridian Joiner
+270 C Viridian Longbow
+139 U Viridian Shaman
+271 C Vorrac Battlehorns
+272 U Vulshok Battlegear
+110 R Vulshok Battlemaster
+111 C Vulshok Berserker
+273 C Vulshok Gauntlets
+81 C Wail of the Nim
+82 U Wall of Blood
+56 C Wanderguard Sentry
+112 R War Elemental
+274 C Welding Jar
+275 C Wizard Replica
+83 U Woebearer
+276 R Worldslayer
+84 C Wrench Mind
+140 C Wurmskin Forger
+277 C Yotian Soldier

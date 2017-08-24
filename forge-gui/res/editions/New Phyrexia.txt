@@ -1,0 +1,186 @@
+[metadata]
+Code=NPH
+Date=2011-05-13
+Name=New Phyrexia
+Code2=NPH
+MciCode=nph
+Type=Expansion
+BoosterCovers=3
+Booster=10 Common, 3 Uncommon, 1 RareMythic, 1 BasicLand
+
+[cards]
+78 U Act of Aggression
+129 U Alloy Myr
+2 C Apostle's Blessing
+27 U Argent Mutation
+28 U Arm with AEther
+79 C Artillerize
+3 U Auriok Survivors
+130 M Batterskull
+103 U Beast Within
+104 R Birthing Pod
+4 R Blade Splicer
+29 C Blighted Agent
+52 C Blind Zealot
+131 C Blinding Souleater
+80 R Bludgeon Brawl
+105 U Brutalizer Exarch
+132 R Caged Sun
+53 U Caress of Phyrexia
+5 U Cathedral Membrane
+30 C Chained Throatseeker
+6 R Chancellor of the Annex
+54 R Chancellor of the Dross
+81 R Chancellor of the Forge
+31 R Chancellor of the Spires
+106 R Chancellor of the Tangle
+133 U Conversion Chamber
+107 U Corrosive Gale
+32 U Corrupted Resolve
+134 U Darksteel Relic
+108 C Death-Hood Cobra
+33 U Deceiver Exarch
+34 C Defensive Stance
+55 C Dementia Bat
+56 U Despise
+57 U Dismember
+7 U Dispatch
+8 U Due Respect
+9 M Elesh Norn, Grand Cenobite
+58 U Enslave
+59 U Entomber Exarch
+135 M Etched Monstrosity
+60 C Evil Presence
+10 U Exclusion Ritual
+82 U Fallen Ferromancer
+83 C Flameborn Viron
+11 C Forced Worship
+174 L Forest
+174 L Forest
+109 R Fresh Meat
+84 C Furnace Scamp
+85 U Geosurge
+61 C Geth's Verdict
+35 C Gitaxian Probe
+110 C Glissa's Scorn
+111 C Glistener Elf
+62 R Glistening Oil
+112 U Greenhilt Trainee
+136 C Gremlin Mine
+63 C Grim Affliction
+86 U Gut Shot
+137 R Hex Parasite
+138 C Hovermyr
+64 U Ichor Explosion
+139 C Immolating Souleater
+36 C Impaler Shrike
+12 U Inquisitor Exarch
+140 C Insatiable Souleater
+87 R Invader Parasite
+169 L Island
+169 L Island
+141 U Isolation Cell
+37 M Jin-Gitaxias, Core Augur
+128 R Jor Kadeen, the Prevailer
+1 M Karn Liberated
+142 U Kiln Walker
+143 R Lashwrithe
+113 C Leeching Bite
+65 R Life's Finale
+13 C Lost Leonin
+14 C Loxodon Convert
+15 U Marrow Shards
+16 U Master Splicer
+114 C Maul Splicer
+115 R Melira, Sylvok Outcast
+38 U Mental Misstep
+144 U Mindcrank
+39 U Mindculling
+88 R Moltensteel Dragon
+66 C Mortis Dogs
+172 L Mountain
+172 L Mountain
+116 C Mutagenic Growth
+117 U Mycosynth Fiend
+145 C Mycosynth Wellspring
+146 R Myr Superion
+147 U Necropouncer
+17 R Norn's Annex
+118 U Noxious Revival
+40 C Numbing Dose
+89 C Ogre Menial
+148 R Omen Machine
+67 C Parasitic Implant
+149 C Pestilent Souleater
+165 U Phyrexia's Core
+150 C Phyrexian Hulk
+41 R Phyrexian Ingester
+42 R Phyrexian Metamorph
+68 M Phyrexian Obliterator
+119 R Phyrexian Swarmlord
+18 R Phyrexian Unlife
+69 C Pith Driller
+167 L Plains
+167 L Plains
+19 C Porcelain Legionnaire
+70 U Postmortem Lunge
+71 R Praetor's Grasp
+90 U Priest of Urabrask
+151 C Pristine Talisman
+43 C Psychic Barrier
+44 R Psychic Surgery
+20 R Puresteel Paladin
+91 U Rage Extractor
+92 C Razor Swine
+72 U Reaper of Sheoldred
+21 C Remember the Fallen
+120 C Rotted Hystrix
+93 C Ruthless Invasion
+94 C Scrapyard Salvo
+22 C Sensor Splicer
+23 U Shattered Angel
+73 M Sheoldred, Whispering One
+24 C Shriek Raptor
+152 U Shrine of Boundless Growth
+153 U Shrine of Burning Rage
+154 U Shrine of Limitless Power
+155 U Shrine of Loyal Legions
+156 U Shrine of Piercing Vision
+157 U Sickleslicer
+95 R Slag Fiend
+96 C Slash Panther
+158 R Soul Conduit
+159 R Spellskite
+121 U Spinebiter
+45 C Spined Thopter
+46 C Spire Monitor
+160 U Surge Node
+74 R Surgical Extraction
+25 C Suture Priest
+170 L Swamp
+170 L Swamp
+161 M Sword of War and Peace
+47 U Tezzeret's Gambit
+122 C Thundering Tanadon
+97 U Tormentor Exarch
+162 R Torpor Orb
+75 C Toxic Nim
+163 C Trespassing Souleater
+123 U Triumph of the Hordes
+164 R Unwinding Clock
+98 M Urabrask the Hidden
+48 C Vapor Snag
+76 C Vault Skirge
+99 C Victorious Destruction
+49 U Viral Drake
+124 C Viridian Betrayers
+125 C Viridian Harvest
+126 U Vital Splicer
+100 C Volt Charge
+127 M Vorinclex, Voice of Hunger
+101 U Vulshok Refugee
+26 C War Report
+102 U Whipflare
+77 U Whispering Specter
+50 U Wing Splicer
+51 R Xenograft

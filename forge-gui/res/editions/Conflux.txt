@@ -1,0 +1,157 @@
+[metadata]
+Code=CFX
+Date=2009-02-06
+Name=Conflux
+Code2=CFX
+Alias=CON
+MciCode=cfx
+Type=Expansion
+BoosterCovers=3
+Booster=10 Common, 3 Uncommon, 1 RareMythic, 1 BasicLand ALA
+
+[cards]
+40 C Absorb Vis
+1 U Aerie Mystics
+141 U Ancient Ziggurat
+98 M Apocalypse Hydra
+134 C Armillary Sphere
+2 C Asha's Favor
+3 C Aven Squire
+4 C Aven Trailblazer
+58 R Banefire
+78 C Beacon Behemoth
+99 R Blood Tyrant
+59 R Bloodhall Ooze
+135 C Bone Saw
+21 C Brackwater Elemental
+60 C Canyon Minotaur
+5 U Celestial Purge
+100 R Charnelhoard Wurm
+101 M Child of Alara
+79 R Cliffrunner Behemoth
+102 M Conflux
+22 C Constricting Tendrils
+23 U Controlled Instincts
+41 U Corrupted Roots
+103 U Countersquall
+6 C Court Homunculus
+24 U Cumber Stone
+80 R Cylian Sunsinger
+61 C Dark Temper
+7 C Darklit Gargoyle
+42 C Drag Down
+62 U Dragonsoul Knight
+43 U Dreadwing
+104 U Elder Mastery
+81 C Ember Weaver
+105 C Esper Cormorants
+25 U Esperzoa
+26 M Ethersworn Adjudicator
+142 R Exotic Orchard
+106 C Exploding Borders
+44 R Extractor Demon
+27 C Faerie Mechanist
+63 C Fiery Fall
+82 U Filigree Fracture
+45 U Fleshformer
+136 R Font of Mythos
+28 C Frontline Sage
+107 U Fusion Elemental
+108 R Giltspire Avenger
+8 C Gleam of Resistance
+83 U Gluttonous Slime
+109 C Goblin Outlander
+64 R Goblin Razerunners
+29 C Grixis Illusionist
+46 U Grixis Slavedriver
+110 R Gwafa Hazid, Profiteer
+111 U Hellkite Hatchling
+65 U Hellspark Elemental
+66 U Ignite Disorder
+47 C Infectious Horror
+30 R Inkwell Leviathan
+112 U Jhessian Balmgiver
+137 C Kaleidostone
+48 R Kederekt Parasite
+113 R Knight of the Reliquary
+114 U Knotvine Mystic
+67 C Kranioceros
+9 C Lapse of Certainty
+115 M Maelstrom Archangel
+116 R Magister Sphinx
+117 M Malfegor
+138 C Mana Cylix
+139 U Manaforce Mace
+68 C Maniacal Rage
+10 R Mark of Asylum
+11 R Martial Coup
+31 R Master Transmuter
+84 C Matca Rioters
+118 R Meglonoth
+85 C Might of Alara
+12 M Mirror-Sigil Sergeant
+69 C Molten Frame
+13 U Nacatl Hunt-Pride
+119 C Nacatl Outlander
+86 C Nacatl Savage
+120 M Nicol Bolas, Planeswalker
+87 R Noble Hierarch
+49 R Nyxathid
+140 R Obelisk of Alara
+88 R Paleoloth
+14 U Paragon of the Amesha
+32 C Parasitic Strix
+15 U Path to Exile
+50 C Pestilent Kathari
+121 M Progenitus
+70 C Quenchable Fire
+71 R Rakka Mar
+143 U Reliquary Tower
+122 C Rhox Bodyguard
+16 C Rhox Meditant
+51 C Rotting Rats
+144 C Rupture Spire
+89 U Sacellum Archers
+52 C Salvage Slasher
+123 U Scarland Thrinax
+90 C Scattershot Archer
+17 R Scepter of Dominance
+53 R Scepter of Fugue
+33 R Scepter of Insight
+34 U Scornful AEther-Lich
+54 C Sedraxis Alchemist
+124 U Shambling Remains
+91 U Shard Convergence
+18 R Sigil of the Empty Throne
+125 U Skyward Eye Prophets
+126 U Sludge Strider
+92 R Soul's Majesty
+127 R Sphinx Summoner
+93 U Spore Burst
+128 C Suicidal Charge
+94 C Sylvan Bounty
+35 R Telemin Performance
+95 M Thornling
+72 C Toxic Iguanar
+36 C Traumatic Visions
+96 C Tukatongue Thallid
+145 U Unstable Frontier
+37 C Unsummon
+129 U Vagrant Plowbeasts
+130 C Valeron Outlander
+19 C Valiant Guard
+131 C Vectis Agents
+132 C Vedalken Outlander
+73 U Viashino Slaughtermaster
+38 U View from Above
+55 U Voices from the Void
+74 U Volcanic Fallout
+75 R Voracious Dragon
+20 R Wall of Reverence
+76 C Wandering Goblins
+97 C Wild Leotau
+77 R Worldheart Phoenix
+39 C Worldly Counsel
+56 C Wretched Banquet
+57 C Yoke of the Damned
+133 C Zombie Outlander

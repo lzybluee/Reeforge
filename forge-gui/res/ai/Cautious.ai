@@ -1,0 +1,67 @@
+# Aggro preferences (enabling these will generally make the AI attack more aggressively)
+PLAY_AGGRO=false
+USE_BERSERK_AGGRESSIVELY=false
+
+# The amount of cards at which to stop considering mulligan
+MULLIGAN_THRESHOLD=4
+
+# Only works when AI cheating is enabled in preferences, otherwise does nothing
+CHEAT_WITH_MANA_ON_SHUFFLE=true
+
+# Planechase logic
+DEFAULT_MAX_PLANAR_DIE_ROLLS_PER_TURN=1
+DEFAULT_MIN_TURN_TO_ROLL_PLANAR_DIE=3
+DEFAULT_PLANAR_DIE_ROLL_CHANCE=50
+PLANAR_DIE_ROLL_HESITATION_CHANCE=10
+
+# Timings for moving equipment to other targets
+MOVE_EQUIPMENT_TO_BETTER_CREATURES=from_useless_only
+MOVE_EQUIPMENT_CREATURE_EVAL_THRESHOLD=60
+PRIORITIZE_MOVE_EQUIPMENT_IF_USELESS=true
+
+# Currently disabled
+PREDICT_SPELLS_FOR_MAIN2=true
+RESERVE_MANA_FOR_MAIN2_CHANCE=100
+
+# If enabled, the AI will target artifacts and non-aura enchantments with removal aggressively
+ACTIVELY_DESTROY_ARTS_AND_NONAURA_ENCHS=true
+
+# Counterspell timings
+MIN_SPELL_CMC_TO_COUNTER=2
+ALWAYS_COUNTER_OTHER_COUNTERSPELLS=true
+ALWAYS_COUNTER_DAMAGE_SPELLS=true
+ALWAYS_COUNTER_CMC_0_MANA_MAKING_PERMS=true
+ALWAYS_COUNTER_REMOVAL_SPELLS=true
+ALWAYS_COUNTER_SPELLS_FROM_NAMED_CARDS=None
+
+# Storm spell logic
+PRIORITY_REDUCTION_FOR_STORM_SPELLS=9
+MIN_COUNT_FOR_STORM_SPELLS=1
+
+# Logic for Strip Mine, Wasteland, Ghost Quarter and other similar sac-destroy lands marked with
+# AILogic$ LandForLand or GhostQuarter.
+STRIPMINE_MIN_LANDS_IN_HAND_TO_ACTIVATE=1
+STRIPMINE_MIN_LANDS_FOR_NO_TIMING_CHECK=9999
+STRIPMINE_MIN_LANDS_OTB_FOR_NO_TEMPO_CHECK=8
+STRIPMINE_MAX_LANDS_TO_ATTEMPT_MANALOCKING=3
+STRIPMINE_HIGH_PRIORITY_ON_SKIPPED_LANDDROP=true
+
+# The default chance to use the token-generation abilities
+TOKEN_GENERATION_ABILITY_CHANCE=80
+# Situations where the AI should always use the token-generation abilities if possible
+TOKEN_GENERATION_ALWAYS_IF_FROM_PLANESWALKER=true
+TOKEN_GENERATION_ALWAYS_IF_OPP_ATTACKS=true
+
+# Attempt to predict the number of potential blockers with various forms of evasion when
+# deciding to do an all-in assault attack (Experimental!)
+COMBAT_ASSAULT_ATTACK_EVASION_PREDICTION=false
+# Attempt to predict the number of potential blockers with various forms of evasion when
+# deciding to do an attrition race attack (Experimental!)
+COMBAT_ATTRITION_ATTACK_EVASION_PREDICTION=false
+
+# AILogic$ PayEnergyConservatively (used for Britsling Hydra and Longtusk Cub) will only
+# be used in case the creature is engaged in favorable combat
+CONSERVATIVE_ENERGY_PAYMENT_ONLY_IN_COMBAT=true
+# If true, the conservative energy payment will not be used when the creature is attacking,
+# only when it's blocking (for more controlling AIs)
+CONSERVATIVE_ENERGY_PAYMENT_ONLY_DEFENSIVELY=true

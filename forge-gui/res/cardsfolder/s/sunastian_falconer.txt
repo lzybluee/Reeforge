@@ -1,0 +1,7 @@
+Name:Sunastian Falconer
+ManaCost:3 R G
+Types:Legendary Creature Human Shaman
+PT:4/4
+A:AB$ Mana | Cost$ T | Produced$ C | Amount$ 2 | SpellDescription$ Add {C}{C} to your mana pool.
+SVar:Picture:http://resources.wizards.com/magic/cards/le/en-us/card1687.jpg
+Oracle:{T}: Add {C}{C} to your mana pool.

@@ -1,0 +1,24 @@
+[metadata]
+Code=FVE
+Date=2009-08-28
+Name=From the Vault: Exiled
+MciCode=fve
+Type=From_the_Vault
+Alias=V09
+
+[cards]
+1 M Balance
+2 M Berserk
+3 M Channel
+4 M Gifts Ungiven
+5 M Goblin Lackey
+6 M Kird Ape
+7 M Lotus Petal
+8 M Mystical Tutor
+9 M Necropotence
+10 M Sensei's Divining Top
+11 M Serendib Efreet
+12 M Skullclamp
+13 M Strip Mine
+14 M Tinker
+15 M Trinisphere

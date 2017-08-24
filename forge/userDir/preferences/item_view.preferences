@@ -1,0 +1,452 @@
+<preferences type="item_view">
+    <config name="STRING_ONLY">
+        <col name="STRING"/>
+    </config>
+    <config name="CARD_CATALOG" viewIndex="1">
+        <col name="NAME"/>
+        <col name="COLOR"/>
+        <col name="POWER"/>
+        <col name="FAVORITE"/>
+        <col name="RARITY"/>
+        <col name="SET"/>
+        <col name="AI"/>
+        <col name="COST"/>
+        <col name="RANKING"/>
+        <col name="TOUGHNESS"/>
+        <col name="CMC"/>
+        <col name="TYPE"/>
+    </config>
+    <config name="DECK_EDITOR">
+        <col name="NAME"/>
+        <col name="COLOR"/>
+        <col name="POWER"/>
+        <col name="RARITY"/>
+        <col name="SET"/>
+        <col name="AI"/>
+        <col name="DECK_QUANTITY"/>
+        <col name="COST"/>
+        <col name="RANKING"/>
+        <col name="TOUGHNESS"/>
+        <col name="CMC"/>
+        <col name="TYPE"/>
+    </config>
+    <config name="DRAFT_PACK">
+        <col name="NAME"/>
+        <col name="COLOR"/>
+        <col name="POWER"/>
+        <col name="RARITY"/>
+        <col name="QUANTITY"/>
+        <col name="SET"/>
+        <col name="AI"/>
+        <col name="COST"/>
+        <col name="RANKING"/>
+        <col name="TOUGHNESS"/>
+        <col name="CMC"/>
+        <col name="TYPE"/>
+    </config>
+    <config name="DRAFT_POOL">
+        <col name="NAME"/>
+        <col name="COLOR"/>
+        <col name="QUANTITY"/>
+        <col name="AI"/>
+        <col name="POWER"/>
+        <col name="FAVORITE"/>
+        <col name="RARITY"/>
+        <col name="SET"/>
+        <col name="COST"/>
+        <col name="RANKING"/>
+        <col name="TOUGHNESS"/>
+        <col name="CMC"/>
+        <col name="TYPE"/>
+    </config>
+    <config name="DRAFT_CONSPIRACY">
+        <col name="NAME"/>
+        <col name="FAVORITE"/>
+        <col name="RARITY"/>
+        <col name="SET"/>
+        <col name="TYPE"/>
+    </config>
+    <config name="SEALED_POOL">
+        <col name="NAME"/>
+        <col name="COLOR"/>
+        <col name="QUANTITY"/>
+        <col name="AI"/>
+        <col name="POWER"/>
+        <col name="FAVORITE"/>
+        <col name="RARITY"/>
+        <col name="SET"/>
+        <col name="COST"/>
+        <col name="RANKING"/>
+        <col name="TOUGHNESS"/>
+        <col name="CMC"/>
+        <col name="TYPE"/>
+    </config>
+    <config name="SPELL_SHOP">
+        <col name="NAME"/>
+        <col name="COLOR"/>
+        <col name="QUANTITY"/>
+        <col name="AI"/>
+        <col name="PRICE"/>
+        <col name="OWNED"/>
+        <col name="POWER"/>
+        <col name="RARITY"/>
+        <col name="SET"/>
+        <col name="COST"/>
+        <col name="RANKING"/>
+        <col name="TOUGHNESS"/>
+        <col name="CMC"/>
+        <col name="TYPE"/>
+    </config>
+    <config name="QUEST_INVENTORY">
+        <col name="NAME"/>
+        <col name="COLOR"/>
+        <col name="DECKS"/>
+        <col name="QUANTITY"/>
+        <col name="AI"/>
+        <col name="PRICE"/>
+        <col name="POWER"/>
+        <col name="NEW"/>
+        <col name="RARITY"/>
+        <col name="SET"/>
+        <col name="COST"/>
+        <col name="RANKING"/>
+        <col name="TOUGHNESS"/>
+        <col name="CMC"/>
+        <col name="TYPE"/>
+    </config>
+    <config name="QUEST_EDITOR_POOL">
+        <col name="NAME"/>
+        <col name="COLOR"/>
+        <col name="QUANTITY"/>
+        <col name="AI"/>
+        <col name="POWER"/>
+        <col name="NEW"/>
+        <col name="RARITY"/>
+        <col name="SET"/>
+        <col name="COST"/>
+        <col name="RANKING"/>
+        <col name="TOUGHNESS"/>
+        <col name="CMC"/>
+        <col name="TYPE"/>
+    </config>
+    <config name="QUEST_DECK_EDITOR">
+        <col name="NAME"/>
+        <col name="COLOR"/>
+        <col name="DECKS"/>
+        <col name="AI"/>
+        <col name="DECK_QUANTITY"/>
+        <col name="POWER"/>
+        <col name="NEW"/>
+        <col name="RARITY"/>
+        <col name="SET"/>
+        <col name="COST"/>
+        <col name="RANKING"/>
+        <col name="TOUGHNESS"/>
+        <col name="CMC"/>
+        <col name="TYPE"/>
+    </config>
+    <config name="QUEST_DRAFT_DECK_VIEWER">
+        <col name="NAME"/>
+        <col name="COLOR"/>
+        <col name="POWER"/>
+        <col name="RARITY"/>
+        <col name="QUANTITY"/>
+        <col name="SET"/>
+        <col name="AI"/>
+        <col name="COST"/>
+        <col name="RANKING"/>
+        <col name="TOUGHNESS"/>
+        <col name="CMC"/>
+        <col name="TYPE"/>
+    </config>
+    <config name="CONQUEST_AETHER">
+        <col name="NAME"/>
+        <col name="COLOR"/>
+        <col name="POWER"/>
+        <col name="RARITY"/>
+        <col name="SET"/>
+        <col name="AI"/>
+        <col name="COST"/>
+        <col name="RANKING"/>
+        <col name="TOUGHNESS"/>
+        <col name="CMC"/>
+        <col name="TYPE"/>
+    </config>
+    <config name="CONQUEST_COMMANDERS">
+        <col name="NAME"/>
+        <col name="COLOR"/>
+    </config>
+    <config name="CONQUEST_COLLECTION">
+        <col name="NAME"/>
+        <col name="COLOR"/>
+        <col name="POWER"/>
+        <col name="NEW"/>
+        <col name="RARITY"/>
+        <col name="SET"/>
+        <col name="AI"/>
+        <col name="COST"/>
+        <col name="RANKING"/>
+        <col name="TOUGHNESS"/>
+        <col name="CMC"/>
+        <col name="TYPE"/>
+    </config>
+    <config name="CONQUEST_DECK_EDITOR">
+        <col name="NAME"/>
+        <col name="COLOR"/>
+        <col name="AI"/>
+        <col name="DECK_QUANTITY"/>
+        <col name="POWER"/>
+        <col name="NEW"/>
+        <col name="RARITY"/>
+        <col name="SET"/>
+        <col name="COST"/>
+        <col name="RANKING"/>
+        <col name="TOUGHNESS"/>
+        <col name="CMC"/>
+        <col name="TYPE"/>
+    </config>
+    <config name="AVATAR_POOL">
+        <col name="NAME"/>
+        <col name="FAVORITE"/>
+        <col name="RARITY"/>
+        <col name="SET"/>
+        <col name="TYPE"/>
+    </config>
+    <config name="SCHEME_POOL">
+        <col name="NAME"/>
+        <col name="FAVORITE"/>
+        <col name="RARITY"/>
+        <col name="SET"/>
+        <col name="TYPE"/>
+    </config>
+    <config name="CONSPIRACY_DECKS">
+        <col name="NAME"/>
+        <col name="FAVORITE"/>
+        <col name="RARITY"/>
+        <col name="SET"/>
+        <col name="TYPE"/>
+    </config>
+    <config name="SCHEME_DECK_EDITOR">
+        <col name="NAME"/>
+        <col name="COLOR"/>
+        <col name="POWER"/>
+        <col name="FAVORITE"/>
+        <col name="RARITY"/>
+        <col name="SET"/>
+        <col name="AI"/>
+        <col name="COST"/>
+        <col name="RANKING"/>
+        <col name="TOUGHNESS"/>
+        <col name="CMC"/>
+        <col name="TYPE"/>
+    </config>
+    <config name="PLANAR_POOL">
+        <col name="NAME"/>
+        <col name="FAVORITE"/>
+        <col name="RARITY"/>
+        <col name="SET"/>
+        <col name="TYPE"/>
+    </config>
+    <config name="PLANAR_DECK_EDITOR">
+        <col name="NAME"/>
+        <col name="COLOR"/>
+        <col name="POWER"/>
+        <col name="FAVORITE"/>
+        <col name="RARITY"/>
+        <col name="SET"/>
+        <col name="AI"/>
+        <col name="COST"/>
+        <col name="RANKING"/>
+        <col name="TOUGHNESS"/>
+        <col name="CMC"/>
+        <col name="TYPE"/>
+    </config>
+    <config name="COMMANDER_POOL">
+        <col name="NAME"/>
+        <col name="COLOR"/>
+        <col name="POWER"/>
+        <col name="FAVORITE"/>
+        <col name="RARITY"/>
+        <col name="SET"/>
+        <col name="AI"/>
+        <col name="COST"/>
+        <col name="RANKING"/>
+        <col name="TOUGHNESS"/>
+        <col name="CMC"/>
+        <col name="TYPE"/>
+    </config>
+    <config name="COMMANDER_SECTION">
+        <col name="NAME"/>
+        <col name="COLOR"/>
+        <col name="POWER"/>
+        <col name="FAVORITE"/>
+        <col name="RARITY"/>
+        <col name="SET"/>
+        <col name="AI"/>
+        <col name="COST"/>
+        <col name="RANKING"/>
+        <col name="TOUGHNESS"/>
+        <col name="CMC"/>
+        <col name="TYPE"/>
+    </config>
+    <config name="WORKSHOP_CATALOG">
+        <col name="NAME"/>
+        <col name="COLOR"/>
+        <col name="POWER"/>
+        <col name="FAVORITE"/>
+        <col name="RARITY"/>
+        <col name="SET"/>
+        <col name="AI"/>
+        <col name="COST"/>
+        <col name="RANKING"/>
+        <col name="TOUGHNESS"/>
+        <col name="CMC"/>
+        <col name="TYPE"/>
+    </config>
+    <config name="DECK_VIEWER">
+        <col name="NAME"/>
+        <col name="COLOR"/>
+        <col name="POWER"/>
+        <col name="RARITY"/>
+        <col name="QUANTITY"/>
+        <col name="SET"/>
+        <col name="AI"/>
+        <col name="COST"/>
+        <col name="RANKING"/>
+        <col name="TOUGHNESS"/>
+        <col name="CMC"/>
+        <col name="TYPE"/>
+    </config>
+    <config name="CONSTRUCTED_DECKS">
+        <col name="DECK_FOLDER"/>
+        <col name="NAME"/>
+        <col name="DECK_COLOR"/>
+        <col name="DECK_SIDE"/>
+        <col name="DECK_MAIN"/>
+        <col name="DECK_ACTIONS"/>
+        <col name="DECK_EDITION"/>
+        <col name="DECK_FAVORITE"/>
+        <col name="DECK_FORMAT"/>
+    </config>
+    <config name="COMMANDER_DECKS">
+        <col name="NAME"/>
+        <col name="DECK_COLOR"/>
+        <col name="DECK_SIDE"/>
+        <col name="DECK_MAIN"/>
+        <col name="DECK_ACTIONS"/>
+        <col name="DECK_EDITION"/>
+        <col name="DECK_FAVORITE"/>
+        <col name="DECK_FORMAT"/>
+    </config>
+    <config name="PLANAR_DECKS">
+        <col name="NAME"/>
+        <col name="DECK_COLOR"/>
+        <col name="DECK_SIDE"/>
+        <col name="DECK_MAIN"/>
+        <col name="DECK_ACTIONS"/>
+        <col name="DECK_EDITION"/>
+        <col name="DECK_FAVORITE"/>
+        <col name="DECK_FORMAT"/>
+    </config>
+    <config name="SCHEME_DECKS">
+        <col name="NAME"/>
+        <col name="DECK_COLOR"/>
+        <col name="DECK_SIDE"/>
+        <col name="DECK_MAIN"/>
+        <col name="DECK_ACTIONS"/>
+        <col name="DECK_EDITION"/>
+        <col name="DECK_FAVORITE"/>
+        <col name="DECK_FORMAT"/>
+    </config>
+    <config name="VANGUARDS">
+        <col name="NAME"/>
+        <col name="DECK_COLOR"/>
+        <col name="DECK_SIDE"/>
+        <col name="DECK_MAIN"/>
+        <col name="DECK_ACTIONS"/>
+        <col name="DECK_EDITION"/>
+        <col name="DECK_FAVORITE"/>
+        <col name="DECK_FORMAT"/>
+    </config>
+    <config name="DRAFT_DECKS">
+        <col name="NAME"/>
+        <col name="DECK_COLOR"/>
+        <col name="DECK_SIDE"/>
+        <col name="DECK_MAIN"/>
+        <col name="DECK_ACTIONS"/>
+        <col name="DECK_EDITION"/>
+        <col name="DECK_FAVORITE"/>
+        <col name="DECK_FORMAT"/>
+    </config>
+    <config name="SEALED_DECKS">
+        <col name="NAME"/>
+        <col name="DECK_COLOR"/>
+        <col name="DECK_SIDE"/>
+        <col name="DECK_MAIN"/>
+        <col name="DECK_ACTIONS"/>
+        <col name="DECK_EDITION"/>
+        <col name="DECK_FAVORITE"/>
+        <col name="DECK_FORMAT"/>
+    </config>
+    <config name="WINSTON_DECKS">
+        <col name="NAME"/>
+        <col name="DECK_COLOR"/>
+        <col name="DECK_SIDE"/>
+        <col name="DECK_MAIN"/>
+        <col name="DECK_ACTIONS"/>
+        <col name="DECK_EDITION"/>
+        <col name="DECK_FAVORITE"/>
+        <col name="DECK_FORMAT"/>
+    </config>
+    <config name="QUEST_DECKS">
+        <col name="NAME"/>
+        <col name="DECK_COLOR"/>
+        <col name="DECK_SIDE"/>
+        <col name="DECK_MAIN"/>
+        <col name="DECK_ACTIONS"/>
+        <col name="DECK_EDITION"/>
+        <col name="DECK_FAVORITE"/>
+        <col name="DECK_FORMAT"/>
+    </config>
+    <config name="PRECON_DECKS">
+        <col name="NAME" sortPriority="3"/>
+        <col name="DECK_COLOR"/>
+        <col name="DECK_SIDE"/>
+        <col name="DECK_MAIN"/>
+        <col name="DECK_EDITION" sortPriority="1" sortState="DESC"/>
+        <col name="DECK_FAVORITE" sortPriority="2"/>
+        <col name="DECK_FORMAT"/>
+    </config>
+    <config name="QUEST_EVENT_DECKS">
+        <col name="NAME"/>
+        <col name="DECK_COLOR"/>
+        <col name="DECK_SIDE"/>
+        <col name="DECK_MAIN"/>
+        <col name="DECK_EDITION"/>
+        <col name="DECK_FAVORITE"/>
+        <col name="DECK_FORMAT"/>
+    </config>
+    <config name="NET_DECKS">
+        <col name="NAME"/>
+        <col name="DECK_COLOR"/>
+        <col name="DECK_SIDE"/>
+        <col name="DECK_MAIN"/>
+        <col name="DECK_EDITION"/>
+        <col name="DECK_FAVORITE"/>
+        <col name="DECK_FORMAT"/>
+    </config>
+    <config name="SIDEBOARD">
+        <col name="NAME"/>
+        <col name="COLOR"/>
+        <col name="POWER"/>
+        <col name="RARITY"/>
+        <col name="SET"/>
+        <col name="AI"/>
+        <col name="DECK_QUANTITY"/>
+        <col name="COST"/>
+        <col name="RANKING"/>
+        <col name="TOUGHNESS"/>
+        <col name="CMC"/>
+        <col name="TYPE"/>
+    </config>
+</preferences>

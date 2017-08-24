@@ -1,0 +1,156 @@
+[metadata]
+Code=APC
+Date=2001-06-04
+Name=Apocalypse
+Code2=AP
+MciCode=ap
+Type=Expansion
+BoosterCovers=1
+Booster=11 Common, 3 Uncommon, 1 Rare
+Foil=OldStyle
+FoilAlwaysInCommonSlot=False
+
+[cards]
+91 U AEther Mutation
+73 C Ana Disciple
+74 U Ana Sanctuary
+75 R Anavolver
+1 C Angelfire Crusader
+139 R Battlefield Forge
+55 R Bloodfire Colossus
+56 C Bloodfire Dwarf
+57 C Bloodfire Infusion
+58 U Bloodfire Kavu
+76 C Bog Gnarr
+133 U Brass Herald
+92 U Captain's Maneuver
+140 R Caves of Koilos
+19 C Ceta Disciple
+20 U Ceta Sanctuary
+21 R Cetavolver
+2 U Coalition Flag
+3 C Coalition Honor Guard
+22 C Coastal Drake
+93 C Consume Strength
+94 R Cromat
+37 C Dead Ringers
+95 R Death Grasp
+96 U Death Mutation
+4 C Dega Disciple
+5 U Dega Sanctuary
+6 R Degavolver
+38 R Desolation Angel
+59 R Desolation Giant
+7 U Diversionary Tactics
+8 C Divine Light
+134 U Dodecapod
+135 U Dragon Arch
+60 C Dwarven Landslide
+61 U Dwarven Patrol
+97 U Ebony Treefolk
+136 U Emblazoned Golem
+9 U Enlistment Officer
+23 U Evasive Action
+10 R False Dawn
+98 R Fervent Charge
+128 U Fire // Ice
+99 U Flowstone Charger
+39 U Foul Presence
+100 R Fungal Shambler
+77 U Gaea's Balance
+101 C Gaea's Skyfolk
+11 R Gerrard Capashen
+102 U Gerrard's Verdict
+78 C Glade Gnarr
+103 C Goblin Legionnaire
+62 U Goblin Ringleader
+104 R Goblin Trenches
+40 U Grave Defiler
+105 R Guided Passage
+12 U Haunted Angel
+13 C Helionaut
+24 R Ice Cave
+63 U Illuminate
+129 U Illusion // Reality
+25 C Index
+26 C Jaded Response
+27 C Jilt
+106 U Jungle Barrier
+64 C Kavu Glider
+79 U Kavu Howler
+80 R Kavu Mauler
+41 C Last Caress
+107 R Last Stand
+81 C Lay of the Land
+137 R Legacy Weapon
+130 U Life // Death
+108 R Lightning Angel
+28 C Living Airship
+109 C Llanowar Dead
+141 R Llanowar Wastes
+14 C Manacles of Decay
+110 U Martyrs' Tomb
+138 R Mask of Intolerance
+42 C Mind Extraction
+111 U Minotaur Illusionist
+65 C Minotaur Tactician
+43 C Mournful Zombie
+112 R Mystic Snake
+44 C Necra Disciple
+45 U Necra Sanctuary
+46 R Necravolver
+131 U Night // Day
+132 U Order // Chaos
+15 C Orim's Thunder
+113 R Overgrown Estate
+82 C Penumbra Bobcat
+83 U Penumbra Kavu
+84 R Penumbra Wurm
+114 R Pernicious Deed
+47 R Phyrexian Arena
+48 U Phyrexian Gargantua
+49 C Phyrexian Rager
+50 R Planar Despair
+115 R Powerstone Minefield
+116 R Prophetic Bolt
+117 C Putrid Warrior
+51 C Quagmire Druid
+118 C Quicksilver Dagger
+66 C Raka Disciple
+67 U Raka Sanctuary
+68 R Rakavolver
+119 C Razorfin Hunter
+29 C Reef Shaman
+85 C Savage Gorilla
+16 C Shield of Duty and Reason
+30 C Shimmering Mirage
+142 R Shivan Reef
+69 C Smash
+120 C Soul Link
+17 R Spectral Lynx
+121 R Spiritmonger
+122 C Squee's Embrace
+123 U Squee's Revenge
+18 C Standard Bearer
+86 C Strength of Night
+124 R Suffocating Blast
+52 U Suppress
+87 U Sylvan Messenger
+88 R Symbiotic Deployment
+70 C Tahngarth's Glare
+125 C Temporal Spring
+31 U Tidal Courier
+89 C Tranquil Path
+71 C Tundra Kavu
+32 R Unnatural Selection
+90 C Urborg Elf
+53 C Urborg Uprising
+126 R Vindicate
+33 U Vodalian Mystic
+34 U Whirlpool Drake
+35 C Whirlpool Rider
+36 R Whirlpool Warrior
+72 R Wild Research
+143 R Yavimaya Coast
+127 R Yavimaya's Embrace
+54 C Zombie Boa

@@ -1,0 +1,394 @@
+[metadata]
+Code=10E
+Date=2007-07-14
+Name=Tenth Edition
+Code2=10E
+MciCode=10e
+Type=Core
+BoosterCovers=5
+Booster=10 Common, 3 Uncommon, 1 Rare, 1 BasicLand
+
+[cards]
+249 R Abundance
+63 U Academy Researchers
+347 R Adarkar Wastes
+125 C Afflict
+250 C Aggressive Urge
+126 U Agonizing Memories
+64 U Air Elemental
+65 R Ambassador Laquatus
+187 C Anaba Bodyguard
+1 U Ancestor's Chosen
+2 U Angel of Mercy
+311 U Angel's Feather
+3 C Angelic Blessing
+4 R Angelic Chorus
+5 C Angelic Wall
+188 U Arcane Teachings
+66 R Arcanis the Omnipotent
+127 R Ascendant Evincar
+128 C Assassinate
+67 U Aura Graft
+6 U Aura of Silence
+251 R Avatar of Might
+7 C Aven Cloudchaser
+68 C Aven Fisher
+69 C Aven Windreader
+8 U Ballista Squad
+9 C Bandage
+348 R Battlefield Forge
+189 R Beacon of Destruction
+10 R Beacon of Immortality
+129 R Beacon of Unrest
+11 C Benalish Knight
+252 R Birds of Paradise
+253 U Blanchwood Armor
+190 U Blaze
+191 R Bloodfire Colossus
+192 C Bloodrock Cyclops
+130 U Bog Wraith
+193 C Bogardan Firefiend
+70 C Boomerang
+312 U Bottle Gnomes
+349 R Brushland
+71 C Cancel
+254 C Canopy Spider
+350 R Caves of Koilos
+72 R Cephalid Constable
+313 R Chimeric Staff
+12 R Cho-Manno, Revolutionary
+314 U Chromatic Star
+315 R Citanul Flute
+255 C Civic Wayfinder
+73 R Clone
+74 C Cloud Elemental
+75 C Cloud Sprite
+316 R Coat of Arms
+317 R Colossus of Sardia
+256 C Commune with Nature
+318 U Composite Golem
+13 U Condemn
+194 U Cone of Flame
+131 U Consume Spirit
+132 C Contaminated Bond
+76 C Counsel of the Soratami
+77 C Crafty Pathmage
+257 C Craw Wurm
+258 U Creeping Mold
+319 R Crucible of Worlds
+133 U Cruel Edict
+195 U Cryoclasm
+134 U Deathmark
+78 C Dehydration
+79 U Deluge
+196 C Demolish
+320 U Demon's Horn
+14 C Demystify
+80 R Denizen of the Deep
+135 U Diabolic Tutor
+81 U Discombobulate
+136 C Distress
+137 R Doomed Necromancer
+321 R Doubling Cube
+197 R Dragon Roost
+322 U Dragon's Claw
+82 R Dreamborn Muse
+138 C Dross Crocodile
+139 U Drudge Skeletons
+198 C Duct Crawler
+140 C Dusk Imp
+199 U Earth Elemental
+259 U Elven Riders
+260 C Elvish Berserker
+261 R Elvish Champion
+262 R Elvish Piper
+263 U Enormous Baloth
+141 C Essence Drain
+83 R Evacuation
+351 U Faerie Conclave
+142 C Fear
+264 U Femeref Archers
+143 C Festering Goblin
+15 R Field Marshal
+200 C Firebreathing
+201 C Fists of the Anvil
+202 U Flamewave Invoker
+84 U Flashfreeze
+203 R Flowstone Slide
+85 U Fog Elemental
+352 U Forbidding Watchtower
+380 L Forest
+380 L Forest
+380 L Forest
+380 L Forest
+323 U Fountain of Youth
+86 C Fugitive Wizard
+205 U Furnace Whelp
+204 R Furnace of Rath
+265 R Gaea's Herald
+353 U Ghitu Encampment
+16 C Ghost Warden
+266 C Giant Growth
+267 C Giant Spider
+17 R Glorious Anthem
+206 C Goblin Elite Infantry
+207 R Goblin King
+208 U Goblin Lore
+209 C Goblin Piker
+210 C Goblin Sky Raider
+144 R Grave Pact
+145 R Graveborn Muse
+146 C Gravedigger
+268 C Grizzly Bears
+211 U Guerrilla Tactics
+18 U Hail of Arrows
+147 U Hate Weaver
+148 R Head Games
+19 C Heart of Light
+149 U Hidden Horror
+20 U High Ground
+150 C Highway Robber
+212 C Hill Giant
+21 C Holy Day
+22 C Holy Strength
+23 C Honor Guard
+87 C Horseshoe Crab
+325 R Howling Mine
+269 U Hunted Wumpus
+88 R Hurkyl's Recall
+270 R Hurricane
+151 R Hypnotic Specter
+24 U Icatian Priest
+326 U Icy Manipulator
+213 C Incinerate
+371 L Island
+371 L Island
+371 L Island
+371 L Island
+327 R Jayemdae Tome
+271 R Joiner Adept
+328 U Juggernaut
+214 R Kamahl, Pit Fighter
+354 R Karplusan Forest
+272 U Karplusan Strider
+273 C Kavu Climber
+25 R Kjeldoran Royal Guard
+152 U Knight of Dusk
+329 U Kraken's Eye
+215 C Lava Axe
+216 R Lavaborn Muse
+330 R Legacy Weapon
+331 U Leonin Scimitar
+217 C Lightning Elemental
+274 C Llanowar Elves
+275 C Llanowar Sentinel
+355 R Llanowar Wastes
+153 C Looming Shade
+154 R Lord of the Pit
+155 R Lord of the Undead
+26 C Loxodon Mystic
+332 R Loxodon Warhammer
+27 R Loyal Sentry
+89 C Lumengrid Warden
+28 U Luminesce
+276 U Lure
+90 R Mahamoti Djinn
+218 R Manabarbs
+333 U Mantis Engine
+91 R March of the Machines
+156 C Mass of Ghouls
+157 U Megrim
+92 C Merfolk Looter
+158 R Midnight Ritual
+278 U Might Weaver
+277 R Might of Oaks
+334 R Millstone
+93 R Mind Bend
+159 C Mind Rot
+335 U Mind Stone
+279 R Mirri, Cat Warrior
+29 R Mobilization
+219 U Mogg Fanatic
+280 R Molimo, Maro-Sorcerer
+160 R Mortal Combat
+161 R Mortivore
+378 L Mountain
+378 L Mountain
+378 L Mountain
+378 L Mountain
+162 U Nantuko Husk
+281 C Natural Spring
+282 C Naturalize
+163 U Nekrataal
+164 R Nightmare
+165 U No Rest for the Wicked
+30 R Nomad Mythmaker
+220 U Orcish Artillery
+336 U Ornithopter
+283 C Overgrowth
+284 U Overrun
+31 C Pacifism
+32 R Paladin en-Vec
+33 R Pariah
+94 C Peek
+95 U Persuasion
+166 R Phage the Untouchable
+96 U Phantom Warrior
+167 C Phyrexian Rager
+337 U Phyrexian Vault
+285 C Pincher Beetles
+338 R Pithing Needle
+97 R Plagiarize
+168 C Plague Beetle
+169 R Plague Wind
+364 L Plains
+364 L Plains
+364 L Plains
+364 L Plains
+339 R Platinum Angel
+286 U Primal Rage
+221 C Prodigal Pyromancer
+98 U Puppeteer
+222 U Pyroclasm
+356 U Quicksand
+287 R Quirion Dryad
+223 U Rage Weaver
+224 C Raging Goblin
+170 U Rain of Tears
+288 C Rampant Growth
+171 C Ravenous Rats
+340 R Razormane Masticore
+289 U Recollect
+172 C Recover
+290 U Regeneration
+225 R Relentless Assault
+173 U Relentless Rats
+99 U Reminisce
+100 C Remove Soul
+34 C Reviving Dose
+35 R Reya Dawnbringer
+291 R Rhox
+36 R Righteousness
+101 C Robe of Mirrors
+226 C Rock Badger
+341 U Rod of Ruin
+292 R Root Maze
+293 C Rootwalla
+102 C Rootwater Commando
+103 R Rootwater Matriarch
+174 R Royal Assassin
+37 U Rule of Law
+294 C Rushwood Dryad
+104 C Sage Owl
+38 C Samite Healer
+105 R Scalpelexis
+175 C Scathe Zombies
+295 R Scion of the Wild
+227 R Scoria Wurm
+342 R Sculpting Steel
+106 C Sea Monster
+296 R Seedborn Muse
+228 R Seismic Assault
+176 R Sengir Vampire
+39 R Serra Angel
+40 U Serra's Embrace
+177 C Severed Legion
+229 U Shatterstorm
+107 C Shimmering Wings
+230 R Shivan Dragon
+231 R Shivan Hellkite
+357 R Shivan Reef
+232 C Shock
+233 R Shunt
+234 R Siege-Gang Commander
+108 C Sift
+109 U Sky Weaver
+41 C Skyhunter Patrol
+42 C Skyhunter Prowler
+43 U Skyhunter Skirmisher
+297 C Skyshroud Ranger
+178 R Sleeper Agent
+235 C Smash
+110 C Snapping Drake
+179 U Soul Feast
+44 U Soul Warden
+236 R Soulblast
+237 U Spark Elemental
+358 U Spawning Pool
+343 U Spellbook
+111 U Spiketail Hatchling
+298 C Spined Wurm
+180 C Spineless Thug
+45 U Spirit Link
+46 U Spirit Weaver
+238 C Spitting Earth
+239 R Squee, Goblin Nabob
+299 C Stalking Tiger
+300 U Stampeding Wildebeests
+47 U Starlight Invoker
+48 C Steadfast Guard
+344 U Steel Golem
+49 R Story Circle
+181 U Stronghold Discipline
+240 C Stun
+241 U Sudden Impact
+359 R Sulfurous Springs
+112 R Sunken Hope
+50 C Suntail Hawk
+375 L Swamp
+375 L Swamp
+375 L Swamp
+375 L Swamp
+301 U Sylvan Basilisk
+302 U Sylvan Scrying
+303 U Tangle Spider
+113 U Telepathy
+114 U Telling Time
+51 U Tempest of Light
+360 C Terramorphic Expanse
+182 C Terror
+324 R The Hive
+115 U Thieving Magpie
+242 U Threaten
+183 U Thrull Surgeon
+243 U Thundering Giant
+116 U Tidings
+117 R Time Stop
+118 R Time Stretch
+119 R Traumatize
+52 U Treasure Hunter
+304 C Treetop Bracers
+361 U Treetop Village
+305 R Troll Ascetic
+53 R True Believer
+54 C Tundra Wolves
+120 R Twincast
+121 C Twitch
+244 C Uncontrollable Anger
+362 R Underground River
+184 R Underworld Dreams
+185 C Unholy Strength
+122 C Unsummon
+306 R Upwelling
+186 C Vampire Bats
+123 U Vedalken Mastermind
+55 C Venerable Monk
+307 R Verdant Force
+245 C Viashino Runner
+246 C Viashino Sandscout
+308 U Viridian Shaman
+56 R Voice of All
+124 U Wall of Air
+247 U Wall of Fire
+57 U Wall of Swords
+309 C Wall of Wood
+248 R Warp World
+58 C Warrior's Honor
+345 U Whispersilk Cloak
+59 C Wild Griffin
+60 R Windborn Muse
+61 R Wrath of God
+346 U Wurm's Tooth
+363 R Yavimaya Coast
+310 U Yavimaya Enchantress
+62 C Youthful Knight

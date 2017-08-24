@@ -1,0 +1,24 @@
+[metadata]
+Code=FVL
+Date=2011-08-26
+Name=From the Vault: Legends
+MciCode=fvl
+Type=From_the_Vault
+Alias=V11
+
+[cards]
+1 M Cao Cao, Lord of Wei
+2 M Captain Sisay
+3 M Doran, the Siege Tower
+4 M Kiki-Jiki, Mirror Breaker
+5 M Kresh the Bloodbraided
+6 M Mikaeus, the Lunarch
+7 M Omnath, Locus of Mana
+8 M Oona, Queen of the Fae
+9 M Progenitus
+10 M Rafiq of the Many
+11 M Sharuum the Hegemon
+12 M Sun Quan, Lord of Wu
+13 M Teferi, Mage of Zhalfir
+14 M Ulamog, the Infinite Gyre
+15 M Visara the Dreadful
