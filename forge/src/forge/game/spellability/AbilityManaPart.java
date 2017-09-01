@@ -337,6 +337,9 @@ public class AbilityManaPart implements java.io.Serializable {
 
             if (sa.isAbility()) {
                 if (restriction.startsWith("Activated")) {
+                    if(sa.isTrigger()) {
+                        continue;
+                    }
                     restriction = restriction.replace("Activated", "Card");
                 }
                 else {
