@@ -276,7 +276,7 @@ public enum VSubmenuPreferences implements IVSubmenu<CSubmenuPreferences> {
         pnlPrefs.add(new NoteLabel("Stacks identical creatures on the battlefield like lands, artifacts, and enchantments."), descriptionConstraints);
 
         pnlPrefs.add(cbTimedTargOverlay, titleConstraints);
-        pnlPrefs.add(new NoteLabel("Enables throttling-based optimization of targeting overlay to reduce CPU use (only disable if you experience choppiness on older hardware, requires starting a new match)"), descriptionConstraints);
+        pnlPrefs.add(new NoteLabel("Enables throttling-based optimization of targeting overlay to reduce CPU use (only disable if you experience choppiness on older hardware, requires starting a new match)."), descriptionConstraints);
 
         pnlPrefs.add(cbpCounterDisplayType, comboBoxConstraints);
         pnlPrefs.add(new NoteLabel("Selects the style of the in-game counter display for cards. Text-based is a new tab-like display on the cards. Image-based is the old counter image. Hybrid displays both at once."), descriptionConstraints);

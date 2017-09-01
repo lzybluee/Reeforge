@@ -476,10 +476,14 @@ public final class StaticAbilityContinuous {
                 // Restore the original text in case it was remembered before
                 if (affectedCard.getStates().contains(CardStateName.OriginalText)) {
                     affectedCard.clearTriggersNew();
+                    List<SpellAbility> saToRemove = Lists.newArrayList();
                     for (SpellAbility saTemp : affectedCard.getSpellAbilities()) {
                         if (saTemp.isTemporary()) {
-                            affectedCard.removeSpellAbility(saTemp);
+                            saToRemove.add(saTemp);
                         }
+                    }
+                    for (SpellAbility saRem : saToRemove) {
+                        affectedCard.removeSpellAbility(saRem);
                     }
                     CardFactory.copyState(affectedCard, CardStateName.OriginalText, affectedCard, CardStateName.Original, false);
                 }
@@ -491,6 +495,10 @@ public final class StaticAbilityContinuous {
                     }
 
                     CardFactory.copyState(gainTextSource, CardStateName.Original, affectedCard, CardStateName.Original, false);
+
+                    // Do not clone the set code and rarity from the target card
+                    affectedCard.getState(CardStateName.Original).setSetCode(affectedCard.getState(CardStateName.OriginalText).getSetCode());
+                    affectedCard.getState(CardStateName.Original).setRarity(affectedCard.getState(CardStateName.OriginalText).getRarity());
 
                     // Enable this in case Volrath's original image is to be used
                     affectedCard.getState(CardStateName.Original).setImageKey(affectedCard.getState(CardStateName.OriginalText).getImageKey());
@@ -568,8 +576,8 @@ public final class StaticAbilityContinuous {
                     toughnessBonus = CardFactoryUtil.xCount(affectedCard, AbilityUtils.getSVar(stAb, addT));
                     se.addXMapValue(affectedCard, toughnessBonus);
                 }
-                affectedCard.addSemiPermanentPowerBoost(powerBonus);
-                affectedCard.addSemiPermanentToughnessBoost(toughnessBonus);
+                affectedCard.addSemiPermanentPowerBoost(powerBonus, false);
+                affectedCard.addSemiPermanentToughnessBoost(toughnessBonus, false);
             }
 
             // add keywords
@@ -722,7 +730,7 @@ public final class StaticAbilityContinuous {
                 affectedCard.setMayPlay(mayPlayController, mayPlayWithoutManaCost, mayPlayWithFlash, mayPlayGrantZonePermissions, stAb);
             }
 
-            //affectedCard.updateStateForView(); // FIXME: causes intolerable flickering for cards such as Thassa, God of the Sea or Wind Zendikon.
+            affectedCard.updateAbilityTextForView(); // only update keywords and text for view to avoid flickering
         }
 
         return affectedCards;

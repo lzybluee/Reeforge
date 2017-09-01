@@ -262,11 +262,6 @@ public abstract class GameState {
             } else if (c.getCurrentStateName().equals(CardStateName.Meld)) {
                 newText.append("|Meld");
             }
-            Map<CounterType, Integer> counters = c.getCounters();
-            if (!counters.isEmpty()) {
-                newText.append("|Counters:");
-                newText.append(countersToString(counters));
-            }
             if (c.getEquipping() != null) {
                 newText.append("|Attaching:").append(c.getEquipping().getId());
             } else if (c.getFortifying() != null) {
@@ -310,6 +305,18 @@ public abstract class GameState {
         if (zoneType == ZoneType.Exile) {
             if (c.getExiledWith() != null) {
                 newText.append("|ExiledWith:").append(c.getExiledWith().getId());
+            }
+            if (c.isFaceDown()) {
+                newText.append("|FaceDown"); // Exiled face down
+            }
+        }
+
+        if (zoneType == ZoneType.Battlefield || zoneType == ZoneType.Exile) {
+            // A card can have counters on the battlefield and in exile (e.g. exiled by Mairsil, the Pretender)
+            Map<CounterType, Integer> counters = c.getCounters();
+            if (!counters.isEmpty()) {
+                newText.append("|Counters:");
+                newText.append(countersToString(counters));
             }
         }
 
@@ -675,14 +682,15 @@ public abstract class GameState {
                 String kwName = sPtr.substring(3);
                 FCollectionView<SpellAbility> saList = c.getSpellAbilities();
 
-                if (kwName.equals("Awaken")) {
+                if (kwName.equals("Awaken") || kwName.equals("AwakenOnly")) {
+                    // AwakenOnly only creates the Awaken effect, while Awaken precasts the whole spell with Awaken
                     for (SpellAbility ab : saList) {
                         if (ab.getDescription().startsWith("Awaken")) {
                             ab.setActivatingPlayer(c.getController());
                             ab.getSubAbility().setActivatingPlayer(c.getController());
-                            sa = ab;
                             // target for Awaken is set in its first subability
-                            handleScriptedTargetingForSA(game, sa.getSubAbility(), tgtID);
+                            handleScriptedTargetingForSA(game, ab.getSubAbility(), tgtID);
+                            sa = kwName.equals("AwakenOnly") ? ab.getSubAbility() : ab;
                         }
                     }
                     if (sa == null) {
@@ -830,7 +838,7 @@ public abstract class GameState {
     }
 
     private void applyCountersToGameEntity(GameEntity entity, String counterString) {
-        entity.clearCounters();
+        entity.setCounters(Maps.<CounterType, Integer>newEnumMap(CounterType.class));
         String[] allCounterStrings = counterString.split(",");
         for (final String counterPair : allCounterStrings) {
             String[] pair = counterPair.split("=", 2);

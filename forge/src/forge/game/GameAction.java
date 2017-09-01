@@ -82,7 +82,7 @@ import java.util.Set;
  * Methods for common actions performed during a game.
  * 
  * @author Forge
- * @version $Id: GameAction.java 35131 2017-08-19 18:05:44Z Agetian $
+ * @version $Id: GameAction.java 35266 2017-08-28 14:06:28Z Agetian $
  */
 public class GameAction {
     private final Game game;
@@ -842,6 +842,12 @@ public class GameAction {
 
         final Map<String, Object> runParams = Maps.newHashMap();
         game.getTriggerHandler().runTrigger(TriggerType.Always, runParams, false);
+
+        // Update P/T and type in the view only once after all the cards have been processed, to avoid flickering
+        for (Card c : affectedCards) {
+            c.updatePowerToughnessForView();
+            c.updateTypesForView();
+        }
 
         if (runEvents && !affectedCards.isEmpty()) {
             game.fireEvent(new GameEventCardStatsChanged(affectedCards));

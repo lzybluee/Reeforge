@@ -40,6 +40,7 @@ import forge.game.card.CardFactory;
 import forge.game.cost.Cost;
 import forge.game.cost.CostPart;
 import forge.game.cost.CostPartMana;
+import forge.game.cost.CostRemoveCounter;
 import forge.game.mana.Mana;
 import forge.game.player.Player;
 import forge.game.staticability.StaticAbility;
@@ -60,7 +61,7 @@ import java.util.*;
  * </p>
  *
  * @author Forge
- * @version $Id: SpellAbility.java 35081 2017-08-16 21:38:26Z Max mtg $
+ * @version $Id: SpellAbility.java 35256 2017-08-27 18:15:19Z Agetian $
  */
 public abstract class SpellAbility extends CardTraitBase implements ISpellAbility, IIdentifiable, Comparable<SpellAbility> {
     private static int maxId = 0;
@@ -595,7 +596,8 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
     }
 
     public void resetOnceResolved() {
-        resetPaidHash();
+        //resetPaidHash(); // FIXME: if uncommented, breaks Dragon Presence, e.g. Orator of Ojutai + revealing a Dragon from hand.
+                           // Is it truly necessary at this point? The paid hash seems to be reset on all SA instance operations.
         resetTargets();
         resetTriggeringObjects();
         resetTriggerRemembered();
@@ -1257,9 +1259,24 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
         if (!this.usesTargeting()) {
             return getTargets().isEmpty();
         }
-        
+
+        int minTargets = getTargetRestrictions().getMinTargets(hostCard, this);
+        int maxTargets = getTargetRestrictions().getMaxTargets(hostCard, this);
         int numTargets = getTargets().getNumTargeted();
-        if (getTargetRestrictions().getMinTargets(hostCard, this) > numTargets || (getTargetRestrictions().getMaxTargets(hostCard, this) < numTargets)) {
+
+        if (maxTargets == 0 && this.getPayCosts() != null
+                && this.getPayCosts().hasSpecificCostType(CostRemoveCounter.class)
+                && this.hasSVar(this.getParam("TargetMax"))
+                && this.getSVar(this.getParam("TargetMax")).startsWith("Count$CardCounters")
+                && this.getHostCard() != null && this.getHostCard().hasSVar("CostCountersRemoved")) {
+            // TODO: Current AI implementation removes the counters during payment before the
+            // ability is added to stack, resulting in maxTargets=0 at this point. We are
+            // assuming here that the AI logic specified a legal number, and that number ended
+            // up being in CostCountersRemoved that is created on the card during payment.
+            maxTargets = Integer.parseInt(this.getHostCard().getSVar("CostCountersRemoved"));
+        }
+
+        if (minTargets > numTargets || maxTargets < numTargets) {
             return false;
         }
         return true;

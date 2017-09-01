@@ -1,6 +1,7 @@
 package forge.ai;
 
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Lists;
@@ -18,11 +19,7 @@ import forge.game.Game;
 import forge.game.GameActionUtil;
 import forge.game.ability.AbilityUtils;
 import forge.game.ability.ApiType;
-import forge.game.card.Card;
-import forge.game.card.CardCollection;
-import forge.game.card.CardCollectionView;
-import forge.game.card.CardLists;
-import forge.game.card.CardUtil;
+import forge.game.card.*;
 import forge.game.combat.CombatUtil;
 import forge.game.cost.Cost;
 import forge.game.cost.CostAdjustment;
@@ -203,20 +200,42 @@ public class ComputerUtilMana {
                 continue;
             }
 
-            if (sa.getHostCard() != null && sa.getApi() == ApiType.Animate) {
-                // For abilities like Genju of the Cedars, make sure that we're not activating the aura ability by tapping the enchanted card for mana
-                if (sa.getHostCard().isAura() && "Enchanted".equals(sa.getParam("Defined"))
-                        && ma.getHostCard() == sa.getHostCard().getEnchantingCard()
-                        && ma.getPayCosts().hasTapCost()) {
-                    continue;
+            if (sa.getHostCard() != null) {
+                if (sa.getApi() == ApiType.Animate) {
+                    // For abilities like Genju of the Cedars, make sure that we're not activating the aura ability by tapping the enchanted card for mana
+                    if (sa.getHostCard().isAura() && "Enchanted".equals(sa.getParam("Defined"))
+                            && ma.getHostCard() == sa.getHostCard().getEnchantingCard()
+                            && ma.getPayCosts().hasTapCost()) {
+                        continue;
+                    }
+
+                    // If a manland was previously animated this turn, do not tap it to animate another manland
+                    if (sa.getHostCard().isLand() && ma.getHostCard().isLand()
+                            && ai.getController().isAI()
+                            && AnimateAi.isAnimatedThisTurn(ai, ma.getHostCard())) {
+                        continue;
+                    }
+                } else if (sa.getApi() == ApiType.Pump) {
+                    if ((sa.getHostCard().isInstant() || sa.getHostCard().isSorcery())
+                            && ma.getHostCard().isCreature()
+                            && ai.getController().isAI()
+                            && ma.getPayCosts().hasTapCost()
+                            && sa.getTargets().getTargetCards().contains(ma.getHostCard())) {
+                        // do not activate pump instants/sorceries targeting creatures by tapping targeted
+                        // creatures for mana (for example, Servant of the Conduit)
+                        continue;
+                    }
+                } else if (sa.getApi() == ApiType.Attach
+                        && "AvoidPayingWithAttachTarget".equals(sa.getHostCard().getSVar("AIPaymentPreference"))) {
+                    // For cards like Genju of the Cedars, make sure we're not attaching to the same land that will
+                    // be tapped to pay its own cost if there's another untapped land like that available
+                    if (ma.getHostCard().equals(sa.getTargetCard())) {
+                        if (CardLists.filter(ai.getCardsIn(ZoneType.Battlefield), Predicates.and(CardPredicates.nameEquals(ma.getHostCard().getName()), CardPredicates.Presets.UNTAPPED)).size() > 1) {
+                            continue;
+                        }
+                    }
                 }
 
-                // If a manland was previously animated this turn, do not tap it to animate another manland
-                if (sa.getHostCard().isLand() && ma.getHostCard().isLand() 
-                        && ai.getController() instanceof PlayerControllerAi
-                        && AnimateAi.isAnimatedThisTurn(ai, ma.getHostCard())) {
-                    continue;
-                }
             }
 
             SpellAbility paymentChoice = ma;
@@ -1099,8 +1118,61 @@ public class ComputerUtilMana {
         return cost;
     }
 
+    // This method can be used to estimate the total amount of mana available to the player,
+    // including the mana available in that player's mana pool
+    public static int getAvailableManaEstimate(final Player p) {
+        int availableMana = 0;
+
+        final CardCollectionView list = new CardCollection(p.getCardsIn(ZoneType.Battlefield));
+        final List<Card> srcs = CardLists.filter(list, new Predicate<Card>() {
+            @Override
+            public boolean apply(final Card c) {
+                return !c.getManaAbilities().isEmpty();
+            }
+        });
+
+        int maxProduced = 0;
+        int producedWithCost = 0;
+        boolean hasSourcesWithNoManaCost = false;
+
+        for (Card src : srcs) {
+            maxProduced = 0;
+
+            for (SpellAbility ma : src.getManaAbilities()) {
+                ma.setActivatingPlayer(p);
+                if (ma.canPlay()) {
+                    int costsToActivate = ma.getPayCosts() != null && ma.getPayCosts().getCostMana() != null ? ma.getPayCosts().getCostMana().convertAmount() : 0;
+                    int producedMana = ma.getParamOrDefault("Produced", "").split(" ").length;
+                    int producedAmount = AbilityUtils.calculateAmount(src, ma.getParamOrDefault("Amount", "1"), ma);
+
+                    int producedTotal = producedMana * producedAmount - costsToActivate;
+
+                    if (costsToActivate > 0) {
+                        producedWithCost += producedTotal;
+                    } else if (!hasSourcesWithNoManaCost) {
+                        hasSourcesWithNoManaCost = true;
+                    }
+
+                    if (producedTotal > maxProduced) {
+                        maxProduced = producedTotal;
+                    }
+                }
+            }
+
+            availableMana += maxProduced;
+        }
+
+        availableMana += p.getManaPool().totalMana();
+
+        if (producedWithCost > 0 && !hasSourcesWithNoManaCost) {
+            availableMana -= producedWithCost; // probably can't activate them, no other mana available
+        }
+
+        return availableMana;
+    }
+
     //This method is currently used by AI to estimate available mana
-    public static CardCollection getAvailableMana(final Player ai, final boolean checkPlayable) {
+    public static CardCollection getAvailableManaSources(final Player ai, final boolean checkPlayable) {
         final CardCollectionView list = CardCollection.combine(ai.getCardsIn(ZoneType.Battlefield), ai.getCardsIn(ZoneType.Hand));
         final List<Card> manaSources = CardLists.filter(list, new Predicate<Card>() {
             @Override
@@ -1207,7 +1279,7 @@ public class ComputerUtilMana {
             System.out.println("DEBUG_MANA_PAYMENT: sortedManaSources = " + sortedManaSources);
         }
         return sortedManaSources;
-    } // getAvailableMana()
+    } // getAvailableManaSources()
 
     //This method is currently used by AI to estimate mana available
     private static ListMultimap<Integer, SpellAbility> groupSourcesByManaColor(final Player ai, boolean checkPlayable) {
@@ -1228,7 +1300,7 @@ public class ComputerUtilMana {
         }
 
         // Loop over all current available mana sources
-        for (final Card sourceCard : getAvailableMana(ai, checkPlayable)) {
+        for (final Card sourceCard : getAvailableManaSources(ai, checkPlayable)) {
             if (DEBUG_MANA_PAYMENT) {
                 System.out.println("DEBUG_MANA_PAYMENT: groupSourcesByManaColor sourceCard = " + sourceCard);
             }

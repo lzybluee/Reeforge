@@ -62,7 +62,7 @@ public class ForgePreferences extends PreferencesStore<ForgePreferences.FPref> {
         UI_DETAILED_SPELLDESC_IN_PROMPT ("true"),
         UI_CARD_SIZE ("small"),
         UI_SINGLE_CARD_ZOOM("false"),
-        UI_LIBGDX_TEXTURE_FILTERING("false"),
+        UI_LIBGDX_TEXTURE_FILTERING("true"),
         UI_BUGZ_NAME (""),
         UI_BUGZ_PWD (""),
         UI_ANTE ("false"),
@@ -93,6 +93,7 @@ public class ForgePreferences extends PreferencesStore<ForgePreferences.FPref> {
         UI_SHOW_STORM_COUNT_IN_PROMPT ("false"),
         UI_CARD_COUNTER_DISPLAY_TYPE(ForgeConstants.CounterDisplayType.TEXT.getName()),
         UI_CARD_COUNTER_DISPLAY_LOCATION(ForgeConstants.CounterDisplayLocation.TOP.getName()),
+        UI_ANDROID_MINIMIZE_ON_SCRLOCK("false"),
 
         UI_FOR_TOUCHSCREN("false"),
 

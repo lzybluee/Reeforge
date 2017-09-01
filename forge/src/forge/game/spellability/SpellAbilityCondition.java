@@ -48,7 +48,7 @@ import java.util.Map;
  * </p>
  * 
  * @author Forge
- * @version $Id: SpellAbilityCondition.java 34296 2017-06-17 13:17:03Z Hanmac $
+ * @version $Id: SpellAbilityCondition.java 35197 2017-08-24 13:29:46Z Agetian $
  * @since 1.0.15
  */
 public class SpellAbilityCondition extends SpellAbilityVariables {
@@ -253,7 +253,7 @@ public class SpellAbilityCondition extends SpellAbilityVariables {
             final String type = this.getPresenceCondition();
 
             int revealed = AbilityUtils.calculateAmount(host, "Revealed$Valid " + type, host.getCastSA());
-            int ctrl = AbilityUtils.calculateAmount(host, "Count$LastStateBattlefield " + type + ".YouCtrl", host.getCastSA());
+            int ctrl = AbilityUtils.calculateAmount(host, "Count$Valid " + type + ".inZoneBattlefield+YouCtrl", host.getCastSA());
 
             if (revealed + ctrl == 0) {
                 return false;

@@ -52,7 +52,7 @@ import java.util.List;
  * </p>
  * 
  * @author Forge
- * @version $Id: ManaPool.java 31154 2016-04-26 01:00:02Z friarsol $
+ * @version $Id: ManaPool.java 35211 2017-08-25 05:49:00Z Agetian $
  */
 public class ManaPool implements Iterable<Mana> {
     private final Player owner;
@@ -243,7 +243,7 @@ public class ManaPool implements Iterable<Mana> {
         if (sa.isSpell() && sa.getHostCard() != null) {
             final Card host = sa.getHostCard();
             if (mana.addsKeywords(sa) && mana.addsKeywordsType()
-                    && host.getType().hasStringType(mana.getManaAbility().getAddsKeyowrdsType())) {
+                    && host.getType().hasStringType(mana.getManaAbility().getAddsKeywordsType())) {
                 final long timestamp = sa.getHostCard().getGame().getNextTimestamp();
                 final List<String> kws = Arrays.asList(mana.getAddedKeywords().split(" & "));
                 host.addChangedCardKeywords(kws, new ArrayList<String>(), false, timestamp);

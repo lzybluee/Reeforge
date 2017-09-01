@@ -30,7 +30,7 @@ import forge.game.spellability.SpellAbility;
  * </p>
  * 
  * @author Forge
- * @version $Id: Mana.java 31154 2016-04-26 01:00:02Z friarsol $
+ * @version $Id: Mana.java 35211 2017-08-25 05:49:00Z Agetian $
  */
 public class Mana {
     @Override
@@ -102,7 +102,7 @@ public class Mana {
     }
 
     public final boolean addsKeywordsType() {
-        return this.manaAbility != null && manaAbility.getAddsKeyowrdsType() != null;
+        return this.manaAbility != null && manaAbility.getAddsKeywordsType() != null;
     }
     
     public final boolean addsKeywordsUntil() {

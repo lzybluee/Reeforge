@@ -44,7 +44,7 @@ public class CounterAi extends SpellAbilityAi {
 
         if (abCost != null) {
             // AI currently disabled for these costs
-            if (!ComputerUtilCost.checkSacrificeCost(ai, abCost, source)) {
+            if (!ComputerUtilCost.checkSacrificeCost(ai, abCost, source, sa)) {
                 return false;
             }
             if (!ComputerUtilCost.checkLifeCost(ai, abCost, source, 4, sa)) {
@@ -94,8 +94,9 @@ public class CounterAi extends SpellAbilityAi {
         String unlessCost = sa.hasParam("UnlessCost") ? sa.getParam("UnlessCost").trim() : null;
 
         if (unlessCost != null && !unlessCost.endsWith(">")) {
-            // Is this Usable Mana Sources? Or Total Available Mana?
-            final int usableManaSources = ComputerUtilMana.getAvailableMana(ComputerUtil.getOpponentFor(ai), true).size();
+            Player opp = tgtSA.getActivatingPlayer();
+            int usableManaSources = ComputerUtilMana.getAvailableManaEstimate(opp);
+
             int toPay = 0;
             boolean setPayX = false;
             if (unlessCost.equals("X") && source.getSVar(unlessCost).equals("Count$xPaid")) {
@@ -168,9 +169,13 @@ public class CounterAi extends SpellAbilityAi {
                 }
             }
                 
-            // should always counter CMC 1 with Mental Misstep despite a possible limitation by minimum CMC
-            if (tgtCMC == 1 && "Mental Misstep".equals(source.getName())) {
-                dontCounter = false;
+            // should not refrain from countering a  CMC X spell if that's the only CMC
+            // counterable with that particular counterspell type (e.g. Mental Misstep vs. CMC 1 spells)
+            if (sa.getParamOrDefault("ValidTgts", "").startsWith("Card.cmcEQ")) {
+                int validTgtCMC = AbilityUtils.calculateAmount(source, sa.getParam("ValidTgts").substring(10), sa);
+                if (tgtCMC == validTgtCMC) {
+                    dontCounter = false;
+                }
             }
 
             if (dontCounter) {
@@ -213,8 +218,9 @@ public class CounterAi extends SpellAbilityAi {
 
             final Card source = sa.getHostCard();
             if (unlessCost != null) {
-                // Is this Usable Mana Sources? Or Total Available Mana?
-                final int usableManaSources = ComputerUtilMana.getAvailableMana(ComputerUtil.getOpponentFor(ai), true).size();
+                Player opp = tgtSA.getActivatingPlayer();
+                int usableManaSources = ComputerUtilMana.getAvailableManaEstimate(opp);
+
                 int toPay = 0;
                 boolean setPayX = false;
                 if (unlessCost.equals("X") && source.getSVar(unlessCost).equals("Count$xPaid")) {

@@ -69,7 +69,7 @@ public class SpecialCardAi {
     // Black Lotus and Lotus Bloom
     public static class BlackLotus {
         public static boolean consider(Player ai, SpellAbility sa, ManaCostBeingPaid cost) {
-            CardCollection manaSources = ComputerUtilMana.getAvailableMana(ai, true);
+            CardCollection manaSources = ComputerUtilMana.getAvailableManaSources(ai, true);
             int numManaSrcs = manaSources.size();
 
             CardCollection allCards = CardLists.filter(ai.getAllCards(), Arrays.asList(CardPredicates.Presets.NON_TOKEN,
@@ -176,6 +176,35 @@ public class SpecialCardAi {
         }
     }
 
+    // Cursed Scroll
+    public static class CursedScroll {
+        public static boolean consider(Player ai, SpellAbility sa) {
+            CardCollectionView hand = ai.getCardsIn(ZoneType.Hand);
+            if (hand.isEmpty()) {
+                return false;
+            }
+
+            // For now, see if all cards in hand have the same name, and then proceed if true
+            return CardLists.filter(hand, CardPredicates.nameEquals(hand.getFirst().getName())).size() == hand.size();
+        }
+
+        public static String chooseCard(Player ai, SpellAbility sa) {
+            int maxCount = 0;
+            Card best = null;
+            CardCollectionView hand = ai.getCardsIn(ZoneType.Hand);
+
+            for (Card c : ai.getCardsIn(ZoneType.Hand)) {
+                int count = CardLists.filter(hand, CardPredicates.nameEquals(c.getName())).size();
+                if (count > maxCount) {
+                    maxCount = count;
+                    best = c;
+                }
+            }
+
+            return best.getName();
+        }
+    }
+
     // Desecration Demon
     public static class DesecrationDemon {
         private static final int demonSacThreshold = Integer.MAX_VALUE; // if we're in dire conditions, sac everything from worst to best hoping to find an answer
@@ -277,8 +306,8 @@ public class SpecialCardAi {
             return true;
         }
 
-        public static Pair<Integer, Integer> getPumpedPT(Player ai, SpellAbility sa, int power, int toughness) {
-            int energy = sa.getHostCard().getController().getCounters(CounterType.ENERGY);
+        public static Pair<Integer, Integer> getPumpedPT(Player ai, int power, int toughness) {
+            int energy = ai.getCounters(CounterType.ENERGY);
             if (energy > 0) {
                 int numActivations = energy / 3;
                 for (int i = 0; i < numActivations; i++) {
@@ -360,6 +389,8 @@ public class SpecialCardAi {
     public static class LivingDeath {
         public static boolean consider(Player ai, SpellAbility sa) {
             int aiBattlefieldPower = 0, aiGraveyardPower = 0;
+            int threshold = 320; // approximately a 4/4 Flying creature worth of extra value
+
             CardCollection aiCreaturesInGY = CardLists.filter(ai.getZone(ZoneType.Graveyard).getCards(), CardPredicates.Presets.CREATURES);
 
             if (aiCreaturesInGY.isEmpty()) {
@@ -396,7 +427,7 @@ public class SpecialCardAi {
             }
 
             // if we get more value out of this than our opponent does (hopefully), go for it
-            return (aiGraveyardPower - aiBattlefieldPower) > (oppGraveyardPower - oppBattlefieldPower);
+            return (aiGraveyardPower - aiBattlefieldPower) > (oppGraveyardPower - oppBattlefieldPower + threshold);
         }
     }
 
@@ -425,6 +456,32 @@ public class SpecialCardAi {
                 }
             }
             return null;
+        }
+    }
+
+    // Momir Vig, Simic Visionary Avatar
+    public static class MomirVigAvatar {
+        public static boolean consider(Player ai, SpellAbility sa) {
+            Card source = sa.getHostCard();
+
+            if (source.getGame().getPhaseHandler().getPhase().isBefore(PhaseType.MAIN1)) {
+                return false;
+            }
+            // Set PayX here to maximum value.
+            int tokenSize = ComputerUtilMana.determineLeftoverMana(sa, ai);
+
+            // Some basic strategy for Momir
+            if (tokenSize < 2) {
+                return false;
+            }
+
+            if (tokenSize > 11) {
+                tokenSize = 11;
+            }
+
+            source.setSVar("PayX", Integer.toString(tokenSize));
+
+            return true;
         }
     }
 
@@ -504,7 +561,7 @@ public class SpecialCardAi {
             final CardCollectionView cards = ai.getCardsIn(new ZoneType[] {ZoneType.Hand, ZoneType.Battlefield, ZoneType.Command});
             List<SpellAbility> all = ComputerUtilAbility.getSpellAbilities(cards, ai);
 
-            int numManaSrcs = CardLists.filter(ComputerUtilMana.getAvailableMana(ai, true), CardPredicates.Presets.UNTAPPED).size();
+            int numManaSrcs = CardLists.filter(ComputerUtilMana.getAvailableManaSources(ai, true), CardPredicates.Presets.UNTAPPED).size();
 
             for (final SpellAbility testSa : ComputerUtilAbility.getOriginalAndAltCostAbilities(all, ai)) {
                 ManaCost cost = testSa.getPayCosts().getTotalMana();

@@ -42,7 +42,7 @@ import com.google.common.collect.Maps;
  * </p>
  * 
  * @author Forge
- * @version $Id: StaticEffect.java 32651 2016-12-10 13:48:27Z Hanmac $
+ * @version $Id: StaticEffect.java 35266 2017-08-28 14:06:28Z Agetian $
  */
 public class StaticEffect {
 
@@ -1003,8 +1003,9 @@ public class StaticEffect {
             if (addT.startsWith("AffectedX")) {
                 toughnessBonus = getXMapValue(affectedCard);
             }
-            affectedCard.addSemiPermanentPowerBoost(powerBonus * -1);
-            affectedCard.addSemiPermanentToughnessBoost(toughnessBonus * -1);
+            // the view is updated in GameAction#checkStaticAbilities to avoid flickering
+            affectedCard.addSemiPermanentPowerBoost(powerBonus * -1, false);
+            affectedCard.addSemiPermanentToughnessBoost(toughnessBonus * -1, false);
 
             // remove keywords
             // TODO regular keywords currently don't try to use keyword multiplier
@@ -1046,7 +1047,8 @@ public class StaticEffect {
 
             // remove Types
             if (params.containsKey("AddType") || params.containsKey("RemoveType")) {
-                affectedCard.removeChangedCardTypes(getTimestamp());
+                // the view is updated in GameAction#checkStaticAbilities to avoid flickering
+                affectedCard.removeChangedCardTypes(getTimestamp(), false);
             }
 
             // remove colors
@@ -1063,7 +1065,8 @@ public class StaticEffect {
             if (removeMayPlay) {
                 affectedCard.removeMayPlay(ability);
             }
-            //affectedCard.updateStateForView(); // FIXME: causes intolerable flickering for cards such as Thassa, God of the Sea or Wind Zendikon
+
+            affectedCard.updateAbilityTextForView(); // only update keywords and text for view to avoid flickering
         }
         return affectedCards;
     }

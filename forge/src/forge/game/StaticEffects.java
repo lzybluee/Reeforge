@@ -33,7 +33,7 @@ import forge.game.staticability.StaticAbility;
  * </p>
  * 
  * @author Forge
- * @version $Id: StaticEffects.java 31865 2016-08-03 15:42:28Z Hanmac $
+ * @version $Id: StaticEffects.java 35266 2017-08-28 14:06:28Z Agetian $
  */
 public class StaticEffects {
 
@@ -63,8 +63,8 @@ public class StaticEffects {
     /**
      * Add a static effect to the list of static effects.
      * 
-     * @param staticEffect
-     *            a {@link StaticEffect}.
+     * @param staticAbility
+     *            a {@link StaticAbility}.
      */
     public final StaticEffect getStaticEffect(final StaticAbility staticAbility) {
         final StaticEffect currentEffect = staticEffects.get(staticAbility);

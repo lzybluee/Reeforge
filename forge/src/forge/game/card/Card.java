@@ -77,7 +77,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * entirely on id.
  *
  * @author Forge
- * @version $Id: Card.java 35137 2017-08-20 04:23:11Z Agetian $
+ * @version $Id: Card.java 35266 2017-08-28 14:06:28Z Agetian $
  */
 public class Card extends GameEntity implements Comparable<Card> {
     private final Game game;
@@ -454,6 +454,22 @@ public class Card extends GameEntity implements Comparable<Card> {
 
     public void updateStateForView() {
         view.updateState(this);
+    }
+
+    // The following methods are used to selectively update certain view components (text,
+    // P/T, card types) in order to avoid card flickering due to aggressive full update
+    public void updateAbilityTextForView() {
+        view.getCurrentState().updateKeywords(this, getCurrentState());
+        view.getCurrentState().updateAbilityText(this, getCurrentState());
+    }
+
+    public final void updatePowerToughnessForView() {
+        currentState.getView().updatePower(this);
+        currentState.getView().updateToughness(this);
+    }
+
+    public final void updateTypesForView() {
+        currentState.getView().updateType(currentState);
     }
 
     public void setPreFaceDownState(CardStateName preCharacteristic) {
@@ -3124,16 +3140,20 @@ public class Card extends GameEntity implements Comparable<Card> {
         return semiPermanentToughnessBoost;
     }
 
-    public final void addSemiPermanentPowerBoost(final int n) {
+    public final void addSemiPermanentPowerBoost(final int n, final boolean updateViewImmediately) {
         if (n == 0) { return; }
         semiPermanentPowerBoost += n;
-        currentState.getView().updatePower(this);
+        if (updateViewImmediately) {
+            currentState.getView().updatePower(this);
+        }
     }
 
-    public final void addSemiPermanentToughnessBoost(final int n) {
+    public final void addSemiPermanentToughnessBoost(final int n, final boolean updateViewImmediately) {
         if (n == 0) { return; }
         semiPermanentToughnessBoost += n;
-        currentState.getView().updateToughness(this);
+        if (updateViewImmediately) {
+            currentState.getView().updateToughness(this);
+        }
     }
 
     public final void setSemiPermanentPowerBoost(final int n) {
@@ -3145,11 +3165,6 @@ public class Card extends GameEntity implements Comparable<Card> {
     public final void setSemiPermanentToughnessBoost(final int n) {
         if (semiPermanentToughnessBoost == n) { return; }
         semiPermanentToughnessBoost = n;
-        currentState.getView().updateToughness(this);
-    }
-
-    public final void updatePowerToughnessView() {
-        currentState.getView().updatePower(this);
         currentState.getView().updateToughness(this);
     }
 

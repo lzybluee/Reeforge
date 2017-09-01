@@ -47,7 +47,7 @@ import java.util.Set;
  * </p>
  *
  * @author Forge
- * @version $Id: SpellAbilityStackInstance.java 33459 2017-01-28 14:11:22Z Agetian $
+ * @version $Id: SpellAbilityStackInstance.java 35257 2017-08-27 18:17:21Z Agetian $
  */
 public class SpellAbilityStackInstance implements IIdentifiable, IHasCardView {
     private static int maxId = 0;
@@ -354,6 +354,29 @@ public class SpellAbilityStackInstance implements IIdentifiable, IHasCardView {
                 getSourceCard().getGame().getTriggerHandler().runTrigger(TriggerType.BecomesTarget, runParams, false);
             }
         }
+    }
+
+    public boolean addTriggeringObject(String trigObj, Object value) {
+        if (!triggeringObjects.containsKey(trigObj)) {
+            triggeringObjects.put(trigObj, value);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean updateTriggeringObject(String trigObj, Object value) {
+        if (triggeringObjects.containsKey(trigObj)) {
+            triggeringObjects.replace(trigObj, value);
+            return true;
+        }
+        return false;
+    }
+
+    public Object getTriggeringObject(String trigObj) {
+        if (triggeringObjects.containsKey(trigObj)) {
+            return triggeringObjects.get(trigObj);
+        }
+        return null;
     }
 
     public boolean compareToSpellAbility(SpellAbility sa) {

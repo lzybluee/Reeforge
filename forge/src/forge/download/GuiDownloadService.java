@@ -242,7 +242,9 @@ public abstract class GuiDownloadService implements Runnable {
             count++;
             cardSkipped = true; //assume skipped unless saved successfully
             String url = kv.getValue();
-            final File fileDest = new File(kv.getKey());
+            //decode URL Key
+            String decodedKey = URLDecoder.decode(kv.getKey());
+            final File fileDest = new File(decodedKey);
 
             System.out.println(count + "/" + totalCount + " - " + fileDest);
 
@@ -331,7 +333,7 @@ public abstract class GuiDownloadService implements Runnable {
 
     protected static void addMissingItems(Map<String, String> list, String nameUrlFile, String dir) {
         for (Pair<String, String> nameUrlPair : FileUtil.readNameUrlFile(nameUrlFile)) {
-            File f = new File(dir, nameUrlPair.getLeft());
+            File f = new File(dir, URLDecoder.decode(nameUrlPair.getLeft()));
             //System.out.println(f.getAbsolutePath());
             if (!f.exists()) {
                 list.put(f.getAbsolutePath(), nameUrlPair.getRight());
