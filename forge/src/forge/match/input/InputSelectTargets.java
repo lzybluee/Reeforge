@@ -117,6 +117,9 @@ public final class InputSelectTargets extends InputSyncronizedBase {
     @Override
     protected final boolean onCardSelected(final Card card, final List<Card> otherCardsToSelect, final ITriggerEvent triggerEvent) {
         if (!tgt.isUniqueTargets() && targetDepth.containsKey(card)) {
+            if(sa.getDescription().startsWith("Any number of target ")) {
+                removeTarget(card);
+            }
             return false;
         }
 
@@ -215,6 +218,9 @@ public final class InputSelectTargets extends InputSyncronizedBase {
     @Override
     protected final void onPlayerSelected(final Player player, final ITriggerEvent triggerEvent) {
         if (!tgt.isUniqueTargets() && targetDepth.containsKey(player)) {
+            if(sa.getDescription().startsWith("Any number of target ")) {
+                removeTarget(player);
+            }
             return;
         }
 
@@ -270,6 +276,15 @@ public final class InputSelectTargets extends InputSyncronizedBase {
         } else {
             this.showMessage();
         }
+    }
+
+    private void removeTarget(final GameEntity ge) {
+        sa.getTargets().remove(ge);
+        if (ge instanceof Card) {
+            getController().getGui().setUsedToPay(CardView.get((Card) ge), false);
+        }
+        targetDepth.remove(ge);
+        this.showMessage();
     }
 
     private void done() {
