@@ -212,16 +212,20 @@ public abstract class InputPayMana extends InputSyncronizedBase {
             if (!m.meetsManaRestrictions(saPaidFor))                        { continue; }
 
             // If Mana Abilities produce differing amounts of mana, let the player choose
-            int maAmount = GameActionUtil.amountOfManaGenerated(ma, true);
-            if (amountOfMana == -1) {
-                amountOfMana = maAmount;
-            } else {
-                if (amountOfMana != maAmount) {
-                    guessAbilityWithRequiredColors = false;
-                }
-            }
+//            int maAmount = GameActionUtil.amountOfManaGenerated(ma, true);
+//            if (amountOfMana == -1) {
+//                amountOfMana = maAmount;
+//            } else {
+//                if (amountOfMana != maAmount) {
+//                    guessAbilityWithRequiredColors = false;
+//                }
+//            }
 
-            abilities.add(ma);
+            if(m.getManaRestrictions() == null || m.getManaRestrictions().isEmpty()) {
+                abilities.add(ma);
+            } else {
+                abilities.add(0, ma);
+            }
 
             // skip express mana if the ability is not undoable or reusable
             if (!ma.isUndoable() || !ma.getPayCosts().isRenewableResource() || ma.getSubAbility() != null) {
