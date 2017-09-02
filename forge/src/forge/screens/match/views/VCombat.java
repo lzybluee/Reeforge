@@ -22,6 +22,7 @@ import forge.gui.framework.DragTab;
 import forge.gui.framework.EDocID;
 import forge.gui.framework.IVDoc;
 import forge.screens.match.controllers.CCombat;
+import forge.toolbox.FScrollPane;
 import forge.toolbox.FSkin;
 import forge.toolbox.FSkin.SkinnedTextArea;
 import net.miginfocom.swing.MigLayout;
@@ -38,6 +39,7 @@ public class VCombat implements IVDoc<CCombat> {
     private final DragTab tab = new DragTab("Combat");
 
     private final SkinnedTextArea tar = new SkinnedTextArea();
+    private final FScrollPane scrollPane = new FScrollPane(tar, false);
 
     private final CCombat controller;
     public VCombat(final CCombat controller) {
@@ -58,7 +60,7 @@ public class VCombat implements IVDoc<CCombat> {
     public void populate() {
         parentCell.getBody().removeAll();
         parentCell.getBody().setLayout(new MigLayout("insets 0, gap 0, wrap"));
-        parentCell.getBody().add(tar, "w 95%!, gapleft 3%, gaptop 1%, h 95%");
+        parentCell.getBody().add(scrollPane, "w 95%!, gapleft 3%, gaptop 3%, h 100%");
     }
 
     /* (non-Javadoc)
