@@ -97,6 +97,8 @@ public class CardPanel extends SkinnedPanel implements CardContainer, IDisposabl
     private static Font smallCounterFont;
     private static Font largeCounterFont;
 
+    private boolean inFlashbackZone = false;
+
     static {
 
         try {
@@ -797,5 +799,13 @@ public class CardPanel extends SkinnedPanel implements CardContainer, IDisposabl
     public void repaintOverlays() {
         repaint();
         doLayout();
+    }
+
+    public boolean isInFlashbackZone() {
+        return inFlashbackZone;
+    }
+
+    public void setInFlashbackZone(boolean b) {
+        inFlashbackZone = b;
     }
 }

@@ -763,10 +763,11 @@ public final class CMatchUI
                 y = 0;
                 SDisplayUtil.showTab(getCPrompt().getView());
             } else {
-                final ZoneType zone = hostCard.getZone();
-                if (ImmutableList.of(ZoneType.Command, ZoneType.Exile, ZoneType.Graveyard, ZoneType.Library).contains(zone)) {
+                final ZoneType zone = panel.isInFlashbackZone() ? ZoneType.Flashback : hostCard.getZone();
+                if (ImmutableList.of(ZoneType.Command, ZoneType.Exile, ZoneType.Graveyard, ZoneType.Library, ZoneType.Flashback).contains(zone)) {
                     FloatingCardArea.show(this, hostCard.getController(), zone);
                 }
+                panel.setInFlashbackZone(false);
                 menuParent = panel.getParent();
                 x = triggerEvent.getX();
                 y = triggerEvent.getY();
