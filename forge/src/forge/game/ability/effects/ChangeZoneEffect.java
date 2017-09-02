@@ -864,7 +864,10 @@ public class ChangeZoneEffect extends SpellAbilityEffect {
 
         if(!sa.hasParam("DifferentNames") && !sa.hasParam("ShareLandType") && !sa.hasParam("AtRandom") && totalcmc == null && !defined) {
             selectPrompt = sa.hasParam("SelectPrompt") ? sa.getParam("SelectPrompt") : MessageUtil.formatMessage("Select " + changeNum + " card(s) from {player's} " + Lang.joinHomogenous(origin).toLowerCase(), decider, player);
-            chosenCards = decider.getController().chooseCardsForZoneChange(destination, origin, sa, fetchList, delayedReveal, selectPrompt, !sa.hasParam("Mandatory"), decider, changeNum);
+            CardCollection cards = decider.getController().chooseCardsForZoneChange(destination, origin, sa, fetchList, delayedReveal, selectPrompt, !sa.hasParam("Mandatory"), decider, changeNum);
+            if(cards != null) {
+                chosenCards = cards;
+            }
         } else {
             for (int i = 0; i < changeNum && destination != null; i++) {
                 if (sa.hasParam("DifferentNames")) {
