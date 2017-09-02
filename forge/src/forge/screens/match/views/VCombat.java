@@ -62,7 +62,7 @@ public class VCombat implements IVDoc<CCombat> {
     public void populate() {
         parentCell.getBody().removeAll();
         parentCell.getBody().setLayout(new MigLayout("insets 0, gap 0, wrap"));
-        parentCell.getBody().add(scrollPane, "w 95%!, gapleft 3%, gaptop 3%, h 100%");
+        parentCell.getBody().add(scrollPane, "w 95%!, gapleft 1%, gaptop 3%, h 97%");
     }
 
     /* (non-Javadoc)
