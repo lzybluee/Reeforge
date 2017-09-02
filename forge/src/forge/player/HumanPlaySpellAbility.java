@@ -255,7 +255,9 @@ public class HumanPlaySpellAbility {
 
         if (fromZone != null) { // and not a copy
             // add back to where it came from
+            game.getAction().setRollback(true);
             game.getAction().moveTo(fromZone, ability.getHostCard(), zonePosition >= 0 ? Integer.valueOf(zonePosition) : null, null);
+            game.getAction().setRollback(false);
             if(ability.getHostCard().isSplitCard())
                 ability.getHostCard().setState(CardStateName.Original, true);
             else
