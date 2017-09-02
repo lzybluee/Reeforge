@@ -88,6 +88,8 @@ public class GameAction {
     private final Game game;
 
     private boolean holdCheckingStaticAbilities = false;
+    
+    private CardCollection  simultaneousEtbCards;
 
     public GameAction(Game game0) {
         game = game0;
@@ -1830,5 +1832,22 @@ public class GameAction {
         final Map<String, Object> runParams = Maps.newHashMap();
         runParams.put("Player", p);
         game.getTriggerHandler().runTrigger(TriggerType.BecomeMonarch, runParams, false);
+    }
+
+    public void setSimultaneousEtbCards(CardCollection cards) {
+        if(cards != null && cards.size() > 1) {
+            simultaneousEtbCards = new CardCollection();
+            simultaneousEtbCards.addAll(cards);
+        }
+    }
+
+    public void clearSimultaneousEtbCards(CardCollection cards) {
+        if(simultaneousEtbCards == cards) {
+            simultaneousEtbCards = null;
+        }
+    }
+
+    public CardCollection getSimultaneousEtbCards() {
+        return simultaneousEtbCards;
     }
 }

@@ -951,6 +951,7 @@ public class ChangeZoneEffect extends SpellAbilityEffect {
         }
 
         CardCollection movedCards = new CardCollection();
+        game.getAction().setSimultaneousEtbCards(chosenCards);
         long ts = game.getNextTimestamp();
         final Map<ZoneType, CardCollection> triggerList = Maps.newEnumMap(ZoneType.class);
         for (Card c : chosenCards) {
@@ -1145,6 +1146,8 @@ public class ChangeZoneEffect extends SpellAbilityEffect {
                 source.addImprintedCard(movedCard);
             }
         }
+
+        game.getAction().clearSimultaneousEtbCards(chosenCards);
 
         if (((!ZoneType.Battlefield.equals(destination) && changeType != null && !defined && !changeType.equals("Card"))
                 || (sa.hasParam("Reveal") && !movedCards.isEmpty())) && !sa.hasParam("NoReveal")) {

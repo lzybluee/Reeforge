@@ -91,8 +91,15 @@ public class ChooseCardEffect extends SpellAbilityEffect {
                 if (sa.hasParam("AtRandom") && !choices.isEmpty()) {
                     Aggregates.random(choices, validAmount, chosen);
                 } else {
+                    CardCollection collection = new CardCollection();
+                    CardCollection etbCards = game.getAction().getSimultaneousEtbCards();
                     String title = sa.hasParam("ChoiceTitle") ? sa.getParam("ChoiceTitle") : "Choose a card ";
-                    chosen.addAll(p.getController().chooseCardsForEffect(choices, sa, title, minAmount, validAmount, !sa.hasParam("Mandatory")));
+                    for(Card c : choices) {
+                        if(!etbCards.contains(c)) {
+                            collection.add(c);
+                        }
+                    }
+                    chosen.addAll(p.getController().chooseCardsForEffect(collection, sa, title, minAmount, validAmount, !sa.hasParam("Mandatory")));
                 }
             }
         }
