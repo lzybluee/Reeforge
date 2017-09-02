@@ -5,7 +5,7 @@ MinDifficulty=0
 MaxDifficulty=5
 [metadata]
 Name=Devouring Skies
-Description=When can you be assured that no enemies stand in your way? When you dive at them from above! 
+Description=When can you be assured that no enemies stand in your way? When you dive at them from above!
 Deck Type=constructed
 Set=NPH
 Image=devouring_skies.jpg

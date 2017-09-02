@@ -1,0 +1,39 @@
+[metadata]
+Name=Path to Victory
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Path to Victory
+Description=Odric, Master Tactician believes that you can find strength in your friends . . . particularly if your friends are a highly trained military fighting force!
+Deck Type=constructed
+Set=M13
+Image=path_to_victory.jpg
+[Main]
+3 Ajani's Sunstriker|M13
+2 Arctic Aven|M13
+3 Attended Knight|M13
+1 Battleflight Eagle|M13
+1 Captain of the Watch|M13
+2 Captain's Call|M13
+2 Chronomaton|M13
+1 Courtly Provocateur|M13
+2 Crusader of Odric|M13
+2 Divine Verdict|M13
+1 Downpour|M13
+1 Evolving Wilds|M13
+1 Faerie Invaders|M13
+1 Glorious Charge|M13
+2 Griffin Protector|M13
+2 Healer of the Pride|M13
+8 Island|M13|1
+1 Oblivion Ring|M13
+1 Odric, Master Tactician|M13
+16 Plains|M13|1
+1 Ring of Thune|M13
+1 Safe Passage|M13
+1 Serra Angel|M13
+3 Silvercoat Lion|M13
+1 Tricks of the Trade|M13

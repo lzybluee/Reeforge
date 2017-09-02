@@ -1,0 +1,37 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Simic Domination
+Description=Simic Domination is a green/blue intro pack centering around the Simic Combine.
+Deck Type=constructed
+Set=DGM
+Image=simic_domination.jpg
+[Main]
+1 Archweaver|RTR
+2 Battering Krasis|DGM
+2 Beetleform Mage|DGM
+2 Bred for the Hunt|DGM
+3 Centaur Courser|M13
+2 Cloudfin Raptor|GTC
+1 Crocanura|GTC
+1 Crowned Ceratok|GTC
+2 Elusive Krasis|GTC
+10 Forest|RTR|1
+1 Give // Take|DGM
+1 Gyre Sage|GTC
+1 Hindervines|GTC
+12 Island|RTR|1
+1 Krasis Incubation|DGM
+1 Murmuring Phantasm|DGM
+2 Mutant's Prey|DGM
+2 Opal Lake Gatekeepers|DGM
+1 Phytoburst|DGM
+2 Runner's Bane|DGM
+1 Sapphire Drake|GTC
+2 Simic Cluestone|DGM
+4 Simic Guildgate|DGM
+2 Species Gorger|DGM
+1 Vorel of the Hull Clade|DGM

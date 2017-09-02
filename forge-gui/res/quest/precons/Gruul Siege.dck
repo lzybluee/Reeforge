@@ -1,0 +1,36 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Gruul Siege
+Description=Gruul Siege is a red/green intro pack centering around the Gruul Clans.
+Deck Type=constructed
+Set=DGM
+Image=gruul_siege.jpg
+[Main]
+1 Armed // Dangerous|DGM
+2 Cobblebrute|RTR
+2 Feral Animist|DGM
+12 Forest|RTR|1
+1 Ghor-Clan Rampager|GTC
+2 Ground Assault|GTC
+2 Gruul Cluestone|DGM
+4 Gruul Guildgate|DGM
+2 Gruul War Chant|DGM
+2 Kraul Warrior|DGM
+10 Mountain|RTR|1
+1 Pit Fight|GTC
+1 Predator's Rapport|GTC
+1 Ripscale Predator|GTC
+3 Rubblebelt Maaka|DGM
+2 Ruination Wurm|GTC
+1 Ruric Thar, the Unbowed|DGM
+2 Saruli Gatekeepers|DGM
+1 Skarrg Goliath|GTC
+1 Slaughterhorn|GTC
+2 Viashino Shanktail|GTC
+1 Volcanic Geyser|M13
+3 Zhur-Taa Druid|DGM
+1 Zhur-Taa Swine|GTC

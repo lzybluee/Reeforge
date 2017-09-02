@@ -1,0 +1,40 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Wrack and Rage
+Description=The Cult of Rakdos spreads pain and mayhem wherever they go, and this deck has the same singular focus. The show kicks off with quick, aggressive creatures that make a brutal impression on your opponents. The second act is a display of fireworks, a flurry of burn spells pointed at players and creatures alike. And for the grand finale? Watch the curtains close on the smoldering battlefield.
+Deck Type=constructed
+Set=RTR
+Image=wrack_and_rage.jpg
+[Main]
+2 Brimstone Volley|ISD
+1 Devil's Play|ISD
+1 Dragonskull Summit|M13
+2 Hellhole Flailer|RTR
+3 Knight of Infamy|M13
+2 Lightning Mauler|AVR
+1 Mizzium Mortars|RTR
+13 Mountain|RTR|1
+1 Nightbird's Clutches|ISD
+4 Pillar of Flame|AVR
+4 Rakdos Cackler|RTR
+1 Rakdos Charm|RTR
+2 Rakdos Guildgate|RTR
+4 Rakdos Shred-Freak|RTR
+3 Rix Maadi Guildmage|RTR
+4 Searing Spear|M13
+2 Stonewright|AVR
+2 Stromkirk Noble|ISD
+8 Swamp|RTR|1
+[Sideboard]
+2 Brimstone Volley|ISD
+3 Duress|M13
+2 Electrickery|RTR
+2 Faithless Looting|DKA
+1 Grafdigger's Cage|DKA
+2 Murder|M13
+2 Ultimate Price|RTR
+1 Vexing Devil|AVR

@@ -1,0 +1,35 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Rakdos Revelry
+Description=Rakdos Revelry is a black/red intro pack centering around the Cult of Rakdos.
+Deck Type=constructed
+Set=DGM
+Image=rakdos_revelry.jpg
+[Main]
+1 Awe for the Guilds|DGM
+1 Bloodfray Giant|RTR
+2 Carnage Gladiator|DGM
+1 Exava, Rakdos Blood Witch|DGM
+1 Grim Roustabout|RTR
+3 Gutter Skulk|GTC
+2 Guttersnipe|RTR
+1 Havoc Festival|RTR
+2 Minotaur Aggressor|RTR
+2 Morgue Burst|DGM
+10 Mountain|RTR|1
+1 Punish the Enemy|DGM
+2 Rakdos Cluestone|DGM
+2 Rakdos Drake|DGM
+4 Rakdos Guildgate|DGM
+3 Riot Piker|DGM
+1 Sinister Possession|DGM
+2 Slum Reaper|RTR
+2 Smelt-Ward Gatekeepers|DGM
+2 Spawn of Rix Maadi|RTR
+2 Spike Jester|DGM
+12 Swamp|RTR|1
+1 Toil // Trouble|DGM

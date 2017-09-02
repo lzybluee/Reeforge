@@ -1,0 +1,41 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Duel Decks: Garruk vs. Liliana - Liliana
+Description=Duel Decks
+Deck Type=constructed
+Set=DDD
+Image=liliana.jpg
+[Main]
+1 Bad Moon|DDD
+2 Corrupt|DDD
+1 Deathgreeter|DDD
+1 Drudge Skeletons|DDD
+1 Enslave|DDD
+1 Faerie Macabre|DDD
+2 Fleshbag Marauder|DDD
+1 Genju of the Fens|DDD
+2 Ghost-Lit Stalker|DDD
+1 Hideous End|DDD
+1 Howling Banshee|DDD
+1 Ichor Slick|DDD
+1 Keening Banshee|DDD
+1 Liliana Vess|DDD
+1 Mutilate|DDD
+2 Phyrexian Rager|DDD
+2 Polluted Mire|DDD
+1 Ravenous Rats|DDD
+1 Rise from the Grave|DDD
+2 Sign in Blood|DDD
+1 Skeletal Vampire|DDD
+1 Snuff Out|DDD
+23 Swamp|DDD|1
+2 Tendrils of Corruption|DDD
+2 Twisted Abomination|DDD
+1 Urborg Syphon-Mage|DDD
+2 Vampire Bats|DDD
+1 Vicious Hunger|DDD
+1 Wall of Bone|DDD

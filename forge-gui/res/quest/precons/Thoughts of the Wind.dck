@@ -1,0 +1,32 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Thoughts of the Wind
+Description=Manipulate the fabric of the Multiverse with Jace's blue deck. Watch the fumbling attempts of your opponents as you counter their spells and turn their creatures against them.
+Deck Type=constructed
+Set=ZEN
+Image=thoughts_of_the_wind.jpg
+[Main]
+2 Air Elemental|M10
+2 Boomerang|10E
+2 Cancel|ZEN
+4 Cloud Sprite|10E
+1 Counterbore|SHM
+2 Deluge|10E
+1 Denizen of the Deep|10E
+3 Essence Scatter|M10
+1 Evacuation|10E
+25 Island|ZEN|1
+2 Kraken's Eye|M10
+1 Mahamoti Djinn|10E
+1 Mind Control|M10
+1 Mind Spring|M10
+2 Negate|M10
+1 Phantom Warrior|M10
+3 Snapping Drake|M10
+2 Thieving Magpie|10E
+2 Unsummon|M10
+2 Wall of Spears|8ED

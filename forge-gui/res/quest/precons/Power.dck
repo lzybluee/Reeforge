@@ -1,0 +1,44 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Power
+Description=Clash Pack
+Deck Type=constructed
+Set=FRF
+Image=power.jpg
+[Main]
+1 Annul|THS
+1 Dead Drop|KTK
+1 Despise|KTK
+2 Dismal Backwater|FRF
+2 Evolving Wilds|M15
+5 Forest|FRF|1
+1 Gurmag Angler|FRF
+1 Herald of Torment|BNG
+1 Hero's Downfall|THS
+5 Island|FRF|1
+1 Merciless Executioner|FRF
+1 Monastery Siege|FRF
+2 Murderous Cut|KTK
+1 Naturalize|KTK
+2 Necromancer's Assistant|M15
+1 Necropolis Fiend|KTK
+1 Neutralizing Blast|FRF
+4 Opulent Palace|KTK
+1 Returned Centaur|THS
+4 Satyr Wayfinder|M15
+1 Scuttling Doom Engine|M15
+1 Set Adrift|KTK
+1 Sultai Ascendancy|KTK
+1 Sultai Banner|KTK
+2 Sultai Charm|KTK
+2 Sultai Scavenger|KTK
+1 Sultai Skullkeeper|FRF
+2 Sultai Soothsayer|KTK
+7 Swamp|FRF|1
+2 Taigam's Scheming|KTK
+1 Treasure Cruise|KTK
+1 Typhoid Rats|FRF

@@ -1,0 +1,38 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Life for Death
+Description="Phyrexian mana" may be the most diabolical advance the Phyrexians have ever created, and this deck is filled with it.
+Deck Type=constructed
+Set=NPH
+Image=life_for_death.jpg
+[Main]
+2 Act of Aggression|NPH
+1 Apostle's Blessing|NPH
+2 Blinding Souleater|NPH
+1 Cathedral Membrane|NPH
+2 Golem's Heart|SOM
+1 Gut Shot|NPH
+2 Immolating Souleater|NPH
+1 Incite|M11
+1 Inquisitor Exarch|NPH
+2 Kemba's Skyguard|SOM
+1 Lightning Bolt|M11
+1 Lumengrid Gargoyle|MBS
+1 Marrow Shards|NPH
+1 Moltensteel Dragon|NPH
+11 Mountain|NPH|1
+1 Ogre Resister|MBS
+2 Pacifism|M11
+1 Phyrexian Rebirth|MBS
+13 Plains|NPH|1
+3 Porcelain Legionnaire|NPH
+1 Pristine Talisman|NPH
+2 Rage Extractor|NPH
+1 Shattered Angel|NPH
+3 Slash Panther|NPH
+1 Solemn Offering|M11
+2 Whitesun's Passage|SOM

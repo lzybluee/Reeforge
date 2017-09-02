@@ -1,0 +1,44 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Duel Decks: Phyrexia vs. The Coalition - Phyrexia
+Description=Duel Decks
+Deck Type=constructed
+Set=DDE
+Image=phyrexia.jpg
+[Main]
+1 Bone Shredder|DDE
+1 Carrion Feeder|DDE
+2 Dark Ritual|DDE
+1 Hideous End|DDE
+1 Hornet Cannon|DDE
+1 Lightning Greaves|DDE
+1 Living Death|DDE
+1 Order of Yawgmoth|DDE
+1 Phyrexian Arena|DDE
+1 Phyrexian Battleflies|DDE
+1 Phyrexian Broodlings|DDE
+1 Phyrexian Colossus|DDE
+1 Phyrexian Debaser|DDE
+1 Phyrexian Defiler|DDE
+1 Phyrexian Denouncer|DDE
+1 Phyrexian Gargantua|DDE
+1 Phyrexian Ghoul|DDE
+1 Phyrexian Hulk|DDE
+1 Phyrexian Negator|DDE
+1 Phyrexian Plaguelord|DDE
+1 Phyrexian Processor|DDE
+1 Phyrexian Totem|DDE
+1 Phyrexian Vault|DDE
+2 Priest of Gix|DDE
+2 Puppet Strings|DDE
+1 Sanguine Guard|DDE
+1 Slay|DDE
+25 Swamp|DDE|1
+2 Tendrils of Corruption|DDE
+1 Voltaic Key|DDE
+1 Whispersilk Cloak|DDE
+1 Worn Powerstone|DDE

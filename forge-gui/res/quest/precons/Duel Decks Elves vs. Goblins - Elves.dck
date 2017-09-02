@@ -1,0 +1,40 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Duel Decks: Elves vs. Goblins - Elves
+Description=Duel Decks
+Deck Type=constructed
+Set=EVG
+Image=elves.jpg
+[Main]
+1 Allosaurus Rider|EVG
+1 Ambush Commander|EVG
+2 Elvish Eulogist|EVG
+1 Elvish Harbinger|EVG
+1 Elvish Promenade|EVG
+3 Elvish Warrior|EVG
+19 Forest|EVG|1
+2 Gempalm Strider|EVG
+2 Giant Growth|EVG
+1 Harmonize|EVG
+1 Heedless One|EVG
+2 Imperious Perfect|EVG
+3 Llanowar Elves|EVG
+2 Lys Alana Huntmaster|EVG
+3 Moonglove Extract|EVG
+1 Slate of Ancestry|EVG
+1 Stonewood Invoker|EVG
+1 Sylvan Messenger|EVG
+1 Timberwatch Elf|EVG
+2 Tranquil Thicket|EVG
+1 Voice of the Woods|EVG
+2 Wellwisher|EVG
+1 Wildsize|EVG
+1 Wirewood Herald|EVG
+1 Wirewood Lodge|EVG
+1 Wirewood Symbiote|EVG
+2 Wood Elves|EVG
+1 Wren's Run Vanquisher|EVG

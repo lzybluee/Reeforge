@@ -1,0 +1,47 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Duel Decks: Elspeth vs. Tezzeret - Elspeth
+Description=Duel Decks
+Deck Type=constructed
+Set=DDF
+Image=elspeth.jpg
+[Main]
+1 Abolish|DDF
+1 Angel of Salvation|DDF
+1 Blinding Beam|DDF
+1 Burrenton Bombardier|DDF
+1 Catapult Master|DDF
+1 Celestial Crusader|DDF
+1 Conclave Equenaut|DDF
+1 Conclave Phalanx|DDF
+1 Crusade|DDF
+1 Daru Encampment|DDF
+2 Elite Vanguard|DDF
+1 Elspeth, Knight-Errant|DDF
+1 Glory Seeker|DDF
+1 Goldmeadow Harrier|DDF
+1 Infantry Veteran|DDF
+1 Journey to Nowhere|DDF
+1 Kabira Crossroads|DDF
+1 Kemba's Skyguard|DDF
+1 Kor Aeronaut|DDF
+1 Kor Hookmaster|DDF
+2 Kor Skyfisher|DDF
+1 Loyal Sentry|DDF
+1 Mighty Leap|DDF
+1 Mosquito Guard|DDF
+22 Plains|DDF|1
+2 Raise the Alarm|DDF
+1 Razor Barrier|DDF
+1 Rustic Clachan|DDF
+1 Saltblast|DDF
+1 Seasoned Marshal|DDF
+1 Stormfront Riders|DDF
+1 Sunlance|DDF
+1 Swell of Courage|DDF
+2 Swords to Plowshares|DDF
+1 Temple Acolyte|DDF

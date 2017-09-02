@@ -1,0 +1,35 @@
+[shop]
+WinsToUnlock=20
+Credits=3500
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Illusionary Might
+Description=With the "Illusionary Might" deck, you're going to take the beatdown to your opponent starting on the very first turn of the game.
+Set=M12
+Image=illusionary_might.jpg
+[Main]
+4 AEther Adept|M12
+1 Glacial Fortress|M12
+4 Glimmerpost|SOM
+2 Grand Architect|SOM
+19 Island|M12|1
+1 Lord of the Unreal|M12
+4 Mana Leak|M12
+3 Mind Control|M12
+4 Phantasmal Bear|M12
+3 Phantasmal Dragon|M12
+1 Phantasmal Image|M12
+4 Porcelain Legionnaire|NPH
+1 Precursor Golem|SOM
+4 Preordain|M11
+4 Spined Thopter|NPH
+1 Steel Hellkite|SOM
+[Sideboard]
+2 Flashfreeze|M12
+2 Frost Breath|M12
+3 Master Thief|M12
+1 Mind Control|M12
+2 Negate|M12
+4 Neurok Commando|MBS
+1 Stoic Rebuttal|SOM

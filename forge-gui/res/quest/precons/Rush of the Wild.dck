@@ -1,0 +1,45 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Rush of the Wild
+Description=Magic 2014 Event deck
+Deck Type=constructed
+Set=M14
+Image=rush_of_the_wild.jpg
+[Main]
+1 Armed // Dangerous|DGM
+2 Burning-Tree Emissary|GTC
+1 Clan Defiance|GTC
+1 Deadbridge Goliath|RTR
+2 Dryad Militant|RTR
+4 Elvish Mystic|M14
+2 Flames of the Firebrand|M14
+12 Forest|M14|1
+4 Ghor-Clan Rampager|GTC
+1 Gruul Charm|GTC
+4 Gruul Guildgate|DGM
+2 Kalonian Tusker|M14
+1 Mizzium Mortars|RTR
+6 Mountain|M14|1
+1 Ogre Battledriver|M14
+1 Pyrewild Shaman|DGM
+2 Rakdos Cackler|RTR
+1 Rogue's Passage|RTR
+1 Rubblebelt Raiders|GTC
+3 Shock|M14
+2 Skarrg Guildmage|GTC
+3 Slaughterhorn|GTC
+1 Stomping Ground|GTC
+1 Wild Beastmaster|RTR
+1 Wrecking Ogre|GTC
+[Sideboard]
+2 Act of Treason|M14
+3 Annihilating Fire|RTR
+2 Enlarge|M14
+2 Gruul Charm|GTC
+2 Naturalize|M14
+1 Savage Summoning|M14
+3 Skullcrack|GTC

@@ -1,0 +1,35 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Azorius Authority
+Description=Azorius Authority is a white/blue intro pack centering around the Azorius Senate.
+Deck Type=constructed
+Set=DGM
+Image=azorius_authority.jpg
+[Main]
+1 Arrest|RTR
+2 Ascended Lawmage|DGM
+2 Avenging Arrow|RTR
+2 Azorius Arrester|RTR
+2 Azorius Cluestone|DGM
+4 Azorius Guildgate|DGM
+1 Azorius Justiciar|RTR
+2 Haazda Snare Squad|DGM
+10 Island|RTR|1
+2 Jelenn Sphinx|DGM
+1 Lavinia of the Tenth|DGM
+2 Lyev Decree|DGM
+1 Lyev Skyknight|RTR
+1 Martial Law|RTR
+12 Plains|RTR|1
+1 Protect // Serve|DGM
+1 Restore the Peace|DGM
+2 Righteous Charge|GTC
+3 Silvercoat Lion|M13
+1 Soulsworn Spirit|RTR
+2 Stealer of Secrets|RTR
+2 Sunspire Gatekeepers|DGM
+3 Wind Drake|DGM

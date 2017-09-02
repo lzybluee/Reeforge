@@ -1,0 +1,34 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Fury
+Description=Clash Pack
+Deck Type=constructed
+Set=M15
+Image=fury.jpg
+[Main]
+1 Arbor Colossus|THS
+1 Boulderfall|THS
+1 Courser of Kruphix|BNG
+4 Elvish Mystic|M15
+1 Fated Intervention|BNG
+1 Font of Fertility|JOU
+15 Forest|M15|1
+2 Generator Servant|M15
+1 Genesis Hydra|M15
+1 Hydra Broodmaster|JOU
+2 Ill-Tempered Cyclops|THS
+3 Karametra's Acolyte|THS
+2 Lightning Strike|M15
+9 Mountain|M15|1
+2 Nemesis of Mortals|THS
+1 Nessian Courser|THS
+3 Nessian Game Warden|JOU
+1 Nykthos, Shrine to Nyx|THS
+3 Nylea's Disciple|THS
+2 Plummet|M15
+2 Reclamation Sage|M15
+2 Voyaging Satyr|THS

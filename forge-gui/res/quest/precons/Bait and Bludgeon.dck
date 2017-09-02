@@ -4,7 +4,7 @@ Credits=1200
 MinDifficulty=0
 MaxDifficulty=5
 [metadata]
-Name=Bait & Bludgeon
+Name=Bait and Bludgeon
 Description=The "Bait & Bludgeon" deck shows your opponents the value of affinity, one of the new Mirrodin mechanics. Cards with affinity for artifacts cost {1} less to play for each artifact you control. Affinity doesn't affect the colored mana required, but with enough artifacts in play, you'll pay close to nothing for your affinity spells.
 Deck Type=constructed
 Set=MRD

@@ -1,0 +1,42 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Strength of Selesnya
+Description=From its guildhome Vitu-Ghazi, the Selesnya Conclave engages in a relentless campaign of growth, sending its tendrils out into the never-ending streets of the Ravnican metropolis.
+Deck Type=constructed
+Set=DGM
+Image=strength_of_selesnya.jpg
+[Main]
+1 Advent of the Wurm|DGM
+4 Call of the Conclave|RTR
+1 Champion of Lambholt|AVR
+2 Doomed Traveler|ISD
+4 Evolving Wilds|M13
+6 Forest|RTR|1
+1 Geist-Honored Monk|ISD
+1 Godless Shrine|GTC
+1 Grove of the Guardian|RTR
+1 Growing Ranks|RTR
+1 Increasing Devotion|DKA
+4 Intangible Virtue|ISD
+3 Lingering Souls|DKA
+1 Odric, Master Tactician|M13
+1 Parallel Lives|ISD
+7 Plains|RTR|1
+2 Rancor|M13
+3 Rootborn Defenses|RTR
+4 Selesnya Charm|RTR
+4 Selesnya Guildgate|DGM
+1 Swamp|RTR|1
+2 Vitu-Ghazi Guildmage|RTR
+4 Wake the Reflections|DGM
+1 Wayfaring Temple|RTR
+[Sideboard]
+4 Centaur Healer|RTR
+3 Druid's Deliverance|RTR
+4 Pacifism|M13
+1 Rogue's Passage|RTR
+3 Sundering Growth|RTR

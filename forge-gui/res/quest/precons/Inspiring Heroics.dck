@@ -1,0 +1,44 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Inspiring Heroics
+Description=Theros Event Deck
+Deck Type=constructed
+Set=THS
+Image=inspiring_heroics.jpg
+[Main]
+2 Ascended Lawmage|DGM
+4 Azorius Guildgate|DGM
+2 Banisher Priest|M14
+3 Battlewise Hoplite|THS
+2 Dauntless Onslaught|THS
+2 Detention Sphere|RTR
+3 Dryad Militant|RTR
+1 Fabled Hero|THS
+1 Frontline Medic|GTC
+2 Gods Willing|THS
+1 Hallowed Fountain|RTR
+3 Hopeful Eidolon|THS
+2 Imposing Sovereign|M14
+5 Island|THS|1
+1 Lavinia of the Tenth|DGM
+3 Lyev Skyknight|RTR
+1 New Prahv Guildmage|RTR
+1 Ordeal of Heliod|THS
+2 Ordeal of Thassa|THS
+2 Pacifism|M14
+14 Plains|THS|1
+1 Precinct Captain|RTR
+1 Skymark Roc|RTR
+1 Soldier of the Pantheon|THS
+[Sideboard]
+2 Arrest|RTR
+2 Gainsay|THS
+2 Gift of Orzhova|GTC
+2 Glare of Heresy|THS
+2 Negate|M14
+3 Solemn Offering|M14
+2 Triton Tactics|THS
