@@ -358,7 +358,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
             final boolean canChooseZero) {
         final int min = canChooseZero ? 0 : 1;
         return getGui().getInteger("Choose " + announce + " for " + ability.getHostCard().getName(), min,
-                Integer.MAX_VALUE, min + 9);
+                Integer.MAX_VALUE, min + 21);
     }
 
     @Override
