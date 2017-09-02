@@ -1090,6 +1090,10 @@ public class Card extends GameEntity implements Comparable<Card> {
                 getGame().fireEvent(new GameEventCardCounters(this, counterType, oldValue == null ? 0 : oldValue, newValue));
             }
 
+            for(Player p : game.getPlayers()) {
+                getGame().fireEvent(new GameEventZone(ZoneType.Battlefield, p, EventValueChangeType.ComplexUpdate, null));
+            }
+
             // Run triggers
             final Map<String, Object> runParams = Maps.newTreeMap();
             runParams.put("Card", this);
@@ -1163,6 +1167,9 @@ public class Card extends GameEntity implements Comparable<Card> {
 
         // Play the Subtract Counter sound
         getGame().fireEvent(new GameEventCardCounters(this, counterName, oldValue == null ? 0 : oldValue, newValue));
+        for(Player p : game.getPlayers()) {
+            getGame().fireEvent(new GameEventZone(ZoneType.Battlefield, p, EventValueChangeType.ComplexUpdate, null));
+        }
 
         // Run triggers
         int curCounters = oldValue == null ? 0 : oldValue;
