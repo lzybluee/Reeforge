@@ -152,9 +152,12 @@ public class HumanPlaySpellAbility {
                 && announceType()
                 && (!mayChooseTargets || setupTargets()); // if you can choose targets, then do choose them.
 
-        boolean payCost = isFree || payment.payCost(new HumanCostDecision(controller, human, ability, ability.getHostCard()));
+        boolean payCost = true;
 
-        prerequisitesMet = (prerequisitesMet && payCost);
+        if(prerequisitesMet) {
+            payCost = isFree || payment.payCost(new HumanCostDecision(controller, human, ability, ability.getHostCard()));
+            prerequisitesMet = (prerequisitesMet && payCost);
+        }
 
         if (!prerequisitesMet) {
             if (ability.isTrigger() && !payCost) {
