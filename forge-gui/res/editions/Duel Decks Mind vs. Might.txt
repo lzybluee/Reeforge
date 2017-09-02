@@ -1,0 +1,74 @@
+[metadata]
+Code=DDS
+Date=2017-03-31
+Name=Duel Decks: Mind vs. Might
+Code2=DDS
+MciCode=dds
+Type=Duel_Decks
+
+[cards]
+1 M Jhoira of the Ghitu
+2 R Beacon of Tomorrows
+3 R Deep-Sea Kraken
+4 R Mind's Desire
+5 C Peer Through Depths
+6 R Quicken
+7 C Reach Through Mists
+8 R Sage-Eye Avengers
+9 C Sift Through Sands
+10 C Snap
+11 R Talrand, Sky Summoner
+12 C Temporal Fissure
+13 R The Unspeakable
+14 U Desperate Ritual
+15 C Empty the Warrens
+16 C Grapeshot
+17 C Rift Bolt
+18 U Shivan Meteor
+19 R Volcanic Vision
+20 U Young Pyromancer
+21 R Firemind's Foresight
+22 C Goblin Electromancer
+23 R Jori En, Ruin Diver
+24 C Nivix Cyclops
+25 U Spellheart Chimera
+26 U Nucklavee
+27 C Swiftwater Cliffs
+28 L Island
+29 L Island
+30 L Island
+31 L Mountain
+32 L Mountain
+33 L Mountain
+34 M Lovisa Coldeyes
+35 R Beacon of Destruction
+36 U Boldwyr Intimidator
+37 C Firebolt
+38 C Gorehorn Minotaurs
+39 R Kamahl, Pit Fighter
+40 C Kruin Striker
+41 R Zo-Zu the Punisher
+42 C Ambassador Oak
+43 U Beast Attack
+44 R Call of the Herd
+45 C Cloudcrown Oak
+46 U Harmonize
+47 R Increasing Savagery
+48 C Rampant Growth
+49 U Roar of the Wurm
+50 C Skarrgan Pit-Skulk
+51 C Sylvan Might
+52 R Talara's Battalion
+53 R Radha, Heir to Keld
+54 U Relentless Hunter
+55 U Burning-Tree Emissary
+56 U Guttural Response
+57 R Rubblebelt Raiders
+58 R Coat of Arms
+59 C Rugged Highlands
+60 L Mountain
+61 L Mountain
+62 L Mountain
+63 L Forest
+64 L Forest
+65 L Forest
