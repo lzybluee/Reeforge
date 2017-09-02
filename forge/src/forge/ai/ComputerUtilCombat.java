@@ -1756,6 +1756,10 @@ public class ComputerUtilCombat {
         final int attackerLife = ComputerUtilCombat.getDamageToKill(attacker)
                 + ComputerUtilCombat.predictToughnessBonusOfAttacker(attacker, blocker, combat, withoutAbilities);
 
+        if(attackerDamage > 0 && blocker.getSVar("HasDamagedEffect").equals("TRUE")) {
+            return true;
+        }
+
         if (blocker.hasKeyword("Double Strike")) {
             if (defenderDamage > 0 && (hasKeyword(blocker, "Deathtouch", withoutAbilities, combat) || attacker.hasSVar("DestroyWhenDamaged"))) {
                 return true;
@@ -1985,6 +1989,10 @@ public class ComputerUtilCombat {
                 + ComputerUtilCombat.predictToughnessBonusOfBlocker(attacker, blocker, withoutAbilities);
         final int attackerLife = ComputerUtilCombat.getDamageToKill(attacker)
                 + ComputerUtilCombat.predictToughnessBonusOfAttacker(attacker, blocker, combat, withoutAbilities);
+
+        if(defenderDamage > 0 && attacker.getSVar("HasDamagedEffect").equals("TRUE")) {
+            return true;
+        }
 
         if (attacker.hasKeyword("Double Strike")) {
             if (attackerDamage > 0 && (hasKeyword(attacker, "Deathtouch", withoutAbilities, combat) || blocker.hasSVar("DestroyWhenDamaged"))) {
