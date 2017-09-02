@@ -226,6 +226,19 @@ public class GuiDesktop implements IGuiBase {
     @Override
     public File getSaveFile(final File defaultFile) {
         final JFileChooser fc = new JFileChooser();
+        fc.setAcceptAllFileFilterUsed(false);
+        fc.setFileFilter(new FileFilter() {
+            
+            @Override
+            public String getDescription() {
+                return "State File";
+            }
+            
+            @Override
+            public boolean accept(File f) {
+                return f.isDirectory() || f.getName().toLowerCase().endsWith(".txt");
+            }
+        });
         fc.setSelectedFile(defaultFile);
         int result = fc.showSaveDialog(null);
         return result == JFileChooser.APPROVE_OPTION ? fc.getSelectedFile() : null;
