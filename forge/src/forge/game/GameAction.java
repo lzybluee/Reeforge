@@ -470,6 +470,10 @@ public class GameAction {
                 }
                 changeZone(null, zoneTo, unmeld, position, cause);
             }
+            // Remove controlling
+            for (final Card bc : game.getCardsIn(ZoneType.Battlefield)) {
+                bc.removeGainControlTargets(c);
+            }
             // Reveal if face-down
             if (c.isFaceDown()) {
             	c.setState(CardStateName.Original, true);
