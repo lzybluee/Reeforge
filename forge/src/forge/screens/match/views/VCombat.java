@@ -17,6 +17,8 @@
  */
 package forge.screens.match.views;
 
+import javax.swing.SwingUtilities;
+
 import forge.gui.framework.DragCell;
 import forge.gui.framework.DragTab;
 import forge.gui.framework.EDocID;
@@ -112,5 +114,12 @@ public class VCombat implements IVDoc<CCombat> {
 
         tab.setText(cntAttackers > 0 ? ("Combat : " + cntAttackers) : "Combat");
         tar.setText(desc);
+
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                scrollPane.scrollToTop();
+            }
+        });
     }
 }
