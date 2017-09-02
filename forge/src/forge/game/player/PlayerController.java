@@ -237,6 +237,7 @@ public abstract class PlayerController {
     public abstract String chooseCardName(SpellAbility sa, List<ICardFace> faces, String message);
     // better to have this odd method than those if playerType comparison in ChangeZone  
     public abstract Card chooseSingleCardForZoneChange(ZoneType destination, List<ZoneType> origin, SpellAbility sa, CardCollection fetchList, DelayedReveal delayedReveal, String selectPrompt, boolean isOptional, Player decider);
+    public abstract CardCollection chooseCardsForZoneChange(ZoneType destination, List<ZoneType> origin, SpellAbility sa, CardCollection fetchList, DelayedReveal delayedReveal, String selectPrompt, boolean isOptional, Player decider, int changeNum);
 
     public abstract void autoPassCancel();
 
