@@ -457,7 +457,7 @@ public class CardPanel extends SkinnedPanel implements CardContainer, IDisposabl
 
         }
 
-        final int combatXSymbols = (cardXOffset + (cardWidth / 4)) - 16;
+        final int combatXSymbols = cardXOffset;
         final int stateXSymbols = (cardXOffset + (cardWidth / 2)) - 16;
         final int ySymbols = (cardYOffset + cardHeight) - (cardHeight / 8) - 16;
 
