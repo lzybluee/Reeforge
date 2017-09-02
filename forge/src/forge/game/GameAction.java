@@ -716,12 +716,12 @@ public class GameAction {
     public final void checkStaticAbilities() {
         checkStaticAbilities(true, Sets.<Card>newHashSet());
     }
-    public final void checkStaticAbilities(final boolean runEvents, final Set<Card> affectedCards) {
+    public final boolean checkStaticAbilities(final boolean runEvents, final Set<Card> affectedCards) {
         if (isCheckingStaticAbilitiesOnHold()) {
-            return;
+            return false;
         }
         if (game.isGameOver()) {
-            return;
+            return false;
         }
 
         // remove old effects
@@ -835,6 +835,7 @@ public class GameAction {
                         c.setPairedWith(null);
                         partner.setPairedWith(null);
                         affectedCards.add(c);
+                        affectedCards.add(partner);
                     }
                 }
             }
@@ -849,9 +850,14 @@ public class GameAction {
             c.updateTypesForView();
         }
 
-        if (runEvents && !affectedCards.isEmpty()) {
-            game.fireEvent(new GameEventCardStatsChanged(affectedCards));
+        if (!affectedCards.isEmpty()) {
+            if(runEvents)
+                game.fireEvent(new GameEventCardStatsChanged(affectedCards));
+            
+            return true;
         }
+        
+        return false;
     }
 
     public final void checkStateEffects(final boolean runEvents) {
@@ -883,8 +889,7 @@ public class GameAction {
 
         // do this multiple times, sometimes creatures/permanents will survive when they shouldn't
         for (int q = 0; q < 9; q++) {
-            checkStaticAbilities(false, affectedCards);
-            boolean checkAgain = false;
+            boolean checkAgain = checkStaticAbilities(false, affectedCards);
 
             for (final Player p : game.getPlayers()) {
                 for (final ZoneType zt : ZoneType.values()) {
