@@ -14,6 +14,7 @@ import forge.game.ability.ApiType;
 import forge.game.card.Card;
 import forge.game.card.CardView;
 import forge.game.player.Player;
+import forge.game.player.PlayerView;
 import forge.game.spellability.SpellAbility;
 import forge.game.spellability.TargetRestrictions;
 import forge.model.FModel;
@@ -116,10 +117,14 @@ public final class InputSelectTargets extends InputSyncronizedBase {
 
     @Override
     protected final boolean onCardSelected(final Card card, final List<Card> otherCardsToSelect, final ITriggerEvent triggerEvent) {
-        if (!tgt.isUniqueTargets() && targetDepth.containsKey(card)) {
-            if(sa.getDescription().startsWith("Any number of target ")) {
-                removeTarget(card);
+        if (targetDepth.containsKey(card)) {
+            if (tgt.isDividedAsYouChoose()) {
+                int toAdd = tgt.removeDividedAllocation(card);
+                int toDevide = tgt.getStillToDivide();
+                tgt.setStillToDivide(toDevide + toAdd);
+                
             }
+            removeTarget(card);
             return false;
         }
 
@@ -128,16 +133,42 @@ public final class InputSelectTargets extends InputSyncronizedBase {
             showMessage(sa.getHostCard() + " - Cannot target this card (Shroud? Protection? Restrictions).");
             return false;
         }
+
         // If all cards must be from the same zone
-        if (tgt.isSingleZone() && lastTarget != null && !card.getController().equals(lastTarget.getController())) {
-            showMessage(sa.getHostCard() + " - Cannot target this card (not in the same zone)");
-            return false;
+        if (tgt.isSingleZone()) {
+            boolean singleZone = true;
+            for (final GameObject o : targetDepth.keySet()) {
+                if (o instanceof Card) {
+                    final Card c = (Card) o;
+                    if(!c.getController().equals(card.getController())) {
+                        singleZone = false;
+                        break;
+                    }
+                }
+            }
+            if(!singleZone) {
+                showMessage(sa.getHostCard() + " - Cannot target this card (not in the same zone)");
+                return false;
+            }
         }
 
         // If the cards can't share a creature type
-        if (tgt.isWithoutSameCreatureType() && lastTarget != null && card.sharesCreatureTypeWith(lastTarget)) {
-            showMessage(sa.getHostCard() + " - Cannot target this card (should not share a creature type)");
-            return false;
+        if (tgt.isWithoutSameCreatureType()) {
+            boolean shareType = false;
+
+            for (final GameObject o : targetDepth.keySet()) {
+                if (o instanceof Card) {
+                    final Card c = (Card) o;
+                    if(card.sharesCreatureTypeWith(c)) {
+                        shareType = true;
+                        break;
+                    }
+                }
+            }
+            if(shareType) {
+                showMessage(sa.getHostCard() + " - Cannot target this card (should not share a creature type)");
+                return false;
+            }
         }
 
         // If all cards must have different controllers
@@ -217,10 +248,14 @@ public final class InputSelectTargets extends InputSyncronizedBase {
 
     @Override
     protected final void onPlayerSelected(final Player player, final ITriggerEvent triggerEvent) {
-        if (!tgt.isUniqueTargets() && targetDepth.containsKey(player)) {
-            if(sa.getDescription().startsWith("Any number of target ")) {
-                removeTarget(player);
+        if (targetDepth.containsKey(player)) {
+            if (tgt.isDividedAsYouChoose()) {
+                int toAdd = tgt.removeDividedAllocation(player);
+                int toDevide = tgt.getStillToDivide();
+                tgt.setStillToDivide(toDevide + toAdd);
+                
             }
+            removeTarget(player);
             return;
         }
 
@@ -266,6 +301,8 @@ public final class InputSelectTargets extends InputSyncronizedBase {
         if (ge instanceof Card) {
             getController().getGui().setUsedToPay(CardView.get((Card) ge), true);
             lastTarget = (Card) ge;
+        } else if(ge instanceof Player) {
+            getController().getGui().setHighlighted(PlayerView.get((Player) ge), true);
         }
         final Integer val = targetDepth.get(ge);
         targetDepth.put(ge, val == null ? Integer.valueOf(1) : Integer.valueOf(val.intValue() + 1) );
@@ -282,15 +319,19 @@ public final class InputSelectTargets extends InputSyncronizedBase {
         sa.getTargets().remove(ge);
         if (ge instanceof Card) {
             getController().getGui().setUsedToPay(CardView.get((Card) ge), false);
+        } else if(ge instanceof Player) {
+            getController().getGui().setHighlighted(PlayerView.get((Player) ge), false);
         }
         targetDepth.remove(ge);
         this.showMessage();
     }
 
     private void done() {
-        for (final GameEntity c : targetDepth.keySet()) {
-            if (c instanceof Card) {
-                getController().getGui().setUsedToPay(CardView.get((Card) c), false);
+        for (final GameEntity ge : targetDepth.keySet()) {
+            if (ge instanceof Card) {
+                getController().getGui().setUsedToPay(CardView.get((Card) ge), false);
+            } else if(ge instanceof Player) {
+                getController().getGui().setHighlighted(PlayerView.get((Player) ge), false);
             }
         }
 
