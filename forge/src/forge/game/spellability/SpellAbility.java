@@ -42,6 +42,7 @@ import forge.game.cost.CostPart;
 import forge.game.cost.CostPartMana;
 import forge.game.cost.CostRemoveCounter;
 import forge.game.mana.Mana;
+import forge.game.mana.ManaCostBeingPaid;
 import forge.game.player.Player;
 import forge.game.staticability.StaticAbility;
 import forge.game.trigger.TriggerType;
@@ -160,6 +161,8 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
 
     private CardCollection lastStateBattlefield = null;
     private CardCollection lastStateGraveyard = null;
+
+    private ManaCostBeingPaid usedToPayMana = null;
 
     public CardCollection getLastStateBattlefield() {
         return lastStateBattlefield;
@@ -1718,5 +1721,13 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
         }
 
         return score;
+    }
+
+    public void setUsedToPayMana(ManaCostBeingPaid mana) {
+        usedToPayMana = mana;
+    }
+
+    public ManaCostBeingPaid getUsedToPayMana() {
+        return usedToPayMana;
     }
 }
