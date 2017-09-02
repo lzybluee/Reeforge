@@ -273,8 +273,6 @@ public class PlayArea extends CardPanelContainer implements CardPanelMouseListen
                 if (!s.isEmpty()) {
                     if (s.get(0).getCard().getCurrentState().isCreature()) {
                         creatures.add(s);
-                    } else {
-                        others.add(s);
                     }
                 } 
             }

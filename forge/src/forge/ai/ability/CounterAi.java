@@ -2,7 +2,6 @@ package forge.ai.ability;
 
 import forge.ai.AiController;
 import forge.ai.AiProps;
-import forge.ai.ComputerUtil;
 import forge.ai.ComputerUtilAbility;
 import java.util.Iterator;
 
@@ -137,6 +136,10 @@ public class CounterAi extends SpellAbilityAi {
             } else if (logic.startsWith("MinCMC.")) {
                 int minCMC = Integer.parseInt(logic.substring(7));
                 if (tgtCMC < minCMC) {
+                    return false;
+                }
+            } else if ("NullBrooch".equals(logic)) {
+                if (!SpecialCardAi.NullBrooch.consider(ai, sa)) {
                     return false;
                 }
             }

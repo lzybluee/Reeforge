@@ -356,7 +356,7 @@ public class CountersPutAi extends SpellAbilityAi {
         PhaseHandler ph = ai.getGame().getPhaseHandler();
 
         if ("AlwaysAtOppEOT".equals(sa.getParam("AILogic"))) {
-            if (ph.is(PhaseType.END_OF_TURN) && !ph.isPlayerTurn(ai)) {
+            if (ph.is(PhaseType.END_OF_TURN) && ph.getNextTurn().equals(ai)) {
                 return true;
             }
         }
@@ -705,6 +705,13 @@ public class CountersPutAi extends SpellAbilityAi {
                     if (list.isEmpty() && preferred) {
                         // If it's required to choose targets and the list is empty, get a new list
                         list = CardLists.getTargetableCards(ai.getOpponents().getCardsIn(ZoneType.Battlefield), sa);
+                        preferred = false;
+                    }
+
+                    if (list.isEmpty()) {
+                        // Still an empty list, but we have to choose something (mandatory); expand targeting to
+                        // include AI's own cards to see if there's anything targetable (e.g. Plague Belcher).
+                        list = CardLists.getTargetableCards(ai.getCardsIn(ZoneType.Battlefield), sa);
                         preferred = false;
                     }
                 }

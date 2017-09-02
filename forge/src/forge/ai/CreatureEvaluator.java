@@ -93,6 +93,7 @@ public class CreatureEvaluator implements Function<Card, Integer> {
                 value += addValue(power * 15, "infect");
             }
             value += addValue(c.getKeywordMagnitude("Rampage"), "rampage");
+            value += addValue(c.getKeywordMagnitude("Afflict") * 5, "afflict");
         }
     
         value += addValue(c.getKeywordMagnitude("Bushido") * 16, "bushido");
@@ -101,6 +102,14 @@ public class CreatureEvaluator implements Function<Card, Integer> {
         value += addValue(c.getKeywordMagnitude("Annihilator") * 50, "eldrazi");
         value += addValue(c.getKeywordMagnitude("Absorb") * 11, "absorb");
 
+        // Keywords that may produce temporary or permanent buffs over time
+        if (c.hasKeyword("Prowess")) {
+            value += addValue(5, "prowess");
+        }
+        if (c.hasKeyword("Outlast")) {
+            value += addValue(10, "outlast");
+        }
+
         // Defensive Keywords
         if (c.hasKeyword("Reach") && !c.hasKeyword("Flying")) {
             value += addValue(5, "reach");
@@ -108,7 +117,7 @@ public class CreatureEvaluator implements Function<Card, Integer> {
         if (c.hasKeyword("CARDNAME can block creatures with shadow as though they didn't have shadow.")) {
             value += addValue(3, "shadow-block");
         }
-    
+
         // Protection
         if (c.hasKeyword("Indestructible")) {
             value += addValue(70, "darksteel");
@@ -129,7 +138,7 @@ public class CreatureEvaluator implements Function<Card, Integer> {
         if (c.hasStartOfKeyword("PreventAllDamageBy")) {
             value += addValue(10, "prevent-dmg");
         }
-    
+
         // Bad keywords
         if (c.hasKeyword("Defender") || c.hasKeyword("CARDNAME can't attack.")) {
             value -= subValue((power * 9) + 40, "defender");
@@ -146,11 +155,11 @@ public class CreatureEvaluator implements Function<Card, Integer> {
         } else if (c.hasKeyword("CARDNAME can block only creatures with flying.")) {
             value -= subValue(toughness * 5, "reverse-reach");
         }
-    
+
         if (c.hasSVar("DestroyWhenDamaged")) {
             value -= subValue((toughness - 1) * 9, "dies-to-dmg");
         }
-    
+
         if (c.hasKeyword("CARDNAME can't attack or block.")) {
             value = addValue(50 + (c.getCMC() * 5), "useless"); // reset everything - useless
         }
@@ -170,7 +179,7 @@ public class CreatureEvaluator implements Function<Card, Integer> {
         } else if (c.hasStartOfKeyword("Echo") && c.cameUnderControlSinceLastUpkeep()) {
             value -= subValue(10, "echo-unpaid");
         }
-    
+
         if (c.hasStartOfKeyword("At the beginning of your upkeep, CARDNAME deals")) {
             value -= subValue(20, "upkeep-dmg");
         } 
@@ -183,7 +192,7 @@ public class CreatureEvaluator implements Function<Card, Integer> {
         if (c.getSVar("Targeting").equals("Dies")) {
             value -= subValue(25, "dies");
         }
-    
+
         for (final SpellAbility sa : c.getSpellAbilities()) {
             if (sa.isAbility()) {
                 value += addValue(evaluateSpellAbility(sa), "sa: " + sa);
@@ -192,11 +201,11 @@ public class CreatureEvaluator implements Function<Card, Integer> {
         if (!c.getManaAbilities().isEmpty()) {
             value += addValue(10, "manadork");
         }
-    
+
         if (c.isUntapped()) {
             value += addValue(1, "untapped");
         }
-    
+
         // paired creatures are more valuable because they grant a bonus to the other creature
         if (c.isPaired()) {
             value += addValue(14, "paired");
