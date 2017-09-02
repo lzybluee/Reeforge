@@ -1439,6 +1439,7 @@ public class Player extends GameEntity implements Comparable<Player> {
 
         cl.addAll(getZone(ZoneType.Graveyard).getCardsPlayerCanActivate(this));
         cl.addAll(getZone(ZoneType.Exile).getCardsPlayerCanActivate(this));
+        cl.addAll(getZone(ZoneType.Exile).getCardsSuspended(this));
         cl.addAll(getZone(ZoneType.Library).getCardsPlayerCanActivate(this));
         if (includeCommandZone) {
             cl.addAll(getZone(ZoneType.Command).getCardsPlayerCanActivate(this));
