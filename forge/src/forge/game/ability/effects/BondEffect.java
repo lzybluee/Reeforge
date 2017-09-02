@@ -33,7 +33,11 @@ public class BondEffect extends SpellAbilityEffect {
             partner = sa.getActivatingPlayer().getController().chooseSingleEntityForEffect(cards, sa, "Select a card to pair with");
         }
 
-        if(trigCards.getFirst().getController() != partner.getController()) {
+        if(trigCards.getFirst().getController() != sa.getActivatingPlayer()) {
+            return;
+        }
+
+        if(partner.getController() != sa.getActivatingPlayer()) {
             return;
         }
 
