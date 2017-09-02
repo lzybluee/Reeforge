@@ -336,7 +336,10 @@ public class Card extends GameEntity implements Comparable<Card> {
                 return CardStateName.Flipped;
             }
             else if (isDoubleFaced() && currentStateName != CardStateName.Transformed) {
-                return CardStateName.Transformed;
+                if(isFaceDown())
+                    return CardStateName.Original;
+                else
+                    return CardStateName.Transformed;
             }
             else if (this.isMeldable() && currentStateName != CardStateName.Meld) {
                 return CardStateName.Meld;
