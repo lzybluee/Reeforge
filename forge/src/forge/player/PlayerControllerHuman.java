@@ -2036,7 +2036,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
                 return;
             }
 
-            final Integer count = getGui().getInteger("How many counters?", 1, Integer.MAX_VALUE, 10);
+            final Integer count = getGui().getInteger("How many counters?", 1, Integer.MAX_VALUE, 21);
             if (count == null) {
                 return;
             }
