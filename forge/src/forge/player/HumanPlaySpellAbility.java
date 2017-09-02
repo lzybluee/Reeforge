@@ -256,6 +256,7 @@ public class HumanPlaySpellAbility {
 
         ability.resetOnceResolved();
         payment.refundPayment();
+        game.getStack().clearUndoStack();
         game.getStack().clearFrozen();
         game.getTriggerHandler().clearWaitingTriggers();
     }
