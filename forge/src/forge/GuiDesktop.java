@@ -231,7 +231,10 @@ public class GuiDesktop implements IGuiBase {
             
             @Override
             public String getDescription() {
-                return "State File";
+                if(defaultFile.toString().endsWith("state.txt"))
+                    return "State File";
+                else
+                    return "Log File";
             }
             
             @Override
