@@ -40,22 +40,30 @@ public class KeywordCollection implements Iterable<String>, Serializable {
     }
 
     public void add(String k) {
-        KeywordInstance<?> inst = Keyword.getInstance(k);
-        Keyword keyword = inst.getKeyword();
-        List<KeywordInstance<?>> list = map.get(keyword);
-        if (list == null) {
-            list = new ArrayList<KeywordInstance<?>>();
-            list.add(inst);
-            map.put(keyword, list);
-            stringMap.put(k, inst.getAmount());
-        }
-        else if (!keyword.isMultipleRedundant) {
-            list.add(inst);
-            int amount = 0;
-            for (KeywordInstance<?> i : list) {
-                amount += i.getAmount();
+        if(k.startsWith("AdjustLandPlays:")) {
+            if(stringMap.containsKey(k)) {
+                stringMap.put(k, stringMap.get(k) + 1);
+            } else {
+                stringMap.put(k, 1);
             }
-            stringMap.put(k, amount);
+        } else {
+            KeywordInstance<?> inst = Keyword.getInstance(k);
+            Keyword keyword = inst.getKeyword();
+            List<KeywordInstance<?>> list = map.get(keyword);
+            if (list == null) {
+                list = new ArrayList<KeywordInstance<?>>();
+                list.add(inst);
+                map.put(keyword, list);
+                stringMap.put(k, inst.getAmount());
+            }
+            else if (!keyword.isMultipleRedundant) {
+                list.add(inst);
+                int amount = 0;
+                for (KeywordInstance<?> i : list) {
+                    amount += i.getAmount();
+                }
+                stringMap.put(k, amount);
+            }
         }
     }
 
