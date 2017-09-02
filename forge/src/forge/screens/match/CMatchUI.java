@@ -927,9 +927,13 @@ public final class CMatchUI
     }
 
     @Override
-    public GameEntityView chooseSingleEntityForEffect(final String title, final List<? extends GameEntityView> optionList, final DelayedReveal delayedReveal, final boolean isOptional) {
+    public GameEntityView chooseSingleEntityForEffect(final String title, final List<? extends GameEntityView> optionList, 
+            final DelayedReveal delayedReveal, final boolean isOptional, int total) {
         if (delayedReveal != null) {
             reveal(delayedReveal.getMessagePrefix(), delayedReveal.getCards()); //TODO: Merge this into search dialog
+        }
+        if(total == 0) {
+            return null;
         }
         if (isOptional) {
             return oneOrNone(title, optionList);
