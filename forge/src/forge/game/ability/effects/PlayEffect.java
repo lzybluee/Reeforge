@@ -131,9 +131,10 @@ public class PlayEffect extends SpellAbilityEffect {
             amount = tgtCards.size();
         }
 
+        final CardCollection cardsForSelect = new CardCollection(tgtCards);
         final CardCollection saidNoTo = new CardCollection();
         while (tgtCards.size() > saidNoTo.size() && saidNoTo.size() < amount && amount > 0) {
-            Card tgtCard = controller.getController().chooseSingleEntityForEffect(tgtCards, sa, "Select a card to play");
+            Card tgtCard = controller.getController().chooseSingleEntityForEffect(cardsForSelect, sa, "Select a card to play");
             if (tgtCard == null) {
                 return;
             }
@@ -155,11 +156,13 @@ public class PlayEffect extends SpellAbilityEffect {
                     tgtCard.setState(CardStateName.FaceDown, false);
                 }
                 saidNoTo.add(tgtCard);
+                cardsForSelect.remove(tgtCard);
                 continue;
             }
 
             if (!sa.hasParam("AllowRepeats")) {
                 tgtCards.remove(tgtCard);
+                cardsForSelect.remove(tgtCard);
             }
 
             if (wasFaceDown) {
@@ -204,6 +207,7 @@ public class PlayEffect extends SpellAbilityEffect {
             // play copied cards with linked abilities, e.g. Elite Arcanist
             if (sa.hasParam("CopyOnce")) {
                 tgtCards.remove(original);
+                cardsForSelect.remove(tgtCard);
             }
 
             // only one mode can be used
