@@ -1630,7 +1630,7 @@ public class GameAction {
         }
 
         boolean isFirstGame = lastGameOutcome == null;
-        if (isFirstGame) {
+        if (isFirstGame || lastGameOutcome.getWinCondition() == GameEndReason.Draw) {
             game.fireEvent(new GameEventFlipCoin()); // Play the Flip Coin sound
             goesFirst = Aggregates.random(game.getPlayers());
         } else {
@@ -1645,7 +1645,7 @@ public class GameAction {
         if (goesFirst == null) {
             // This happens in hotseat matches when 2 equal lobbyplayers play.
             // Noone of them has lost, so cannot decide who goes first .
-            goesFirst = game.getPlayers().get(0); // does not really matter who plays first - it's controlled from the same computer.
+            goesFirst = Aggregates.random(game.getPlayers()); // does not really matter who plays first - it's controlled from the same computer.
         }
 
         for (Player p : game.getPlayers()) {
