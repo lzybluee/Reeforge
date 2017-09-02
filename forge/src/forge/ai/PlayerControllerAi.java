@@ -923,11 +923,10 @@ public class PlayerControllerAi extends PlayerController {
             reveal(delayedReveal.getCards(), delayedReveal.getZone(), delayedReveal.getOwner(), delayedReveal.getMessagePrefix());
         }
         
-        Card card = null;
         CardCollection collection = new CardCollection();
         int i = 0;
         do {
-            card = brains.chooseCardToHiddenOriginChangeZone(destination, origin, sa, fetchList, player, decider);
+            Card card = brains.chooseCardToHiddenOriginChangeZone(destination, origin, sa, fetchList, player, decider);
             if(card == null) {
                 if (fetchList.isEmpty() || decider.getController().confirmAction(sa, PlayerActionConfirmMode.ChangeZoneGeneral, selectPrompt)) {
                     break;

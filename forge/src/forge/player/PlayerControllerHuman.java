@@ -1678,20 +1678,30 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
             return new CardCollection(input.getSelected());
         }
 
-        tempShow(optionList);
-        if (delayedReveal != null) {
-            tempShow(delayedReveal.getCards());
-        }
-        final GameEntityView result = getGui().chooseSingleEntityForEffect(selectPrompt, GameEntityView.getEntityCollection(optionList), delayedReveal, isOptional);
-        endTempShowCards();
-        
-        if (result instanceof CardView) {
-            CardCollection collection = new CardCollection();
-            collection.add(game.getCard((CardView)result));
-            return collection;
-        }
+        CardCollection collection = new CardCollection();
+        int i = 0;
+        do {
+            tempShow(optionList);
+            if (delayedReveal != null) {
+                tempShow(delayedReveal.getCards());
+            }
+            final GameEntityView result = getGui().chooseSingleEntityForEffect(selectPrompt, GameEntityView.getEntityCollection(optionList), delayedReveal, isOptional);
+            endTempShowCards();
 
-        return null;
+            if(result == null) {
+                if (optionList.isEmpty() || confirmAction(sa, PlayerActionConfirmMode.ChangeZoneGeneral, selectPrompt)) {
+                    break;
+                }
+            } else {
+                if (result instanceof CardView) {
+                    collection.add(game.getCard((CardView)result));
+                    optionList.remove(game.getCard((CardView)result));
+                }
+            }
+            i++;
+        } while (i < changeNum);
+
+        return collection;
     }
 
     @Override
