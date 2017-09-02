@@ -89,6 +89,7 @@ import forge.game.spellability.SpellAbilityStackInstance;
 import forge.game.spellability.SpellAbilityView;
 import forge.game.spellability.TargetChoices;
 import forge.game.trigger.Trigger;
+import forge.game.trigger.TriggerType;
 import forge.game.trigger.WrappedAbility;
 import forge.game.zone.MagicStack;
 import forge.game.zone.PlayerZone;
@@ -124,6 +125,8 @@ import forge.util.Lang;
 import forge.util.MessageUtil;
 import forge.util.TextUtil;
 import forge.util.gui.SOptionPane;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -1436,8 +1439,40 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
 
     @Override
     public void orderAndPlaySimultaneousSa(final List<SpellAbility> activePlayerSAs) {
-        List<SpellAbility> orderedSAs = activePlayerSAs;
+        List<SpellAbility> orderedSAs = new ArrayList<SpellAbility>(activePlayerSAs);
         if (activePlayerSAs.size() > 1) {
+
+            ArrayList<SpellAbility> sas = new ArrayList<SpellAbility>();
+            for(SpellAbility sa : activePlayerSAs) {
+                if(sa.hasParam("Evolve") && sa.getHostCard() != null) {
+                    for(final Trigger trigger : sa.getHostCard().getTriggers()) {
+                        if (trigger.getMode() == TriggerType.Evolved) {
+                            sas.add(sa);
+                            orderedSAs.remove(sa);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            Collections.sort(sas, new Comparator<SpellAbility>() {
+
+                @Override
+                public int compare(SpellAbility sa1, SpellAbility sa2) {
+                    if(sa1.getHostCard().isCreature() && sa2.getHostCard().isCreature()) {
+                        int power = sa2.getHostCard().getNetPower() - sa1.getHostCard().getNetPower();
+                        if(power != 0)
+                            return power;
+                        return sa2.getHostCard().getNetToughness() - sa1.getHostCard().getNetToughness();
+                    }
+                    return 0;
+                }
+            });
+
+            for(SpellAbility sa : sas) {
+                orderedSAs.add(sa);
+            }
+
             final String firstStr = activePlayerSAs.get(0).toString();
             boolean needPrompt = false;
 
