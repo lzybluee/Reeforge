@@ -246,7 +246,10 @@ public class HumanPlaySpellAbility {
         if (fromZone != null) { // and not a copy
             // add back to where it came from
             game.getAction().moveTo(fromZone, ability.getHostCard(), zonePosition >= 0 ? Integer.valueOf(zonePosition) : null, null);
-            ability.getHostCard().setState(fromState, true);
+            if(ability.getHostCard().isSplitCard())
+                ability.getHostCard().setState(CardStateName.Original, true);
+            else
+                ability.getHostCard().setState(fromState, true);
         }
 
         clearTargets(ability);
