@@ -1,0 +1,29 @@
+[metadata]
+Code=E01
+Date=2017-06-17
+Name=Archenemy: Nicol Bolas
+Code2=E01
+MciCode=E01
+Type=Other
+
+[cards]
+1 C Because I Have Willed It
+2 C Behold My Grandeur
+3 C Bow to My Command
+4 C Choose Your Demise
+5 C Delight in the Hunt
+6 C Every Dream a Nightmare
+7 C For Each of You, a Gift
+8 C Know Evil
+9 C Make Yourself Useful
+10 C The Mighty Will Fall
+11 C My Forces are Innumerable
+12 C My Laughter Echoes
+13 C No One Will Hear Your Cries
+14 C Pay Tribute to Me
+15 C Power Without Equal
+16 C A Reckoning Approaches
+17 C There Is No Refuge
+18 C This World Belongs to Me
+19 C What's Yours Is Now Mine
+20 C When Will You Learn?
