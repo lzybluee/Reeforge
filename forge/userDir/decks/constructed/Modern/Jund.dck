@@ -1,0 +1,43 @@
+[metadata]
+Name=Jund
+[Main]
+2 Abrupt Decay|RTR
+4 Blackcleave Cliffs|SOM
+1 Blood Crypt|RTR
+1 Bloodstained Mire|KTK
+4 Dark Confidant|MMA
+1 Forest|DTK|1
+1 Ghost Quarter|ISD
+1 Grim Lavamancer|M12
+4 Inquisition of Kozilek|ROE
+1 Kitchen Finks|MMA
+2 Kolaghan's Command|DTK
+4 Lightning Bolt|M11
+3 Liliana of the Veil|ISD
+1 Maelstrom Pulse|MMA
+1 Olivia Voldaren|ISD
+1 Overgrown Tomb|RTR
+2 Raging Ravine|WWK
+2 Scavenging Ooze|M14
+1 Stomping Ground|GTC
+2 Swamp|DTK|1
+4 Tarmogoyf|MMA
+1 Tasigur, the Golden Fang|FRF
+3 Terminate|ARB
+2 Thoughtseize|THS
+2 Treetop Village|10E
+2 Twilight Mire|EVE
+4 Verdant Catacombs|ZEN
+3 Wooded Foothills|KTK
+[Sideboard]
+1 Ancient Grudge|ISD
+2 Blood Moon|MMA
+1 Duress|DTK
+1 Jund Charm|ALA
+2 Kitchen Finks|MMA
+3 Leyline of the Void|M11
+1 Olivia Voldaren|ISD
+1 Rending Volley|DTK
+1 Shatterstorm|10E
+1 Tasigur, the Golden Fang|FRF
+1 Unravel the AEther|BNG

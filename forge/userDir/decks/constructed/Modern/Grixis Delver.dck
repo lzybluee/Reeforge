@@ -1,0 +1,40 @@
+[metadata]
+Name=Grixis Delver
+[Main]
+1 Blood Crypt|RTR
+1 Burst Lightning|ZEN
+2 Darkslick Shores|SOM
+4 Delver of Secrets|ISD
+1 Deprive|ROE
+1 Electrolyze|MMA
+3 Gitaxian Probe|NPH
+2 Gurmag Angler|FRF
+2 Island|DTK|1
+1 Izzet Charm|RTR
+1 Kolaghan's Command|DTK
+4 Lightning Bolt|M11
+2 Mana Leak|M12
+1 Murderous Cut|KTK
+4 Polluted Delta|KTK
+1 Remand|RAV
+3 Scalding Tarn|ZEN
+4 Serum Visions|5DN
+4 Snapcaster Mage|ISD
+2 Spell Snare|MMA
+2 Steam Vents|RTR
+2 Sulfur Falls|ISD
+1 Swamp|DTK|1
+2 Tasigur, the Golden Fang|FRF
+1 Terminate|ARB
+4 Thought Scour|DKA
+1 Watery Grave|GTC
+3 Young Pyromancer|M14
+[Sideboard]
+2 Blood Moon|MMA
+2 Dispel|RTR
+3 Dragon's Claw|M12
+2 Izzet Staticaster|RTR
+1 Negate|DTK
+2 Shattering Spree|GPT
+2 Spellskite|NPH
+1 Threads of Disloyalty|BOK
