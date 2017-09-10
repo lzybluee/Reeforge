@@ -1029,7 +1029,7 @@ public class AbilityUtils {
                     final List<?> pList = (List<?>)o;
                     if (!pList.isEmpty() && pList.get(0) instanceof Player) {
                         for (final Object p : pList) {
-                            if (!players.contains(p)) {
+                            if (!players.contains(p) && p instanceof Player) {
                                 // We now know each p in o to be an instance of Player, so cast is safe
                                 players.add((Player) p);
                             }
