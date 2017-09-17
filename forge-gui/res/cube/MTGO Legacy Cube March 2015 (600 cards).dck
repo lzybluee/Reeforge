@@ -111,12 +111,12 @@ Name=MTGO Legacy Cube March 2015 (600 cards)
 1 Cryptic Command|MM2
 1 Cultivate|M11
 1 Cunning Sparkmage|WWK
-1 Cursed Scroll|TPR
+1 Cursed Scroll
 1 Cyclonic Rift|MM3
 1 Damnation|MM3
 1 Dark Confidant|MM2
 1 Dark Impostor|AVR
-1 Dark Ritual|TPR
+1 Dark Ritual
 1 Day of Judgment|M12
 1 Daze|EMA
 1 Deathrite Shaman|EMA
@@ -133,7 +133,7 @@ Name=MTGO Legacy Cube March 2015 (600 cards)
 1 Disciple of Bolas|M13
 1 Disfigure|ZEN
 1 Dismember|MM2
-1 Dismiss|TPR
+1 Dismiss
 1 Dissipate|M15
 1 Dissolve|THS
 1 Domri Rade|MM3
@@ -189,7 +189,7 @@ Name=MTGO Legacy Cube March 2015 (600 cards)
 1 Fleecemane Lion|THS
 1 Flickerwisp|MM3
 1 Flooded Strand|EXP
-1 Forbid|TPR
+1 Forbid
 1 Forbidden Alchemy|MM3
 1 Force of Will|EMA
 1 Force Spike|7ED
@@ -221,7 +221,7 @@ Name=MTGO Legacy Cube March 2015 (600 cards)
 1 Glen Elendra Archmage|MMA
 1 Glorious Anthem|10E
 1 Go for the Throat|MBS
-1 Goblin Bombardment|TPR
+1 Goblin Bombardment
 1 Goblin Bushwhacker|ZEN
 1 Goblin Guide|MM3
 1 Goblin Rabblemaster|M15
@@ -243,7 +243,7 @@ Name=MTGO Legacy Cube March 2015 (600 cards)
 1 Hallowed Spiritkeeper
 1 Hammer of Purphoros|THS
 1 Harmonize|MM3
-1 Harrow|TPR
+1 Harrow
 1 Hellrider|MM3
 1 Herald of Torment|BNG
 1 Hero of Bladehold|MBS
@@ -305,7 +305,7 @@ Name=MTGO Legacy Cube March 2015 (600 cards)
 1 Liliana Vess|M15
 1 Lingering Souls|MM3
 1 Linvala, Keeper of Silence|MM3
-1 Living Death|TPR
+1 Living Death
 1 Llanowar Elves|EMA
 1 Llanowar Wastes|ORI
 1 Looter il-Kor|TSP
@@ -345,7 +345,7 @@ Name=MTGO Legacy Cube March 2015 (600 cards)
 1 Monastery Mentor|FRF
 1 Monastery Swiftspear|KTK
 1 Mother of Runes|EMA
-1 Mox Diamond|TPR
+1 Mox Diamond
 1 Mulldrifter|MM2
 1 Murderous Cut|KTK
 1 Mutavault|M14
@@ -375,7 +375,7 @@ Name=MTGO Legacy Cube March 2015 (600 cards)
 1 Oust|ROE
 1 Overgrown Battlement|ROE
 1 Overgrown Tomb|EXP
-1 Overrun|TPR
+1 Overrun
 1 Pack Rat|RTR
 1 Pact of Negation|MMA
 1 Pain Seer|BNG
@@ -411,9 +411,9 @@ Name=MTGO Legacy Cube March 2015 (600 cards)
 1 Ranger of Eos|MM3
 1 Ratchet Bomb|M14
 1 Ravages of War|PTK
-1 Reanimate|TPR
+1 Reanimate
 1 Reclamation Sage|M15
-1 Recurring Nightmare|TPR
+1 Recurring Nightmare
 1 Reflecting Pool|CNS
 1 Regrowth|VMA
 1 Relic of Progenitus|EMA
@@ -533,10 +533,10 @@ Name=MTGO Legacy Cube March 2015 (600 cards)
 1 Thrun, the Last Troll|MBS
 1 Thundermaw Hellkite|M13
 1 Tidehollow Sculler|MMA
-1 Time Warp|TPR
+1 Time Warp
 1 Tooth and Nail|MMA
 1 Toxic Deluge|EMA
-1 Tradewind Rider|TPR
+1 Tradewind Rider
 1 Treachery|UDS
 1 Troll Ascetic|10E
 1 Tropical Island|VMA
@@ -568,11 +568,11 @@ Name=MTGO Legacy Cube March 2015 (600 cards)
 1 Vindicate|EMA
 1 Voice of Resurgence|MM3
 1 Volcanic Island|VMA
-1 Volrath's Stronghold|TPR
+1 Volrath's Stronghold
 1 Voyaging Satyr|THS
 1 Vraska the Unseen|RTR
 1 Wake Thrasher|EVE
-1 Wall of Blossoms|TPR
+1 Wall of Blossoms
 1 Wall of Omens|EMA
 1 Wall of Roots|TSB
 1 Warden of the First Tree|FRF

@@ -110,7 +110,7 @@ Name=MTGO Legacy Cube April 2017 (600 cards)
 1 Damnation|MM3
 1 Dark Confidant|MM2
 1 Dark Petition|ORI
-1 Dark Ritual|TPR
+1 Dark Ritual
 1 Darkslick Shores|SOM
 1 Day of Judgment|M12
 1 Daze|EMA
@@ -127,7 +127,7 @@ Name=MTGO Legacy Cube April 2017 (600 cards)
 1 Disallow|AER
 1 Disfigure|ZEN
 1 Dismember|MM2
-1 Dismiss|TPR
+1 Dismiss
 1 Dissipate|M15
 1 Dissolve|THS
 1 Distended Mindbender|EMN
@@ -186,7 +186,7 @@ Name=MTGO Legacy Cube April 2017 (600 cards)
 1 Flametongue Kavu|VMA
 1 Flickerwisp|MM3
 1 Flooded Strand|EXP
-1 Forbid|TPR
+1 Forbid
 1 Force of Will|EMA
 1 Force Spike|7ED
 1 Forked Bolt|ROE
@@ -215,7 +215,7 @@ Name=MTGO Legacy Cube April 2017 (600 cards)
 1 Glen Elendra Archmage|MMA
 1 Glorious Anthem|10E
 1 Go for the Throat|MBS
-1 Goblin Bombardment|TPR
+1 Goblin Bombardment
 1 Goblin Dark-Dwellers|OGW
 1 Goblin Guide|MM3
 1 Goblin Rabblemaster|M15
@@ -302,7 +302,7 @@ Name=MTGO Legacy Cube April 2017 (600 cards)
 1 Lingering Souls|MM3
 1 Linvala, Keeper of Silence|MM3
 1 Linvala, the Preserver|OGW
-1 Living Death|TPR
+1 Living Death
 1 Llanowar Elves|EMA
 1 Looter il-Kor|TSP
 1 Lotus Cobra|ZEN
@@ -418,11 +418,11 @@ Name=MTGO Legacy Cube April 2017 (600 cards)
 1 Ravages of War|PTK
 1 Razorverge Thicket|SOM
 1 Read the Bones|ORI
-1 Reanimate|TPR
+1 Reanimate
 1 Reckless Bushwhacker|OGW
 1 Reclamation Sage|M15
 1 Recruiter of the Guard
-1 Recurring Nightmare|TPR
+1 Recurring Nightmare
 1 Reflecting Pool|CNS
 1 Reflector Mage|OGW
 1 Regrowth|VMA
@@ -543,7 +543,7 @@ Name=MTGO Legacy Cube April 2017 (600 cards)
 1 Thunderbreak Regent|DTK
 1 Thundermaw Hellkite|M13
 1 Tidehollow Sculler|MMA
-1 Time Warp|TPR
+1 Time Warp
 1 Tireless Tracker|SOI
 1 Tooth and Nail|MMA
 1 Torch Fiend|M15
@@ -572,12 +572,12 @@ Name=MTGO Legacy Cube April 2017 (600 cards)
 1 Victimize|EMA
 1 Vindicate|EMA
 1 Volcanic Island|VMA
-1 Volrath's Stronghold|TPR
+1 Volrath's Stronghold
 1 Vorinclex, Voice of Hunger|NPH
 1 Vraska the Unseen|RTR
 1 Wake Thrasher|EVE
 1 Walking Ballista|AER
-1 Wall of Blossoms|TPR
+1 Wall of Blossoms
 1 Wall of Omens|EMA
 1 Wandering Fumarole|OGW
 1 Wasteland|EMA

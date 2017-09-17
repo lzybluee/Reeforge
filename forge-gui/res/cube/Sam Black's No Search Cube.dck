@@ -63,7 +63,7 @@ Name=Sam Black's No Search Cube
 1 Brimstone Volley|CNS
 1 Broodmate Dragon|MM3
 1 Burst Lightning|MM2
-1 Capsize|TPR
+1 Capsize
 1 Carrion Feeder|EMA
 1 Cartel Aristocrat|GTC
 1 Catastrophe|USG
@@ -77,7 +77,7 @@ Name=Sam Black's No Search Cube
 1 Channel|VMA
 1 Chromatic Star|10E
 1 Chrome Mox|EMA
-1 City of Traitors|TPR
+1 City of Traitors
 1 Coalition Relic|FUT
 1 Coercive Portal|VMA
 1 Coldsteel Heart|CSP
@@ -87,7 +87,7 @@ Name=Sam Black's No Search Cube
 1 Consecrated Sphinx|MBS
 1 Contraband Kingpin|KLD
 1 Control Magic|EMA
-1 Corpse Dance|TPR
+1 Corpse Dance
 1 Council's Judgment|CNS
 1 Counterspell|EMA
 1 Courser of Kruphix|BNG
@@ -103,7 +103,7 @@ Name=Sam Black's No Search Cube
 1 Dack's Duplicate|CNS
 1 Damnation|MM3
 1 Dark Confidant|MM2
-1 Dark Ritual|TPR
+1 Dark Ritual
 1 Daze|EMA
 1 Deceiver Exarch|NPH
 1 Delver of Secrets|ISD
@@ -113,7 +113,7 @@ Name=Sam Black's No Search Cube
 1 Dig Through Time|KTK
 1 Dimir Aqueduct|MM2
 1 Disciple of Bolas|M13
-1 Disenchant|TPR
+1 Disenchant
 1 Dismember|MM2
 1 Distended Mindbender|EMN
 1 Domri Rade|MM3
@@ -189,7 +189,7 @@ Name=Sam Black's No Search Cube
 1 Glen Elendra Archmage|MMA
 1 Glint-Nest Crane|KLD
 1 Go for the Throat|MBS
-1 Goblin Bombardment|TPR
+1 Goblin Bombardment
 1 Goblin Bushwhacker|ZEN
 1 Goblin Dark-Dwellers|OGW
 1 Goblin Guide|MM3
@@ -211,7 +211,7 @@ Name=Sam Black's No Search Cube
 1 Harmonize|MM3
 1 Hedron Archive|BFZ
 1 Hellrider|MM3
-1 Hermit Druid|TPR
+1 Hermit Druid
 1 Hero of Bladehold|MBS
 1 Hero's Downfall|THS
 1 Hissing Quagmire|OGW
@@ -270,7 +270,7 @@ Name=Sam Black's No Search Cube
 1 Liliana, the Last Hope|EMN
 1 Lingering Souls|MM3
 1 Linvala, the Preserver|OGW
-1 Living Death|TPR
+1 Living Death
 1 Llanowar Elves|EMA
 1 Lodestone Golem|MM2
 1 Looter il-Kor|TSP
@@ -313,7 +313,7 @@ Name=Sam Black's No Search Cube
 1 Monastery Swiftspear|KTK
 1 Moorland Haunt|ISD
 1 Mother of Runes|EMA
-1 Mox Diamond|TPR
+1 Mox Diamond
 1 Mox Emerald|VMA
 1 Mox Jet|VMA
 1 Mox Pearl|VMA
@@ -341,7 +341,7 @@ Name=Sam Black's No Search Cube
 1 Noose Constrictor|EMN
 1 Noxious Gearhulk|KLD
 1 Nyx-Fleece Ram|JOU
-1 Oath of Druids|TPR
+1 Oath of Druids
 1 Oath of Nissa|OGW
 1 Oblivion Ring|MM2
 1 Oblivion Sower|BFZ
@@ -389,10 +389,10 @@ Name=Sam Black's No Search Cube
 1 Rancor|EMA
 1 Ratchet Bomb|M14
 1 Reality Smasher|OGW
-1 Reanimate|TPR
+1 Reanimate
 1 Reassembling Skeleton|MM2
 1 Reclamation Sage|M15
-1 Recurring Nightmare|TPR
+1 Recurring Nightmare
 1 Reflector Mage|OGW
 1 Regrowth|VMA
 1 Relic of Progenitus|EMA
@@ -519,7 +519,7 @@ Name=Sam Black's No Search Cube
 1 Tormenting Voice|AKH
 1 Torrential Gearhulk|KLD
 1 Toxic Deluge|EMA
-1 Tradewind Rider|TPR
+1 Tradewind Rider
 1 Trading Post|M14
 1 Treachery|UDS
 1 Treasure Cruise|KTK
@@ -552,9 +552,9 @@ Name=Sam Black's No Search Cube
 1 Viscera Seer|M11
 1 Voice of Resurgence|MM3
 1 Volcanic Island|VMA
-1 Volrath's Stronghold|TPR
+1 Volrath's Stronghold
 1 Vraska the Unseen|RTR
-1 Wall of Blossoms|TPR
+1 Wall of Blossoms
 1 Wall of Omens|EMA
 1 Wall of Roots|TSB
 1 Wandering Fumarole|OGW

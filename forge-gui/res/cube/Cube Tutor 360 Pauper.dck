@@ -13,7 +13,7 @@ Name=Cube Tutor 360 Pauper
 1 Leonin Skyhunter|MBS
 1 Lone Missionary|MM3
 1 Loyal Cathar|DKA
-1 Soltari Trooper|TPR
+1 Soltari Trooper
 1 Stormfront Pegasus|M12
 1 Syndic of Tithes|GTC
 1 Whitemane Lion|EMA
@@ -94,7 +94,7 @@ Name=Cube Tutor 360 Pauper
 1 Remove Soul|10E
 1 Think Twice|ISD
 1 Withdraw|PCY
-1 Capsize|TPR
+1 Capsize
 1 Exclude|INV
 1 Forbidden Alchemy|MM3
 1 Repulse|INV
@@ -111,21 +111,21 @@ Name=Cube Tutor 360 Pauper
 1 Foresee|M11
 1 Narcolepsy|MM2
 1 Claustrophobia|ORI
-1 Carnophage|TPR
+1 Carnophage
 1 Fume Spitter|SOM
 1 Typhoid Rats|FRF
 1 Vampire Lacerator|MM2
 1 Basilica Screecher|GTC
 1 Blind Creeper|5DN
-1 Dauthi Horror|TPR
-1 Dauthi Slayer|TPR
+1 Dauthi Horror
+1 Dauthi Slayer
 1 Nezumi Cutthroat|CHK
 1 Vampire Interloper|ISD
 1 Wretched Anurid|ONS
 1 Blind Zealot|NPH
 1 Chittering Rats|DST
 1 Crypt Rats|7ED
-1 Dauthi Marauder|TPR
+1 Dauthi Marauder
 1 Dead Reveler|RTR
 1 Liliana's Specter|CNS
 1 Phyrexian Rager|EMA
@@ -144,7 +144,7 @@ Name=Cube Tutor 360 Pauper
 1 Undying Evil|DKA
 1 Vendetta|ROE
 1 Devour Flesh|GTC
-1 Diabolic Edict|TPR
+1 Diabolic Edict
 1 Doom Blade|M14
 1 Grim Harvest|CSP
 1 Last Gasp|RAV
@@ -255,7 +255,7 @@ Name=Cube Tutor 360 Pauper
 1 Vines of Vastwood|MM2
 1 Sprout Swarm|FUT
 1 Crushing Vines|DKA
-1 Harrow|TPR
+1 Harrow
 1 Elephant Ambush|ODY
 1 Prey Upon|AER
 1 Edge of Autumn|FUT

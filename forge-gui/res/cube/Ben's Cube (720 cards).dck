@@ -91,10 +91,10 @@ Name=Ben's Cube (720 cards)
 1 Burst Lightning|MM2
 1 Cabal Coffers|TOR
 1 Call of the Herd|MM3
-1 Capsize|TPR
+1 Capsize
 1 Careful Consideration|MMA
-1 Carnophage|TPR
-1 Cataclysm|TPR
+1 Carnophage
+1 Cataclysm
 1 Celestial Colonnade|WWK
 1 Chain Lightning|EMA
 1 Chained to the Rocks|THS
@@ -107,7 +107,7 @@ Name=Ben's Cube (720 cards)
 1 Char|RAV
 1 Chrome Mox|EMA
 1 City of Brass|MMA
-1 City of Traitors|TPR
+1 City of Traitors
 1 Clifftop Retreat|ISD
 1 Cloudgoat Ranger|MMA
 1 Cloudthresher|LRW
@@ -120,7 +120,7 @@ Name=Ben's Cube (720 cards)
 1 Consuming Vapors|ROE
 1 Containment Priest
 1 Control Magic|EMA
-1 Corpse Dance|TPR
+1 Corpse Dance
 1 Council's Judgment|CNS
 1 Counterspell|EMA
 1 Countryside Crusher|MMA
@@ -132,15 +132,15 @@ Name=Ben's Cube (720 cards)
 1 Cryptic Command|MM2
 1 Crystal Shard|MRD
 1 Cultivate|M11
-1 Cursed Scroll|TPR
+1 Cursed Scroll
 1 Cyclonic Rift|MM3
 1 Dack Fayden|EMA
 1 Dack's Duplicate|CNS
 1 Damnation|MM3
 1 Daretti, Scrap Savant
 1 Dark Confidant|MM2
-1 Dark Ritual|TPR
-1 Dauthi Horror|TPR
+1 Dark Ritual
+1 Dauthi Horror
 1 Day of Judgment|M12
 1 Daze|EMA
 1 Deathrite Shaman|EMA
@@ -159,7 +159,7 @@ Name=Ben's Cube (720 cards)
 1 Dig Through Time|KTK
 1 Diregraf Ghoul|ISD
 1 Disciple of Bolas|M13
-1 Disenchant|TPR
+1 Disenchant
 1 Disfigure|ZEN
 1 Dismember|MM2
 1 Dissipate|M15
@@ -222,7 +222,7 @@ Name=Ben's Cube (720 cards)
 1 Flametongue Kavu|VMA
 1 Flickerwisp|MM3
 1 Flooded Strand|EXP
-1 Forbid|TPR
+1 Forbid
 1 Forbidden Alchemy|MM3
 1 Force of Will|EMA
 1 Frantic Search|VMA
@@ -272,7 +272,7 @@ Name=Ben's Cube (720 cards)
 1 Hallowed Burial|EVE
 1 Hallowed Fountain|EXP
 1 Harmonize|MM3
-1 Harrow|TPR
+1 Harrow
 1 Heartbeat of Spring|CHK
 1 Hellrider|MM3
 1 Hell's Thunder|ALA
@@ -297,7 +297,7 @@ Name=Ben's Cube (720 cards)
 1 Innocent Blood|EMA
 1 Inquisition of Kozilek|MM3
 1 Into the Roil|ZEN
-1 Intuition|TPR
+1 Intuition
 1 Iona, Shield of Emeria|MM2
 1 Isamaru, Hound of Konda|CHK
 1 Isochron Scepter|EMA
@@ -346,13 +346,13 @@ Name=Ben's Cube (720 cards)
 1 Liliana of the Veil|MM3
 1 Liliana Vess|M15
 1 Lingering Souls|MM3
-1 Living Death|TPR
+1 Living Death
 1 Llanowar Elves|EMA
 1 Lodestone Golem|MM2
 1 Looter il-Kor|TSP
 1 Lotus Bloom|MMA
 1 Lotus Cobra|ZEN
-1 Lotus Petal|TPR
+1 Lotus Petal
 1 Loyal Cathar|DKA
 1 Loyal Retainers|PTK
 1 Luminarch Ascension|ZEN
@@ -402,7 +402,7 @@ Name=Ben's Cube (720 cards)
 1 Monastery Mentor|FRF
 1 Mortarpod|MM2
 1 Mother of Runes|EMA
-1 Mox Diamond|TPR
+1 Mox Diamond
 1 Mox Emerald|VMA
 1 Mox Jet|VMA
 1 Mox Pearl|VMA
@@ -432,7 +432,7 @@ Name=Ben's Cube (720 cards)
 1 Nightscape Familiar|VMA
 1 Nissa, Worldwaker|M15
 1 Noble Hierarch|MM2
-1 Oath of Druids|TPR
+1 Oath of Druids
 1 Oblivion Ring|MM2
 1 Obstinate Baloth|M11
 1 Obzedat, Ghost Council|GTC
@@ -445,7 +445,7 @@ Name=Ben's Cube (720 cards)
 1 Oracle of Mul Daya|ZEN
 1 Overgrown Battlement|ROE
 1 Overgrown Tomb|EXP
-1 Overrun|TPR
+1 Overrun
 1 Pack Rat|RTR
 1 Pact of Negation|MMA
 1 Palinchron|VMA
@@ -495,11 +495,11 @@ Name=Ben's Cube (720 cards)
 1 Ranger of Eos|MM3
 1 Ravages of War|PTK
 1 Ravenous Baboons|EXO
-1 Reanimate|TPR
+1 Reanimate
 1 Reckless Charge|EMA
 1 Reckless Waif|ISD
 1 Reclamation Sage|M15
-1 Recurring Nightmare|TPR
+1 Recurring Nightmare
 1 Regrowth|VMA
 1 Relic of Progenitus|EMA
 1 Remand|MM2
@@ -551,8 +551,8 @@ Name=Ben's Cube (720 cards)
 1 Sol Ring|VMA
 1 Soldier of the Pantheon|THS
 1 Solemn Simulacrum|M12
-1 Soltari Champion|TPR
-1 Soltari Priest|TPR
+1 Soltari Champion
+1 Soltari Priest
 1 Song of the Dryads
 1 Sorin Markov|M12
 1 Sorin, Lord of Innistrad|DKA
@@ -593,7 +593,7 @@ Name=Ben's Cube (720 cards)
 1 Sundering Titan|DST
 1 Sunpetal Grove|M13
 1 Supreme Verdict|RTR
-1 Survival of the Fittest|TPR
+1 Survival of the Fittest
 1 Sword of Body and Mind|SOM
 1 Sword of Feast and Famine|MBS
 1 Sword of Fire and Ice|MMA
@@ -636,14 +636,14 @@ Name=Ben's Cube (720 cards)
 1 Time Spiral|USG
 1 Time Vault|VMA
 1 Time Walk|VMA
-1 Time Warp|TPR
+1 Time Warp
 1 Timetwister|VMA
 1 Tinker|ULG
 1 Tombstalker|MMA
 1 Tooth and Nail|MMA
 1 Torch Fiend|M15
 1 Tormented Hero|THS
-1 Tradewind Rider|TPR
+1 Tradewind Rider
 1 Treachery|UDS
 1 Treasure Cruise|KTK
 1 Treetop Village|10E
@@ -679,12 +679,12 @@ Name=Ben's Cube (720 cards)
 1 Voice of Resurgence|MM3
 1 Voidslime|DIS
 1 Volcanic Island|VMA
-1 Volrath's Stronghold|TPR
+1 Volrath's Stronghold
 1 Voltaic Key|M11
 1 Vorapede|DKA
 1 Vraska the Unseen|RTR
 1 Wake Thrasher|EVE
-1 Wall of Blossoms|TPR
+1 Wall of Blossoms
 1 Wall of Denial|MM3
 1 Wall of Omens|EMA
 1 Wall of Reverence|CFX

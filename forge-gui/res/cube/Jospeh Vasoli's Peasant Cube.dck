@@ -65,7 +65,7 @@ Name=Jospeh Vasoli's Peasant Cube
 1 Butcher Ghoul|AVR
 1 Calciderm|EMA
 1 Calcite Snapper|WWK
-1 Carnophage|TPR
+1 Carnophage
 1 Carrier Thrall|BFZ
 1 Carrion Feeder|EMA
 1 Catacomb Sifter|BFZ
@@ -106,14 +106,14 @@ Name=Jospeh Vasoli's Peasant Cube
 1 Deadly Recluse|M14
 1 Deadwood Treefolk|PLC
 1 Death Frenzy|KTK
-1 Diabolic Edict|TPR
+1 Diabolic Edict
 1 Diabolic Servitude|USG
 1 Dimir Aqueduct|MM2
 1 Dimir Signet|MM3
 1 Diregraf Ghoul|ISD
 1 Disfigure|ZEN
 1 Dismember|MM2
-1 Dismiss|TPR
+1 Dismiss
 1 Doom Blade|M14
 1 Doomed Traveler|CNS
 1 Dragon Hunter|DTK
@@ -207,7 +207,7 @@ Name=Jospeh Vasoli's Peasant Cube
 1 Guttersnipe|RTR
 1 Halimar Wavewatch|ROE
 1 Harmonize|MM3
-1 Harrow|TPR
+1 Harrow
 1 Havoc Demon|EMA
 1 Hedron Archive|BFZ
 1 Herald of the Host
@@ -318,7 +318,7 @@ Name=Jospeh Vasoli's Peasant Cube
 1 Opulent Palace|KTK
 1 Oreskos Explorer
 1 Ornitharch|BNG
-1 Overrun|TPR
+1 Overrun
 1 Pacifism|EMA
 1 Path to Exile|MM3
 1 Pelakka Wurm|MM2
@@ -390,7 +390,7 @@ Name=Jospeh Vasoli's Peasant Cube
 1 Sadistic Hypnotist|ODY
 1 Sakura-Tribe Elder|CNS
 1 Sandsteppe Citadel|KTK
-1 Sarcomancy|TPR
+1 Sarcomancy
 1 Savage Alliance|EMN
 1 Savage Lands|MM3
 1 Savage Punch|KTK
@@ -430,8 +430,8 @@ Name=Jospeh Vasoli's Peasant Cube
 1 Skymark Roc|RTR
 1 Skysnare Spider|ORI
 1 Slice and Dice|ONS
-1 Soltari Champion|TPR
-1 Soltari Trooper|TPR
+1 Soltari Champion
+1 Soltari Trooper
 1 Somberwald Stag|EMN
 1 Spectral Procession|MM2
 1 Spell Pierce|MM3
@@ -440,7 +440,7 @@ Name=Jospeh Vasoli's Peasant Cube
 1 Spitemare|EVE
 1 Stab Wound|M15
 1 Staggershock|ROE
-1 Stalking Stones|TPR
+1 Stalking Stones
 1 Stasis Snare|BFZ
 1 Steppe Lynx|ZEN
 1 Stitched Mangler|SOI
@@ -518,7 +518,7 @@ Name=Jospeh Vasoli's Peasant Cube
 1 Voldaren Duelist|SOI
 1 Vulturous Aven|DTK
 1 Wakestone Gargoyle|CNS
-1 Wall of Blossoms|TPR
+1 Wall of Blossoms
 1 Wall of Omens|EMA
 1 Wall of Roots|TSB
 1 Wandering Champion|FRF

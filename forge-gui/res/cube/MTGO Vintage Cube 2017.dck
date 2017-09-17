@@ -49,7 +49,7 @@ Name=MTGO Vintage Cube 2017
 1 Mana Tithe|PLC
 1 Path to Exile|MMA
 1 Swords to Plowshares|EMA
-1 Disenchant|TPR
+1 Disenchant
 1 Unexpectedly Absent|EMA
 1 Balance|EMA
 1 Declaration in Stone|SOI
@@ -172,16 +172,16 @@ Name=MTGO Vintage Cube 2017
 1 Sheoldred, Whispering One|NPH
 1 Griselbrand|AVR
 1 Liliana of the Veil|ISD
-1 Dark Ritual|TPR
+1 Dark Ritual
 1 Disfigure|ZEN
 1 Entomb|EMA
 1 Vampiric Tutor|EMA
 1 Cabal Ritual|VMA
-1 Diabolic Edict|TPR
+1 Diabolic Edict
 1 Go for the Throat|MBS
 1 Shallow Grave|MIR
 1 Ultimate Price|DTK
-1 Corpse Dance|TPR
+1 Corpse Dance
 1 Dismember|MM2
 1 Hero's Downfall|THS
 1 Makeshift Mannequin|LRW
@@ -189,7 +189,7 @@ Name=MTGO Vintage Cube 2017
 1 Duress|EMA
 1 Imperial Seal|PTK
 1 Inquisition of Kozilek|ROE
-1 Reanimate|TPR
+1 Reanimate
 1 Thoughtseize|THS
 1 Demonic Tutor|VMA
 1 Exhume|USG
@@ -202,14 +202,14 @@ Name=MTGO Vintage Cube 2017
 1 Damnation|PLC
 1 Tendrils of Agony|VMA
 1 Dark Petition|ORI
-1 Living Death|TPR
+1 Living Death
 1 Unburial Rites|ISD
 1 Mind Twist|4ED
 1 Animate Dead|EMA
 1 Bitterblossom|MM2
 1 Necromancy|VIS
 1 Necropotence|EMA
-1 Recurring Nightmare|TPR
+1 Recurring Nightmare
 1 The Abyss|LEG
 1 Yawgmoth's Bargain|UDS
 1 Falkenrath Gorger|SOI
@@ -339,8 +339,8 @@ Name=MTGO Vintage Cube 2017
 1 Genesis Wave|SOM
 1 Fastbond|VMA
 1 Oath of Nissa|OGW
-1 Oath of Druids|TPR
-1 Survival of the Fittest|TPR
+1 Oath of Druids
+1 Survival of the Fittest
 1 Sylvan Library|EMA
 1 Awakening Zone|ROE
 1 Heartbeat of Spring|CHK
@@ -421,7 +421,7 @@ Name=MTGO Vintage Cube 2017
 1 Lion's Eye Diamond|MIR
 1 Lotus Bloom|MMA
 1 Mana Crypt|EMA
-1 Mox Diamond|TPR
+1 Mox Diamond
 1 Mox Emerald|VMA
 1 Mox Jet|VMA
 1 Mox Pearl|VMA

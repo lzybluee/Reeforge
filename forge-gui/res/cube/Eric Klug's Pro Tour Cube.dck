@@ -56,8 +56,8 @@ Name=Eric Klug's Pro Tour Cube
 1 Brushland|10E
 1 Burning-Tree Shaman|GPT
 1 Burst Lightning|MM2
-1 Canyon Wildcat|TPR
-1 Capsize|TPR
+1 Canyon Wildcat
+1 Capsize
 1 Careful Consideration|MMA
 1 Carven Caryatid|RAV
 1 Cascade Bluffs|EXP
@@ -97,11 +97,11 @@ Name=Eric Klug's Pro Tour Cube
 1 Cruel Ultimatum|MM3
 1 Crypt Angel|INV
 1 Cryptic Command|MM2
-1 Cursed Scroll|TPR
+1 Cursed Scroll
 1 Cyclonic Rift|MM3
 1 Damnation|MM3
 1 Dark Confidant|MM2
-1 Dark Ritual|TPR
+1 Dark Ritual
 1 Darksteel Citadel|MM2
 1 Daru Sanctifier|LGN
 1 Day of Judgment|M12
@@ -116,7 +116,7 @@ Name=Eric Klug's Pro Tour Cube
 1 Devil's Play|ISD
 1 Dimir Signet|MM3
 1 Disciple of the Vault|MRD
-1 Disenchant|TPR
+1 Disenchant
 1 Disfigure|ZEN
 1 Dismember|MM2
 1 Dispatch|MM2
@@ -267,7 +267,7 @@ Name=Eric Klug's Pro Tour Cube
 1 Longbow Archer|7ED
 1 Lotus Bloom|MMA
 1 Lotus Cobra|ZEN
-1 Lotus Petal|TPR
+1 Lotus Petal
 1 Maelstrom Pulse|MMA
 1 Man-o'-War|VIS
 1 Mana Leak|MM2
@@ -286,7 +286,7 @@ Name=Eric Klug's Pro Tour Cube
 1 Mirari's Wake|CNS
 1 Mishra's Factory|EMA
 1 Misty Rainforest|MM3
-1 Mogg Conscripts|TPR
+1 Mogg Conscripts
 1 Mogg Fanatic|EMA
 1 Mogg Raider|TMP
 1 Moldervine Cloak|MMA
@@ -296,7 +296,7 @@ Name=Eric Klug's Pro Tour Cube
 1 Morphling|VMA
 1 Mortarpod|MM2
 1 Mortify|CNS
-1 Mox Diamond|TPR
+1 Mox Diamond
 1 Mox Opal|MM2
 1 Mulldrifter|MM2
 1 Murderous Cut|KTK
@@ -312,7 +312,7 @@ Name=Eric Klug's Pro Tour Cube
 1 Nightveil Specter|GTC
 1 Nissa, Voice of Zendikar|OGW
 1 Noble Hierarch|MM2
-1 Oath of Druids|TPR
+1 Oath of Druids
 1 Oath of Nissa|OGW
 1 Ob Nixilis Reignited|BFZ
 1 Ohran Viper|CSP
@@ -362,7 +362,7 @@ Name=Eric Klug's Pro Tour Cube
 1 Ranger of Eos|MM3
 1 Read the Bones|ORI
 1 Reality Smasher|OGW
-1 Recurring Nightmare|TPR
+1 Recurring Nightmare
 1 Reflecting Pool|CNS
 1 Regal Force|EMA
 1 Reprisal|JOU
@@ -397,7 +397,7 @@ Name=Eric Klug's Pro Tour Cube
 1 Serrated Arrows|TSB
 1 Shadow Guildmage|TSB
 1 Shambling Vent|BFZ
-1 Shard Phoenix|TPR
+1 Shard Phoenix
 1 Shivan Reef|ORI
 1 Shock|AER
 1 Shrapnel Blast|M15
@@ -425,7 +425,7 @@ Name=Eric Klug's Pro Tour Cube
 1 Sphere of the Suns|MM2
 1 Sphinx of Lost Truths|ZEN
 1 Sphinx's Revelation|MM3
-1 Spike Feeder|TPR
+1 Spike Feeder
 1 Spike Weaver|EXO
 1 Spirit of the Night|MIR
 1 Splinter Twin|MM2
@@ -447,7 +447,7 @@ Name=Eric Klug's Pro Tour Cube
 1 Sulfurous Springs|10E
 1 Summoner's Pact|MMA
 1 Supreme Verdict|RTR
-1 Survival of the Fittest|TPR
+1 Survival of the Fittest
 1 Sword of Feast and Famine|MBS
 1 Sword of War and Peace|NPH
 1 Swords to Plowshares|EMA
@@ -476,13 +476,13 @@ Name=Eric Klug's Pro Tour Cube
 1 Thoughtseize|THS
 1 Thraben Inspector|SOI
 1 Thran Dynamo|UDS
-1 Thrull Surgeon|TPR
+1 Thrull Surgeon
 1 Thrun, the Last Troll|MBS
 1 Tidebinder Mage|M14
 1 Time Spiral|USG
 1 Tinker|ULG
 1 Tolarian Academy|VMA
-1 Tradewind Rider|TPR
+1 Tradewind Rider
 1 Transgress the Mind|BFZ
 1 Treetop Village|10E
 1 Trinket Mage|SOM
@@ -503,7 +503,7 @@ Name=Eric Klug's Pro Tour Cube
 1 Vengeful Dreams|TOR
 1 Venser, Shaper Savant|MM3
 1 Verdant Catacombs|MM3
-1 Verdant Force|TPR
+1 Verdant Force
 1 Vile Aggregate|BFZ
 1 Viridian Shaman|10E
 1 Voice of All|10E
@@ -512,7 +512,7 @@ Name=Eric Klug's Pro Tour Cube
 1 Volcanic Fallout|CNS
 1 Volcanic Island|VMA
 1 Voltaic Key|M11
-1 Wall of Blossoms|TPR
+1 Wall of Blossoms
 1 Wall of Reverence|CFX
 1 Wall of Roots|TSB
 1 Warden of the First Tree|FRF

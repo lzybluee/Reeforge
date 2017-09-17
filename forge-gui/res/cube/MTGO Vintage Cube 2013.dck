@@ -13,7 +13,7 @@ Name=MTGO Vintage Cube 2013
 1 Elesh Norn, Grand Cenobite|MM2
 1 Lingering Souls|MM3
 1 Terminus|MM3
-1 Disenchant|TPR
+1 Disenchant
 1 Mother of Runes|EMA
 1 Weathered Wayfarer|9ED
 1 Ravages of War|PTK
@@ -27,7 +27,7 @@ Name=MTGO Vintage Cube 2013
 1 Silverblade Paladin|AVR
 1 Soldier of the Pantheon|THS
 1 Enlightened Tutor|EMA
-1 Soltari Champion|TPR
+1 Soltari Champion
 1 Catastrophe|USG
 1 Parallax Wave|VMA
 1 Rout|CNS
@@ -35,7 +35,7 @@ Name=MTGO Vintage Cube 2013
 1 Kami of Ancient Law|MM2
 1 Isamaru, Hound of Konda|CHK
 1 Savannah Lions|9ED
-1 Paladin en-Vec|TPR
+1 Paladin en-Vec
 1 Wrath of God|EMA
 1 Cloudgoat Ranger|MMA
 1 Mirror Entity|MM2
@@ -82,8 +82,8 @@ Name=MTGO Vintage Cube 2013
 1 Consecrated Sphinx|MBS
 1 Snapcaster Mage|MM3
 1 True-Name Nemesis
-1 Intuition|TPR
-1 Forbid|TPR
+1 Intuition
+1 Forbid
 1 Force Spike|7ED
 1 Upheaval|VMA
 1 Voidmage Prodigy|TSB
@@ -123,7 +123,7 @@ Name=MTGO Vintage Cube 2013
 1 Show and Tell|USG
 1 Aetherling|DGM
 1 Memory Lapse|EMA
-1 Dream Halls|TPR
+1 Dream Halls
 1 Opposition|7ED
 1 Mind's Desire|SCG
 1 Vendilion Clique|MM2
@@ -139,7 +139,7 @@ Name=MTGO Vintage Cube 2013
 1 Time Spiral|USG
 1 Miscalculation|ULG
 1 Trinket Mage|SOM
-1 Recurring Nightmare|TPR
+1 Recurring Nightmare
 1 Buried Alive|ODY
 1 Tendrils of Agony|VMA
 1 Unburial Rites|MM3
@@ -149,7 +149,7 @@ Name=MTGO Vintage Cube 2013
 1 Grave Titan|M12
 1 Phyrexian Obliterator|NPH
 1 Necromancy|VIS
-1 Corpse Dance|TPR
+1 Corpse Dance
 1 Yawgmoth's Will|USG
 1 Nightscape Familiar|VMA
 1 Nezumi Shortfang|CHK
@@ -166,8 +166,8 @@ Name=MTGO Vintage Cube 2013
 1 Erebos, God of the Dead|THS
 1 Toxic Deluge|EMA
 1 Vampiric Tutor|EMA
-1 Living Death|TPR
-1 Reanimate|TPR
+1 Living Death
+1 Reanimate
 1 Bone Shredder|ULG
 1 Braids, Cabal Minion|EMA
 1 Entomb|EMA
@@ -198,10 +198,10 @@ Name=MTGO Vintage Cube 2013
 1 Lifebane Zombie|M14
 1 Thoughtseize|THS
 1 Hero's Downfall|THS
-1 Diabolic Edict|TPR
-1 Sarcomancy|TPR
+1 Diabolic Edict
+1 Sarcomancy
 1 Oona's Prowler|LRW
-1 Dark Ritual|TPR
+1 Dark Ritual
 1 Hypnotic Specter|M10
 1 Bloodghast|ZEN
 1 Inquisition of Kozilek|MM3
@@ -286,7 +286,7 @@ Name=MTGO Vintage Cube 2013
 1 Lotus Cobra|ZEN
 1 Primeval Titan|MM2
 1 Birds of Paradise|M12
-1 Wall of Blossoms|TPR
+1 Wall of Blossoms
 1 Restock|M15
 1 Tooth and Nail|MMA
 1 Eternal Witness|MMA
@@ -344,7 +344,7 @@ Name=MTGO Vintage Cube 2013
 1 Elvish Mystic|M15
 1 Sylvan Caryatid|THS
 1 Chord of Calling|M15
-1 Survival of the Fittest|TPR
+1 Survival of the Fittest
 1 Sylvan Library|EMA
 1 Savannah|VMA
 1 Bayou|VMA
@@ -408,7 +408,7 @@ Name=MTGO Vintage Cube 2013
 1 Karakas|EMA
 1 Temple Garden|EXP
 1 Overgrown Tomb|EXP
-1 Volrath's Stronghold|TPR
+1 Volrath's Stronghold
 1 Gaea's Cradle|USG
 1 Tolarian Academy|VMA
 1 Flooded Strand|EXP
@@ -467,7 +467,7 @@ Name=MTGO Vintage Cube 2013
 1 Sphinx's Revelation|MM3
 1 Voice of Resurgence|MM3
 1 Null Rod|VMA
-1 Cursed Scroll|TPR
+1 Cursed Scroll
 1 All Is Dust|MM2
 1 Emrakul, the Aeons Torn|MM2
 1 Kozilek, Butcher of Truth|MM2
@@ -477,7 +477,7 @@ Name=MTGO Vintage Cube 2013
 1 Lion's Eye Diamond|MIR
 1 Grim Monolith|ULG
 1 Memory Jar|VMA
-1 Mox Diamond|TPR
+1 Mox Diamond
 1 Nevinyrral's Disk|EMA
 1 Orzhov Signet|MM3
 1 Pristine Talisman|NPH

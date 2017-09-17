@@ -76,7 +76,7 @@ Name=MTGO Vintage Cube June 2016
 1 Conclave Naturalists|ORI
 1 Consecrated Sphinx|MBS
 1 Control Magic|EMA
-1 Corpse Dance|TPR
+1 Corpse Dance
 1 Council's Judgment|CNS
 1 Counterspell|EMA
 1 Courser of Kruphix|BNG
@@ -90,7 +90,7 @@ Name=MTGO Vintage Cube June 2016
 1 Daretti, Scrap Savant
 1 Dark Confidant|MM2
 1 Dark Petition|ORI
-1 Dark Ritual|TPR
+1 Dark Ritual
 1 Day of Judgment|M12
 1 Daze|EMA
 1 Deathrite Shaman|EMA
@@ -101,10 +101,10 @@ Name=MTGO Vintage Cube June 2016
 1 Den Protector|DTK
 1 Deranged Hermit|VMA
 1 Desecration Demon|MM3
-1 Diabolic Edict|TPR
+1 Diabolic Edict
 1 Dig Through Time|KTK
 1 Dimir Signet|MM3
-1 Disenchant|TPR
+1 Disenchant
 1 Disfigure|ZEN
 1 Dismember|MM2
 1 Dragonlord Atarka|DTK
@@ -248,7 +248,7 @@ Name=MTGO Vintage Cube June 2016
 1 Linvala, Keeper of Silence|MM3
 1 Linvala, the Preserver|OGW
 1 Lion's Eye Diamond|MIR
-1 Living Death|TPR
+1 Living Death
 1 Llanowar Elves|EMA
 1 Lodestone Golem|MM2
 1 Looter il-Kor|TSP
@@ -291,7 +291,7 @@ Name=MTGO Vintage Cube June 2016
 1 Monastery Mentor|FRF
 1 Monastery Swiftspear|KTK
 1 Mother of Runes|EMA
-1 Mox Diamond|TPR
+1 Mox Diamond
 1 Mox Emerald|VMA
 1 Mox Jet|VMA
 1 Mox Pearl|VMA
@@ -318,7 +318,7 @@ Name=MTGO Vintage Cube June 2016
 1 Nissa, Worldwaker|M15
 1 Noble Hierarch|MM2
 1 Nykthos, Shrine to Nyx|THS
-1 Oath of Druids|TPR
+1 Oath of Druids
 1 Oath of Nissa|OGW
 1 Oblivion Ring|MM2
 1 Olivia Voldaren|MM3
@@ -359,10 +359,10 @@ Name=MTGO Vintage Cube June 2016
 1 Rakdos's Return|RTR
 1 Ral Zarek|DGM
 1 Ravages of War|PTK
-1 Reanimate|TPR
+1 Reanimate
 1 Reckless Bushwhacker|OGW
 1 Reclamation Sage|M15
-1 Recurring Nightmare|TPR
+1 Recurring Nightmare
 1 Reflector Mage|OGW
 1 Regrowth|VMA
 1 Remand|MM2
@@ -435,7 +435,7 @@ Name=MTGO Vintage Cube June 2016
 1 Sun Titan|M12
 1 Sundering Titan|DST
 1 Supreme Verdict|RTR
-1 Survival of the Fittest|TPR
+1 Survival of the Fittest
 1 Sword of Body and Mind|SOM
 1 Sword of Feast and Famine|MBS
 1 Sword of Fire and Ice|MMA
@@ -516,7 +516,7 @@ Name=MTGO Vintage Cube June 2016
 1 Voice of Resurgence|MM3
 1 Volcanic Island|VMA
 1 Vryn Wingmare|ORI
-1 Wall of Blossoms|TPR
+1 Wall of Blossoms
 1 Wall of Omens|EMA
 1 Wall of Roots|TSB
 1 Wandering Fumarole|OGW

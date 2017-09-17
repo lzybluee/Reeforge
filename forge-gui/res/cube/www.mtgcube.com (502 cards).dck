@@ -60,7 +60,7 @@ Name=www.mtgcube.com (502 cards)
 1 Burning of Xinye|VMA
 1 Burst Lightning|MM2
 1 Call of the Herd|MM3
-1 Carnophage|TPR
+1 Carnophage
 1 Catastrophe|USG
 1 Caves of Koilos|ORI
 1 Celestial Colonnade|WWK
@@ -86,21 +86,21 @@ Name=www.mtgcube.com (502 cards)
 1 Cryptic Command|MM2
 1 Crystal Shard|MRD
 1 Cultivate|M11
-1 Cursed Scroll|TPR
+1 Cursed Scroll
 1 Damnation|MM3
 1 Dance of the Dead|ICE
 1 Dark Confidant|MM2
-1 Dark Ritual|TPR
+1 Dark Ritual
 1 Day of Judgment|M12
 1 Daze|EMA
 1 Deep Analysis|EMA
 1 Demonic Tutor|VMA
 1 Deranged Hermit|VMA
 1 Detention Sphere|RTR
-1 Diabolic Edict|TPR
+1 Diabolic Edict
 1 Dimir Signet|MM3
 1 Diregraf Ghoul|ISD
-1 Disenchant|TPR
+1 Disenchant
 1 Dismember|MM2
 1 Dreadbore|RTR
 1 Dryad Militant|RTR
@@ -119,7 +119,7 @@ Name=www.mtgcube.com (502 cards)
 1 Enclave Cryptologist|ROE
 1 Enlightened Tutor|EMA
 1 Entomb|EMA
-1 Erratic Portal|TPR
+1 Erratic Portal
 1 Esper Charm|ALA
 1 Eternal Witness|MMA
 1 Eureka|VMA
@@ -145,7 +145,7 @@ Name=www.mtgcube.com (502 cards)
 1 Flametongue Kavu|VMA
 1 Flickerwisp|MM3
 1 Flooded Strand|EXP
-1 Forbid|TPR
+1 Forbid
 1 Force of Will|EMA
 1 Force Spike|7ED
 1 Fyndhorn Elves|VMA
@@ -280,7 +280,7 @@ Name=www.mtgcube.com (502 cards)
 1 Morphling|VMA
 1 Mortify|CNS
 1 Mother of Runes|EMA
-1 Mox Diamond|TPR
+1 Mox Diamond
 1 Mox Emerald|VMA
 1 Mox Jet|VMA
 1 Mox Pearl|VMA
@@ -337,10 +337,10 @@ Name=www.mtgcube.com (502 cards)
 1 Ranger of Eos|MM3
 1 Ratchet Bomb|M14
 1 Ravages of War|PTK
-1 Reanimate|TPR
+1 Reanimate
 1 Reassembling Skeleton|MM2
 1 Reckless Waif|ISD
-1 Recurring Nightmare|TPR
+1 Recurring Nightmare
 1 Reflecting Pool|CNS
 1 Regrowth|VMA
 1 Remand|MM2
@@ -386,10 +386,10 @@ Name=www.mtgcube.com (502 cards)
 1 Sol Ring|VMA
 1 Soldier of the Pantheon|THS
 1 Solemn Simulacrum|M12
-1 Soltari Champion|TPR
-1 Soltari Monk|TPR
-1 Soltari Priest|TPR
-1 Soltari Trooper|TPR
+1 Soltari Champion
+1 Soltari Monk
+1 Soltari Priest
+1 Soltari Trooper
 1 Sorin, Lord of Innistrad|DKA
 1 Sower of Temptation|LRW
 1 Spear of Heliod|THS
@@ -413,7 +413,7 @@ Name=www.mtgcube.com (502 cards)
 1 Sun Titan|M12
 1 Sundering Titan|DST
 1 Supreme Verdict|RTR
-1 Survival of the Fittest|TPR
+1 Survival of the Fittest
 1 Sword of Body and Mind|SOM
 1 Sword of Feast and Famine|MBS
 1 Sword of Fire and Ice|MMA
@@ -476,8 +476,8 @@ Name=www.mtgcube.com (502 cards)
 1 Viridian Shaman|10E
 1 Voice of Resurgence|MM3
 1 Volcanic Island|VMA
-1 Volrath's Stronghold|TPR
-1 Wall of Blossoms|TPR
+1 Volrath's Stronghold
+1 Wall of Blossoms
 1 Wall of Omens|EMA
 1 Wall of Roots|TSB
 1 Wasteland|EMA
