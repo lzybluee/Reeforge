@@ -77,6 +77,7 @@ public class VField implements IVDoc<CField> {
     private final FLabel lblLife   = new FLabel.Builder().fontAlign(SwingConstants.CENTER).fontStyle(Font.BOLD).build();
     private final FLabel lblPoison = new FLabel.Builder().fontAlign(SwingConstants.CENTER).fontStyle(Font.BOLD).icon(FSkin.getImage(FSkinProp.IMG_ZONE_POISON)).iconInBackground().build();
     private final FLabel lblEnergy = new FLabel.Builder().fontAlign(SwingConstants.CENTER).fontStyle(Font.BOLD).icon(FSkin.getImage(FSkinProp.IMG_ENERGY)).iconInBackground().build();
+    private final FLabel lblExperience = new FLabel.Builder().fontAlign(SwingConstants.CENTER).fontStyle(Font.BOLD).icon(FSkin.getImage(FSkinProp.IMG_COMMANDER)).iconInBackground().build();
 
     private final PhaseIndicator phaseIndicator = new PhaseIndicator();
 
@@ -231,6 +232,25 @@ public class VField implements IVDoc<CField> {
         avatarArea.add(lblLife, "w 100%!, h 20px!, wrap");
     }
 
+    private void addLblExperience() {
+        if (lblExperience.isShowing() || lblEnergy.isShowing() || lblPoison.isShowing()) {
+            return; // poison takes precedence
+        }
+        avatarArea.remove(lblLife);
+        lblLife.setIcon(FSkin.getImage(FSkinProp.ICO_QUEST_LIFE));
+        avatarArea.add(lblLife, "w 50%!, h 20px!, split 2");
+        avatarArea.add(lblExperience, "w 50%!, h 20px!, wrap");
+    }
+    
+    private void removeLblExperience() {
+        if (!lblExperience.isShowing()) {
+            return;
+        }
+        avatarArea.remove(lblExperience);
+        avatarArea.remove(lblLife);
+        avatarArea.add(lblLife, "w 100%!, h 20px!, wrap");
+    }
+
     private void addLblPoison() {
         if (lblPoison.isShowing()) {
             return;
@@ -262,9 +282,11 @@ public class VField implements IVDoc<CField> {
         // Update poison and/or energy counters, poison counters take precedence
         final int poison = player.getCounters(CounterType.POISON);
         final int energy = player.getCounters(CounterType.ENERGY);
+        final int experience = player.getCounters(CounterType.EXPERIENCE);
 
         if (poison > 0) {
             removeLblEnergy();
+            removeLblExperience();
             addLblPoison();
             lblPoison.setText(String.valueOf(poison));
             if (poison < POISON_CRITICAL) {
@@ -278,11 +300,21 @@ public class VField implements IVDoc<CField> {
 
         if (energy > 0) {
             if (poison == 0) {
+                removeLblExperience();
                 addLblEnergy();
                 lblEnergy.setText(String.valueOf(energy));
             }
         } else {
             removeLblEnergy();
+        }
+
+        if (experience > 0) {
+            if (poison == 0 && energy == 0) {
+                addLblExperience();
+                lblExperience.setText(String.valueOf(experience));
+            }
+        } else {
+            removeLblExperience();
         }
 
         final boolean highlighted = isHighlighted();
