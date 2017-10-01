@@ -71,6 +71,10 @@ public class PlayerZone extends Zone {
                     return true;
                 }
 
+                if (sa.isSpell() && c.mayPlay(player).size() > 0) {
+                    return true;
+                }
+
                 if (PlayerZone.this.is(restrictZone)) {
                     return true;
                 }
