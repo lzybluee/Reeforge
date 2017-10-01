@@ -1,0 +1,32 @@
+[metadata]
+Name=Emerge
+[Main]
+1 Abrade|HOU
+3 Advanced Stitchwing|EMN
+4 Cathartic Reunion|KLD
+2 Champion of Wits|HOU
+4 Elder Deep-Fiend|EMN
+3 Fevered Visions|SOI
+1 Highland Lake|AKH
+2 Ipnu Rivulet|HOU
+5 Island|HOU|1
+3 Kozilek's Return|OGW
+4 Lightning Axe|SOI
+2 Magma Spray|AKH
+5 Mountain|HOU|1
+4 Prized Amalgam|SOI
+2 Sanctum of Ugin|BFZ
+4 Spirebluff Canal|KLD
+4 Stitchwing Skaab|SOI
+3 Strategic Planning|HOU
+4 Wandering Fumarole|OGW
+[Sideboard]
+2 Abrade|HOU
+2 Dispel|BFZ
+1 Fevered Visions|SOI
+3 Glorybringer|AKH
+1 Kozilek's Return|OGW
+1 Magma Spray|AKH
+2 Negate|AER
+2 Summary Dismissal|EMN
+1 Wretched Gryff|EMN

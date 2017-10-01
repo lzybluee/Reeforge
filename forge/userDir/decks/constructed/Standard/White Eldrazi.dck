@@ -1,0 +1,29 @@
+[metadata]
+Name=White Eldrazi
+[Main]
+3 Aether Hub|KLD
+4 Archangel Avacyn|SOI
+1 Cast Out|AKH
+1 Declaration in Stone|SOI
+3 Eldrazi Displacer|OGW
+4 Matter Reshaper|OGW
+11 Plains|HOU|1
+3 Scavenger Grounds|HOU
+3 Selfless Spirit|EMN
+4 Shefet Dunes|HOU
+2 Spatial Contortion|OGW
+4 Spawning Bed|BFZ
+3 Stasis Snare|BFZ
+4 Thought-Knot Seer|OGW
+4 Thraben Inspector|SOI
+4 Walking Ballista|AER
+2 Warping Wail|OGW
+[Sideboard]
+1 Cast Out|AKH
+2 Linvala, the Preserver|OGW
+1 Scavenger Grounds|HOU
+2 Skysovereign, Consul Flagship|KLD
+3 Solemnity|HOU
+1 Spatial Contortion|OGW
+3 Sunscourge Champion|HOU
+2 Warping Wail|OGW

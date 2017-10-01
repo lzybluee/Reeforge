@@ -1,33 +1,32 @@
 [metadata]
 Name=Affinity
 [Main]
-4 Arcbound Ravager|MMA
-4 Blinkmoth Nexus|MMA
-4 Cranial Plating|5DN
-4 Darksteel Citadel|M15
-2 Ensoul Artifact|M15
-3 Etched Champion|SOM
-3 Galvanic Blast|SOM
-3 Glimmervoid|MMA
-4 Inkmoth Nexus|MBS
-1 Island|DTK|1
-1 Master of Etherium|ALA
-2 Memnite|SOM
-4 Mox Opal|SOM
-4 Ornithopter|M15
-4 Signal Pest|MBS
-4 Springleaf Drum|BNG
-3 Steel Overseer|M11
-1 Thoughtcast|MRD
-4 Vault Skirge|NPH
-1 Welding Jar|MRD
+4 Arcbound Ravager
+4 Blinkmoth Nexus
+4 Cranial Plating
+4 Darksteel Citadel
+3 Etched Champion
+4 Galvanic Blast
+3 Glimmervoid
+4 Inkmoth Nexus
+2 Master of Etherium
+3 Memnite
+1 Mountain
+4 Mox Opal
+4 Ornithopter
+4 Signal Pest
+4 Springleaf Drum
+3 Steel Overseer
+1 Thoughtcast
+4 Vault Skirge
 [Sideboard]
-2 Ancient Grudge|ISD
-1 Etched Champion|SOM
-1 Hurkyl's Recall|10E
-1 Illness in the Ranks|GTC
-2 Spell Pierce|ZEN
-2 Spellskite|NPH
-3 Thoughtseize|THS
-1 Wear // Tear|DGM
-2 Whipflare|NPH
+2 Ancient Grudge
+1 Ethersworn Canonist
+1 Ghirapur Aether Grid
+2 Grafdigger's Cage
+1 Ravenous Trap
+2 Spellskite
+1 Thoughtseize
+1 Tormod's Crypt
+2 Wear // Tear
+2 Whipflare

@@ -1,0 +1,32 @@
+[metadata]
+Name=Energy
+[Main]
+2 Abrade|HOU
+4 Aether Hub|KLD
+4 Attune with Aether|KLD
+4 Botanical Sanctum|KLD
+4 Bristling Hydra|KLD
+4 Forest|HOU|1
+1 Game Trail|SOI
+3 Glorybringer|AKH
+4 Harnessed Lightning|KLD
+1 Island|HOU|1
+4 Longtusk Cub|KLD
+1 Lumbering Falls|BFZ
+2 Magma Spray|AKH
+2 Mountain|HOU|1
+1 Rhonas the Indomitable|AKH
+4 Rogue Refiner|AER
+4 Servant of the Conduit|KLD
+3 Sheltered Thicket|AKH
+2 Skysovereign, Consul Flagship|KLD
+2 Spirebluff Canal|KLD
+4 Whirler Virtuoso|KLD
+[Sideboard]
+1 Abrade|HOU
+2 Chandra, Flamecaller|OGW
+2 Chandra, Torch of Defiance|KLD
+2 Confiscation Coup|KLD
+4 Negate|AER
+2 Radiant Flames|BFZ
+2 Tireless Tracker|SOI
