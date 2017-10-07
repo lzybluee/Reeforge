@@ -474,6 +474,9 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
         if (sp.isAbility() && sp.getRestrictions().isPwAbility()) {
             sp.getActivatingPlayer().setActivateLoyaltyAbilityThisTurn(true);
         }
+        if (sp.isSpell() && sp.getHostCard() != null && sp.getHostCard().isCommander() && sp.getHostCard().getCastFrom() == ZoneType.Command) {
+            sp.getActivatingPlayer().addCommanderCast();
+        }
         game.updateStackForView();
         game.fireEvent(new GameEventSpellAbilityCast(sp, si, false));
         return si;

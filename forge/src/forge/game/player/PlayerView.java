@@ -128,6 +128,9 @@ public class PlayerView extends GameEntityView {
         final List<String> info = Lists.newArrayListWithExpectedSize(opponents.size());
         info.add(String.format("Commanders: %s", Lang.joinHomogenous(commanders)));
         for (final PlayerView p : Iterables.concat(Collections.singleton(this), opponents)) {
+            if (p.getCommanders() == null) {
+                continue;
+            }
             for (final CardView v : p.getCommanders()) {
                 final int damage = this.getCommanderDamage(v);
                 if (damage > 0) {
@@ -203,8 +206,16 @@ public class PlayerView extends GameEntityView {
         return get(TrackableProperty.SpellsCastThisTurn);
     }
 
+    public int getCommanderCast() {
+        return get(TrackableProperty.CommanderCast);
+    }
+
     public void updateSpellsCastThisTurn(Player p) {
         set(TrackableProperty.SpellsCastThisTurn, p.getSpellsCastThisTurn());
+    }
+
+    public void updateCommanderCast(Player p) {
+        set(TrackableProperty.CommanderCast, p.getCommanderCast());
     }
 
     public int getNumDrawnThisTurn() {
@@ -433,6 +444,9 @@ public class PlayerView extends GameEntityView {
         details.add(String.format("Spells cast this turn: %d", getSpellsCastThisTurn()));
         details.add(String.format("Cards drawn this turn: %d", getNumDrawnThisTurn()));
         details.add(String.format("Damage prevention: %d", getPreventNextDamage()));
+        if (getCommanderCast() > 0) {
+            details.add(String.format("Commander cast from command zone: %d", getCommanderCast()));
+        }
         final String keywords = Lang.joinHomogenous(getDisplayableKeywords());
         if (!keywords.isEmpty()) {
             details.add(keywords);

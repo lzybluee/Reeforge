@@ -133,6 +133,7 @@ public class Player extends GameEntity implements Comparable<Player> {
     private int numDrawnThisDrawStep = 0;
     private int numDiscardedThisTurn = 0;
     private int numCardsInHandStartedThisTurnWith = 0;
+    private int commanderCast = 0;
 
     private boolean revolt = false;
 
@@ -2144,6 +2145,9 @@ public class Player extends GameEntity implements Comparable<Player> {
     public final int getSpellsCastThisTurn() {
         return spellsCastThisTurn;
     }
+    public final int getCommanderCast() {
+        return commanderCast;
+    }
     public final int getSpellsCastLastTurn() {
         return spellsCastLastTurn;
     }
@@ -2154,6 +2158,10 @@ public class Player extends GameEntity implements Comparable<Player> {
             achievementTracker.maxStormCount = spellsCastThisTurn;
         }
         view.updateSpellsCastThisTurn(this);
+    }
+    public final void addCommanderCast() {
+        commanderCast++;
+        view.updateCommanderCast(this);
     }
     public final void resetSpellsCastThisTurn() {
         spellsCastThisTurn = 0;
