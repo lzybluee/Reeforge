@@ -218,6 +218,10 @@ public class SpellAbilityRestriction extends SpellAbilityVariables {
             cp.animateBestow();
         }
 
+        if (sa.toString().startsWith("Fuse (") && !cardZone.is(ZoneType.Hand, activator)) {
+            return false;
+        }
+
         if (cardZone == null || this.getZone() == null || !cardZone.is(this.getZone())) {
             // If Card is not in the default activating zone, do some additional checks
 
@@ -255,6 +259,11 @@ public class SpellAbilityRestriction extends SpellAbilityVariables {
                         if (!hasOtherGrantor) {
                             return false;
                         }
+                    }
+
+                    if (cardZone.is(ZoneType.Graveyard) && sa.isAftermath()) {
+                        // Special exclusion for Aftermath, useful for e.g. As Foretold
+                        return true;
                     }
 
                     if (params.containsKey("Affected")) {

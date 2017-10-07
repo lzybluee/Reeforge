@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.google.common.collect.Lists;
 
 import forge.card.CardType;
+import forge.card.MagicColor;
 import forge.game.Game;
 import forge.game.GameObject;
 import forge.game.card.Card;
@@ -350,7 +351,11 @@ public abstract class SpellAbilityEffect {
         eff.setOwner(controller);
 
         eff.setImageKey(image);
-        eff.setColor(hostCard.determineColor().getColor());
+        if (eff.getType().hasType(CardType.CoreType.Emblem)) {
+            eff.setColor(MagicColor.COLORLESS);
+        } else {
+            eff.setColor(hostCard.determineColor().getColor());
+        }
         eff.setImmutable(true);
         eff.setEffectSource(hostCard);
 

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.Iterables;
 
+import forge.card.CardStateName;
 import forge.card.ColorSet;
 import forge.card.MagicColor;
 import forge.game.Direction;
@@ -93,6 +94,36 @@ public class CardProperty {
             }
         } else if (property.equals("Flip")) {
             if (!card.isFlipCard()) {
+                return false;
+            }
+        } else if (property.equals("Split")) {
+            if (!card.isSplitCard()) {
+                return false;
+            }
+        } else if (property.equals("NotSplit")) {
+            if (card.isSplitCard()) {
+                return false;
+            }
+        } else if (property.startsWith("leftcmc") || property.startsWith("rightcmc")) {
+            int x;
+            int y = 0;
+            String rhs = "";
+
+            if (property.startsWith("leftcmc")) {
+                rhs = property.substring(9);
+                y = card.getCMC(Card.SplitCMCMode.LeftSplitCMC);
+            } else if (property.startsWith("rightcmc")) {
+                rhs = property.substring(10);
+                y = card.getCMC(Card.SplitCMCMode.RightSplitCMC);
+            }
+
+            try {
+                x = Integer.parseInt(rhs);
+            } catch (final NumberFormatException e) {
+                x = AbilityUtils.calculateAmount(source, rhs, spellAbility);
+            }
+
+            if (!Expressions.compare(y, property, x)) {
                 return false;
             }
         } else if (property.startsWith("YouCtrl")) {

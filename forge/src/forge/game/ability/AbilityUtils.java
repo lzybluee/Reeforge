@@ -1582,7 +1582,7 @@ public class AbilityUtils {
                 if (l[0].startsWith("LastStateBattlefield")) {
                     final String[] k = l[0].split(" ");
                     CardCollectionView list = null;
-                    if (sa.getLastStateBattlefield() != null) {
+                    if (sa.getLastStateBattlefield() != null && !sa.getLastStateBattlefield().isEmpty()) {
                     	list = new CardCollection(sa.getLastStateBattlefield());
                     } else { // LastState is Empty
                     	list = sa.getHostCard().getGame().getCardsIn(ZoneType.Battlefield);
@@ -1594,7 +1594,7 @@ public class AbilityUtils {
                 if (l[0].startsWith("LastStateGraveyard")) {
                     final String[] k = l[0].split(" ");
                     CardCollectionView list = null;
-                    if (sa.getLastStateGraveyard() != null) {
+                    if (sa.getLastStateGraveyard() != null && !sa.getLastStateGraveyard().isEmpty()) {
                         list = new CardCollection(sa.getLastStateGraveyard());
                     } else { // LastState is Empty
                         list = sa.getHostCard().getGame().getCardsIn(ZoneType.Graveyard);
@@ -1648,9 +1648,6 @@ public class AbilityUtils {
         List<SpellAbility> sas = new ArrayList<SpellAbility>();
         for (SpellAbility s : tgtCard.getBasicSpells()) {
             final Spell newSA = (Spell) s.copy();
-            if(s.toString().startsWith("Fuse (") && tgtCard.getCastFrom() != ZoneType.Hand) {
-                continue;
-            }
             newSA.setActivatingPlayer(controller);
             SpellAbilityRestriction res = new SpellAbilityRestriction();
             // timing restrictions still apply

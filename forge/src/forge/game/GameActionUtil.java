@@ -31,6 +31,7 @@ import forge.game.card.Card;
 import forge.game.card.CardCollectionView;
 import forge.game.card.CardPlayOption;
 import forge.game.card.CardPredicates;
+import forge.game.card.CounterType;
 import forge.game.card.CardPlayOption.PayManaCost;
 import forge.game.cost.Cost;
 import forge.game.mana.ManaCostBeingPaid;
@@ -141,9 +142,36 @@ public final class GameActionUtil {
                 sar.setZone(null);
                 newSA.setMayPlay(o.getAbility());
                 newSA.setMayPlayOriginal(sa);
+
+                boolean changedManaCost = false;
                 if (o.getPayManaCost() == PayManaCost.NO) {
                     newSA.setBasicSpell(false);
                     newSA.setPayCosts(newSA.getPayCosts().copyWithNoMana());
+                    changedManaCost = true;
+                } else if (o.getAltManaCost() != null) {
+                    newSA.setBasicSpell(false);
+                    newSA.setPayCosts(newSA.getPayCosts().copyWithDefinedMana(o.getAltManaCost()));
+                    changedManaCost = true;
+                    if (host.hasSVar("AsForetoldSplitCMCHack")) {
+                        // FIXME: A temporary workaround for As Foretold interaction with split cards, better solution needed.
+                        if (sa.isLeftSplit()) {
+                            int leftCMC = sa.getHostCard().getCMC(Card.SplitCMCMode.LeftSplitCMC);
+                            if (leftCMC > host.getCounters(CounterType.TIME)) {
+                                continue;
+                            }
+                        } else if (sa.isRightSplit()) {
+                            int rightCMC = sa.getHostCard().getCMC(Card.SplitCMCMode.RightSplitCMC);
+                            if (rightCMC > host.getCounters(CounterType.TIME)) {
+                                continue;
+                            }
+                        }
+                    }
+                }
+
+                if (changedManaCost) {
+                    if ("0".equals(sa.getParam("ActivationLimit")) && sa.getHostCard().getManaCost().isNoCost()) {
+                        sar.setLimitToCheck(null);
+                    }
                 }
 
                 final StringBuilder sb = new StringBuilder(sa.getDescription());

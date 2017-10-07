@@ -2,6 +2,8 @@ package forge.game.card;
 
 import org.apache.commons.lang3.StringUtils;
 
+import forge.card.mana.ManaCost;
+import forge.card.mana.ManaCostParser;
 import forge.game.player.Player;
 import forge.game.staticability.StaticAbility;
 
@@ -18,18 +20,20 @@ public final class CardPlayOption {
     private final PayManaCost payManaCost;
     private final boolean withFlash;
     private final boolean grantsZonePermissions;
+    private final String altManaCost;
 
-    public CardPlayOption(final Player player, final StaticAbility sta, final boolean withoutManaCost, final boolean withFlash,
-                          final boolean grantZonePermissions) {
-        this(player, sta, withoutManaCost ? PayManaCost.NO : PayManaCost.YES, withFlash, grantZonePermissions);
+    public CardPlayOption(final Player player, final StaticAbility sta, final boolean withoutManaCost, final String altManaCost,
+                          final boolean withFlash, final boolean grantZonePermissions) {
+        this(player, sta, withoutManaCost ? PayManaCost.NO : PayManaCost.YES, altManaCost, withFlash, grantZonePermissions);
     }
-    private CardPlayOption(final Player player, final StaticAbility sta, final PayManaCost payManaCost, final boolean withFlash,
-                           final boolean grantZonePermissions) {
+    private CardPlayOption(final Player player, final StaticAbility sta, final PayManaCost payManaCost, final String altManaCost, final boolean withFlash,
+            final boolean grantZonePermissions) {
         this.player = player;
         this.sta = sta;
         this.payManaCost = payManaCost;
         this.withFlash = withFlash;
         this.grantsZonePermissions = grantZonePermissions;
+        this.altManaCost = altManaCost;
     }
 
 
@@ -63,6 +67,12 @@ public final class CardPlayOption {
 
     public boolean grantsZonePermissions() { return grantsZonePermissions; }
 
+    public String getAltManaCost() { return altManaCost; }
+
+    private String getFormattedAltManaCost() {
+        return new ManaCost(new ManaCostParser(altManaCost)).getSimpleString();
+    }
+
     @Override
     public String toString() {
         return toString(true);
@@ -73,6 +83,13 @@ public final class CardPlayOption {
 
         switch (getPayManaCost()) {
         case YES:
+            if (altManaCost != null) {
+                sb.append(" (by paying " + getFormattedAltManaCost() + " instead of paying its mana cost");
+                if (isWithFlash()) {
+                    sb.append(" and as though it has flash");
+                }
+                sb.append(")");
+            }
             if (isIgnoreManaCostColor()) {
                 sb.append(" (may spend mana as though it were mana of any color to cast it)");
             } else if (isIgnoreManaCostType()) {
@@ -86,6 +103,7 @@ public final class CardPlayOption {
             }
             sb.append(")");
         }
+
         return sb.toString();
     }
 
