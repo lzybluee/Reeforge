@@ -83,8 +83,6 @@ public class GameCopier {
             newPlayer.setActivateLoyaltyAbilityThisTurn(origPlayer.getActivateLoyaltyAbilityThisTurn());
             for (int j = 0; j < origPlayer.getSpellsCastThisTurn(); j++)
                 newPlayer.addSpellCastThisTurn();
-            for (int j = 0; j < origPlayer.getCommanderCast(); j++)
-                newPlayer.addCommanderCast();
             for (int j = 0; j < origPlayer.getLandsPlayedThisTurn(); j++)
                 newPlayer.addLandPlayedThisTurn();
             newPlayer.setCounters(Maps.newEnumMap(origPlayer.getCounters()));

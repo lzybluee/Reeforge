@@ -109,6 +109,7 @@ public class Player extends GameEntity implements Comparable<Player> {
             ZoneType.Sideboard, ZoneType.PlanarDeck, ZoneType.SchemeDeck));
 
     private final Map<Card, Integer> commanderDamage = Maps.newHashMap();
+    private final Map<Card, Integer> commanderCast = Maps.newHashMap();
 
     private int life = 20;
     private int startingLife = 20;
@@ -133,7 +134,6 @@ public class Player extends GameEntity implements Comparable<Player> {
     private int numDrawnThisDrawStep = 0;
     private int numDiscardedThisTurn = 0;
     private int numCardsInHandStartedThisTurnWith = 0;
-    private int commanderCast = 0;
 
     private boolean revolt = false;
 
@@ -2145,9 +2145,6 @@ public class Player extends GameEntity implements Comparable<Player> {
     public final int getSpellsCastThisTurn() {
         return spellsCastThisTurn;
     }
-    public final int getCommanderCast() {
-        return commanderCast;
-    }
     public final int getSpellsCastLastTurn() {
         return spellsCastLastTurn;
     }
@@ -2159,10 +2156,7 @@ public class Player extends GameEntity implements Comparable<Player> {
         }
         view.updateSpellsCastThisTurn(this);
     }
-    public final void addCommanderCast() {
-        commanderCast++;
-        view.updateCommanderCast(this);
-    }
+
     public final void resetSpellsCastThisTurn() {
         spellsCastThisTurn = 0;
         view.updateLandsPlayedThisTurn(this);
@@ -2575,6 +2569,14 @@ public class Player extends GameEntity implements Comparable<Player> {
         return damage == null ? 0 : damage.intValue();
     }
 
+    public Iterable<Entry<Card, Integer>> getCommanderCast() {
+        return commanderCast.entrySet();
+    }
+    public int getCommanderCast(Card commander) {
+        Integer cast = commanderCast.get(commander);
+        return cast == null ? 0 : cast.intValue();
+    }
+
     public boolean isPlayingExtraTurn() {
         return isPlayingExtraTrun;
     }
@@ -2765,5 +2767,9 @@ public class Player extends GameEntity implements Comparable<Player> {
             com.remove(monarchEffect);
             this.updateZoneForView(com);
         }
+    }
+    public void increaseCommanderCast(Card card) {
+        commanderCast.put(card, getCommanderCast(card) + 1);
+        view.updateCommanderCast(this);
     }
 }
