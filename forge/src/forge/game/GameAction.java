@@ -1023,6 +1023,7 @@ public class GameAction {
         // trigger reset above will activate the copy's Always trigger, which needs to be triggered at
         // this point.
         checkStaticAbilities(false, affectedCards);
+        game.clearChangeZoneLKIInfo();
 
         if (!refreeze) {
             game.getStack().unfreezeStack();
