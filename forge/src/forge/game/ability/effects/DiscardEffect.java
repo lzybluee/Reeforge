@@ -209,6 +209,7 @@ public class DiscardEffect extends SpellAbilityEffect {
                         CardCollectionView toDiscard = p.getController().chooseCardsToDiscardUnlessType(Math.min(numCards, numCardsInHand), hand, sa.getParam("UnlessType"), sa);
                         for (Card c : toDiscard) {
                             c.getController().discard(c, sa);
+                            discarded.add(c);
                         }
                     }
                 }
