@@ -128,6 +128,40 @@ public class PlayerZone extends Zone {
         return CardLists.filter(cl, filterPredicate);
     }
 
+    public CardCollectionView getCardsRetrace(Player who, CardCollectionView hand) {
+        boolean checkingForOwner = who == player;
+
+        CardCollection cards = new CardCollection();
+        
+        if (hand == null || hand.size() == 0) {
+            return cards;
+        }
+
+        boolean hasLand = false;
+        for (Card c : hand) {
+            if (c.isLand()) {
+                hasLand = true;
+                break;
+            }
+        }
+        if (!hasLand) {
+            return cards;
+        }
+
+        if (checkingForOwner) {
+            CardCollectionView cl = getCards(false);
+            for(Card c : cl) {
+                for (String keyword : c.getKeywords()) {
+                    if (keyword.startsWith("Retrace")) {
+                        cards.add(c);
+                    }
+                }
+            }
+        }
+
+        return cards;
+    }
+
     public CardCollectionView getCardsSuspended(Player who) {
         boolean checkingForOwner = who == player;
 
