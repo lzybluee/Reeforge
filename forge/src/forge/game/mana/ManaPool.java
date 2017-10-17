@@ -198,6 +198,7 @@ public class ManaPool implements Iterable<Mana> {
                 saPaidFor.getPayingMana().add(0, mana);
             }
         }
+        abManaPart.getLastManaProduced().clear();
     }
 
     public boolean tryPayCostWithColor(byte colorCode, SpellAbility saPaidFor, ManaCostBeingPaid manaCost) {
