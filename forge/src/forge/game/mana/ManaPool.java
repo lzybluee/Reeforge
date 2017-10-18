@@ -349,6 +349,10 @@ public class ManaPool implements Iterable<Mana> {
             refundManaPaid(am);
         }
 
+        for (final SpellAbility am : payingAbilities) {
+            am.getManaPart().getLastManaProduced().clear();
+        }
+
         payingAbilities.clear();
 
         // update battlefield of activating player - to redraw cards used to pay mana as untapped
