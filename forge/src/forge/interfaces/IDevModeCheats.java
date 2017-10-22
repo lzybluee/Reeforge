@@ -6,23 +6,23 @@ public interface IDevModeCheats {
 
     void setViewAllCards(boolean canViewAll);
 
-    void generateMana();
+    void generateMana(boolean empty);
 
     void dumpGameState();
 
     void setupGameState();
 
-    void tutorForCard();
+    void tutorForCard(boolean sideboard);
 
     void addCountersToPermanent();
 
-    void tapPermanents();
+    void tapPermanents(boolean all);
 
-    void untapPermanents();
+    void untapPermanents(boolean all);
 
-    void setPlayerLife();
+    void setPlayerLife(boolean maxlife);
 
-    void winGame();
+    void winGame(boolean lose);
 
     void addCardToHand();
 
@@ -59,16 +59,16 @@ public interface IDevModeCheats {
      */
     public static final IDevModeCheats NO_CHEAT = new IDevModeCheats() {
         @Override
-        public void winGame() {
+        public void winGame(boolean lose) {
         }
         @Override
-        public void untapPermanents() {
+        public void untapPermanents(boolean all) {
         }
         @Override
-        public void tutorForCard() {
+        public void tutorForCard(boolean sideboard) {
         }
         @Override
-        public void tapPermanents() {
+        public void tapPermanents(boolean all) {
         }
         @Override
         public void setupGameState() {
@@ -77,7 +77,7 @@ public interface IDevModeCheats {
         public void setViewAllCards(final boolean canViewAll) {
         }
         @Override
-        public void setPlayerLife() {
+        public void setPlayerLife(boolean maxlife) {
         }
         @Override
         public void setCanPlayUnlimitedLands(final boolean canPlayUnlimitedLands0) {
@@ -89,7 +89,7 @@ public interface IDevModeCheats {
         public void planeswalkTo() {
         }
         @Override
-        public void generateMana() {
+        public void generateMana(boolean empty) {
         }
         @Override
         public void dumpGameState() {

@@ -119,21 +119,21 @@ public class DevModeMenu implements ActionListener, IDevListener {
     @Override
     public void actionPerformed(final ActionEvent e) {
         switch (DevMenuItem.getValue(e.getActionCommand())) {
-        case GENERATE_MANA:        { controller.generateMana(); break; }
-        case TUTOR_FOR_CARD:       { controller.tutorForCard(); break; }
+        case GENERATE_MANA:        { controller.generateMana(false); break; }
+        case TUTOR_FOR_CARD:       { controller.tutorForCard(false); break; }
         case ADD_CARD_TO_HAND:     { controller.addCardToHand(); break; }
         case ADD_CARD_TO_PLAY:     { controller.addCardToBattlefield(); break; }
         case EXILE_FROM_PLAY:	   { controller.exileCardsFromPlay(); break; }
         case EXILE_FROM_HAND:	   { controller.exileCardsFromHand(); break; }
-        case SET_PLAYER_LIFE:      { controller.setPlayerLife(); break; }
-        case WIN_GAME:             { controller.winGame(); break; }
+        case SET_PLAYER_LIFE:      { controller.setPlayerLife(false); break; }
+        case WIN_GAME:             { controller.winGame(false); break; }
         case SETUP_GAME_STATE:     { controller.setupGameState(); break; }
         case DUMP_GAME_STATE:      { controller.dumpGameState(); break; }
         case PLAY_UNLIMITED_LANDS: { controller.togglePlayManyLandsPerTurn(); break; }
         case VIEW_ALL:             { controller.toggleViewAllCards(); break; }
         case ADD_COUNTER:          { controller.addCounterToPermanent(); break; }
-        case TAP_PERMANENT:        { controller.tapPermanent(); break; }
-        case UNTAP_PERMANENT:      { controller.untapPermanent(); break; }
+        case TAP_PERMANENT:        { controller.tapPermanent(false); break; }
+        case UNTAP_PERMANENT:      { controller.untapPermanent(false); break; }
         case RIGGED_PLANAR_ROLL:   { controller.riggedPlanerRoll(); break; }
         case PLANESWALK_TO:        { controller.planeswalkTo(); break; }
         case DEV_CORNER:           { openDevForumInBrowser(); break; }
