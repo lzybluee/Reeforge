@@ -49,6 +49,7 @@ public final class GameMenu {
         menu.add(new CardOverlaysMenu(matchUI).getMenu());
         menu.add(getMenuItem_AutoYields());
         menu.add(getMenuItem_SkipRestoreDeck());
+        menu.add(getMenuItem_StartPlayer());
         menu.addSeparator();
         menu.add(getMenuItem_ViewDeckList());
         menu.add(getMenuItem_ViewOpponentDeckList());
@@ -75,6 +76,41 @@ public final class GameMenu {
         final boolean skipRestoreDeck = !prefs.getPrefBoolean(FPref.UI_SKIP_RESTORE_DECK);
         prefs.setPref(FPref.UI_SKIP_RESTORE_DECK, skipRestoreDeck);
         prefs.save();
+    }
+    
+    private SkinnedMenu getMenuItem_StartPlayer() {
+        final SkinnedMenu menu = new SkinnedMenu("Start Player");
+        final ButtonGroup group = new ButtonGroup();
+
+        SkinnedRadioButtonMenuItem menuItem;
+        menuItem = getStartPlayerRadioButton("Random");
+        group.add(menuItem);
+        menu.add(menuItem);
+        menuItem = getStartPlayerRadioButton("Human");
+        group.add(menuItem);
+        menu.add(menuItem);
+        menuItem = getStartPlayerRadioButton("AI");
+        group.add(menuItem);
+        menu.add(menuItem);
+
+        return menu;
+    }
+
+    private SkinnedRadioButtonMenuItem getStartPlayerRadioButton(final String caption) {
+        final SkinnedRadioButtonMenuItem menuItem = new SkinnedRadioButtonMenuItem(caption);
+        menuItem.setSelected(caption.equals(prefs.getPref(FPref.UI_START_PLAYER)));
+        menuItem.addActionListener(getStartPlayerButtonAction(caption));
+        return menuItem;
+    }
+    
+    private ActionListener getStartPlayerButtonAction(final String starter) {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                prefs.setPref(FPref.UI_START_PLAYER, starter);
+                prefs.save();
+            }
+        };
     }
 
     private static SkinnedCheckBoxMenuItem getMenuItem_GameSoundEffects() {
