@@ -21,7 +21,6 @@ public class MillEffect extends SpellAbilityEffect {
         final boolean bottom = sa.hasParam("FromBottom");
         final boolean facedown = sa.hasParam("ExileFaceDown");
         final boolean reveal = !sa.hasParam("NoReveal");
-        final boolean showRevealDialog = sa.hasParam("ShowMilledCards");
 
         if (sa.hasParam("ForgetOtherRemembered")) {
             source.clearRemembered();

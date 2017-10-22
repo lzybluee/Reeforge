@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import forge.game.GameActionUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import forge.FThreads;
@@ -201,7 +200,6 @@ public abstract class InputPayMana extends InputSyncronizedBase {
         }
 
         boolean guessAbilityWithRequiredColors = true;
-        int amountOfMana = -1;
         for (SpellAbility ma : card.getManaAbilities()) {
             ma.setActivatingPlayer(player);
 

@@ -1609,6 +1609,7 @@ public class ChangeZoneAi extends SpellAbilityAi {
     }
 
     public boolean doReturnCommanderLogic(SpellAbility sa, Player aiPlayer) {
+        @SuppressWarnings("unchecked")
         Map<String, Object> originalParams = (Map<String, Object>)sa.getReplacingObject("OriginalParams");
         SpellAbility causeSa = (SpellAbility)originalParams.get("Cause");
         SpellAbility causeSub = null;

@@ -2696,8 +2696,6 @@ public class ComputerUtil {
         return true;
     }
 
-
-    @Deprecated
     public static final Player getOpponentFor(final Player player) {
         // This method is deprecated and currently functions as a synonym for player.getWeakestOpponent
         // until it can be replaced everywhere in the code.

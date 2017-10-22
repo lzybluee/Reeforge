@@ -28,7 +28,6 @@ public final class InputSelectTargets extends InputSyncronizedBase {
     private final Map<GameEntity, Integer> targetDepth = new HashMap<GameEntity, Integer>();
     private final TargetRestrictions tgt;
     private final SpellAbility sa;
-    private Card lastTarget = null;
     private boolean bCancel = false;
     private boolean bOk = false;
     private final boolean mandatory;
@@ -300,7 +299,6 @@ public final class InputSelectTargets extends InputSyncronizedBase {
         sa.getTargets().add(ge);
         if (ge instanceof Card) {
             getController().getGui().setUsedToPay(CardView.get((Card) ge), true);
-            lastTarget = (Card) ge;
         } else if(ge instanceof Player) {
             getController().getGui().setHighlighted(PlayerView.get((Player) ge), true);
         }

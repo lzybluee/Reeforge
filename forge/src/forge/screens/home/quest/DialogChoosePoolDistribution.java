@@ -15,7 +15,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("WeakerAccess")
 public class DialogChoosePoolDistribution {
 
 	private final FPanel mainPanel = new FPanel(new MigLayout("insets 20, gap 25, center, wrap 2"));

@@ -17,7 +17,6 @@
  */
 package forge.game;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.Iterables;
@@ -1767,32 +1766,6 @@ public class GameAction {
                 p.scry(1, false);
             }
         }
-    }
-
-    private void runPreOpeningHandActions(final Player first) {
-        Player takesAction = first;
-        do {
-            //
-            List<Card> ploys = CardLists.filter(takesAction.getCardsIn(ZoneType.Command), new Predicate<Card>() {
-                @Override
-                public boolean apply(Card input) {
-                    return input.getName().equals("Emissary's Ploy");
-                }
-            });
-
-            int chosen = 1;
-            List<Integer> cmc = Lists.newArrayList(1, 2, 3);
-
-            for (Card c : ploys) {
-                if (!cmc.isEmpty()) {
-                    chosen = takesAction.getController().chooseNumber(c.getSpellPermanent(), "Emissary's Ploy", cmc, c.getOwner());
-                    cmc.remove((Object)chosen);
-                }
-
-                c.setChosenNumber(chosen);
-            }
-            takesAction = game.getNextPlayerAfter(takesAction);
-        } while (takesAction != first);
     }
 
     private void runOpeningHandActions(final Player first) {

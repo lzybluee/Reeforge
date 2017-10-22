@@ -225,7 +225,8 @@ public final class BoosterUtils {
                 case RANDOM:
                     populateRandomFilters(colorFilters);
                     break;
-
+                default:
+                    break;
             }
 
         }

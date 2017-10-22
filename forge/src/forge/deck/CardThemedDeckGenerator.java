@@ -18,7 +18,6 @@ public class CardThemedDeckGenerator extends DeckProxy implements Comparable<Car
         return decks;
     }
     private final String name;
-    private final int index;
     private final GameFormat format;
     private final boolean isForAi;
 
@@ -26,7 +25,6 @@ public class CardThemedDeckGenerator extends DeckProxy implements Comparable<Car
     private CardThemedDeckGenerator(String cardName, GameFormat format0, boolean isForAi0) {
         super();
         name = cardName;
-        index = 0;
         format=format0;
         isForAi=isForAi0;
     }

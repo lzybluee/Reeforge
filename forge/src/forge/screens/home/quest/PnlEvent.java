@@ -31,9 +31,7 @@ class PnlEvent extends JPanel {
 
     private final int wImg = 85;
     private final int hImg = 85;
-    private final int hRfl = 20;
 
-    private final Color clr1 = new Color(255, 0, 255, 100);
     private final Color clr2 = new Color(255, 255, 0, 0);
     private final SkinColor clr3 = FSkin.getColor(FSkin.Colors.CLR_THEME2).alphaColor(200);
 

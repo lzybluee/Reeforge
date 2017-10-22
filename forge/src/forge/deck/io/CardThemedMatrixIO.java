@@ -47,6 +47,7 @@ public class CardThemedMatrixIO {
         try {
             FileInputStream fin = new FileInputStream(getMatrixFile(format));
             ObjectInputStream s = new ObjectInputStream(fin);
+            @SuppressWarnings("unchecked")
             HashMap<String, List<Map.Entry<PaperCard,Integer>>> matrix = (HashMap<String, List<Map.Entry<PaperCard,Integer>>>) s.readObject();
             s.close();
             return matrix;

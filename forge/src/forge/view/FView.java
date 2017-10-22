@@ -287,14 +287,18 @@ public enum FView {
 			updateWarningOverlay.add(updateWarningContentPanel, constraints);
 
 			btnRemindMeLater.setCommand(new UiCommand() {
-				@Override
+                private static final long serialVersionUID = 2693556909489728821L;
+
+                @Override
 				public void run() {
 					SOverlayUtils.hideOverlay();
 				}
 			});
 
 			btnDoNotRemindMe.setCommand(new UiCommand() {
-				@Override
+                private static final long serialVersionUID = 3854383209625638723L;
+
+                @Override
 				public void run() {
 					if (FOptionPane.showConfirmDialog("Are you sure? You can re-enable this warning in Forge's general preferences.")) {
 						FModel.getPreferences().setPref(ForgePreferences.FPref.DISABLE_DISPLAY_JAVA_8_UPDATE_WARNING, true);
@@ -305,7 +309,9 @@ public enum FView {
 			});
 
 			btnDownloadLatestJava.setCommand(new UiCommand() {
-				@Override
+                private static final long serialVersionUID = -6939673832342998774L;
+
+                @Override
 				public void run() {
 					try {
 						assert desktop != null;

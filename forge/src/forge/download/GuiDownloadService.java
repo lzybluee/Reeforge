@@ -243,7 +243,16 @@ public abstract class GuiDownloadService implements Runnable {
             cardSkipped = true; //assume skipped unless saved successfully
             String url = kv.getValue();
             //decode URL Key
-            String decodedKey = URLDecoder.decode(kv.getKey());
+            String decodedKey = null;
+            try {
+                decodedKey = URLDecoder.decode(kv.getKey(), "UTF-8");
+            } catch (UnsupportedEncodingException e1) {
+                e1.printStackTrace();
+                return;
+            }
+            if(decodedKey == null) {
+                return;
+            }
             final File fileDest = new File(decodedKey);
 
             System.out.println(count + "/" + totalCount + " - " + fileDest);
@@ -333,10 +342,14 @@ public abstract class GuiDownloadService implements Runnable {
 
     protected static void addMissingItems(Map<String, String> list, String nameUrlFile, String dir) {
         for (Pair<String, String> nameUrlPair : FileUtil.readNameUrlFile(nameUrlFile)) {
-            File f = new File(dir, URLDecoder.decode(nameUrlPair.getLeft()));
-            //System.out.println(f.getAbsolutePath());
-            if (!f.exists()) {
-                list.put(f.getAbsolutePath(), nameUrlPair.getRight());
+            try {
+                File f = new File(dir, URLDecoder.decode(nameUrlPair.getLeft(), "UTF-8"));
+                //System.out.println(f.getAbsolutePath());
+                if (!f.exists()) {
+                    list.put(f.getAbsolutePath(), nameUrlPair.getRight());
+                }
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
             }
         }
     }
