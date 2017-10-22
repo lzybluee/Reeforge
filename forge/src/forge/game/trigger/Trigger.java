@@ -154,7 +154,7 @@ public abstract class Trigger extends TriggerReplacementBase {
 
             StringBuilder sb = new StringBuilder();
             String desc = this.mapParams.get("TriggerDescription");
-            desc = desc.replace("CARDNAME", active ? getHostCard().toString() : getHostCard().getName());
+            desc = desc.replaceAll("CARDNAME", active ? getHostCard().toString() : getHostCard().getName());
             if (getHostCard().getEffectSource() != null) {
                 desc = desc.replace("EFFECTSOURCE", active ? getHostCard().getEffectSource().toString() : getHostCard().getEffectSource().getName());
             }

@@ -694,7 +694,7 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
                 sb.append(" ");
             }
             if (node.getHostCard() != null) {
-                sb.append(node.getDescription().replace("CARDNAME", node.getHostCard().getName()));
+                sb.append(node.getDescription().replaceAll("CARDNAME", node.getHostCard().getName()));
             }
             node = node.getSubAbility();
         }

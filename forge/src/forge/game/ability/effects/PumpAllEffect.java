@@ -109,7 +109,7 @@ public class PumpAllEffect extends SpellAbilityEffect {
 
         String desc = "";
         if (sa.hasParam("SpellDescription")) {
-            desc = sa.getParam("SpellDescription").replace("CARDNAME", sa.getHostCard().getName());
+            desc = sa.getParam("SpellDescription").replaceAll("CARDNAME", sa.getHostCard().getName());
         }
 
         sb.append(desc);

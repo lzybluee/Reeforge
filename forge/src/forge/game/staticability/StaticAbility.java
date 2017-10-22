@@ -184,7 +184,7 @@ public class StaticAbility extends CardTraitBase implements Comparable<StaticAbi
     public final String toString() {
         if (hasParam("Description") && !this.isSuppressed()) {
             String desc = getParam("Description");
-            desc = desc.replace("CARDNAME", this.hostCard.getName());
+            desc = desc.replaceAll("CARDNAME", this.hostCard.getName());
 
             if (desc.contains("ORIGINALTEXTONLY:")) {
                 // Only display the description if the text of the card is not changed via GainTextOf.

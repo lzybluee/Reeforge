@@ -250,7 +250,7 @@ public class ReplacementHandler {
             }
 
             Card cardForUi = host.getCardForUi();
-            String effectDesc = replacementEffect.toString().replace("CARDNAME", cardForUi.getName());
+            String effectDesc = replacementEffect.toString().replaceAll("CARDNAME", cardForUi.getName());
             String question = replacementEffect instanceof ReplaceDiscard
                 ? String.format("Apply replacement effect of %s to %s?\r\n(%s)", cardForUi, runParams.get("Card").toString(), effectDesc)
                 : String.format("Apply replacement effect of %s?\r\n(%s)", cardForUi, effectDesc);
