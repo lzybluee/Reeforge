@@ -48,12 +48,33 @@ public final class GameMenu {
         menu.add(getMenuItem_TargetingArcs());
         menu.add(new CardOverlaysMenu(matchUI).getMenu());
         menu.add(getMenuItem_AutoYields());
+        menu.add(getMenuItem_SkipRestoreDeck());
         menu.addSeparator();
         menu.add(getMenuItem_ViewDeckList());
         menu.add(getMenuItem_ViewOpponentDeckList());
         menu.addSeparator();
         menu.add(getMenuItem_GameSoundEffects());
         return menu;
+    }
+
+    private static SkinnedCheckBoxMenuItem getMenuItem_SkipRestoreDeck() {
+        SkinnedCheckBoxMenuItem menuItem = new SkinnedCheckBoxMenuItem("Keep Sideboard");
+        menuItem.setState(prefs.getPrefBoolean(FPref.UI_SKIP_RESTORE_DECK));
+        menuItem.addActionListener(getSkipRestoreDeck());
+        return menuItem;
+    }
+    private static ActionListener getSkipRestoreDeck() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                toggleSkipRestoreDeck();
+            }
+        };
+    }
+    private static void toggleSkipRestoreDeck() {
+        final boolean skipRestoreDeck = !prefs.getPrefBoolean(FPref.UI_SKIP_RESTORE_DECK);
+        prefs.setPref(FPref.UI_SKIP_RESTORE_DECK, skipRestoreDeck);
+        prefs.save();
     }
 
     private static SkinnedCheckBoxMenuItem getMenuItem_GameSoundEffects() {
