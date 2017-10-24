@@ -8,11 +8,8 @@ import forge.game.spellability.SpellAbility;
 import forge.game.spellability.TargetRestrictions;
 import forge.game.zone.ZoneType;
 import forge.util.Lang;
-import forge.util.MyRandom;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public class ReorderZoneEffect extends SpellAbilityEffect {
     @Override
