@@ -59,6 +59,7 @@ import forge.game.trigger.TriggerType;
 import forge.game.zone.*;
 import forge.trackable.Tracker;
 import forge.util.Aggregates;
+import forge.util.MyRandom;
 import forge.util.Visitor;
 
 /**
@@ -253,6 +254,8 @@ public class Game {
     public Game(List<RegisteredPlayer> players0, GameRules rules0, Match match0) { /* no more zones to map here */
         rules = rules0;
         match = match0;
+
+        MyRandom.updateSeed(players0, match0.getPlayedGames().size() + 1);
 
         spabCache.put(PLAY_LAND_SURROGATE.getId(), PLAY_LAND_SURROGATE);
 
@@ -800,7 +803,7 @@ public class Game {
                 onePlayerHasTimeShifted = false;
             }
             
-            CardRarity anteRarity = validRarities.get(new Random().nextInt(validRarities.size()));
+            CardRarity anteRarity = validRarities.get(MyRandom.getRandom().nextInt(validRarities.size()));
             
             System.out.println("Rarity chosen for ante: " + anteRarity.name());
             
@@ -830,7 +833,7 @@ public class Game {
                 library.removeAll((Collection<?>)toRemove);
                 
                 if (library.size() > 0) { //Make sure that matches were found. If not, use the original method to choose antes
-                    Card ante = library.get(new Random().nextInt(library.size()));
+                    Card ante = library.get(MyRandom.getRandom().nextInt(library.size()));
                     anteed.put(player, ante);
                 } else {
                     chooseRandomCardsForAnte(player, anteed);

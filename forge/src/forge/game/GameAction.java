@@ -64,6 +64,7 @@ import forge.properties.ForgePreferences.FPref;
 import forge.util.Aggregates;
 import forge.util.CollectionSuppliers;
 import forge.util.Expressions;
+import forge.util.MyRandom;
 import forge.util.collect.FCollection;
 import forge.util.collect.FCollectionView;
 import forge.util.ThreadUtil;
@@ -1629,10 +1630,11 @@ public class GameAction {
 
         if (!powerPlayers.isEmpty()) {
             List<Player> players = Lists.newArrayList(powerPlayers);
-            Collections.shuffle(players);
+            Collections.shuffle(players, MyRandom.getRandom());
             return players.get(0);
         }
 
+        String matchPlayer = "Start player -> ";
         boolean isFirstGame = lastGameOutcome == null;
         if (isFirstGame || lastGameOutcome.getWinCondition() == GameEndReason.Draw) {
             game.fireEvent(new GameEventFlipCoin()); // Play the Flip Coin sound
@@ -1648,15 +1650,19 @@ public class GameAction {
             }
             if(FModel.getPreferences().getPref(FPref.UI_START_PLAYER).equals("Human")) {
                 goesFirst = Aggregates.random(humanPlayers);
+                matchPlayer = "Player start -> ";
             } else if(FModel.getPreferences().getPref(FPref.UI_START_PLAYER).equals("AI")) {
                 goesFirst = Aggregates.random(aiPlayers);
+                matchPlayer = "Opponent start -> ";
             } else {
                 goesFirst = Aggregates.random(game.getPlayers());
+                matchPlayer = "Random player start -> ";
             }
         } else {
             for (Player p : game.getPlayers()) {
                 if (!lastGameOutcome.isWinner(p.getLobbyPlayer())) {
                     goesFirst = p;
+                    matchPlayer = "Loser start -> ";
                     break;
                 }
             }
@@ -1667,6 +1673,9 @@ public class GameAction {
             // Noone of them has lost, so cannot decide who goes first .
             goesFirst = Aggregates.random(game.getPlayers()); // does not really matter who plays first - it's controlled from the same computer.
         }
+
+        matchPlayer += goesFirst.getName();
+        MyRandom.saveSeed(matchPlayer);
 
         for (Player p : game.getPlayers()) {
             if (p != goesFirst) {

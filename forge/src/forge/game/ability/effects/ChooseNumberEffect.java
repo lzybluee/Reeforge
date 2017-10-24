@@ -7,6 +7,7 @@ import forge.game.player.Player;
 import forge.game.spellability.AbilitySub;
 import forge.game.spellability.SpellAbility;
 import forge.game.spellability.TargetRestrictions;
+import forge.util.MyRandom;
 
 import java.util.List;
 import java.util.Map;
@@ -56,7 +57,7 @@ public class ChooseNumberEffect extends SpellAbilityEffect {
             if ((tgt == null) || p.canBeTargetedBy(sa)) {
                 int chosen;
                 if (random) {
-                    final Random randomGen = new Random();
+                    final Random randomGen = MyRandom.getRandom();
                     chosen = randomGen.nextInt(max - min) + min;
                     p.getGame().getAction().nofityOfValue(sa, p, Integer.toString(chosen), null);
                 } else {
