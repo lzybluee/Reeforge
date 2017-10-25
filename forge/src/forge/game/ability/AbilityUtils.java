@@ -1643,11 +1643,24 @@ public class AbilityUtils {
             }
         }
     }
+    
+    private static boolean checkZone(final Spell spell, final Card card, final Player player) {
+        if (spell.toString().startsWith("Fuse (") && !player.getGame().getZoneOf(card).is(ZoneType.Hand, player)) {
+            return false;
+        }
+        if (spell.isAftermath() && !player.getGame().getZoneOf(card).is(ZoneType.Graveyard, player)) {
+            return false;
+        }
+        return true;
+    }
 
     public static final List<SpellAbility> getBasicSpellsFromPlayEffect(final Card tgtCard, final Player controller) {
         List<SpellAbility> sas = new ArrayList<SpellAbility>();
         for (SpellAbility s : tgtCard.getBasicSpells()) {
             final Spell newSA = (Spell) s.copy();
+            if (!checkZone(newSA, tgtCard, controller)) {
+                continue;
+            }
             newSA.setActivatingPlayer(controller);
             SpellAbilityRestriction res = new SpellAbilityRestriction();
             // timing restrictions still apply
