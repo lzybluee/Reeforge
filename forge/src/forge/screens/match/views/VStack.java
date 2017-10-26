@@ -139,7 +139,7 @@ public class VStack implements IVDoc<CStack> {
             //update the Card Picture/Detail when the spell is added to the stack
             if (isFirst) {
                 isFirst = false;
-                controller.getMatchUI().setCard(item.getSourceCard());
+                controller.getMatchUI().setPaperCard(item.getSourceCard());
             }
         }
 
@@ -204,7 +204,7 @@ public class VStack implements IVDoc<CStack> {
                     if (matchUI != null) {
                         matchUI.clearPanelSelections();
                         if (item.getSourceCard() != null) {
-                            matchUI.setCard(item.getSourceCard());
+                            matchUI.setPaperCard(item.getSourceCard());
                             matchUI.setPanelSelection(item.getSourceCard());
                         }
                     }

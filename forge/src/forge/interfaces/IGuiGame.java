@@ -144,6 +144,7 @@ public interface IGuiGame {
     GameEntityView chooseSingleEntityForEffect(String title, List<? extends GameEntityView> optionList,
             DelayedReveal delayedReveal, boolean isOptional, int total);
     void setCard(CardView card);
+    void setPaperCard(CardView card);
     void setPlayerAvatar(LobbyPlayer player, IHasIcon ihi);
     boolean openZones(Collection<ZoneType> zones, Map<PlayerView, Object> players);
     void restoreOldZones(Map<PlayerView, Object> playersToRestoreZonesFor);

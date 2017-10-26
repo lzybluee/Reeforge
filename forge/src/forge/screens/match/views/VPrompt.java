@@ -97,7 +97,7 @@ public class VPrompt implements IVDoc<CPrompt> {
         	@Override 
         	public void mouseEntered(final MouseEvent e) {
         		if ( card != null ) {
-			    controller.getMatchUI().setCard(card);
+        		    controller.getMatchUI().setPaperCard(card);
         		}
         	}
         });

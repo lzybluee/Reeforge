@@ -997,4 +997,8 @@ public class PlayerControllerAi extends PlayerController {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public void showCardDetail(Card card) {
+    }
 }
