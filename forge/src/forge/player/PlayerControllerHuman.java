@@ -2728,9 +2728,4 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         return getGui().many("Choose optional Costs", "Optional Costs", 0, optionalCost.size(),
                 optionalCost, choosen.getHostCard().getView());
     }
-
-    @Override
-    public void showCardDetail(Card card) {
-        getGui().setPaperCard(CardView.get(card));
-    }
 }

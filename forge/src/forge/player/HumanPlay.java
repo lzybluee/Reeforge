@@ -65,10 +65,6 @@ public class HumanPlay {
     public final static boolean playSpellAbility(final PlayerControllerHuman controller, final Player p, SpellAbility sa) {
         FThreads.assertExecutedByEdt(false);
 
-        if(sa != null && sa.getHostCard() != null) {
-            controller.showCardDetail(sa.getHostCard());
-        }
-
         if (sa == controller.getGame().PLAY_LAND_SURROGATE) {
             p.playLand(sa.getHostCard(), false);
             return false;
@@ -255,10 +251,6 @@ public class HumanPlay {
     }
 
     public final static void playSpellAbilityNoStack(final PlayerControllerHuman controller, final Player player, final SpellAbility sa, boolean useOldTargets) {
-        if(sa != null && sa.getHostCard() != null) {
-            controller.showCardDetail(sa.getHostCard());
-        }
-        
         sa.setActivatingPlayer(player);
 
         if (sa.getPayCosts() != null) {
