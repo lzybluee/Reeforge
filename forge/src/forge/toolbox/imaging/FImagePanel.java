@@ -225,6 +225,14 @@ public class FImagePanel extends JPanel {
         if (this.imageScale != 1) {
             if (isResampleEnabled) {
                 isResampleEnabled = false;
+
+                int destWidth = (int)(this.imageScale * sourceImage.getWidth());
+                int destHeight = (int)(this.imageScale * sourceImage.getHeight());
+
+                if (this.scaledImage != null && this.scaledImage.getWidth() == destWidth && this.scaledImage.getHeight() == destHeight) {
+                    return this.scaledImage;
+                }
+
                 DimensionConstrain constrain = DimensionConstrain.createRelativeDimension((float)this.imageScale);
                 ResampleOp resampler = new ResampleOp(constrain);
                 this.scaledImage = resampler.filter(sourceImage, null);
