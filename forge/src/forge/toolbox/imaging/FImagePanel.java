@@ -235,10 +235,6 @@ public class FImagePanel extends JPanel {
                 int destWidth = (int)(this.imageScale * sourceImage.getWidth());
                 int destHeight = (int)(this.imageScale * sourceImage.getHeight());
 
-                if (this.scaledImage != null && this.scaledImage.getWidth() == destWidth && this.scaledImage.getHeight() == destHeight) {
-                    return this.scaledImage;
-                }
-
                 String scaleLib = FModel.getPreferences().getPref(FPref.UI_SCALE_LIB);
                 if (scaleLib.startsWith("Scalr")) {
                     Scalr.Method method = Scalr.Method.QUALITY;
