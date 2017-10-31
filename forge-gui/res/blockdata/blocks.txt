@@ -61,8 +61,8 @@ Magic Origins, 3/6/ORI, ORI
 Magic Origins Prerelease, -/7/ORI, ORI ORI ORI Meta-Choose(S(ORI Prerelease Gideon)Gideon;S(ORI Prerelease Jace)Jace;S(ORI Prerelease Liliana)Liliana;S(ORI Prerelease Chandra)Chandra;S(ORI Prerelease Nissa)Nissa)Planeswalker
 Battle for Zendikar, 3/6/BFZ, BFZ OGW
 Shadows over Innistrad, 3/6/SOI, SOI EMN
-Eternal Masters, 3/6/SOI, EMA
+Eternal Masters, 3/6/ORI, EMA
 Conspiracy Take the Crown, 3/6/ORI, CN2
 Kaladesh, 3/6/KLD, KLD AER
-Modern Masters 2017, 3/6/M15, MM3
+Modern Masters 2017, 3/6/ORI, MM3
 Amonkhet, 3/6/AKH, AKH HOU
