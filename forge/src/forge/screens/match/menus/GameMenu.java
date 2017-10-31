@@ -47,6 +47,8 @@ public final class GameMenu {
         menu.addSeparator();
         menu.add(getMenuItem_TargetingArcs());
         menu.add(new CardOverlaysMenu(matchUI).getMenu());
+        menu.add(getMenuItem_ScaleLib());
+        menu.addSeparator();
         menu.add(getMenuItem_AutoYields());
         menu.add(getMenuItem_SkipRestoreDeck());
         menu.add(getMenuItem_StartPlayer());
@@ -108,6 +110,41 @@ public final class GameMenu {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 prefs.setPref(FPref.UI_START_PLAYER, starter);
+                prefs.save();
+            }
+        };
+    }
+
+    private SkinnedMenu getMenuItem_ScaleLib() {
+        final SkinnedMenu menu = new SkinnedMenu("Scale Lib");
+        final ButtonGroup group = new ButtonGroup();
+
+        SkinnedRadioButtonMenuItem menuItem;
+        menuItem = getScaleLibRadioButton("Scalr Quality");
+        group.add(menuItem);
+        menu.add(menuItem);
+        menuItem = getScaleLibRadioButton("JIS");
+        group.add(menuItem);
+        menu.add(menuItem);
+        menuItem = getScaleLibRadioButton("Scalr Auto");
+        group.add(menuItem);
+        menu.add(menuItem);
+
+        return menu;
+    }
+
+    private SkinnedRadioButtonMenuItem getScaleLibRadioButton(final String caption) {
+        final SkinnedRadioButtonMenuItem menuItem = new SkinnedRadioButtonMenuItem(caption);
+        menuItem.setSelected(caption.equals(prefs.getPref(FPref.UI_SCALE_LIB)));
+        menuItem.addActionListener(getScaleLibButtonAction(caption));
+        return menuItem;
+    }
+    
+    private ActionListener getScaleLibButtonAction(final String lib) {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                prefs.setPref(FPref.UI_SCALE_LIB, lib);
                 prefs.save();
             }
         };
