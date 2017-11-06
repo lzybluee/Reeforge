@@ -74,6 +74,8 @@ public class VStack implements IVDoc<CStack> {
 
     private StackInstanceTextArea hoveredItem;
 
+    private int lastStackSize = 0;
+
     public StackInstanceTextArea getHoveredItem() {
         return hoveredItem;
     }
@@ -142,6 +144,11 @@ public class VStack implements IVDoc<CStack> {
                 controller.getMatchUI().setPaperCard(item.getSourceCard());
             }
         }
+
+        if (lastStackSize != items.size()) {
+            controller.getMatchUI().clearPanelSelections();
+        }
+        lastStackSize = items.size();
 
         scroller.revalidate();
         scroller.repaint();
