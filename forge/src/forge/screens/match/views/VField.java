@@ -111,6 +111,7 @@ public class VField implements IVDoc<CField> {
         lblLife.setFocusable(false);
         lblPoison.setFocusable(false);
         lblEnergy.setFocusable(false);
+        lblExperience.setFocusable(false);
 
         avatarArea.setOpaque(false);
         avatarArea.setBackground(FSkin.getColor(FSkin.Colors.CLR_HOVER));
