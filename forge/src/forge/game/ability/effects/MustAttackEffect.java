@@ -61,12 +61,12 @@ public class MustAttackEffect extends SpellAbilityEffect {
         // System.out.println("Setting mustAttackEntity to: "+entity);
 
         for (final Player p : tgtPlayers) {
-            if ((tgt == null) || p.canBeTargetedBy(sa)) {
+            if ((tgt == null) || p.canBeTargetedBy(sa) && p != entity) {
                 p.setMustAttackEntity(entity);
             }
         }
         for (final Card c : getTargetCards(sa)) {
-            if ((tgt == null) || c.canBeTargetedBy(sa)) {
+            if ((tgt == null) || c.canBeTargetedBy(sa) && c.getController() != entity) {
                 c.setMustAttackEntity(entity);
             }
         }
