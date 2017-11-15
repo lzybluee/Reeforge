@@ -53,6 +53,8 @@ public class MustAttackEffect extends SpellAbilityEffect {
             entity = sa.getHostCard();
         } else if (defender.equals("You")) {
             entity = sa.getActivatingPlayer();
+        } else if (defender.equals("ParentTargeted")) {
+            entity = (GameEntity)sa.getParent().getTargets().getFirstTargetedPlayer();
         } else {
             throw new RuntimeException("Illegal defender " + defender + " for MustAttackEffect in card " + sa.getHostCard());
         }
