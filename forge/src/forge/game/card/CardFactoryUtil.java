@@ -644,6 +644,10 @@ public class CardFactoryUtil {
         return doXMath(0, m, source);
     }
 
+    public static int xCount(final Card c, final String expression) {
+        return xCount(c, expression, null);
+    }
+
     /**
      * <p>
      * Parse non-mana X variables.
@@ -655,7 +659,7 @@ public class CardFactoryUtil {
      *            a {@link java.lang.String} object.
      * @return a int.
      */
-    public static int xCount(final Card c, final String expression) {
+    public static int xCount(final Card c, final String expression, final Player activitor) {
         if (StringUtils.isBlank(expression) || c == null) {
             return 0;
         }
@@ -663,7 +667,7 @@ public class CardFactoryUtil {
             return Integer.parseInt(expression);
         }
 
-        final Player cc = c.getController();
+        final Player cc = (activitor == null ? c.getController() : activitor);
         final Game game = c.getGame();
         final Player activePlayer = game.getPhaseHandler().getPlayerTurn();
 
