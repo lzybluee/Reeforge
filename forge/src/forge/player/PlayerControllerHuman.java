@@ -1477,6 +1477,42 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
                             preselect ? Lists.<SpellAbility>newArrayList() : orderedSAs,
                             preselect ? orderedSAs : Lists.<SpellAbility>newArrayList(), null, false);
                 } else {
+                    String refereceKey = null;
+                    for (String key : orderedSALookup.keySet()) {
+                        boolean found = true;
+                        for (String s : key.split(delim + "")) {
+                            if (!saLookupKey.contains(s)) {
+                                found = false;
+                                break;
+                            }
+                        }
+                        if (found) {
+                            refereceKey = key;
+                            break;
+                        }
+                    }
+                    if (refereceKey != null) {
+                        List<SpellAbility> copyOrderedSAs = Lists.newArrayList(orderedSAs);
+                        List<SpellAbility> newOrderedSAs = Lists.newArrayList();
+                        savedOrder = orderedSALookup.get(refereceKey);
+                        String[] strs = refereceKey.split(delim + "");
+                        for (Integer index : savedOrder) {
+                            if (index >= strs.length) {
+                                continue;
+                            }
+                            for (SpellAbility sa : copyOrderedSAs) {
+                                if (sa.toString().contains(strs[index])) {
+                                    newOrderedSAs.add(sa);
+                                    copyOrderedSAs.remove(sa);
+                                    break;
+                                }
+                            }
+                        }
+                        for (SpellAbility sa : copyOrderedSAs) {
+                            newOrderedSAs.add(sa);
+                        }
+                        orderedSAs = newOrderedSAs;
+                    }
                     orderedSAs = getGui().order("Select order for simultaneous abilities", "Resolve first", orderedSAs,
                             null);
                 }
