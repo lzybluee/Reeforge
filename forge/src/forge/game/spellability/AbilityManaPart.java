@@ -262,6 +262,7 @@ public class AbilityManaPart implements java.io.Serializable {
 
             ReplacementEffect re = ReplacementHandler.parseReplacement(repeffstr, c, false);
             re.setLayer(ReplacementLayer.Other);
+            re.getMapParams().put("ETBCountersOneShot", "true");
 
             c.addReplacementEffect(re);
         }
