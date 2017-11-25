@@ -204,7 +204,9 @@ public class HumanPlaySpellAbility {
                 manapool.restoreColorReplacements();
             }
             for (final SpellAbility am : ability.getPayingManaAbilities()) {
-                am.getManaPart().getLastManaProduced().clear();
+                if(am.getManaPart() != null && am.getManaPart().getLastManaProduced() != null) {
+                    am.getManaPart().getLastManaProduced().clear();
+                }
             }
             ability.getPayingManaAbilities().clear();
         }
