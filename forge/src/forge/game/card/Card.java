@@ -1035,8 +1035,11 @@ public class Card extends GameEntity implements Comparable<Card> {
         addCounter(counterType, n, source, applyMultiplier, false);
     }
 
-    @Override
     public void addCounter(final CounterType counterType, final int n, final Card source, final boolean applyMultiplier, final boolean fireEvents) {
+        addCounter(counterType, n, source, applyMultiplier, fireEvents, 0);
+    }
+
+    public void addCounter(final CounterType counterType, final int n, final Card source, final boolean applyMultiplier, final boolean fireEvents, final int index) {
         int addAmount = n;
         if(addAmount < 0) {
             addAmount = 0; // As per rule 107.1b
@@ -1048,6 +1051,7 @@ public class Card extends GameEntity implements Comparable<Card> {
         repParams.put("CounterType", counterType);
         repParams.put("CounterNum", addAmount);
         repParams.put("EffectOnly", applyMultiplier);
+        repParams.put("EtbEffectIndex", index);
 
         switch (getGame().getReplacementHandler().run(repParams)) {
         case NotReplaced:
@@ -5588,8 +5592,15 @@ public class Card extends GameEntity implements Comparable<Card> {
     }
 
     public final void putEtbCounters() {
+        final Map<CounterType, Integer> counterMap = Maps.newTreeMap();
         for (Table.Cell<Card, CounterType, Integer> e : etbCounters.cellSet()) {
-            this.addCounter(e.getColumnKey(), e.getValue(), e.getRowKey(), true);
+            CounterType type = e.getColumnKey();
+            if(counterMap.containsKey(type)) {
+                counterMap.put(type, counterMap.get(type) + 1);
+            } else {
+                counterMap.put(type, 1);
+            }
+            this.addCounter(e.getColumnKey(), e.getValue(), e.getRowKey(), true, true, counterMap.get(type));
         }
     }
 
