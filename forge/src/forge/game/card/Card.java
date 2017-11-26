@@ -5595,12 +5595,14 @@ public class Card extends GameEntity implements Comparable<Card> {
         final Map<CounterType, Integer> counterMap = Maps.newTreeMap();
         for (Table.Cell<Card, CounterType, Integer> e : etbCounters.cellSet()) {
             CounterType type = e.getColumnKey();
-            if(counterMap.containsKey(type)) {
-                counterMap.put(type, counterMap.get(type) + 1);
-            } else {
-                counterMap.put(type, 1);
+            if(e.getValue() > 0) {
+                if(counterMap.containsKey(type)) {
+                    counterMap.put(type, counterMap.get(type) + 1);
+                } else {
+                    counterMap.put(type, 1);
+                }
             }
-            this.addCounter(e.getColumnKey(), e.getValue(), e.getRowKey(), true, true, counterMap.get(type));
+            this.addCounter(e.getColumnKey(), e.getValue(), e.getRowKey(), true, true, counterMap.containsKey(type) ? counterMap.get(type) : 0);
         }
     }
 
