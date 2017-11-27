@@ -12,5 +12,5 @@ S:Mode$ Continuous | Affected$ Creature.EnchantedBy | AddPower$ 3 | AddToughness
 
 SVar:Picture:http://www.wizards.com/global/images/magic/general/boon_of_emrakul.jpg
 
-Oracle:Enchant creature\nEnchanted creature gets +3/-3. 
+Oracle:Enchant creature\nEnchanted creature gets +3/-3.
 

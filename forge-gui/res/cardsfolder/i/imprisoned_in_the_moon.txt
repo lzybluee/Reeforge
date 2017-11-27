@@ -10,7 +10,7 @@ A:SP$ Attach | Cost$ 2 U | ValidTgts$ Creature,Land,Planeswalker | AILogic$ Curs
 
 S:Mode$ Continuous | Affected$ Card.EnchantedBy | SetColor$ Colorless | AddType$ Land | RemoveCardTypes$ True | RemoveSubTypes$ True | RemoveAllAbilities$ True | AddAbility$ ABMana | Description$ Enchanted permanent is a colorless land with "{T}: Add {C} to your mana pool" and loses all other card types and abilities.
 
-SVar:ABMana:AB$Mana | Cost$ T | Produced$ C | SpellDescription$ Add {C} to your mana pool. 
+SVar:ABMana:AB$Mana | Cost$ T | Produced$ C | SpellDescription$ Add {C} to your mana pool.
 
 SVar:NonStackingAttachEffect:True
 

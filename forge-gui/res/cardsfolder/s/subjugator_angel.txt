@@ -16,5 +16,5 @@ SVar:PlayMain1:TRUE
 
 SVar:Picture:http://www.wizards.com/global/images/magic/general/subjugator_angel.jpg
 
-Oracle:Flying\nWhen Subjugator Angel enters the battlefield, tap all creatures your opponents control. 
+Oracle:Flying\nWhen Subjugator Angel enters the battlefield, tap all creatures your opponents control.
 

@@ -14,7 +14,7 @@ T:Mode$ ChangesZone | ValidCard$ Card.Self | Origin$ Any | Destination$ Battlefi
 
 SVar:TrigDiscard:AB$ Discard | Cost$ 0 | Mode$ Hand | SubAbility$ DBDraw
 
-SVar:DBDraw:DB$ Draw | Defined$ You | NumCards$ 3 
+SVar:DBDraw:DB$ Draw | Defined$ You | NumCards$ 3
 
 SVar:X:Count$ValidGraveyard Instant.YouOwn,Sorcery.YouOwn
 

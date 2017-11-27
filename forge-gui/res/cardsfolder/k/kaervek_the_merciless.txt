@@ -6,4 +6,4 @@ T:Mode$ SpellCast | ValidCard$ Card | ValidActivatingPlayer$ Opponent | TriggerZ
 SVar:TrigDealDamage:DB$DealDamage | ValidTgts$ Creature,Player | TgtPrompt$ Select target creature or player | NumDmg$ X | References$ X
 SVar:X:TriggerCount$CastSACMC
 SVar:Picture:http://www.wizards.com/global/images/magic/general/kaervek_the_merciless.jpg
-Oracle:Whenever an opponent casts a spell, Kaervek the Merciless deals damage to target creature or player equal to that spell's converted mana cost. 
+Oracle:Whenever an opponent casts a spell, Kaervek the Merciless deals damage to target creature or player equal to that spell's converted mana cost.

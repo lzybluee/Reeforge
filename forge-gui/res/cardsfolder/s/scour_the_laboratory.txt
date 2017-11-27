@@ -16,5 +16,5 @@ DeckHas:Ability$Delirium
 
 SVar:Picture:http://www.wizards.com/global/images/magic/general/scour_the_laboratory.jpg
 
-Oracle:Delirium — Scour the Laboratory costs {2} less to cast if there are four or more card types among cards in your graveyard.\nDraw three cards. 
+Oracle:Delirium — Scour the Laboratory costs {2} less to cast if there are four or more card types among cards in your graveyard.\nDraw three cards.
 

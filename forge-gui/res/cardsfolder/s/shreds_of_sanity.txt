@@ -10,7 +10,7 @@ SVar:DBReturn:DB$ ChangeZone | Origin$ Graveyard | Destination$ Hand | TargetMin
 
 SVar:DBDiscard:DB$Discard | Defined$ You | NumCards$ 1 | Mode$ TgtChoose | SubAbility$ DBExile
 
-SVar:DBExile:DB$ChangeZone | Origin$ Stack | Destination$ Exile 
+SVar:DBExile:DB$ChangeZone | Origin$ Stack | Destination$ Exile
 
 DeckHints:Ability$Graveyard
 

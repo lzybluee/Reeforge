@@ -10,7 +10,7 @@ A:SP$ Attach | Cost$ R | ValidTgts$ Creature | AILogic$ Pump
 
 S:Mode$ Continuous | Affected$ Creature.EnchantedBy | AddKeyword$ Haste | AddAbility$ ProphetDraw | Description$ Enchanted creature has haste and "{T}, Discard a card: Draw a card."
 
-SVar:ProphetDraw:AB$ Draw | Cost$ T Discard<1/Card> | NumCards$ 1 | SpellDescription$ Draw a card. 
+SVar:ProphetDraw:AB$ Draw | Cost$ T Discard<1/Card> | NumCards$ 1 | SpellDescription$ Draw a card.
 
 SVar:NonStackingAttachEffect:True
 

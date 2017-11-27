@@ -9,5 +9,5 @@ SVar:TrigDiscard:AB$ Discard | Cost$ 0 | Defined$ You | NumCards$ 1 | Mode$ TgtC
 
 SVar:DBDraw:DB$ Draw | NumCards$ 1 | ConditionDefined$ Remembered | ConditionPresent$ Card | ConditionCompare$ GE1 | SubAbility$ DBCleanup
 
-SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True 
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
 Oracle:You may exert Battlefield Scavenger as it attacks. (It won't untap during your next untap step.)\nWhenever you exert a creature, you may discard a card. If you do, draw a card.

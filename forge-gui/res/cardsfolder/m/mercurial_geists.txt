@@ -16,5 +16,5 @@ SVar:BuffedBy:Instant,Sorcery
 
 SVar:Picture:http://www.wizards.com/global/images/magic/general/mercurial_geists.jpg
 
-Oracle:Flying\nWhenever you cast an instant or sorcery spell, Mercurial Geists gets +3/+0 until end of turn. 
+Oracle:Flying\nWhenever you cast an instant or sorcery spell, Mercurial Geists gets +3/+0 until end of turn.
 

@@ -10,5 +10,5 @@ SVar:DBGainLife:DB$GainLife | Defined$ You | LifeAmount$ 4
 
 SVar:Picture:http://www.wizards.com/global/images/magic/general/springsage_ritual.jpg
 
-Oracle:Destroy target artifact or enchantment. You gain 4 life. 
+Oracle:Destroy target artifact or enchantment. You gain 4 life.
 

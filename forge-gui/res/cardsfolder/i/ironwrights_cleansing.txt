@@ -8,5 +8,5 @@ A:SP$ ChangeZone | Cost$ 2 W | ValidTgts$ Artifact,Enchantment | TgtPrompt$ Sele
 
 SVar:Picture:http://www.wizards.com/global/images/magic/general/ironwrights_cleansing.jpg
 
-Oracle:Exile target artifact or enchantment. 
+Oracle:Exile target artifact or enchantment.
 

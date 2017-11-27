@@ -6,4 +6,4 @@ R:Event$ Moved | ValidCard$ Card.YouOwn+withCycling,Card.YouOwn+withTypeCycling 
 SVar:Exile:DB$ ChangeZone | Hidden$ True | Origin$ All | Destination$ Exile | Defined$ ReplacedCard
 SVar:RemAIDeck:True
 SVar:Picture:http://www.wizards.com/global/images/magic/general/abandoned_sarcophagus.jpg
-Oracle:You may cast nonland cards with cycling from your graveyard.\nIf a card with cycling would be put into your graveyard from anywhere and it wasn't cycled, exile it instead. 
+Oracle:You may cast nonland cards with cycling from your graveyard.\nIf a card with cycling would be put into your graveyard from anywhere and it wasn't cycled, exile it instead.
