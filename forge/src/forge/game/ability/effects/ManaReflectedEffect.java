@@ -60,6 +60,8 @@ public class ManaReflectedEffect extends SpellAbilityEffect {
 
         if (colors.size() == 0) {
             return "0";
+        } else if (sa.getNeedChooseMana()) {
+            baseMana = MagicColor.toShortString(player.getController().chooseColor("Select Mana to Produce", sa, ColorSet.fromNames(colors)));
         } else if (colors.size() == 1) {
             baseMana = MagicColor.toShortString(colors.iterator().next());
         } else {
