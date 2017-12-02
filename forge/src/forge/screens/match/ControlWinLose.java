@@ -2,6 +2,9 @@ package forge.screens.match;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
 
 import javax.swing.JButton;
 
@@ -11,6 +14,7 @@ import forge.gui.SOverlayUtils;
 import forge.gui.framework.FScreen;
 import forge.interfaces.IGameController;
 import forge.match.NextGameDecision;
+import forge.util.RestartUtil;
 
 /** 
  * Default controller for a ViewWinLose object. This class can
@@ -53,6 +57,27 @@ public class ControlWinLose {
             public void actionPerformed(final ActionEvent e) {
                 actionOnQuit();
                 ((JButton) e.getSource()).setEnabled(false);
+            }
+        });
+
+        view.getBtnQuit().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(final MouseEvent e) {
+                if(e.getButton() == MouseEvent.BUTTON3) {
+                    File file = new File("run-forge.bat");
+                    if(file.exists()) {
+                        try {
+                            Runtime.getRuntime().exec("\"" + file.getAbsolutePath() + "\"");
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
+                        }
+                        System.exit(0);
+                    } else {
+                        if (RestartUtil.prepareForRestart()) {
+                            System.exit(0);
+                        }
+                    }
+                }
             }
         });
     }
