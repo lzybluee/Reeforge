@@ -43,6 +43,9 @@ public abstract class SpellAbilityEffect {
 
     protected String getStackDescription(final SpellAbility sa) {
         // Unless overriden, let the spell description also be the stack description
+        if (sa.getHostCard() != null) {
+            return sa.getDescription().replaceAll("CARDNAME", sa.getHostCard().getName());
+        }
         return sa.getDescription();
     }
 
