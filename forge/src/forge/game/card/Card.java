@@ -1897,7 +1897,7 @@ public class Card extends GameEntity implements Comparable<Card> {
         }
 
         if (isGoaded()) {
-            sb.append("is goaded by: " + Lang.joinHomogenous(getGoaded()));
+            sb.append("Goaded by: " + Lang.joinHomogenous(getGoaded()));
             sb.append("\r\n");
         }
         // replace triple line feeds with double line feeds
