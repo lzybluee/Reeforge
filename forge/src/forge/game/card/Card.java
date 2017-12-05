@@ -4630,7 +4630,7 @@ public class Card extends GameEntity implements Comparable<Card> {
     public void exert() {
         exertedByPlayer.add(getController());
         exertThisTurn++;
-        view.updateExertedThisTurn(this, true);
+        view.updateExerted(this, exertedByPlayer);
         final Map<String, Object> runParams = Maps.newHashMap();
         runParams.put("Card", this);
         runParams.put("Player", getController());
@@ -4643,12 +4643,11 @@ public class Card extends GameEntity implements Comparable<Card> {
     
     public void removeExertedBy(final Player player) {
         exertedByPlayer.remove(player);
-        view.updateExertedThisTurn(this, getExertedThisTurn() > 0);
+        view.updateExerted(this, exertedByPlayer);
     }
     
     protected void resetExtertedThisTurn() {
         exertThisTurn = 0;
-        view.updateExertedThisTurn(this, false);
     }
 
     public boolean isMadness() {
