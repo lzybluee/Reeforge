@@ -73,6 +73,7 @@ public abstract class GameState {
     private final Map<Card, String> cardToChosenType = new HashMap<>();
     private final Map<Card, List<String>> cardToRememberedId = new HashMap<>();
     private final Map<Card, List<String>> cardToImprintedId = new HashMap<>();
+    private final Map<Card, String> cardToNamedCard = new HashMap<>();
     private final Map<Card, String> cardToExiledWithId = new HashMap<>();
     private final Map<Card, Card> cardAttackMap = new HashMap<>();
 
@@ -279,6 +280,9 @@ public abstract class GameState {
             }
             if (!c.getChosenType().isEmpty()) {
                 newText.append("|ChosenType:").append(c.getChosenType());
+            }
+            if (!c.getNamedCard().isEmpty()) {
+                newText.append("|NamedCard:").append(c.getNamedCard());
             }
 
             List<String> rememberedCardIds = Lists.newArrayList();
@@ -662,10 +666,10 @@ public abstract class GameState {
     private void executeScript(Game game, Card c, String sPtr) {
         int tgtID = TARGET_NONE;
         if (sPtr.contains("->")) {
-            String tgtDef = sPtr.substring(sPtr.indexOf("->") + 2);
+            String tgtDef = sPtr.substring(sPtr.lastIndexOf("->") + 2);
 
             tgtID = parseTargetInScript(tgtDef);
-            sPtr = sPtr.substring(0, sPtr.indexOf("->"));
+            sPtr = sPtr.substring(0, sPtr.lastIndexOf("->"));
         }
 
         SpellAbility sa = null;
@@ -700,12 +704,31 @@ public abstract class GameState {
                 }
             } else {
                 // SVar-based script execution
-                if (!c.hasSVar(sPtr)) {
-                    System.err.println("ERROR: Unable to find SVar " + sPtr + " on card " + c + " + to execute!");
-                    return;
+                String svarValue = "";
+
+                if (sPtr.startsWith("CustomScript:")) {
+                    // A custom line defined in the game state file
+                    svarValue = sPtr.substring(sPtr.indexOf(":") + 1);
+                } else {
+                    // A SVar from the card script file
+                    if (!c.hasSVar(sPtr)) {
+                        System.err.println("ERROR: Unable to find SVar " + sPtr + " on card " + c + " + to execute!");
+                        return;
+                    }
+
+                    svarValue = c.getSVar(sPtr);
+
+                    if (tgtID != TARGET_NONE && svarValue.contains("| Defined$")) {
+                        // We want a specific target, so try to undefine a predefined target if possible
+                        svarValue = svarValue.replace("| Defined$", "| Undefined$");
+                        if (tgtID == TARGET_HUMAN || tgtID == TARGET_AI) {
+                            svarValue += " | ValidTgts$ Player";
+                        } else {
+                            svarValue += " | ValidTgts$ Card";
+                        }
+                    }
                 }
 
-                String svarValue = c.getSVar(sPtr);
                 sa = AbilityFactory.getAbility(svarValue, c);
                 if (sa == null) {
                     System.err.println("ERROR: Unable to generate ability for SVar " + svarValue);
@@ -807,6 +830,12 @@ public abstract class GameState {
         for (Entry<Card, String> entry : cardToChosenType.entrySet()) {
             Card c = entry.getKey();
             c.setChosenType(entry.getValue());
+        }
+
+        // Named card
+        for (Entry<Card, String> entry : cardToNamedCard.entrySet()) {
+            Card c = entry.getKey();
+            c.setNamedCard(entry.getValue());
         }
     }
 
@@ -987,6 +1016,8 @@ public abstract class GameState {
                     cardToChosenClrs.put(c, Arrays.asList(info.substring(info.indexOf(':') + 1).split(",")));
                 } else if (info.startsWith("ChosenType:")) {
                     cardToChosenType.put(c, info.substring(info.indexOf(':') + 1));
+                } else if (info.startsWith("NamedCard:")) {
+                    cardToNamedCard.put(c, info.substring(info.indexOf(':') + 1));
                 } else if (info.startsWith("ExecuteScript:")) {
                     cardToScript.put(c, info.substring(info.indexOf(':') + 1));
                 } else if (info.startsWith("RememberedCards:")) {
