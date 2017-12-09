@@ -45,19 +45,7 @@ public class ReplaceEffect extends SpellAbilityEffect {
                 params.put(varName, list.get(0));
             }
         } else {
-            boolean skip = false;
-            if (varName.equals("CounterNum") && params.containsKey("EtbEffectIndex") && 
-                    (Integer)params.get("EtbEffectIndex") > 1) {
-                if (sa != null && sa instanceof SpellAbility) {
-                    String cmd = ((SpellAbility)sa).getSVar(varValue);
-                    if (!cmd.isEmpty() && (cmd.toLowerCase().contains("counternum/plus") || cmd.toLowerCase().contains("counternum/minus"))) {
-                        skip = true;
-                    }
-                }
-            }
-            if (!skip) {
-                params.put(varName, AbilityUtils.calculateAmount(card, varValue, sa));
-            }
+            params.put(varName, AbilityUtils.calculateAmount(card, varValue, sa));
         }
 
         //try to call replacementHandler with new Params
