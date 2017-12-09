@@ -1592,7 +1592,7 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
             return true;
         }
         String text = hostCard.getRules().getOracleText();
-        if (isSpell() && (text.contains("was spent to cast") || text.contains("the number of colors of mana spent"))) {
+        if (isSpell() && (text.contains("was spent to cast") || text.contains("Converge — "))) {
             return true;
         }
         if (isAbility() && text.contains("mana spent to pay")) {
