@@ -4,6 +4,7 @@ import forge.game.GameAction;
 import forge.game.ability.AbilityUtils;
 import forge.game.ability.SpellAbilityEffect;
 import forge.game.card.Card;
+import forge.game.card.CardCollection;
 import forge.game.player.Player;
 import forge.game.spellability.AbilitySub;
 import forge.game.spellability.SpellAbility;
@@ -91,9 +92,11 @@ public class ClashEffect extends SpellAbilityEffect {
     
         if (pLib.size() > 0) {
             pCard = pLib.get(0);
+            player.getGame().getAction().reveal(new CardCollection(pCard), pCard.getOwner(), false);
         }
         if (oLib.size() > 0) {
             oCard = oLib.get(0);
+            player.getGame().getAction().reveal(new CardCollection(oCard), oCard.getOwner(), false);
         }
     
         if ((pLib.size() == 0) && (oLib.size() == 0)) {
