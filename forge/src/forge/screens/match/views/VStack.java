@@ -268,7 +268,7 @@ public class VStack implements IVDoc<CStack> {
             final Graphics2D g2d = (Graphics2D) g;
 
             //draw image for source card
-            final BufferedImage img = cachedImage.getImage();
+            final BufferedImage img = cachedImage.getFrontImage();
             if (img != null) {
                 g2d.drawImage(img, null, PADDING, PADDING);
             }
