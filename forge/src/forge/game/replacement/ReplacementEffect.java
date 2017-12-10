@@ -188,12 +188,12 @@ public abstract class ReplacementEffect extends TriggerReplacementBase {
      */
     @Override
     public String toString() {
-        if (this.getMapParams().containsKey("Description") && !this.isSuppressed()) {
-            String desc = this.getMapParams().get("Description");
-            if (desc != null && desc.contains("CARDNAME")) {
+        if (hasParam("Description") && !this.isSuppressed()) {
+            String desc = AbilityUtils.applyDescriptionTextChangeEffects(getParam("Description"), this);
+            if (desc.contains("CARDNAME")) {
                 desc = desc.replaceAll("CARDNAME", getHostCard().toString());
             }
-            return AbilityUtils.applyDescriptionTextChangeEffects(desc, this);
+            return desc;
         } else {
             return "";
         }
