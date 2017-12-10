@@ -62,7 +62,8 @@ public class ManaEffect extends SpellAbilityEffect {
                 if (tgt == null || p.canBeTargetedBy(sa)) {
                     Player activator = sa.getActivatingPlayer();
                     String express = abMana.getExpressChoice();
-                    String[] colorsProduced = abMana.getComboColors().split(" ");
+                    String colorsProducedStr = abMana.getComboColors();
+                    String[] colorsProduced = colorsProducedStr.split(" ");
 
                     final StringBuilder choiceString = new StringBuilder();
                     ColorSet colorOptions = null;
@@ -92,19 +93,19 @@ public class ManaEffect extends SpellAbilityEffect {
                                 String usedToPayMana = sa.getUsedToPayMana().toString();
                                 ArrayList<String> new_colors = new ArrayList<>();
                                 
-                                if(colorOptions.hasWhite() && (usedToPayMana.contains("{W") || usedToPayMana.contains("W}"))) {
+                                if((colorOptions.hasWhite() || colorsProducedStr.contains("W")) && (usedToPayMana.contains("{W") || usedToPayMana.contains("W}"))) {
                                     new_colors.add("white");
                                 }
-                                if(colorOptions.hasBlue() && (usedToPayMana.contains("{U") || usedToPayMana.contains("U}"))) {
+                                if((colorOptions.hasBlue() || colorsProducedStr.contains("U")) && (usedToPayMana.contains("{U") || usedToPayMana.contains("U}"))) {
                                     new_colors.add("blue");
                                 }
-                                if(colorOptions.hasBlack() && (usedToPayMana.contains("{B") || usedToPayMana.contains("B}"))) {
+                                if((colorOptions.hasBlack() || colorsProducedStr.contains("B")) && (usedToPayMana.contains("{B") || usedToPayMana.contains("B}"))) {
                                     new_colors.add("black");
                                 }
-                                if(colorOptions.hasRed() && (usedToPayMana.contains("{R") || usedToPayMana.contains("R}"))) {
+                                if((colorOptions.hasRed() || colorsProducedStr.contains("R")) && (usedToPayMana.contains("{R") || usedToPayMana.contains("R}"))) {
                                     new_colors.add("red");
                                 }
-                                if(colorOptions.hasGreen() && (usedToPayMana.contains("{G") || usedToPayMana.contains("G}"))) {
+                                if((colorOptions.hasGreen() || colorsProducedStr.contains("G")) && (usedToPayMana.contains("{G") || usedToPayMana.contains("G}"))) {
                                     new_colors.add("green");
                                 }
                                 
