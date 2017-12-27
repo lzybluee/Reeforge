@@ -1272,6 +1272,7 @@ public class GameAction {
                 // Play the Destroy sound
                 game.fireEvent(new GameEventCardDestroyed());
                 recheck = true;
+                continue;
             }
 
 
