@@ -61,6 +61,7 @@ public enum VSubmenuPreferences implements IVSubmenu<CSubmenuPreferences> {
     private final JCheckBox cbAnteMatchRarity = new OptionsCheckBox("Match Ante Rarity");
     private final JCheckBox cbEnableAICheats = new OptionsCheckBox("Allow AI Cheating");
     private final JCheckBox cbManaBurn = new OptionsCheckBox("Mana Burn");
+    private final JCheckBox cbUniquePlaneswalker = new OptionsCheckBox("Unique Planeswalker");
     private final JCheckBox cbManaLostPrompt = new OptionsCheckBox("Prompt Mana Pool Emptying");
     private final JCheckBox cbDevMode = new OptionsCheckBox("Developer Mode");
     private final JCheckBox cbLoadCardsLazily = new OptionsCheckBox("Load Card Scripts Lazily");
@@ -160,6 +161,9 @@ public enum VSubmenuPreferences implements IVSubmenu<CSubmenuPreferences> {
 
         pnlPrefs.add(cbManaBurn, titleConstraints);
         pnlPrefs.add(new NoteLabel("Play with mana burn (from pre-Magic 2010 rules)."), descriptionConstraints);
+
+        pnlPrefs.add(cbUniquePlaneswalker, titleConstraints);
+        pnlPrefs.add(new NoteLabel("Play with \"planeswalker uniqueness rule.\""), descriptionConstraints);
 
         pnlPrefs.add(cbManaLostPrompt, titleConstraints);
         pnlPrefs.add(new NoteLabel("When enabled, you get a warning if passing priority would cause you to lose mana in your mana pool."), descriptionConstraints);
@@ -532,6 +536,11 @@ public enum VSubmenuPreferences implements IVSubmenu<CSubmenuPreferences> {
     /** @return {@link javax.swing.JCheckBox} */
     public JCheckBox getCbManaBurn() {
         return cbManaBurn;
+    }
+
+    /** @return {@link javax.swing.JCheckBox} */
+    public JCheckBox getCbUniquePlaneswalker() {
+        return cbUniquePlaneswalker;
     }
 
     /** @return {@link javax.swing.JCheckBox} */

@@ -1275,10 +1275,17 @@ public class GameAction {
                 continue;
             }
 
-
-            for (final String type : c.getType()) {
-                if (CardType.isAPlaneswalkerType(type)) {
-                    uniqueWalkers.put(type, c);
+            if(p.getGame().getRules().planeswalkerIsUnique()) {
+                for (final String type : c.getType()) {
+                    if (CardType.isAPlaneswalkerType(type)) {
+                        uniqueWalkers.put(type, c);
+                    }
+                }
+            } else {
+                for (final String type : c.getType()) {
+                    if (CardType.isAPlaneswalkerType(type)) {
+                        uniqueWalkers.put(c.getName(), c);
+                    }
                 }
             }
         }
@@ -1291,7 +1298,14 @@ public class GameAction {
 
             recheck = true;
 
-            Card toKeep = p.getController().chooseSingleEntityForEffect(new CardCollection(duplicates), new AbilitySub(ApiType.InternalLegendaryRule, null, null, null), "You have multiple planeswalkers of type \""+key+"\"in play.\n\nChoose one to stay on battlefield (the rest will be moved to graveyard)");
+            String prompt = "You have multiple planeswalkers of " + (
+                            p.getGame().getRules().planeswalkerIsUnique() ? 
+                                "type \"" + key + "\"" : 
+                                "\"" + key + "\"")
+                            + " in play.\n\nChoose one to stay on battlefield (the rest will be moved to graveyard)";
+
+            Card toKeep = p.getController().chooseSingleEntityForEffect(new CardCollection(duplicates),
+                            new AbilitySub(ApiType.InternalLegendaryRule, null, null, null), prompt);
             for (Card c: duplicates) {
                 if (c != toKeep) {
                     moveToGraveyard(c, null);

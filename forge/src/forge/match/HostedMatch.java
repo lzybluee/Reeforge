@@ -74,6 +74,7 @@ public class HostedMatch {
         gameRules.setPlayForAnte(FModel.getPreferences().getPrefBoolean(FPref.UI_ANTE));
         gameRules.setMatchAnteRarity(FModel.getPreferences().getPrefBoolean(FPref.UI_ANTE_MATCH_RARITY));
         gameRules.setManaBurn(FModel.getPreferences().getPrefBoolean(FPref.UI_MANABURN));
+        gameRules.setPlaneswalkerIsUnique(FModel.getPreferences().getPrefBoolean(FPref.UI_UNIQUE_PLANESWALKER));
         gameRules.setCanCloneUseTargetsImage(FModel.getPreferences().getPrefBoolean(FPref.UI_CLONE_MODE_SOURCE));
         return gameRules;
     }
