@@ -4,6 +4,7 @@ Date=1995-07
 Name=Chronicles
 Code2=CH
 MciCode=ch
+Type=Reprint
 Border=White
 BoosterCovers=1
 Booster=9 Common, 3 UncommonRare

@@ -1,4 +1,13 @@
-Language 'java.util.PropertyResourceBundle@15327b79' loaded successfully.
-(ThreadUtil first call): Running on a machine with 4 cpu core(s)
-Read cards: 16893 files in 2948 ms (25 parts) using thread pool
-[AI Preferences] AI profile Default was chosen for the lobby player James.
+unknown preference: UI_SCALE_LIB=Scalr Quality
+unknown preference: UI_SKIP_RESTORE_DECK=true
+unknown preference: UI_START_PLAYER=Random
+unknown preference: UI_SCALE_LIB=Scalr Quality
+unknown preference: UI_SKIP_RESTORE_DECK=true
+unknown preference: UI_START_PLAYER=Random
+Language 'java.util.PropertyResourceBundle@1cf4f579' loaded successfully.
+(ThreadUtil first call): Running on a machine with 8 cpu core(s)
+Read cards: 17402 files in 5904 ms (25 parts) using thread pool
+Upcoming set Masters 25 (A25) dated in the future. All unaccounted cards will be added to this set with unknown rarity.
+Upcoming set Masters 25 (A25) dated in the future. All unaccounted cards will be added to this set with unknown rarity.
+Read cards: 3 files in 8 ms (1 parts) using thread pool
+[AI Preferences] AI profile Default was chosen for the lobby player Halmar.

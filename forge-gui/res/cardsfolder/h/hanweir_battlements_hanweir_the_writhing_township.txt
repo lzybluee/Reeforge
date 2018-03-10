@@ -10,7 +10,7 @@ DeckHas:Ability$Mana.Colorless & Ability$Token
 SVar:Picture:http://www.wizards.com/global/images/magic/general/hanweir_battlements.jpg
 MeldPair:Hanweir Garrison
 AlternateMode:Meld
-Oracle:{T}: Add Colorless to your mana pool.\n{R}, {T}: Target creature gains haste until end of turn.\n{3}{R}{R}{R}, {T}: If you both own and control Hanweir Battlements and a creature named Hanweir Garrison, exile them, then meld them into Hanweir, the Writhing Township.
+Oracle:{T}: Add {C} to your mana pool.\n{R}, {T}: Target creature gains haste until end of turn.\n{3}{R}{R}{R}, {T}: If you both own and control Hanweir Battlements and a creature named Hanweir Garrison, exile them, then meld them into Hanweir, the Writhing Township.
 
 ALTERNATE
 
@@ -20,6 +20,6 @@ PT:7/4
 K:Trample
 K:Haste
 T:Mode$ Attacks | ValidCard$ Card.Self | Execute$ TrigToken | TriggerDescription$ Whenever CARDNAME attacks, create two 3/2 colorless Eldrazi Horror creature tokens that are tapped and attacking.
-SVar:TrigToken:AB$ Token | Cost$ 0 | TokenAmount$ 2 | TokenName$ Eldrazi Horror | TokenTypes$ Creature,Eldrazi,Horror | TokenOwner$ You | TokenColors$ Colorless | TokenPower$ 3 | TokenToughness$ 2 | TokenTapped$ True | TokenAttacking$ True | TokenImage$ c 3 2 eldrazi horror EMN
+SVar:TrigToken:DB$ Token | TokenAmount$ 2 | TokenName$ Eldrazi Horror | TokenTypes$ Creature,Eldrazi,Horror | TokenOwner$ You | TokenColors$ Colorless | TokenPower$ 3 | TokenToughness$ 2 | TokenTapped$ True | TokenAttacking$ True | TokenImage$ c 3 2 eldrazi horror EMN
 SVar:Picture:http://www.wizards.com/global/images/magic/general/hanweir_the_writhing_township.jpg
 Oracle:Trample, haste\nWhenever Hanweir, the Writhing Township attacks, create two 3/2 colorless Eldrazi Horror creature tokens that are tapped and attacking.

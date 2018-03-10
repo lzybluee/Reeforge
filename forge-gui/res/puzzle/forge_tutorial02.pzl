@@ -1,24 +1,42 @@
 [metadata]
-Name:Forge Puzzle Tutorial #02 - Bypass Operation
+
+Name:Forge Puzzle Tutorial #02 - Background Count
 URL:https://www.cardforge.org
+
 Goal:Win
+
 Turns:1
+
 Difficulty:Easy
-Description:Most Magic puzzles will require you to win by reducing your opponent's life total to zero. The most common way of doing this involves dealing damage to your opponent with one or more attacking creatures. As a result, you should look for any evasive abilities on the table - abilities like Flying, Shadow, Horsemanship, and even Trample can help you out.\n\nIn this puzzle, you have a clear source of damage in your hand. But you don't have the mana to cast it, and it wouldn't be enough to defeat your opponent by itself in any case. That means that you've got to attack in some way. With this in mind, how do you get past your opponent's blockers?
+
+Description:You can often get an idea of what a puzzle expects you to do by counting your mana. The amount of mana you have will dictate the spells or abilities you can or can't use. Don't forget to take additional sources into account when you figure out what's available to you.\n\nIn this puzzle, you have to get past some tough blockers. Fortunately you have a lot of mana available - enough to cast the spells in your hand, and some left over to activate your Waker of the Wilds. But creating a single good-sized Elemental out of one of your lands won't get you too far here. Where should the extra mana go?
 [state]
+
 humanlife=7
-ailife=5
+
+ailife=6
 activeplayer=human
+
 activephase=MAIN1
-humanhand=Unstable Mutation|Set:4ED; Turn // Burn
+
+humanhand=Guilty Conscience|Set:SCG; Fists of Ironwood|Set:RAV; Cleansing Meditation
+|Set:TOR
 humanlibrary=
+
 humangraveyard=
-humanbattlefield=Knight of Dawn|Set:TMP; Vedalken Mastermind|Set:10E; Mausoleum Guard|Set:ISD; Silver Knight|Set:SCG; Giant Crab|Set:TMP; Island|Set:ISD; Island|Set:ISD; Island|Set:ISD; Island|Set:ISD; Island|Set:ISD; Plains|Set:ISD; Plains|Set:ISD; Plains|Set:ISD; Plains|Set:ISD; Crumbling Vestige|Set:OGW
+
+humanbattlefield=Llanowar Druid|Set:WTH; Gustrider Exuberant|Set:ALA; Herd Gnarr|Set:TSP; Waker of the Wilds|Set:XLN; Plains|Set:AKH; Plains|Set:AKH; Plains|Set:AKH; Plains|Set:AKH; Plains|Set:AKH|Id:141; Wild Growth|Set:7ED|Attaching:141; Forest|Set:AKH; Forest|Set:AKH; Forest|Set:AKH
+
 humanexile=
+
 humancommand=
+
 aihand=
+
 ailibrary=
+
 aigraveyard=
-aibattlefield=Sylvan Caryatid|Set:THS; Willbender|Set:LGN; Minotaur Sureshot|Set:AKH; Steamcore Weird|Set:GPT; Giant Spider|Set:8ED; Assembled Alphas|Set:EMN
+
+aibattlefield=Augury Owl|Set:M11; Seacoast Drake|Set:M14; Desperate Castaways|Set:XLN; Grim Guardian|Set:JOU; Ukud Cobra|Set:DTK
 aiexile=
 aicommand=

@@ -1,12 +1,80 @@
-# Aggro preferences (enabling these will generally make the AI attack more aggressively)
-PLAY_AGGRO=true
-USE_BERSERK_AGGRESSIVELY=true
-
 # The amount of cards at which to stop considering mulligan
 MULLIGAN_THRESHOLD=3
 
+# Aggro preferences (enabling these will generally make the AI attack more aggressively)
+# If the following option is enabled, the AI will generally play aggressively, seeking trades on offense when possible
+# (the following two parameters will then be ignored)
+PLAY_AGGRO=true
+# The chance to attack aggressively into a potential trade (works even if not playing all-out aggro, e.g. PLAY_AGGRO disabled,
+# but only in more favorable conditions in that case - when ahead in life count and in parity or ahead in creature count)
+CHANCE_TO_ATTACK_INTO_TRADE=100
+# When enabled, the AI will attack into trading options when it's tapped out (note that this flag is ignored if PLAY_AGGRO
+# is globally enabled). If disabled, the non-aggro AI will only attack into trades when it has mana open, thus having a chance
+# to "bluff" (or use, if available) combat tricks at the same time.
+ATTACK_INTO_TRADE_WHEN_TAPPED_OUT=true
+# If enabled, the AI will only randomly attack into a trade if its life pressure is lower than the opponent's.
+RANDOMLY_ATKTRADE_ONLY_ON_LOWER_LIFE_PRESSURE=false
+# When above zero, the AI will attack into trading options when the opponent is not tapped out, thus risking getting an
+# unexpected combat trick or ability activation. Note that this chance is rolled separately after CHANCE_TO_ATTACK_INTO_TRADE
+# has already succeeded.
+CHANCE_TO_ATKTRADE_WHEN_OPP_HAS_MANA=100
+# When enabled, the AI will run some additional checks in an attempt to avoid attacking into certain block situations
+# when it can't deal at least some permanent damage to the defending creature/planeswalker or to at least one defending
+# creature. Works in many but not all cases.
+TRY_TO_AVOID_ATTACKING_INTO_CERTAIN_BLOCK=true
+# When enabled, the AI will use Berserk on offense to try to severely damage the opponent at the expense of the creature
+USE_BERSERK_AGGRESSIVELY=true
+# Try to hold combat tricks until blockers are declared in an attempt to trick the opponent into blocking a weak creature
+# and dying to it (currently has some limitations, the AI will only try to do it to one creature per turn)
+TRY_TO_HOLD_COMBAT_TRICKS_UNTIL_BLOCK=true
+# Chance to hold combat tricks until blockers are declared. If -1 is specified, this chance is not used, and the standard
+# evaluation for offensive pump buff is used instead.
+CHANCE_TO_HOLD_COMBAT_TRICKS_UNTIL_BLOCK=65
+
+# Trade blocking preferences (enabling these will make the AI trade more aggressively when considering blocks,
+# but only with creatures that are worse in abilities and have lower or the same power as the attacker). Note
+# that the first option serves as a master toggle. If it is disabled, the following related options have no effect.
+ENABLE_RANDOM_FAVORABLE_TRADES_ON_BLOCK=true
+# If enabled, the AI will consider trade blocking even if its creature count is lower than the opponent's
+RANDOMLY_TRADE_EVEN_WHEN_HAVE_LESS_CREATS=false
+# If the previous option is enabled, then the next option controls how big of a handicap in creature count the AI
+# is allowed to have to still decide to trade
+MAX_DIFF_IN_CREATURE_COUNT_TO_TRADE=0
+# If enabled, the AI will also consider trading if it has a replacement creature in hand
+ALSO_TRADE_WHEN_HAVE_A_REPLACEMENT_CREAT=true
+# The allowed handicap in creature count when the AI wants to trade while having a replacement creature in hand
+MAX_DIFF_IN_CREATURE_COUNT_TO_TRADE_WITH_REPL=1
+# Min and max chance to randomly aggressively trade when blocking (note that it will become 100 if the AI is in danger)
+MIN_CHANCE_TO_RANDOMLY_TRADE_ON_BLOCK=0
+MAX_CHANCE_TO_RANDOMLY_TRADE_ON_BLOCK=50
+# The decrease amount for the trade chance when trading against a non-token Embalm/Eternalize creature with a non-token
+# creature that does not have Embalm/Eternalize
+CHANCE_DECREASE_TO_TRADE_VS_EMBALM=10
+
+# Options to save / preserve loyalty of planeswalkers
+# Chance to trade a (worse or roughly equal) creature in order to save a planeswalker or preserve its loyalty
+# (random favorable trades must be enabled)
+CHANCE_TO_TRADE_TO_SAVE_PLANESWALKER=80
+# Chance to trade a better creature for a worse one in order to save a planeswalker
+CHANCE_TO_TRADE_DOWN_TO_SAVE_PLANESWALKER=0
+# Creature evaluation threshold for which creatures to consider good candidates for chump blocking to protect a
+# planeswalker (135 is about the level of a 1/2 nontoken creature with no abilities or a 2/2 token with no abilities)
+# There is a separate option for evaluating token and nontoken creatures. Set both to -1 to disable chump blocking
+# to protect planeswalkers.
+THRESHOLD_NONTOKEN_CHUMP_TO_SAVE_PLANESWALKER=130
+THRESHOLD_TOKEN_CHUMP_TO_SAVE_PLANESWALKER=135
+# If enabled, the AI will not bother chump blocking to protect a planeswalker unless lethal damage is threatened to it
+CHUMP_TO_SAVE_PLANESWALKER_ONLY_ON_LETHAL=true
+
 # Only works when AI cheating is enabled in preferences, otherwise does nothing
 CHEAT_WITH_MANA_ON_SHUFFLE=true
+
+# The chance for the AI to attempt to hold land drops until Main 2 when it's safe and when it has nothing to potentially
+# do with the extra mana
+HOLD_LAND_DROP_FOR_MAIN2_IF_UNUSED=30
+# If enabled, the AI will not try to conceal its land drops until Main 2 if the only permanents it has in play are lands
+# (usually in this case this accomplishes little but confuses the game a bit; disable for a little bit more unpredictability)
+HOLD_LAND_DROP_ONLY_IF_HAVE_OTHER_PERMS=true
 
 # Planechase logic
 DEFAULT_MAX_PLANAR_DIE_ROLLS_PER_TURN=1
@@ -26,12 +94,29 @@ RESERVE_MANA_FOR_MAIN2_CHANCE=100
 # If enabled, the AI will target artifacts and non-aura enchantments with removal aggressively
 ACTIVELY_DESTROY_ARTS_AND_NONAURA_ENCHS=true
 
-# Counterspell timings
+# If enabled, the AI will prioritize removing creatures that it can't block at all (e.g. Flying in absence of flying
+# blockers). This is a master toggle. If disabled, the following three options do nothing.
+ACTIVELY_DESTROY_IMMEDIATELY_UNBLOCKABLE=false
+# How many unblockable creatures can there be when the AI should still consider prioritizing something (when there are
+# too many, probably it's just worth going for the biggest threat overall instead)
+DESTROY_IMMEDIATELY_UNBLOCKABLE_THRESHOLD=2
+# Only consider prioritizing the destruction of immediately unblockable creatures if life is in danger
+DESTROY_IMMEDIATELY_UNBLOCKABLE_ONLY_IN_DNGR=true
+# How much life can there remain after a swing of the immediately unblockable creature for it to be considered dangerous
+# for the purpose of previous option
+DESTROY_IMMEDIATELY_UNBLOCKABLE_LIFE_IN_DNGR=5
+
+# Permission timings
 MIN_SPELL_CMC_TO_COUNTER=0
+CHANCE_TO_COUNTER_CMC_1=80
+CHANCE_TO_COUNTER_CMC_2=100
+CHANCE_TO_COUNTER_CMC_3=100
 ALWAYS_COUNTER_OTHER_COUNTERSPELLS=true
 ALWAYS_COUNTER_DAMAGE_SPELLS=true
 ALWAYS_COUNTER_CMC_0_MANA_MAKING_PERMS=true
 ALWAYS_COUNTER_REMOVAL_SPELLS=true
+ALWAYS_COUNTER_PUMP_SPELLS=true
+ALWAYS_COUNTER_AURAS=true
 ALWAYS_COUNTER_SPELLS_FROM_NAMED_CARDS=None
 
 # Storm spell logic
@@ -52,6 +137,29 @@ TOKEN_GENERATION_ABILITY_CHANCE=80
 TOKEN_GENERATION_ALWAYS_IF_FROM_PLANESWALKER=true
 TOKEN_GENERATION_ALWAYS_IF_OPP_ATTACKS=true
 
+# Scry AI toggles
+# The total number of mana-producing lands at which the AI will still consider scrying away non-lands
+SCRY_NUM_LANDS_TO_STILL_NEED_MORE=3
+# The total number of mana-producing lands at which the AI will stop considering scrying such lands to top
+SCRY_NUM_LANDS_TO_NOT_NEED_MORE=5
+# The total number of creatures when the AI will consider scrying away the ones that are below average in
+# evaluation score for the deck
+SCRY_NUM_CREATURES_TO_NOT_NEED_SUBPAR_ONES=4
+# The total number of creatures on board at which to start considering scrying away low CMC creatures
+# as defined in the two following options
+SCRY_EVALTHR_CREATCOUNT_TO_SCRY_AWAY_LOWCMC=3
+# The evaluation score at which the AI will consider the creature bad enough to scry it away in case it's
+# low CMC (see the next option) and the AI already has higher CMC creatures on board
+SCRY_EVALTHR_TO_SCRY_AWAY_LOWCMC_CREATURE=160
+# The CMC threshold at which (and below which) the AI considers creatures to be "low CMC" for the purpose
+# of the previous option
+SCRY_EVALTHR_CMC_THRESHOLD=1
+# If enabled, the AI will scry cards that it can't immediately cast to the bottom
+SCRY_IMMEDIATELY_UNCASTABLE_TO_BOTTOM=true
+# How big of a CMC difference between the currently castable and the considered card's CMC is allowed before
+# the card is considered not immediately castable for the purpose of the previous option
+SCRY_IMMEDIATELY_UNCASTABLE_CMC_DIFF=1
+
 # Attempt to predict the number of potential blockers with various forms of evasion when
 # deciding to do an all-in assault attack
 COMBAT_ASSAULT_ATTACK_EVASION_PREDICTION=true
@@ -65,3 +173,25 @@ CONSERVATIVE_ENERGY_PAYMENT_ONLY_IN_COMBAT=false
 # If true, the conservative energy payment will not be used when the creature is attacking,
 # only when it's blocking (for more controlling AIs)
 CONSERVATIVE_ENERGY_PAYMENT_ONLY_DEFENSIVELY=false
+
+# How big of a value difference there should be for the AI to consider mass bouncing all creature permanents
+# on both sides of the battlefield in a non-lethal situation
+BOUNCE_ALL_TO_HAND_CREAT_EVAL_DIFF=200
+BOUNCE_ALL_ELSEWHERE_CREAT_EVAL_DIFF=200
+# How big of a CMC difference there should be for the AI to consider mass bouncing all noncreature permanents
+# on both side of the battlefield
+BOUNCE_ALL_TO_HAND_NONCREAT_EVAL_DIFF=3
+BOUNCE_ALL_ELSEWHERE_NONCREAT_EVAL_DIFF=3
+
+# If enabled, the AI will try to pair up cards to present to the opponent so that a specific card may be picked,
+# it'll also try to grab Accumulated Knowledge and Take Inventory more actively, as well as interact with the Trix
+# combo deck more appropriately. In Reanimator decks, this logic will make the AI pick the fattest threats in the
+# library to put some into the graveyard.
+INTUITION_ALTERNATIVE_LOGIC=true
+
+# How big of a difference is allowed between the revealed card CMC and the currently castable CMC to still put the
+# card on top of the library
+EXPLORE_MAX_CMC_DIFF_TO_PUT_IN_GRAVEYARD=1
+# The number of lands on the battlefield when the AI would use Explore to put non-land cards in graveyard if it
+# doesn't have a land in hand
+EXPLORE_NUM_LANDS_TO_STILL_NEED_MORE=2

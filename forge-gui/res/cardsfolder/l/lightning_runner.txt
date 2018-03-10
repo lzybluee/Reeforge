@@ -11,6 +11,6 @@ SVar:PayEnergy:DB$ StoreSVar | SVar$ Relentless | Type$ Number | Expression$ 1 |
 SVar:DBUntapAll:DB$ UntapAll | ValidCards$ Creature.YouCtrl | SubAbility$ DBAddCombat | ConditionCheckSVar$ Relentless | ConditionSVarCompare$ EQ1
 SVar:DBAddCombat:DB$ AddPhase | ExtraPhase$ BeginCombat | AfterPhase$ EndCombat | ConditionCheckSVar$ Relentless | ConditionSVarCompare$ EQ1
 SVar:Relentless:Number$0
-SVar:PlayMain1:TRUE
+SVar:PlayMain1:TRUE 
 SVar:Picture:http://www.wizards.com/global/images/magic/general/lightning_runner.jpg
 Oracle:Double strike, haste\nWhenever Lightning Runner attacks, you get {E}{E} (two energy counters), then you may pay {E}{E}{E}{E}{E}{E}{E}{E}. If you pay, untap all creatures you control, and after this phase, there is an additional combat phase.

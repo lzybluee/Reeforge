@@ -12,5 +12,5 @@ Name:Mind
 ManaCost:4 U U
 Types:Instant
 K:Aftermath
-A:SP$Draw | Cost$ 4 U U | NumCards$ 2 | SpellDescription$ Draw two cards.
+A:SP$Draw | Cost$ 4 U U | NumCards$ 2 | SpellDescription$ Draw two cards. 
 Oracle:Aftermath (Cast this spell only from your graveyard. Then exile it.)\nDraw two cards.
