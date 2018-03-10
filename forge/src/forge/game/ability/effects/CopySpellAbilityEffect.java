@@ -80,18 +80,6 @@ public class CopySpellAbilityEffect extends SpellAbilityEffect {
         
         if (sa.hasParam("CopyMultipleSpells")) {
             final int spellCount = Integer.parseInt(sa.getParam("CopyMultipleSpells"));
-            List<SpellAbility> toRemove = new ArrayList<SpellAbility>();
-
-            for(SpellAbility s : tgtSpells) {
-                s.getHostCard().setController(card.getController(), card.getGame().getNextTimestamp());
-                s.setActivatingPlayer(controller);
-                if(!s.isSpell() || s.toString().startsWith("Fuse (")) {
-                    toRemove.add(s);
-                }
-            }
-            for(SpellAbility rm : toRemove) {
-                tgtSpells.remove(rm);
-            }
 
             for (int multi = 0; multi < spellCount && !tgtSpells.isEmpty(); multi++) {
                 String prompt = "Select " + Lang.getOrdinal(multi + 1) + " spell to copy to stack";
@@ -100,16 +88,7 @@ public class CopySpellAbilityEffect extends SpellAbilityEffect {
                 copiedSpell.getHostCard().setController(card.getController(), card.getGame().getNextTimestamp());
                 copiedSpell.setActivatingPlayer(controller);
                 copies.add(copiedSpell);
-                Card c = chosen.getHostCard();
-                toRemove = new ArrayList<SpellAbility>();
-                for (SpellAbility s : tgtSpells) {
-                    if(c == s.getHostCard()) {
-                        toRemove.add(s);
-                    }
-                }
-                for(SpellAbility rm : toRemove) {
-                    tgtSpells.remove(rm);
-                }
+                tgtSpells.remove(chosen);
             }
         }
         else if (sa.hasParam("CopyForEachCanTarget")) {

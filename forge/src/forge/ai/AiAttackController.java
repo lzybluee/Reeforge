@@ -35,6 +35,7 @@ import forge.game.card.*;
 import forge.game.combat.Combat;
 import forge.game.combat.CombatUtil;
 import forge.game.combat.GlobalAttackRestrictions;
+import forge.game.keyword.KeywordInterface;
 import forge.game.player.Player;
 import forge.game.spellability.SpellAbility;
 import forge.game.trigger.Trigger;
@@ -52,7 +53,7 @@ import forge.util.collect.FCollectionView;
  * </p>
  * 
  * @author Forge
- * @version $Id: AiAttackController.java 35254 2017-08-27 18:11:06Z Agetian $
+ * @version $Id$
  */
 public class AiAttackController {
 
@@ -60,7 +61,7 @@ public class AiAttackController {
     private final List<Card> attackers;
     private final List<Card> blockers;
 
-    private final static Random random = MyRandom.getRandom();
+    private final static Random random = new Random();
     private final static int randomInt = random.nextInt();
 
     private List<Card> oppList; // holds human player creatures
@@ -376,8 +377,12 @@ public class AiAttackController {
                 blockersLeft--;
                 continue;
             }
-            totalAttack += ComputerUtilCombat.damageIfUnblocked(attacker, ai, null, false);
-            totalPoison += ComputerUtilCombat.poisonIfUnblocked(attacker, ai);
+
+            // Test for some special triggers that can change the creature in combat
+            Card effectiveAttacker = ComputerUtilCombat.applyPotentialAttackCloneTriggers(attacker);
+
+            totalAttack += ComputerUtilCombat.damageIfUnblocked(effectiveAttacker, ai, null, false);
+            totalPoison += ComputerUtilCombat.poisonIfUnblocked(effectiveAttacker, ai);
         }
 
         if (totalAttack > 0 && ai.getLife() <= totalAttack && !ai.cantLoseForZeroOrLessLife()) {
@@ -476,7 +481,7 @@ public class AiAttackController {
 
         for (Card blocker : this.blockers) {
             if (blocker.hasKeyword("CARDNAME can block any number of creatures.")
-                    || blocker.hasKeyword("CARDNAME can block an additional ninety-nine creatures.")) {
+                    || blocker.hasKeyword("CARDNAME can block an additional ninety-nine creatures each combat.")) {
                 for (Card attacker : this.attackers) {
                     if (CombatUtil.canBlock(attacker, blocker)) {
                         remainingAttackers.remove(attacker);
@@ -492,7 +497,7 @@ public class AiAttackController {
             if (remainingAttackers.isEmpty() || maxBlockersAfterCrew == 0) {
                 break;
             }
-            if (blocker.hasKeyword("CARDNAME can block an additional creature.")) {
+            if (blocker.hasKeyword("CARDNAME can block an additional creature each combat.")) {
                 blockedAttackers.add(remainingAttackers.get(0));
                 remainingAttackers.remove(0);
                 maxBlockersAfterCrew--;
@@ -541,11 +546,16 @@ public class AiAttackController {
         }
         Player prefDefender = (Player) (defs.contains(this.defendingOpponent) ? this.defendingOpponent : defs.get(0));
 
-        final GameEntity entity = ai.getMustAttackEntity();
+        // Attempt to see if there's a defined entity that must be attacked strictly this turn...
+        GameEntity entity = ai.getMustAttackEntityThisTurn();
+        if (entity == null) {
+            // ...or during the attacking creature controller's turn
+            entity = ai.getMustAttackEntity();
+        }
         if (null != entity) {
             int n = defs.indexOf(entity);
             if (-1 == n) {
-                System.out.println("getMustAttackEntity() returned something not in defenders.");
+                System.out.println("getMustAttackEntity() or getMustAttackEntityThisTurn() returned something not in defenders.");
                 return prefDefender;
             } else {
                 return entity;
@@ -587,10 +597,21 @@ public class AiAttackController {
             return;
         }
 
+        // Aggro options
         boolean playAggro = false;
+        int chanceToAttackToTrade = 0;
+        boolean tradeIfTappedOut = false;
+        int extraChanceIfOppHasMana = 0;
+        boolean tradeIfLowerLifePressure = false;
         if (ai.getController().isAI()) {
-            playAggro = ((PlayerControllerAi) ai.getController()).getAi().getProperty(AiProps.PLAY_AGGRO).equals("true");
+            AiController aic = ((PlayerControllerAi) ai.getController()).getAi();
+            playAggro = aic.getBooleanProperty(AiProps.PLAY_AGGRO);
+            chanceToAttackToTrade = aic.getIntProperty(AiProps.CHANCE_TO_ATTACK_INTO_TRADE);
+            tradeIfTappedOut = aic.getBooleanProperty(AiProps.ATTACK_INTO_TRADE_WHEN_TAPPED_OUT);
+            extraChanceIfOppHasMana = aic.getIntProperty(AiProps.CHANCE_TO_ATKTRADE_WHEN_OPP_HAS_MANA);
+            tradeIfLowerLifePressure = aic.getBooleanProperty(AiProps.RANDOMLY_ATKTRADE_ONLY_ON_LOWER_LIFE_PRESSURE);
         }
+
         final boolean bAssault = this.doAssault(ai);
         // TODO: detect Lightmine Field by presence of a card with a specific trigger
         final boolean lightmineField = ComputerUtilCard.isPresentOnBattlefield(ai.getGame(), "Lightmine Field");
@@ -628,7 +649,8 @@ public class AiAttackController {
                     && isEffectiveAttacker(ai, attacker, combat)) {
                 mustAttack = true;
             } else {
-                for (String s : attacker.getKeywords()) {
+                for (KeywordInterface inst : attacker.getKeywords()) {
+                    String s = inst.getOriginal();
                     if (s.equals("CARDNAME attacks each turn if able.")
                             || s.startsWith("CARDNAME attacks specific player each combat if able")
                             || s.equals("CARDNAME attacks each combat if able.")) {
@@ -637,7 +659,7 @@ public class AiAttackController {
                     }
                 }
             }
-            if (mustAttack || attacker.getController().getMustAttackEntity() != null) {
+            if (mustAttack || attacker.getController().getMustAttackEntity() != null || attacker.getController().getMustAttackEntityThisTurn() != null) {
                 combat.addAttacker(attacker, defender);
                 attackersLeft.remove(attacker);
                 numForcedAttackers++;
@@ -912,8 +934,18 @@ public class AiAttackController {
         if (ratioDiff > 0 && doAttritionalAttack) {
             this.aiAggression = 5; // attack at all costs
         } else if ((ratioDiff >= 1 && this.attackers.size() > 1 && (humanLifeToDamageRatio < 2 || outNumber > 0))
-        		|| (playAggro && humanLifeToDamageRatio > 1)) {
+        		|| (playAggro && MyRandom.percentTrue(chanceToAttackToTrade) && humanLifeToDamageRatio > 1)) {
             this.aiAggression = 4; // attack expecting to trade or damage player.
+        } else if (MyRandom.percentTrue(chanceToAttackToTrade) && humanLifeToDamageRatio > 1
+                && defendingOpponent != null
+                && ComputerUtil.countUsefulCreatures(ai) > ComputerUtil.countUsefulCreatures(defendingOpponent)
+                && ai.getLife() > defendingOpponent.getLife()
+                && !ComputerUtilCombat.lifeInDanger(ai, combat)
+                && (ComputerUtilMana.getAvailableManaEstimate(ai) > 0) || tradeIfTappedOut
+                && (ComputerUtilMana.getAvailableManaEstimate(defendingOpponent) == 0) || MyRandom.percentTrue(extraChanceIfOppHasMana)
+                && (!tradeIfLowerLifePressure || (ai.getLifeLostLastTurn() + ai.getLifeLostThisTurn() <
+                        defendingOpponent.getLifeLostThisTurn() + defendingOpponent.getLifeLostThisTurn()))) {
+            this.aiAggression = 4; // random (chance-based) attack expecting to trade or damage player.
         } else if (ratioDiff >= 0 && this.attackers.size() > 1) {
             this.aiAggression = 3; // attack expecting to make good trades or damage player.
         } else if (ratioDiff + outNumber >= -1 || aiLifeToPlayerDamageRatio > 1
@@ -1050,7 +1082,29 @@ public class AiAttackController {
         boolean isWorthLessThanAllKillers = true;
         boolean canBeBlocked = false;
         int numberOfPossibleBlockers = 0;
-        
+
+        // Is it a creature that has a more valuable ability with a tap cost than what it can do by attacking?
+        if ((attacker.hasSVar("NonCombatPriority"))
+                && (!attacker.hasKeyword("Vigilance"))) {
+            // For each level of priority, enemy has to have life as much as the creature's power
+            // so a priority of 4 means the creature will not attack unless it can defeat that player in 4 successful attacks.
+            // the lower the priroity, the less willing the AI is to use the creature for attacking.
+            // TODO Somehow subtract expected damage of other attacking creatures from enemy life total (how? other attackers not yet declared? Can the AI guesstimate which of their creatures will not get blocked?)
+            if (attacker.getCurrentPower() * Integer.parseInt(attacker.getSVar("NonCombatPriority")) < ai.getOpponentsSmallestLifeTotal()) {
+                // Check if the card actually has an ability the AI can and wants to play, if not, attacking is fine!
+                boolean wantability = false;
+                for (SpellAbility sa : attacker.getSpellAbilities()) {
+                    // Do not attack if we can afford using the ability.
+                    if (sa.isAbility()) {
+                        if (ComputerUtilCost.canPayCost(sa, ai)) {
+                            return false;
+                        }
+                        // TODO Eventually The Ai will need to learn to predict if they have any use for the ability before next untap or not.
+                        // TODO abilities that tap enemy creatures should probably only be saved if the enemy has nonzero creatures? Haste can be a threat though...
+                    }
+                }
+            }
+        }
 
         if (!this.isEffectiveAttacker(ai, attacker, combat)) {
             return false;
@@ -1060,7 +1114,8 @@ public class AiAttackController {
         boolean hasCombatEffect = attacker.getSVar("HasCombatEffect").equals("TRUE") 
         		|| "Blocked".equals(attacker.getSVar("HasAttackEffect"));
         if (!hasCombatEffect) {
-            for (String keyword : attacker.getKeywords()) {
+            for (KeywordInterface inst : attacker.getKeywords()) {
+                String keyword = inst.getOriginal();
                 if (keyword.equals("Wither") || keyword.equals("Infect")
                         || keyword.equals("Lifelink") || keyword.startsWith("Afflict")) {
                     hasCombatEffect = true;
@@ -1095,7 +1150,8 @@ public class AiAttackController {
                     if (defender.getSVar("HasCombatEffect").equals("TRUE") || defender.getSVar("HasBlockEffect").equals("TRUE")) {
                         canKillAllDangerous = false;
                     } else {
-                        for (String keyword : defender.getKeywords()) {
+                        for (KeywordInterface inst : defender.getKeywords()) {
+                            String keyword = inst.getOriginal();
                             if (keyword.equals("Wither") || keyword.equals("Infect") || keyword.equals("Lifelink")) {
                                 canKillAllDangerous = false;
                                 break;
@@ -1103,6 +1159,22 @@ public class AiAttackController {
                                 // and combat will have negative effects
                             }
                         }
+
+                        if (canKillAllDangerous
+                                && !hasAttackEffect && !hasCombatEffect
+                                && (this.attackers.size() <= defenders.size() || attacker.getNetPower() <= 0)) {
+                            if (ai.getController().isAI()) {
+                                if (((PlayerControllerAi)ai.getController()).getAi().getBooleanProperty(AiProps.TRY_TO_AVOID_ATTACKING_INTO_CERTAIN_BLOCK)) {
+                                    // We can't kill a blocker, there is no reason to attack unless we can cripple a
+                                    // blocker or gain life from attacking or we have some kind of another attack/combat effect,
+                                    // or if we can deal damage to the opponent via the sheer number of potential attackers
+                                    // (note that the AI will sometimes still miscount here, and thus attack into a block,
+                                    // because there is no way to check which attackers are actually guaranteed to attack at this point)
+                                    canKillAllDangerous = false;
+                                }
+                            }
+                        }
+
                     }
                 }
             }

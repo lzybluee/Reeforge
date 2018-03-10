@@ -18,6 +18,7 @@
 package forge.properties;
 
 import forge.GuiBase;
+import forge.util.FileUtil;
 
 import java.io.File;
 import java.util.Collections;
@@ -57,6 +58,7 @@ public final class ForgeConstants {
     public static final String DRAFT_RANKINGS_FILE = DRAFT_DIR + "rankings.txt";
     public static final String SEALED_DIR          = RES_DIR + "sealed" + PATH_SEPARATOR;
     public static final String CARD_DATA_DIR       = RES_DIR + "cardsfolder" + PATH_SEPARATOR;
+    public static final String TOKEN_DATA_DIR      = RES_DIR + "tokenscripts" + PATH_SEPARATOR;
     public static final String EDITIONS_DIR        = RES_DIR + "editions" + PATH_SEPARATOR;
     public static final String BLOCK_DATA_DIR      = RES_DIR + "blockdata" + PATH_SEPARATOR;
     public static final String DECK_CUBE_DIR       = RES_DIR + "cube" + PATH_SEPARATOR;
@@ -91,6 +93,7 @@ public final class ForgeConstants {
     public static final String SPRITE_OLD_FOILS_FILE  = "sprite_old_foils.png";
     public static final String SPRITE_TROPHIES_FILE   = "sprite_trophies.png";
     public static final String SPRITE_AVATARS_FILE    = "sprite_avatars.png";
+    public static final String SPRITE_FAVICONS_FILE   = "sprite_favicons.png";
     public static final String SPRITE_PLANAR_CONQUEST_FILE = "sprite_planar_conquest.png";
     public static final String FONT_FILE              = "font1.ttf";
     public static final String SPLASH_BG_FILE         = "bg_splash.png";
@@ -99,6 +102,85 @@ public final class ForgeConstants {
     public static final String SPACE_BG_FILE          = "bg_space.png";
     public static final String CHAOS_WHEEL_IMG_FILE   = "bg_chaos_wheel.png";
     public static final String DRAFT_DECK_IMG_FILE    = "bg_draft_deck.png";
+    //Planes addon
+    public static final String BG_1                   = "Academy_at_Tolaria_West.jpg";
+    public static final String BG_2                   = "Agyrem.jpg";
+    public static final String BG_3                   = "Akoum.jpg";
+    public static final String BG_4                   = "Aretopolis.jpg";
+    public static final String BG_5                   = "Astral_Arena.jpg";
+    public static final String BG_6                   = "Bant.jpg";
+    public static final String BG_7                   = "Bloodhill_Bastion.jpg";
+    public static final String BG_8                   = "Cliffside_Market.jpg";
+    public static final String BG_9                   = "Edge_of_Malacol.jpg";
+    public static final String BG_10                  = "Eloren_Wilds.jpg";
+    public static final String BG_11                  = "Feeding_Grounds.jpg";
+    public static final String BG_12                  = "Fields_of_Summer.jpg";
+    public static final String BG_13                  = "Furnace_Layer.jpg";
+    public static final String BG_14                  = "Gavony.jpg";
+    public static final String BG_15                  = "Glen_Elendra.jpg";
+    public static final String BG_16                  = "Glimmervoid_Basin.jpg";
+    public static final String BG_17                  = "Goldmeadow.jpg";
+    public static final String BG_18                  = "Grand_Ossuary.jpg";
+    public static final String BG_19                  = "Grixis.jpg";
+    public static final String BG_20                  = "Grove_of_the_Dreampods.jpg";
+    public static final String BG_21                  = "Hedron_Fields_of_Agadeem.jpg";
+    public static final String BG_22                  = "Immersturm.jpg";
+    public static final String BG_23                  = "Isle_of_Vesuva.jpg";
+    public static final String BG_24                  = "Izzet_Steam_Maze.jpg";
+    public static final String BG_25                  = "Jund.jpg";
+    public static final String BG_26                  = "Kessig.jpg";
+    public static final String BG_27                  = "Kharasha_Foothills.jpg";
+    public static final String BG_28                  = "Kilnspire_District.jpg";
+    public static final String BG_29                  = "Krosa.jpg";
+    public static final String BG_30                  = "Lair_of_the_Ashen_Idol.jpg";
+    public static final String BG_31                  = "Lethe_Lake.jpg";
+    public static final String BG_32                  = "Llanowar.jpg";
+    public static final String BG_33                  = "Minamo.jpg";
+    public static final String BG_34                  = "Mount_Keralia.jpg";
+    public static final String BG_35                  = "Murasa.jpg";
+    public static final String BG_36                  = "Naar_Isle.jpg";
+    public static final String BG_37                  = "Naya.jpg";
+    public static final String BG_38                  = "Nephalia.jpg";
+    public static final String BG_39                  = "Norn's_Dominion.jpg";
+    public static final String BG_40                  = "Onakke_Catacomb.jpg";
+    public static final String BG_41                  = "Orochi_Colony.jpg";
+    public static final String BG_42                  = "Orzhova.jpg";
+    public static final String BG_43                  = "Otaria.jpg";
+    public static final String BG_44                  = "Panopticon.jpg";
+    public static final String BG_45                  = "Pools_of_Becoming.jpg";
+    public static final String BG_46                  = "Prahv.jpg";
+    public static final String BG_47                  = "Quicksilver_Sea.jpg";
+    public static final String BG_48                  = "Raven's_Run.jpg";
+    public static final String BG_49                  = "Sanctum_of_Serra.jpg";
+    public static final String BG_50                  = "Sea_of_Sand.jpg";
+    public static final String BG_51                  = "Selesnya_Loft_Gardens.jpg";
+    public static final String BG_52                  = "Shiv.jpg";
+    public static final String BG_53                  = "Skybreen.jpg";
+    public static final String BG_54                  = "Sokenzan.jpg";
+    public static final String BG_55                  = "Stairs_to_Infinity.jpg";
+    public static final String BG_56                  = "Stensia.jpg";
+    public static final String BG_57                  = "Stronghold_Furnace.jpg";
+    public static final String BG_58                  = "Takenuma.jpg";
+    public static final String BG_59                  = "Tazeem.jpg";
+    public static final String BG_60                  = "The_Aether_Flues.jpg";
+    public static final String BG_61                  = "The_Dark_Barony.jpg";
+    public static final String BG_62                  = "The_Eon_Fog.jpg";
+    public static final String BG_63                  = "The_Fourth_Sphere.jpg";
+    public static final String BG_64                  = "The_Great_Forest.jpg";
+    public static final String BG_65                  = "The_Hippodrome.jpg";
+    public static final String BG_66                  = "The_Maelstrom.jpg";
+    public static final String BG_67                  = "The_Zephyr_Maze.jpg";
+    public static final String BG_68                  = "Trail_of_the_Mage-Rings.jpg";
+    public static final String BG_69                  = "Truga_Jungle.jpg";
+    public static final String BG_70                  = "Turri_Island.jpg";
+    public static final String BG_71                  = "Undercity_Reaches.jpg";
+    public static final String BG_72                  = "Velis_Vel.jpg";
+    public static final String BG_73                  = "Windriddle_Palaces.jpg";
+    public static final String BG_74                  = "Tember_City.jpg";
+    public static final String BG_75                  = "Celestine_Reef.jpg";
+    public static final String BG_76                  = "Horizon_Boughs.jpg";
+    public static final String BG_77                  = "Mirrored_Depths.jpg";
+    public static final String BG_78                  = "Talon_Gates.jpg";
 
     // data tree roots
     public static final String USER_DIR;
@@ -106,12 +188,16 @@ public final class ForgeConstants {
     public static final String CACHE_CARD_PICS_DIR;
     public static final Map<String, String> CACHE_CARD_PICS_SUBDIR;
     public static final int SERVER_PORT_NUMBER;
+    public static final String DECK_BASE_DIR;
+    public static final String DECK_CONSTRUCTED_DIR;
     static {
         ForgeProfileProperties.load();
         USER_DIR               = ForgeProfileProperties.getUserDir();
         CACHE_DIR              = ForgeProfileProperties.getCacheDir();
         CACHE_CARD_PICS_DIR    = ForgeProfileProperties.getCardPicsDir();
         CACHE_CARD_PICS_SUBDIR = Collections.unmodifiableMap(ForgeProfileProperties.getCardPicsSubDirs());
+        DECK_BASE_DIR          = ForgeProfileProperties.getDecksDir();
+        DECK_CONSTRUCTED_DIR   = ForgeProfileProperties.getDecksConstructedDir();
         SERVER_PORT_NUMBER     = ForgeProfileProperties.getServerPort();
     }
 
@@ -122,9 +208,7 @@ public final class ForgeConstants {
     public static final String USER_PREFS_DIR       = USER_DIR + "preferences" + PATH_SEPARATOR;
     public static final String USER_GAMES_DIR       = USER_DIR + "games" + PATH_SEPARATOR;
     public static final String LOG_FILE             = USER_DIR + "forge.log";
-    public static final String DECK_BASE_DIR        = USER_DIR + "decks" + PATH_SEPARATOR;
     public static final String ACHIEVEMENTS_DIR     = USER_DIR + "achievements" + PATH_SEPARATOR;
-    public static final String DECK_CONSTRUCTED_DIR = DECK_BASE_DIR + "constructed" + PATH_SEPARATOR;
     public static final String DECK_DRAFT_DIR       = DECK_BASE_DIR + "draft" + PATH_SEPARATOR;
     public static final String DECK_WINSTON_DIR     = DECK_BASE_DIR + "winston" + PATH_SEPARATOR;
     public static final String DECK_SEALED_DIR      = DECK_BASE_DIR + "sealed" + PATH_SEPARATOR;
@@ -164,6 +248,7 @@ public final class ForgeConstants {
     public static final String CACHE_BOOSTERBOX_PICS_DIR     = PICS_DIR + "boosterboxes" + PATH_SEPARATOR;
     public static final String CACHE_PRECON_PICS_DIR         = PICS_DIR + "precons" + PATH_SEPARATOR;
     public static final String CACHE_TOURNAMENTPACK_PICS_DIR = PICS_DIR + "tournamentpacks" + PATH_SEPARATOR;
+    public static final String CACHE_PLANECHASE_PICS_DIR     = PICS_DIR + "planechase" + PATH_SEPARATOR;
     public static final String CACHE_ACHIEVEMENTS_DIR        = PICS_DIR + "achievements" + PATH_SEPARATOR;
     public static final String QUEST_CARD_PRICE_FILE         = DB_DIR + "all-prices.txt";
 
@@ -188,12 +273,14 @@ public final class ForgeConstants {
             CACHE_FATPACK_PICS_DIR,
             CACHE_BOOSTERBOX_PICS_DIR,
             CACHE_PRECON_PICS_DIR,
-            CACHE_TOURNAMENTPACK_PICS_DIR };
+            CACHE_TOURNAMENTPACK_PICS_DIR,
+            CACHE_PLANECHASE_PICS_DIR };
 
     // URLs
     private static final String URL_CARDFORGE = "https://downloads.cardforge.org";
     public static final String URL_PIC_DOWNLOAD = URL_CARDFORGE + "/images/cards/";
-    public static final String URL_PRICE_DOWNLOAD = "https://downloads.cardforge.org/all-prices.txt";
+    public static final String URL_TOKEN_DOWNLOAD = URL_CARDFORGE + "/images/tokens/";
+    public static final String URL_PRICE_DOWNLOAD = URL_CARDFORGE + "/all-prices.txt";
 
     // Constants for Display Card Identity game setting
     public static final String DISP_CURRENT_COLORS_ALWAYS = "Always";
@@ -205,6 +292,14 @@ public final class ForgeConstants {
     // Constants for Auto-Yield Mode
     public static final String AUTO_YIELD_PER_CARD = "Per Card (Each Game)";
     public static final String AUTO_YIELD_PER_ABILITY = "Per Ability (Each Match)";
+
+    // Constants for Graveyard Ordering
+    public static final String GRAVEYARD_ORDERING_NEVER = "Never";
+    public static final String GRAVEYARD_ORDERING_OWN_CARDS = "With Relevant Cards";
+    public static final String GRAVEYARD_ORDERING_ALWAYS = "Always";
+
+    // Set boolean constant for landscape mode for gdx port
+    public static final boolean isGdxPortLandscape = FileUtil.doesFileExist(ASSETS_DIR + "switch_orientation.ini") ? true : false;
 
     public enum CounterDisplayLocation {
 

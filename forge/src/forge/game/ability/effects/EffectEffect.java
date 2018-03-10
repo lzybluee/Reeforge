@@ -21,6 +21,7 @@ import forge.game.zone.ZoneType;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import forge.util.TextUtil;
 
 public class EffectEffect extends SpellAbilityEffect {
 
@@ -104,8 +105,13 @@ public class EffectEffect extends SpellAbilityEffect {
         String image;
         if (sa.hasParam("Image")) {
             image = ImageKeys.getTokenKey(sa.getParam("Image"));
-        } else if (name.endsWith("emblem")) { // try to get the image from name
-            image = ImageKeys.getTokenKey(name.replace(",", "").replace(" ", "_").toLowerCase());
+        } else if (name.startsWith("Emblem")) { // try to get the image from name
+            image = ImageKeys.getTokenKey(
+            TextUtil.fastReplace(
+                TextUtil.fastReplace(
+                    TextUtil.fastReplace(name.toLowerCase(), " - ", "_"),
+                        ",", ""),
+                    " ", "_").toLowerCase());
         } else { // use host image
             image = hostCard.getImageKey();
         }
@@ -223,6 +229,10 @@ public class EffectEffect extends SpellAbilityEffect {
             eff.copyChangedTextFrom(hostCard);
         }
 
+        if (sa.hasParam("AtEOT")) {
+            registerDelayedTrigger(sa, sa.getParam("AtEOT"), Lists.newArrayList(hostCard));
+        }
+
         // Duration
         final String duration = sa.getParam("Duration");
         if ((duration == null) || !duration.equals("Permanent")) {
@@ -253,6 +263,16 @@ public class EffectEffect extends SpellAbilityEffect {
             }
             else if (duration.equals("UntilEndOfCombat")) {
                 game.getEndOfCombat().addUntil(endEffect);
+            }
+            else if (duration.equals("ThisTurnAndNextTurn")) {
+                game.getUntap().addAt(new GameCommand() {
+                    private static final long serialVersionUID = -5054153666503075717L;
+
+                    @Override
+                    public void run() {
+                        game.getEndOfTurn().addUntil(endEffect);
+                    }
+                });
             }
         }
 

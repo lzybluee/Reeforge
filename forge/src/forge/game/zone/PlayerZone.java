@@ -20,13 +20,12 @@ package forge.game.zone;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import forge.game.card.Card;
-import forge.game.card.CardCollection;
 import forge.game.card.CardCollectionView;
 import forge.game.card.CardLists;
-import forge.game.card.CounterType;
 import forge.game.player.Player;
 import forge.game.spellability.SpellAbility;
 import forge.util.Lang;
+import forge.util.TextUtil;
 
 /**
  * <p>
@@ -34,7 +33,7 @@ import forge.util.Lang;
  * </p>
  * 
  * @author Forge
- * @version $Id: PlayerZone.java 32651 2016-12-10 13:48:27Z Hanmac $
+ * @version $Id$
  */
 public class PlayerZone extends Zone {
     private static final long serialVersionUID = -5687652485777639176L;
@@ -71,10 +70,6 @@ public class PlayerZone extends Zone {
                     return true;
                 }
 
-                if (sa.isSpell() && c.mayPlay(player).size() > 0) {
-                    return true;
-                }
-
                 if (PlayerZone.this.is(restrictZone)) {
                     return true;
                 }
@@ -107,7 +102,7 @@ public class PlayerZone extends Zone {
 
     @Override
     public final String toString() {
-        return String.format("%s %s", Lang.getPossesive(player.toString()), zoneType);
+        return TextUtil.concatWithSpace(Lang.getPossesive(player.toString()), zoneType.toString());
     }
 
     public CardCollectionView getCardsPlayerCanActivate(Player who) {
@@ -126,55 +121,5 @@ public class PlayerZone extends Zone {
 
         final Predicate<Card> filterPredicate = checkingForOwner ? new OwnCardsActivationFilter() : alienCardsActivationFilter(who);
         return CardLists.filter(cl, filterPredicate);
-    }
-
-    public CardCollectionView getCardsRetrace(Player who, CardCollectionView hand) {
-        boolean checkingForOwner = who == player;
-
-        CardCollection cards = new CardCollection();
-        
-        if (hand == null || hand.size() == 0) {
-            return cards;
-        }
-
-        boolean hasLand = false;
-        for (Card c : hand) {
-            if (c.isLand()) {
-                hasLand = true;
-                break;
-            }
-        }
-        if (!hasLand) {
-            return cards;
-        }
-
-        if (checkingForOwner) {
-            CardCollectionView cl = getCards(false);
-            for(Card c : cl) {
-                for (String keyword : c.getKeywords()) {
-                    if (keyword.startsWith("Retrace")) {
-                        cards.add(c);
-                    }
-                }
-            }
-        }
-
-        return cards;
-    }
-
-    public CardCollectionView getCardsSuspended(Player who) {
-        boolean checkingForOwner = who == player;
-
-        CardCollection cards = new CardCollection();
-        if (checkingForOwner) {
-            CardCollectionView cl = getCards(false);
-            for(Card c : cl) {
-                if(c.hasSuspend() && c.getCounters(CounterType.TIME) >= 1) {
-                    cards.add(c);
-                }
-            }
-        }
-
-        return cards;
     }
 }

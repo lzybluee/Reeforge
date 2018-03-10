@@ -41,7 +41,9 @@ import java.util.Set;
 public class AiCardMemory {
 
     private final Set<Card> memMandatoryAttackers;
+    private final Set<Card> memTrickAttackers;
     private final Set<Card> memHeldManaSources;
+    private final Set<Card> memHeldManaSourcesForCombat;
     private final Set<Card> memAttachedThisTurn;
     private final Set<Card> memAnimatedThisTurn;
     private final Set<Card> memBouncedThisTurn;
@@ -50,10 +52,12 @@ public class AiCardMemory {
     public AiCardMemory() {
         this.memMandatoryAttackers = new HashSet<>();
         this.memHeldManaSources = new HashSet<>();
+        this.memHeldManaSourcesForCombat = new HashSet<>();
         this.memAttachedThisTurn = new HashSet<>();
         this.memAnimatedThisTurn = new HashSet<>();
         this.memBouncedThisTurn = new HashSet<>();
         this.memActivatedThisTurn = new HashSet<>();
+        this.memTrickAttackers = new HashSet<>();
     }
 
     /**
@@ -63,7 +67,9 @@ public class AiCardMemory {
      */
     public enum MemorySet {
         MANDATORY_ATTACKERS,
-        HELD_MANA_SOURCES, 
+        TRICK_ATTACKERS,
+        HELD_MANA_SOURCES_FOR_MAIN2,
+        HELD_MANA_SOURCES_FOR_DECLBLK,
         ATTACHED_THIS_TURN,
         ANIMATED_THIS_TURN,
         BOUNCED_THIS_TURN,
@@ -75,8 +81,12 @@ public class AiCardMemory {
         switch (set) {
             case MANDATORY_ATTACKERS:
                 return memMandatoryAttackers;
-            case HELD_MANA_SOURCES:
+            case TRICK_ATTACKERS:
+                return memTrickAttackers;
+            case HELD_MANA_SOURCES_FOR_MAIN2:
                 return memHeldManaSources;
+            case HELD_MANA_SOURCES_FOR_DECLBLK:
+                return memHeldManaSourcesForCombat;
             case ATTACHED_THIS_TURN:
                 return memAttachedThisTurn;
             case ANIMATED_THIS_TURN:
@@ -254,7 +264,9 @@ public class AiCardMemory {
      */
     public void clearAllRemembered() {
         clearMemorySet(MemorySet.MANDATORY_ATTACKERS);
-        clearMemorySet(MemorySet.HELD_MANA_SOURCES);
+        clearMemorySet(MemorySet.TRICK_ATTACKERS);
+        clearMemorySet(MemorySet.HELD_MANA_SOURCES_FOR_MAIN2);
+        clearMemorySet(MemorySet.HELD_MANA_SOURCES_FOR_DECLBLK);
         clearMemorySet(MemorySet.ATTACHED_THIS_TURN);
         clearMemorySet(MemorySet.ANIMATED_THIS_TURN);
         clearMemorySet(MemorySet.BOUNCED_THIS_TURN);
@@ -270,6 +282,9 @@ public class AiCardMemory {
     }
     public static boolean isRememberedCard(Player ai, Card c, MemorySet set) {
         return ((PlayerControllerAi)ai.getController()).getAi().getCardMemory().isRememberedCard(c, set);
+    }
+    public static boolean isRememberedCardByName(Player ai, String name, MemorySet set) {
+        return ((PlayerControllerAi)ai.getController()).getAi().getCardMemory().isRememberedCardByName(name, set);
     }
     public static void clearMemorySet(Player ai, MemorySet set) {
         ((PlayerControllerAi)ai.getController()).getAi().getCardMemory().clearMemorySet(set);

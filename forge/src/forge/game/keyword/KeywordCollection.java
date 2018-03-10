@@ -1,70 +1,68 @@
 package forge.game.keyword;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map.Entry;
 
-import com.google.common.collect.Maps;
+import java.util.Collection;
+import java.util.Iterator;
+
+import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
 
 public class KeywordCollection implements Iterable<String>, Serializable {
     private static final long serialVersionUID = -2882986558147844702L;
+    
+    private boolean hidden = false;
 
     private transient KeywordCollectionView view;
-    private final EnumMap<Keyword, List<KeywordInstance<?>>> map = Maps.newEnumMap(Keyword.class);
+    private final Multimap<Keyword, KeywordInterface> map = MultimapBuilder.enumKeys(Keyword.class)
+            .arrayListValues().build();
+
+    public KeywordCollection() {
+        super();
+        this.hidden = false;
+    }
+    public KeywordCollection(boolean hidden) {
+        super();
+        this.hidden = hidden;
+    }
 
     public boolean contains(Keyword keyword) {
         return map.containsKey(keyword);
     }
 
     public boolean isEmpty() {
-        return stringMap.isEmpty(); //TODO: Replace with map when stringMap goes away
+        return map.isEmpty();
     }
 
     public int size() {
-        return stringMap.size(); //TODO: Replace with map when stringMap goes away
+        return map.values().size();
     }
 
     public int getAmount(Keyword keyword) {
         int amount = 0;
-        List<KeywordInstance<?>> instances = map.get(keyword);
-        if (instances != null) {
-            for (KeywordInstance<?> inst : instances) {
-                amount += inst.getAmount();
-            }
+        for (KeywordInterface inst : map.get(keyword)) {
+            amount += inst.getAmount();
         }
         return amount;
     }
 
-    public void add(String k) {
-        if(k.startsWith("AdjustLandPlays:")) {
-            if(stringMap.containsKey(k)) {
-                stringMap.put(k, stringMap.get(k) + 1);
-            } else {
-                stringMap.put(k, 1);
-            }
-        } else {
-            KeywordInstance<?> inst = Keyword.getInstance(k);
-            Keyword keyword = inst.getKeyword();
-            List<KeywordInstance<?>> list = map.get(keyword);
-            if (list == null) {
-                list = new ArrayList<KeywordInstance<?>>();
-                list.add(inst);
-                map.put(keyword, list);
-                stringMap.put(k, inst.getAmount());
-            }
-            else if (!keyword.isMultipleRedundant) {
-                list.add(inst);
-                int amount = 0;
-                for (KeywordInstance<?> i : list) {
-                    amount += i.getAmount();
-                }
-                stringMap.put(k, amount);
-            }
+    public KeywordInterface add(String k) {
+        KeywordInterface inst = Keyword.getInstance(k);
+        inst.setHidden(hidden);
+        if (insert(inst)) {
+            return inst;
         }
+        return null;
+    }
+    public boolean insert(KeywordInterface inst) {
+        Keyword keyword = inst.getKeyword();
+        Collection<KeywordInterface> list = map.get(keyword);
+        if (list.isEmpty() || !keyword.isMultipleRedundant) {
+            list.add(inst);
+            return true;
+        }
+        return false;
+        
     }
 
     public void addAll(Iterable<String> keywords) {
@@ -73,64 +71,93 @@ public class KeywordCollection implements Iterable<String>, Serializable {
         }
     }
 
-    public void remove(String keyword) {
-        int amount = getAmount(keyword);
-        switch (amount) {
-        case 0:
-            break;
-        case 1:
-            stringMap.remove(keyword);
-            break;
-        default:
-            stringMap.put(keyword, amount - 1);
+    public boolean insertAll(Iterable<KeywordInterface> inst) {
+        boolean result = false;
+        for (KeywordInterface k : inst) {
+            if (insert(k)) {
+                result = true;
+            }
         }
+        return result;
+    }
+    
+    public boolean remove(String keyword) {
+        Iterator<KeywordInterface> it = map.values().iterator();
+        
+        boolean result = false;
+        while (it.hasNext()) {
+            KeywordInterface k = it.next();
+            if (keyword.equals(k.getOriginal())) {
+                it.remove();
+                result = true;
+            }
+        }
+        
+        return result;
     }
 
-    public void removeAll(Iterable<String> keywords) {
+    public boolean removeAll(Iterable<String> keywords) {
+        boolean result = false;
         for (String k : keywords) {
-            remove(k);
+            if (remove(k)) {
+                result = true;
+            }
         }
+        return result;
+    }
+
+    public boolean removeInstances(Iterable<KeywordInterface> keywords) {
+        boolean result = false;
+        for (KeywordInterface k : keywords) {
+            if (map.remove(k.getKeyword(), k)) {
+                result = true;
+            }
+        }
+        return result;
     }
 
     public void clear() {
         map.clear();
-        stringMap.clear();
     }
 
-    //Below is temporary code to mimic the current List<String>
-    //TODO: Remove when keywords no longer implemented that way
-    private HashMap<String, Integer> stringMap = new HashMap<String, Integer>();
     public boolean contains(String keyword) {
-        return stringMap.containsKey(keyword);
+        for (KeywordInterface inst : map.values()) {
+            if (keyword.equals(inst.getOriginal())) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public int getAmount(String keyword) {
-        Integer amount = stringMap.get(keyword);
-        return amount == null ? 0 : amount.intValue();
+    public int getAmount(String k) {
+        int amount = 0;
+        for (KeywordInterface inst : map.values()) {
+            if (k.equals(inst.getOriginal())) {
+                amount++;
+            }
+        }
+        return amount;
+    }
+    
+    public Collection<KeywordInterface> getValues() {
+        return map.values();
     }
 
     @Override
     public Iterator<String> iterator() {
         return new Iterator<String>() {
-            private final Iterator<Entry<String, Integer>> iterator = stringMap.entrySet().iterator();
-            private String entryKey;
-            private int entryRemainder = 0;
+            private final Iterator<KeywordInterface> iterator = map.values().iterator();
+            
 
             @Override
             public boolean hasNext() {
-                return entryRemainder > 0 || iterator.hasNext();
+                return iterator.hasNext();
             }
 
             @Override
             public String next() {
-                if (entryRemainder > 0) {
-                    entryRemainder--;
-                    return entryKey;
-                }
-                Entry<String, Integer> entry = iterator.next();
-                entryKey = entry.getKey();
-                entryRemainder = entry.getValue() - 1;
-                return entryKey;
+                KeywordInterface entry = iterator.next();
+                return entry.getOriginal();
             }
 
             @Override
@@ -138,6 +165,17 @@ public class KeywordCollection implements Iterable<String>, Serializable {
                 //Don't support this
             }
         };
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb  = new StringBuilder();
+
+        sb.append(map.values());
+        return sb.toString();
     }
 
     public KeywordCollectionView getView() {
@@ -162,8 +200,7 @@ public class KeywordCollection implements Iterable<String>, Serializable {
         }
 
         public int getAmount(String keyword) {
-            Integer amount = stringMap.get(keyword);
-            return amount == null ? 0 : amount.intValue();
+            return KeywordCollection.this.getAmount(keyword);
         }
 
         public boolean contains(Keyword keyword) {

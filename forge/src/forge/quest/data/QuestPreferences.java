@@ -19,6 +19,7 @@ package forge.quest.data;
 
 import forge.properties.ForgeConstants;
 import forge.properties.PreferencesStore;
+import forge.util.TextUtil;
 
 import java.io.Serializable;
 
@@ -54,11 +55,16 @@ public class QuestPreferences extends PreferencesStore<QuestPreferences.QPref> i
         // For each of your previous wins gain a small multiplier
         // This is here to award long quests with more money for buying expensive cards
         REWARDS_WINS_MULTIPLIER("0.3"),
+        // Rewards stop increasing after this many wins
+        REWARDS_WINS_MULTIPLIER_MAX("300"),
 
         // Winning each game by other means "Poison", "Milling" or "Alternative" Win
         REWARDS_POISON("50"),
         REWARDS_MILLED("40"),
         REWARDS_ALTERNATIVE("100"),
+
+        // Max Bonus for health difference
+        REWARDS_HEALTH_DIFF_MAX("750"),
 
         // If you Mulligan to 0 to start a game
         REWARDS_MULLIGAN0("500"),
@@ -175,7 +181,10 @@ public class QuestPreferences extends PreferencesStore<QuestPreferences.QPref> i
 
         ITEM_LEVEL_RESTRICTION("1"),
 
-        SIMULATE_AI_VS_AI_RESULTS("0");
+        SIMULATE_AI_VS_AI_RESULTS("0"),
+        DRAFT_ROTATION("0"),
+        FOIL_FILTER_DEFAULT("0"),
+        RATING_FILTER_DEFAULT("1");
 
         private final String strDefaultVal;
 
@@ -256,7 +265,7 @@ public class QuestPreferences extends PreferencesStore<QuestPreferences.QPref> i
             newQPref += "_EXPERT";
             break;
         default:
-            throw new IllegalArgumentException(String.format("Difficulty index %d out of bounds, preference %s", difficultyIndex, newQPref));
+            throw new IllegalArgumentException(TextUtil.concatNoSpace("Difficulty index ", String.valueOf(difficultyIndex), " out of bounds, preference ", newQPref));
         }
 
         return getPref(QPref.valueOf(newQPref));
@@ -278,8 +287,10 @@ public class QuestPreferences extends PreferencesStore<QuestPreferences.QPref> i
                     return "Bias value too large (maximum 100).";
                 }
                 break;
-
+            case DRAFT_ROTATION:
             case SPECIAL_BOOSTERS:
+            case FOIL_FILTER_DEFAULT:
+            case RATING_FILTER_DEFAULT:
             case ITEM_LEVEL_RESTRICTION:
                 if (val != 0 && val != 1) {
                     return "Only values 0 or 1 are acceptable; 1 for enabled, 0 for disabled.";
@@ -310,11 +321,14 @@ public class QuestPreferences extends PreferencesStore<QuestPreferences.QPref> i
             case STARTING_CREDITS_MEDIUM:
             case STARTING_CREDITS_HARD:
             case STARTING_CREDITS_EXPERT:
+            case REWARDS_WINS_MULTIPLIER:
+            case REWARDS_WINS_MULTIPLIER_MAX:
             case REWARDS_MILLED:
             case REWARDS_MULLIGAN0:
             case REWARDS_ALTERNATIVE:
             case REWARDS_TURN5:
             case REWARDS_TURN1:
+            case REWARDS_HEALTH_DIFF_MAX:
             case SHOP_MIN_PACKS:
             case SHOP_STARTING_PACKS:
             case SHOP_SINGLES_COMMON:

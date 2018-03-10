@@ -17,6 +17,7 @@
  */
 package forge.game.cost;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -43,9 +44,9 @@ import forge.util.TextUtil;
  * </p>
  * 
  * @author Forge
- * @version $Id: Cost.java 34955 2017-08-08 04:44:05Z Agetian $
+ * @version $Id$
  */
-public class Cost {
+public class Cost implements Serializable {
     private boolean isAbility = true;
     private final List<CostPart> costParts = Lists.newArrayList();
     private boolean isMandatory = false;
@@ -457,6 +458,12 @@ public class Cost {
             final String[] splitStr = abCostParse(parse, 4);
             final String description = splitStr.length > 3 ? splitStr[3] : null;
             return new CostPutCardToLib(splitStr[0], splitStr[1], splitStr[2], description, ZoneType.Graveyard, true);
+        }
+
+        if (parse.startsWith("PutCardToLibFromBattlefield<")) {
+            final String[] splitStr = abCostParse(parse, 4);
+            final String description = splitStr.length > 3 ? splitStr[3] : null;
+            return new CostPutCardToLib(splitStr[0], splitStr[1], splitStr[2], description, ZoneType.Battlefield);
         }
 
         if (parse.startsWith("Exert<")) {

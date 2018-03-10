@@ -43,7 +43,7 @@ import forge.util.Expressions;
  * </p>
  * 
  * @author Forge
- * @version $Id: TriggerSpellAbilityCast.java 34519 2017-07-01 09:39:36Z swordshine $
+ * @version $Id$
  */
 public class TriggerSpellAbilityCast extends Trigger {
 
@@ -156,6 +156,13 @@ public class TriggerSpellAbilityCast extends Trigger {
         if (hasParam("NonTapCost")) {
             final Cost cost = (Cost) (runParams2.get("Cost"));
             if (cost.hasTapCost()) {
+                return false;
+            }
+        }
+
+        if (hasParam("HasTapCost")) {
+            final Cost cost = (Cost) (runParams2.get("Cost"));
+            if (!cost.hasTapCost()) {
                 return false;
             }
         }

@@ -1,27 +1,23 @@
 package forge.ai.ability;
 
-import java.util.Collections;
-import java.util.Random;
-
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-
 import forge.ai.*;
 import forge.game.Game;
 import forge.game.ability.AbilityUtils;
-import forge.game.card.Card;
-import forge.game.card.CardCollection;
-import forge.game.card.CardCollectionView;
-import forge.game.card.CardLists;
-import forge.game.card.CardPredicates;
+import forge.game.card.*;
 import forge.game.cost.Cost;
 import forge.game.phase.PhaseType;
 import forge.game.player.Player;
 import forge.game.player.PlayerActionConfirmMode;
+import forge.game.player.PlayerCollection;
 import forge.game.player.PlayerPredicates;
 import forge.game.spellability.SpellAbility;
 import forge.game.zone.ZoneType;
 import forge.util.MyRandom;
+
+import java.util.Collections;
+import java.util.Random;
 
 public class ChangeZoneAllAi extends SpellAbilityAi {
     @Override
@@ -41,7 +37,11 @@ public class ChangeZoneAllAi extends SpellAbilityAi {
             }
 
             if (!ComputerUtilCost.checkDiscardCost(ai, abCost, source)) {
-                return false;
+                boolean aiLogicAllowsDiscard = sa.hasParam("AILogic") && sa.getParam("AILogic").startsWith("DiscardAll");
+
+                if (!aiLogicAllowsDiscard) {
+                    return false;
+                }
             }
         }
 
@@ -87,13 +87,36 @@ public class ChangeZoneAllAi extends SpellAbilityAi {
                 }
             }
             return false;
+        } else if ("ManifestCreatsFromGraveyard".equals(sa.getParam("AILogic"))) {
+            PlayerCollection players = new PlayerCollection();
+            players.addAll(ai.getOpponents());
+            players.add(ai);
+            int maxSize = 1;
+            for (Player player : players) {
+                Player bestTgt = null;
+                if (player.canBeTargetedBy(sa)) {
+                    CardCollectionView cardsGY = CardLists.filter(player.getCardsIn(ZoneType.Graveyard),
+                            CardPredicates.Presets.CREATURES);
+                    if (cardsGY.size() > maxSize) {
+                        maxSize = cardsGY.size();
+                        bestTgt = player;
+                    }
+                }
+
+                if (bestTgt != null) {
+                    sa.resetTargets();
+                    sa.getTargets().add(bestTgt);
+                    return true;
+                }
+            }
+            return false;
         }
 
         // TODO improve restrictions on when the AI would want to use this
         // spBounceAll has some AI we can compare to.
         if (origin.equals(ZoneType.Hand) || origin.equals(ZoneType.Library)) {
             if (!sa.usesTargeting()) {
-                // TODO: improve logic for non-targeted SAs of this type (most are currently RemAIDeck, e.g. Memory Jar, Timetwister)
+                // TODO: improve logic for non-targeted SAs of this type (most are currently RemAIDeck, e.g. Memory Jar)
                 return true;
             } else {
                 // search targetable Opponents
@@ -136,15 +159,39 @@ public class ChangeZoneAllAi extends SpellAbilityAi {
                 }
                 computerType = new CardCollection();
             }
+
+            int creatureEvalThreshold = 200; // value difference (in evaluateCreatureList units)
+            int nonCreatureEvalThreshold = 3; // CMC difference
+            if (ai.getController().isAI()) {
+                AiController aic = ((PlayerControllerAi)ai.getController()).getAi();
+                if (destination == ZoneType.Hand) {
+                    creatureEvalThreshold = aic.getIntProperty(AiProps.BOUNCE_ALL_TO_HAND_CREAT_EVAL_DIFF);
+                    nonCreatureEvalThreshold = aic.getIntProperty(AiProps.BOUNCE_ALL_TO_HAND_NONCREAT_EVAL_DIFF);
+                } else {
+                    creatureEvalThreshold = aic.getIntProperty(AiProps.BOUNCE_ALL_ELSEWHERE_CREAT_EVAL_DIFF);
+                    nonCreatureEvalThreshold = aic.getIntProperty(AiProps.BOUNCE_ALL_ELSEWHERE_NONCREAT_EVAL_DIFF);
+                }
+            }
+
+            // mass zone change for creatures: if in dire danger, do it; otherwise, only do it if the opponent's
+            // creatures are better in value
             if ((CardLists.getNotType(oppType, "Creature").size() == 0)
                     && (CardLists.getNotType(computerType, "Creature").size() == 0)) {
-                if ((ComputerUtilCard.evaluateCreatureList(computerType) + 200) >= ComputerUtilCard
+                if (game.getCombat() != null && ComputerUtilCombat.lifeInSeriousDanger(ai, game.getCombat())) {
+                    if (game.getPhaseHandler().is(PhaseType.COMBAT_DECLARE_BLOCKERS)
+                            && game.getPhaseHandler().getPlayerTurn().isOpponentOf(ai)) {
+                        // Life is in serious danger, return all creatures from the battlefield to wherever
+                        // so they don't deal lethal damage
+                        return true;
+                    }
+                }
+                if ((ComputerUtilCard.evaluateCreatureList(computerType) + creatureEvalThreshold) >= ComputerUtilCard
                         .evaluateCreatureList(oppType)) {
                     return false;
                 }
-            } // otherwise evaluate both lists by CMC and pass only if human
+            } // mass zone change for non-creatures: evaluate both lists by CMC and pass only if human
               // permanents are more valuable
-            else if ((ComputerUtilCard.evaluatePermanentList(computerType) + 3) >= ComputerUtilCard
+            else if ((ComputerUtilCard.evaluatePermanentList(computerType) + nonCreatureEvalThreshold) >= ComputerUtilCard
                     .evaluatePermanentList(oppType)) {
                 return false;
             }
@@ -245,8 +292,8 @@ public class ChangeZoneAllAi extends SpellAbilityAi {
      * </p>
      * @param sa
      *            a {@link forge.game.spellability.SpellAbility} object.
-     * @param af
-     *            a {@link forge.game.ability.AbilityFactory} object.
+     * @param aiPlayer
+     *            a {@link forge.game.player.Player} object.
      * 
      * @return a boolean.
      */

@@ -33,7 +33,7 @@ import forge.util.collect.FCollectionView;
  * </p>
  * 
  * @author Forge
- * @version $Id: AbilityActivated.java 32589 2016-11-21 18:57:42Z Hanmac $
+ * @version $Id$
  */
 public abstract class AbilityActivated extends SpellAbility implements java.io.Serializable, Cloneable {
     /** Constant <code>serialVersionUID=1L</code>. */
@@ -70,10 +70,6 @@ public abstract class AbilityActivated extends SpellAbility implements java.io.S
         if ((tgt != null) && tgt.doesTarget()) {
             this.setTargetRestrictions(tgt);
         }
-    }
-
-    public abstract AbilityActivated getCopy(); /* {
-        return null;
     }
 
     /** {@inheritDoc} */

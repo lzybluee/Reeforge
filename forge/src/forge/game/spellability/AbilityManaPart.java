@@ -17,8 +17,6 @@
  */
 package forge.game.spellability;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -27,11 +25,18 @@ import java.util.regex.Pattern;
 import forge.card.mana.ManaAtom;
 import forge.game.trigger.Trigger;
 import forge.game.trigger.TriggerHandler;
+import forge.util.TextUtil;
 import org.apache.commons.lang3.StringUtils;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import forge.card.ColorSet;
 import forge.card.MagicColor;
+import forge.game.ability.AbilityFactory;
 import forge.game.card.Card;
+import forge.game.card.CardFactoryUtil;
+import forge.game.card.CounterType;
 import forge.game.mana.Mana;
 import forge.game.mana.ManaPool;
 import forge.game.player.Player;
@@ -47,7 +52,7 @@ import forge.game.trigger.TriggerType;
  * </p>
  * 
  * @author Forge
- * @version $Id: AbilityManaPart.java 35211 2017-08-25 05:49:00Z Agetian $
+ * @version $Id$
  */
 public class AbilityManaPart implements java.io.Serializable {
     /** Constant <code>serialVersionUID=-6816356991224950520L</code>. */
@@ -65,9 +70,9 @@ public class AbilityManaPart implements java.io.Serializable {
     private final boolean persistentMana;
     private String manaReplaceType;
 
-    private transient List<Mana> lastManaProduced = new ArrayList<Mana>();
+    private transient List<Mana> lastManaProduced = Lists.newArrayList();
 
-    private final transient Card sourceCard;
+    private transient Card sourceCard;
 
 
     // Spells paid with this mana spell can't be countered.
@@ -122,7 +127,7 @@ public class AbilityManaPart implements java.io.Serializable {
         final Card source = this.getSourceCard();
         final ManaPool manaPool = player.getManaPool();
         String afterReplace = applyManaReplacement(sa, produced);
-        final HashMap<String, Object> repParams = new HashMap<String, Object>();
+        final Map<String, Object> repParams = Maps.newHashMap();
         repParams.put("Event", "ProduceMana");
         repParams.put("Mana", afterReplace);
         repParams.put("Affected", source);
@@ -162,7 +167,7 @@ public class AbilityManaPart implements java.io.Serializable {
         manaPool.add(this.lastManaProduced);
 
         // Run triggers
-        final HashMap<String, Object> runParams = new HashMap<String, Object>();
+        final Map<String, Object> runParams = Maps.newHashMap();
 
         runParams.put("Card", source);
         runParams.put("Player", player);
@@ -243,26 +248,22 @@ public class AbilityManaPart implements java.io.Serializable {
         String[] parse = this.addsCounters.split("_");
         // Convert random SVars if there are other cards with this effect
         if (c.isValid(parse[0], c.getController(), c, null)) {
-            String abStr = "DB$ PutCounter | Defined$ Self | CounterType$ " + parse[1]
-                    + " | ETB$ True | CounterNum$ " + parse[2] + " | SubAbility$ ManaDBETBCounters";
-            String dbStr = "DB$ ChangeZone | Hidden$ True | Origin$ All | Destination$ Battlefield"
-                    + " | Defined$ ReplacedCard";
-            try {
-                Integer.parseInt(parse[2]);
-            } catch (NumberFormatException ignored) {
-                dbStr += " | References$ " + parse[2];
-                c.setSVar(parse[2], sourceCard.getSVar(parse[2]));
+            String abStr = "DB$ PutCounter | Defined$ ReplacedCard | CounterType$ " + parse[1]
+                    + " | ETB$ True | CounterNum$ " + parse[2];
+
+            SpellAbility sa = AbilityFactory.getAbility(abStr, c);
+            if (!StringUtils.isNumeric(parse[2])) {
+                sa.setSVar(parse[2], sourceCard.getSVar(parse[2]));
             }
-            c.setSVar("ManaETBCounters", abStr);
-            c.setSVar("ManaDBETBCounters", dbStr);
+            CardFactoryUtil.setupETBReplacementAbility(sa);
 
             String repeffstr = "Event$ Moved | ValidCard$ Card.Self | Destination$ Battlefield "
-                    + "| ReplaceWith$ ManaETBCounters | Secondary$ True | Description$ CARDNAME"
-                    + " enters the battlefield with " + parse[1] + " counters.";
+                    + " | Secondary$ True | Description$ CARDNAME"
+                    + " enters the battlefield with " + CounterType.valueOf(parse[1]).getName() + " counters.";
 
             ReplacementEffect re = ReplacementHandler.parseReplacement(repeffstr, c, false);
             re.setLayer(ReplacementLayer.Other);
-            re.getMapParams().put("ETBCountersOneShot", "true");
+            re.setOverridingAbility(sa);
 
             c.addReplacementEffect(re);
         }
@@ -338,10 +339,7 @@ public class AbilityManaPart implements java.io.Serializable {
 
             if (sa.isAbility()) {
                 if (restriction.startsWith("Activated")) {
-                    if(sa.isTrigger()) {
-                        continue;
-                    }
-                    restriction = restriction.replace("Activated", "Card");
+                    restriction = TextUtil.fastReplace(restriction, "Activated", "Card");
                 }
                 else {
                     continue;
@@ -569,7 +567,7 @@ public class AbilityManaPart implements java.io.Serializable {
             return "W U B R G";
         }
         if (!origProduced.contains("ColorIdentity")) {
-            return origProduced.replace("Combo ", "");
+            return TextUtil.fastReplace(origProduced, "Combo ", "");
         }
         // ColorIdentity
         List<Card> commanders = getSourceCard().getController().getCommanders();
@@ -595,6 +593,10 @@ public class AbilityManaPart implements java.io.Serializable {
 
     public Card getSourceCard() {
         return sourceCard;
+    }
+    
+    public void setSourceCard(final Card host) {
+        sourceCard = host;
     }
 
     /**
@@ -628,7 +630,7 @@ public class AbilityManaPart implements java.io.Serializable {
      * @return a String
      */
     public static String applyManaReplacement(final SpellAbility sa, final String original) {
-        final HashMap<String, String> repMap = new HashMap<String, String>();
+        final Map<String, String> repMap = Maps.newHashMap();
         final Player act = sa != null ? sa.getActivatingPlayer() : null;
         final String manaReplace = sa != null ? sa.getManaPart().getManaReplaceType(): "";
         if (manaReplace.isEmpty()) {

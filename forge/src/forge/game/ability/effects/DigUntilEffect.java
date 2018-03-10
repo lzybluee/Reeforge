@@ -5,12 +5,12 @@ import forge.game.ability.AbilityUtils;
 import forge.game.ability.SpellAbilityEffect;
 import forge.game.card.Card;
 import forge.game.card.CardCollection;
-import forge.game.card.CardLists;
 import forge.game.player.Player;
 import forge.game.spellability.SpellAbility;
 import forge.game.spellability.TargetRestrictions;
 import forge.game.zone.PlayerZone;
 import forge.game.zone.ZoneType;
+import forge.util.MyRandom;
 
 import java.util.*;
 
@@ -179,7 +179,8 @@ public class DigUntilEffect extends SpellAbilityEffect {
                     }
                 }
                 if (sa.hasParam("RevealRandomOrder")) {
-                    CardLists.shuffle(revealed);
+                    final Random random = MyRandom.getRandom();
+                    Collections.shuffle(revealed, random);
                 }
 
                 if (sa.hasParam("NoneFoundDestination") && found.size() < untilAmount) {

@@ -39,7 +39,7 @@ import com.google.common.collect.Sets;
  * </p>
  * 
  * @author Forge
- * @version $Id: TriggerChangesZone.java 35070 2017-08-16 06:08:46Z Agetian $
+ * @version $Id$
  */
 public class TriggerChangesZone extends Trigger {
 

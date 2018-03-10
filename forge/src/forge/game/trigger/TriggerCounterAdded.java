@@ -30,7 +30,7 @@ import forge.game.spellability.SpellAbility;
  * </p>
  * 
  * @author Forge
- * @version $Id: TriggerCounterAdded.java 33795 2017-04-21 07:47:13Z Hanmac $
+ * @version $Id$
  */
 public class TriggerCounterAdded extends Trigger {
 

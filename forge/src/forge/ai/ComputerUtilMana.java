@@ -2,12 +2,7 @@ package forge.ai;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
-
+import com.google.common.collect.*;
 import forge.ai.ability.AnimateAi;
 import forge.card.ColorSet;
 import forge.card.MagicColor;
@@ -38,7 +33,6 @@ import forge.game.spellability.SpellAbility;
 import forge.game.zone.ZoneType;
 import forge.util.MyRandom;
 import forge.util.TextUtil;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -250,8 +244,10 @@ public class ComputerUtilMana {
                 } else if (toPay == ManaCostShard.GENERIC || toPay == ManaCostShard.X) {
                     for (SpellAbility ab : saList) {
                         if (ab.isManaAbility() && ab.getManaPart().isAnyMana() && ab.hasParam("AddsNoCounter")) {
-                            paymentChoice = ab;
-                            break;
+                            if (!ab.getHostCard().isTapped()) {
+                                paymentChoice = ab;
+                                break;
+                            }
                         }
                     }
                 }
@@ -517,6 +513,16 @@ public class ComputerUtilMana {
 //                    extraMana, sa.getHostCard(), sa.toUnsuppressedString(), StringUtils.join(paymentPlan, "\n\t"));
 //        }
 
+        // See if it's possible to pay with something that was left in the mana pool in corner cases,
+        // e.g. Gemstone Caverns with a Luck counter on it generating colored mana (which fails to be
+        // processed correctly on a per-ability basis, leaving floating mana in the pool)
+        if (!cost.isPaid() && !manapool.isEmpty()) {
+            for (byte color : MagicColor.WUBRGC) {
+                manapool.tryPayCostWithColor(color, sa, cost);
+            }
+        }
+
+        // The cost is still unpaid, so refund the mana and report
         if (!cost.isPaid()) {
             refundMana(manaSpentToPay, ai, sa);
             if (test) {
@@ -828,7 +834,7 @@ public class ComputerUtilMana {
     }
 
     // isManaSourceReserved returns true if sourceCard is reserved as a mana source for payment
-    // for the future spell to be cast in Mana 2. However, if "sa" (the spell ability that is
+    // for the future spell to be cast in another phase. However, if "sa" (the spell ability that is
     // being considered for casting) is high priority, then mana source reservation will be
     // ignored.
     private static boolean isManaSourceReserved(Player ai, Card sourceCard, SpellAbility sa) {
@@ -842,8 +848,21 @@ public class ComputerUtilMana {
         AiController aic = ((PlayerControllerAi)ai.getController()).getAi();
         int chanceToReserve = aic.getIntProperty(AiProps.RESERVE_MANA_FOR_MAIN2_CHANCE);
 
+        PhaseType curPhase = ai.getGame().getPhaseHandler().getPhase();
+
+        // For combat tricks, always obey mana reservation
+        if (curPhase == PhaseType.COMBAT_DECLARE_BLOCKERS || curPhase == PhaseType.CLEANUP) {
+            AiCardMemory.clearMemorySet(ai, AiCardMemory.MemorySet.HELD_MANA_SOURCES_FOR_DECLBLK);
+        }
+        else {
+            if (AiCardMemory.isRememberedCard(ai, sourceCard, AiCardMemory.MemorySet.HELD_MANA_SOURCES_FOR_DECLBLK)) {
+                // This mana source is held elsewhere for a combat trick.
+                return true;
+            }
+        }
+
         // If it's a low priority spell (it's explicitly marked so elsewhere in the AI with a SVar), always
-        // obey mana reservations; otherwise, obey mana reservations depending on the "chance to reserve" 
+        // obey mana reservations for Main 2; otherwise, obey mana reservations depending on the "chance to reserve"
         // AI profile variable.
         if (sa.getSVar("LowPriorityAI").equals("")) {
             if (chanceToReserve == 0 || MyRandom.getRandom().nextInt(100) >= chanceToReserve) {
@@ -851,16 +870,16 @@ public class ComputerUtilMana {
             }
         }
 
-        PhaseType curPhase = ai.getGame().getPhaseHandler().getPhase();
         if (curPhase == PhaseType.MAIN2 || curPhase == PhaseType.CLEANUP) {
-            AiCardMemory.clearMemorySet(ai, AiCardMemory.MemorySet.HELD_MANA_SOURCES);
+            AiCardMemory.clearMemorySet(ai, AiCardMemory.MemorySet.HELD_MANA_SOURCES_FOR_MAIN2);
         }
         else {
-            if (AiCardMemory.isRememberedCard(ai, sourceCard, AiCardMemory.MemorySet.HELD_MANA_SOURCES)) {
+            if (AiCardMemory.isRememberedCard(ai, sourceCard, AiCardMemory.MemorySet.HELD_MANA_SOURCES_FOR_MAIN2)) {
                 // This mana source is held elsewhere for a Main Phase 2 spell.
                 return true;
             }
         }
+
         return false;
     }
 
@@ -1121,6 +1140,10 @@ public class ComputerUtilMana {
     // This method can be used to estimate the total amount of mana available to the player,
     // including the mana available in that player's mana pool
     public static int getAvailableManaEstimate(final Player p) {
+        return getAvailableManaEstimate(p, true);
+    }
+
+    public static int getAvailableManaEstimate(final Player p, final boolean checkPlayable) {
         int availableMana = 0;
 
         final CardCollectionView list = new CardCollection(p.getCardsIn(ZoneType.Battlefield));
@@ -1140,7 +1163,7 @@ public class ComputerUtilMana {
 
             for (SpellAbility ma : src.getManaAbilities()) {
                 ma.setActivatingPlayer(p);
-                if (ma.canPlay()) {
+                if (!checkPlayable || ma.canPlay()) {
                     int costsToActivate = ma.getPayCosts() != null && ma.getPayCosts().getCostMana() != null ? ma.getPayCosts().getCostMana().convertAmount() : 0;
                     int producedMana = ma.getParamOrDefault("Produced", "").split(" ").length;
                     int producedAmount = AbilityUtils.calculateAmount(src, ma.getParamOrDefault("Amount", "1"), ma);
@@ -1343,7 +1366,7 @@ public class ComputerUtilMana {
                         Card crd = replacementEffect.getHostCard();
                         String repType = crd.getSVar(replacementEffect.getMapParams().get("ManaReplacement"));
                         if (repType.contains("Chosen")) {
-                            repType = repType.replace("Chosen", MagicColor.toShortString(crd.getChosenColor()));
+                            repType = TextUtil.fastReplace(repType, "Chosen", MagicColor.toShortString(crd.getChosenColor()));
                         }
                         mp.setManaReplaceType(repType);
                     }

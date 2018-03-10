@@ -28,7 +28,7 @@ import java.util.Map;
  * </p>
  * 
  * @author Forge
- * @version $Id: TriggerTaps.java 31143 2016-04-20 17:47:28Z friarsol $
+ * @version $Id$
  */
 public class TriggerTaps extends Trigger {
 

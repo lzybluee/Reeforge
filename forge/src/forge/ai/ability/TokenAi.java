@@ -9,6 +9,7 @@ import forge.game.ability.AbilityFactory;
 import forge.game.ability.AbilityUtils;
 import forge.game.ability.ApiType;
 import forge.game.card.*;
+import forge.game.card.token.TokenInfo;
 import forge.game.combat.Combat;
 import forge.game.cost.CostPart;
 import forge.game.cost.CostPutCounter;
@@ -25,6 +26,7 @@ import forge.game.trigger.TriggerHandler;
 import forge.game.zone.ZoneType;
 import forge.item.PaperToken;
 import forge.util.MyRandom;
+import forge.util.TextUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -427,7 +429,7 @@ public class TokenAi extends SpellAbilityAi {
         
         final List<String> imageNames = new ArrayList<String>(1);
         if (tokenImage.equals("")) {
-            imageNames.add(PaperToken.makeTokenFileName(colorDesc.replace(" ", ""), tokenPower, tokenToughness, tokenName));
+            imageNames.add(PaperToken.makeTokenFileName(TextUtil.fastReplace(colorDesc, " ", ""), tokenPower, tokenToughness, tokenName));
         } else {
             imageNames.add(0, tokenImage);
         }
@@ -449,9 +451,9 @@ public class TokenAi extends SpellAbilityAi {
         }
         final String substitutedName = tokenName.equals("ChosenType") ? host.getChosenType() : tokenName;
         final String imageName = imageNames.get(MyRandom.getRandom().nextInt(imageNames.size()));
-        final CardFactory.TokenInfo tokenInfo = new CardFactory.TokenInfo(substitutedName, imageName,
+        final TokenInfo tokenInfo = new TokenInfo(substitutedName, imageName,
                 cost, substitutedTypes, tokenKeywords, finalPower, finalToughness);
-        Card token = CardFactory.makeOneToken(tokenInfo, ai);
+        Card token = tokenInfo.makeOneToken(ai);
 
         if (token == null) {
             return null;

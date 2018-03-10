@@ -1,21 +1,5 @@
 package forge.deckchooser;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map.Entry;
-
-import javax.swing.JPanel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-import forge.model.FModel;
-import forge.properties.ForgePreferences;
-import net.miginfocom.swing.MigLayout;
 import forge.deck.CardPool;
 import forge.deck.Deck;
 import forge.deck.DeckSection;
@@ -29,9 +13,25 @@ import forge.itemmanager.ItemManagerConfig;
 import forge.itemmanager.ItemManagerContainer;
 import forge.itemmanager.ItemManagerModel;
 import forge.itemmanager.views.ImageView;
+import forge.model.FModel;
+import forge.properties.ForgePreferences;
 import forge.toolbox.FButton;
 import forge.toolbox.FOptionPane;
 import forge.view.FDialog;
+import net.miginfocom.swing.MigLayout;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 @SuppressWarnings("serial")
 public class FDeckViewer extends FDialog {
@@ -57,7 +57,7 @@ public class FDeckViewer extends FDialog {
     private FDeckViewer(final Deck deck0) {
         this.deck = deck0;
         this.setTitle(deck.getName());
-        this.cardManager = new CardManager(null, false) {
+        this.cardManager = new CardManager(null, false, false) {
             @Override //show hovered card in Image View in dialog instead of main Detail/Picture panes
             protected ImageView<PaperCard> createImageView(final ItemManagerModel<PaperCard> model0) {
                 return new ImageView<PaperCard>(this, model0) {
@@ -125,10 +125,12 @@ public class FDeckViewer extends FDialog {
         if(FModel.getPreferences().getPrefBoolean(ForgePreferences.FPref.UI_SMALL_DECK_VIEWER)){
             width = 800;
             height = 600;
-        }else{
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            width = (int)(screenSize.width * 0.8);
-            height = (int)(screenSize.height * 0.9);
+        }
+        else {
+            GraphicsDevice gd = this.getGraphicsConfiguration().getDevice();
+
+            width = (int)(gd.getDisplayMode().getWidth() * 0.8);
+            height = (int)(gd.getDisplayMode().getHeight() * 0.9);
         }
 
         this.setPreferredSize(new Dimension(width, height));
@@ -171,6 +173,8 @@ public class FDeckViewer extends FDialog {
         final String nl = System.getProperty("line.separator");
         final StringBuilder deckList = new StringBuilder();
         final String dName = deck.getName();
+        String cardName;
+        SortedMap<String, Integer> sectionCards;
         deckList.append(dName == null ? "" : dName + nl + nl);
 
         for (DeckSection s : DeckSection.values()){
@@ -179,14 +183,19 @@ public class FDeckViewer extends FDialog {
                 continue;
             }
             deckList.append(s.toString()).append(": ");
-            if (s.isSingleCard()) {
-                deckList.append(cp.get(0).getName()).append(nl);
-            }
-            else {
-                deckList.append(nl);
-                for (final Entry<PaperCard, Integer> ev : cp) {
-                    deckList.append(ev.getValue()).append(" ").append(ev.getKey()).append(nl);
+            sectionCards = new TreeMap<>();
+            deckList.append(nl);
+            for (final Entry<PaperCard, Integer> ev : cp) {
+                cardName = ev.getKey().toString();
+                if (sectionCards.containsKey(cardName)) {
+                    sectionCards.put(cardName, (int)sectionCards.get(cardName) + ev.getValue());
                 }
+                else {
+                    sectionCards.put(cardName, ev.getValue());
+                }
+            }
+            for (final Entry<String, Integer> ev: sectionCards.entrySet()) {
+                deckList.append(ev.getValue()).append(" ").append(ev.getKey()).append(nl);
             }
             deckList.append(nl);
         }

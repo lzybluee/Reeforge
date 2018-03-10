@@ -25,6 +25,7 @@ import forge.util.ITriggerEvent;
 
 public interface IGuiGame {
     void setGameView(GameView gameView);
+    GameView getGameView();
     void setOriginalGameController(PlayerView view, IGameController gameController);
     void setGameController(PlayerView player, IGameController gameController);
     void setSpectator(IGameController spectator);
@@ -36,6 +37,7 @@ public interface IGuiGame {
     void updateButtons(PlayerView owner, boolean okEnabled, boolean cancelEnabled, boolean focusOk);
     void updateButtons(PlayerView owner, String label1, String label2, boolean enable1, boolean enable2, boolean focus1);
     void flashIncorrectAction();
+    void alertUser();
     void updatePhase();
     void updateTurn(PlayerView player);
     void updatePlayerControl();
@@ -141,10 +143,7 @@ public interface IGuiGame {
     <T> List<T> insertInList(String title, T newItem, List<T> oldItems);
 
     List<PaperCard> sideboard(CardPool sideboard, CardPool main);
-    GameEntityView chooseSingleEntityForEffect(String title, List<? extends GameEntityView> optionList,
-            DelayedReveal delayedReveal, boolean isOptional, int total);
-    void setCard(CardView card);
-    void setPaperCard(CardView card);
+    GameEntityView chooseSingleEntityForEffect(String title, List<? extends GameEntityView> optionList, DelayedReveal delayedReveal, boolean isOptional); void setCard(CardView card);
     void setPlayerAvatar(LobbyPlayer player, IHasIcon ihi);
     boolean openZones(Collection<ZoneType> zones, Map<PlayerView, Object> players);
     void restoreOldZones(Map<PlayerView, Object> playersToRestoreZonesFor);

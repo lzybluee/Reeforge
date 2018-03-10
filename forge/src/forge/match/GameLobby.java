@@ -4,10 +4,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+
+import forge.util.TextUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.Lists;
@@ -48,13 +51,17 @@ public abstract class GameLobby implements IHasGameType {
 
     private final boolean allowNetworking;
     private HostedMatch hostedMatch;
-    private final Map<LobbySlot, IGameController> gameControllers = Maps.newHashMap();
+    private final HashMap<LobbySlot, IGameController> gameControllers = Maps.newHashMap();
     protected GameLobby(final boolean allowNetworking) {
         this.allowNetworking = allowNetworking;
     }
 
     public final boolean isAllowNetworking() {
         return allowNetworking;
+    }
+
+    public final boolean isMatchActive() {
+        return hostedMatch != null && hostedMatch.isMatchOver() == false;
     }
 
     public void setListener(final IUpdateable listener) {
@@ -305,16 +312,16 @@ public abstract class GameLobby implements IHasGameType {
 
         for (final LobbySlot slot : activeSlots) {
             if (!slot.isReady() && slot.getType() != LobbySlotType.OPEN) {
-                SOptionPane.showMessageDialog(String.format("Player %s is not ready", slot.getName()));
+                SOptionPane.showMessageDialog(TextUtil.concatNoSpace("Player ", slot.getName(), " is not ready"));
                 return null;
             }
             if (slot.getDeck() == null) {
-                SOptionPane.showMessageDialog(String.format("Please specify a deck for %s", slot.getName()));
+                SOptionPane.showMessageDialog(TextUtil.concatNoSpace("Please specify a deck for ", slot.getName()));
                 return null;
             }
             if (hasVariant(GameType.Commander) || hasVariant(GameType.TinyLeaders)) {
                 if (!slot.getDeck().has(DeckSection.Commander)) {
-                    SOptionPane.showMessageDialog(String.format("%s doesn't have a commander", slot.getName()));
+                    SOptionPane.showMessageDialog(TextUtil.concatNoSpace(slot.getName(), " doesn't have a commander"));
                     return null;
                 }
             }
@@ -411,6 +418,11 @@ public abstract class GameLobby implements IHasGameType {
                 // Initialise variables for other variants
                 deck = deck == null ? rp.getDeck() : deck;
 
+                final CardPool avatarPool = deck.get(DeckSection.Avatar);
+                if (avatarPool != null && (hasVariant(GameType.Vanguard) || hasVariant(GameType.MomirBasic))) {
+                    vanguardAvatar = avatarPool.get(0);
+                }
+
                 Iterable<PaperCard> schemes = null;
                 Iterable<PaperCard> planes = null;
 
@@ -443,10 +455,6 @@ public abstract class GameLobby implements IHasGameType {
 
                 //Vanguard
                 if (variantTypes.contains(GameType.Vanguard)) {
-                    final CardPool avatarPool = deck.get(DeckSection.Avatar);
-                    if (avatarPool != null && (hasVariant(GameType.Vanguard) || hasVariant(GameType.MomirBasic))) {
-                        vanguardAvatar = avatarPool.get(0);
-                    }
                     if (vanguardAvatar == null) { //ERROR! null if avatar deselected on list
                         SOptionPane.showMessageDialog("No Vanguard avatar selected for " + name
                                 + ". Please choose one or disable the Vanguard variant");
@@ -478,6 +486,8 @@ public abstract class GameLobby implements IHasGameType {
                         gameControllers.put(slot, (IGameController) p.getController());
                     }
                 }
+
+                hostedMatch.gameControllers = gameControllers;
 
                 onGameStarted();
             }

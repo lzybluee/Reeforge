@@ -30,7 +30,7 @@ import forge.game.spellability.SpellAbility;
  * </p>
  * 
  * @author Forge
- * @version $Id: Mana.java 35211 2017-08-25 05:49:00Z Agetian $
+ * @version $Id$
  */
 public class Mana {
     @Override

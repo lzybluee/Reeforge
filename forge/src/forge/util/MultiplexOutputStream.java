@@ -24,7 +24,7 @@ import java.io.OutputStream;
  * An OutputStream that writes to multiple other OutputStreams.
  * 
  * @author Forge
- * @version $Id: MultiplexOutputStream.java 16359 2012-07-29 17:43:03Z Sloth $
+ * @version $Id$
  */
 public class MultiplexOutputStream extends OutputStream {
     private final OutputStream[] streams;

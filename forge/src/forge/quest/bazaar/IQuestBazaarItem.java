@@ -25,7 +25,7 @@ import forge.quest.data.QuestAssets;
  * This interface defines a thing that can be sold at the Bazaar.
  * 
  * @author Forge
- * @version $Id: IQuestBazaarItem.java 27955 2014-10-15 14:52:47Z drdev $
+ * @version $Id$
  */
 public interface IQuestBazaarItem extends Comparable<Object> {
     /**

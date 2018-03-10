@@ -23,7 +23,7 @@ package forge;
  * </p>
  *
  * @author Forge
- * @version $Id: UiCommand.java 29317 2015-05-01 19:27:48Z elcnesh $
+ * @version $Id$
  */
 public interface UiCommand extends java.io.Serializable, Runnable {
 }

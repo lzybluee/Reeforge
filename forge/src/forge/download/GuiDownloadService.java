@@ -25,11 +25,14 @@ import forge.error.BugReporter;
 import forge.interfaces.IButton;
 import forge.interfaces.IProgressBar;
 import forge.interfaces.ITextField;
+import forge.properties.ForgeConstants;
 import forge.util.FileUtil;
+import forge.util.HttpUtil;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.*;
 import java.net.*;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -243,16 +246,7 @@ public abstract class GuiDownloadService implements Runnable {
             cardSkipped = true; //assume skipped unless saved successfully
             String url = kv.getValue();
             //decode URL Key
-            String decodedKey = null;
-            try {
-                decodedKey = URLDecoder.decode(kv.getKey(), "UTF-8");
-            } catch (UnsupportedEncodingException e1) {
-                e1.printStackTrace();
-                return;
-            }
-            if(decodedKey == null) {
-                return;
-            }
+            String decodedKey = URLDecoder.decode(kv.getKey());
             final File fileDest = new File(decodedKey);
 
             System.out.println(count + "/" + totalCount + " - " + fileDest);
@@ -342,15 +336,34 @@ public abstract class GuiDownloadService implements Runnable {
 
     protected static void addMissingItems(Map<String, String> list, String nameUrlFile, String dir) {
         for (Pair<String, String> nameUrlPair : FileUtil.readNameUrlFile(nameUrlFile)) {
-            try {
-                File f = new File(dir, URLDecoder.decode(nameUrlPair.getLeft(), "UTF-8"));
-                //System.out.println(f.getAbsolutePath());
-                if (!f.exists()) {
-                    list.put(f.getAbsolutePath(), nameUrlPair.getRight());
-                }
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+            File f = new File(dir, URLDecoder.decode(nameUrlPair.getLeft()));
+            //System.out.println(f.getAbsolutePath());
+            if (!f.exists()) {
+                list.put(f.getAbsolutePath(), nameUrlPair.getRight());
             }
         }
+    }
+
+    protected static HashSet<String> retrieveManifestDirectory() {
+        String manifestUrl = ForgeConstants.URL_PIC_DOWNLOAD;
+        HashSet<String> existingSets = new HashSet<>();
+
+        String response = HttpUtil.getURL(manifestUrl);
+
+        if (response == null)  return null;
+
+        String[] strings = response.split("<a href=\"");
+
+        for (String s : strings) {
+            int idx = s.indexOf('/');
+            if (!Character.isLetterOrDigit(s.charAt(0)) || idx > 4 || idx == -1) {
+                continue;
+            }
+
+            String set = s.substring(0, idx);
+            existingSets.add(set);
+        }
+
+        return existingSets;
     }
 }

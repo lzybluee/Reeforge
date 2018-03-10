@@ -1,10 +1,8 @@
 package forge.ai.ability;
 
-import java.util.List;
-
 import com.google.common.base.Predicate;
-
 import forge.ai.ComputerUtilCard;
+import forge.ai.SpecialCardAi;
 import forge.ai.SpellAbilityAi;
 import forge.game.ability.AbilityUtils;
 import forge.game.card.Card;
@@ -15,6 +13,9 @@ import forge.game.player.Player;
 import forge.game.spellability.AbilitySub;
 import forge.game.spellability.SpellAbility;
 import forge.game.zone.ZoneType;
+import forge.util.TextUtil;
+
+import java.util.List;
 
 
 public class RepeatEachAi extends SpellAbilityAi {
@@ -26,7 +27,9 @@ public class RepeatEachAi extends SpellAbilityAi {
     protected boolean canPlayAI(Player aiPlayer, SpellAbility sa) {
         String logic = sa.getParam("AILogic");
 
-        if ("Never".equals(logic)) {
+        if ("PriceOfProgress".equals(logic)) {
+            return SpecialCardAi.PriceOfProgress.consider(aiPlayer, sa);
+        } else if ("Never".equals(logic)) {
             return false;
         } else if ("CloneMyTokens".equals(logic)) {
             if (CardLists.filter(aiPlayer.getCreaturesInPlay(), Presets.TOKEN).size() < 2) {
@@ -66,12 +69,12 @@ public class RepeatEachAi extends SpellAbilityAi {
                 }
             }
         } else if ("OpponentHasCreatures".equals(logic)) {
-        	for (Player opp : aiPlayer.getOpponents()) {
-        		if (!opp.getCreaturesInPlay().isEmpty()){
-        			return true;
-        		}
-        	}
-        	return false;
+            for (Player opp : aiPlayer.getOpponents()) {
+                if (!opp.getCreaturesInPlay().isEmpty()){
+                    return true;
+                }
+            }
+            return false;
         } else if ("OpponentHasMultipleCreatures".equals(logic)) {
             for (Player opp : aiPlayer.getOpponents()) {
                 if (opp.getCreaturesInPlay().size() > 1){
@@ -81,11 +84,11 @@ public class RepeatEachAi extends SpellAbilityAi {
             return false;
         } else if ("AllPlayerLoseLife".equals(logic)) {
             final Card source = sa.getHostCard();
-            AbilitySub repeat = sa.getAdditonalAbility("RepeatSubAbility");
+            AbilitySub repeat = sa.getAdditionalAbility("RepeatSubAbility");
 
             String svar = repeat.getSVar(repeat.getParam("LifeAmount"));
             // replace RememberedPlayerCtrl with YouCtrl
-            String svarYou = svar.replace("RememberedPlayer", "You");
+            String svarYou = TextUtil.fastReplace(svar, "RememberedPlayer", "You");
 
             // Currently all Cards with that are affect all player, including AI
             if (aiPlayer.canLoseLife()) {

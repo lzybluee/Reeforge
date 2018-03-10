@@ -1,9 +1,12 @@
 package forge.game.ability.effects;
 
 import forge.game.GameEntity;
+import forge.game.ability.AbilityUtils;
 import forge.game.ability.SpellAbilityEffect;
 import forge.game.card.Card;
+import forge.game.card.CardCollection;
 import forge.game.player.Player;
+import forge.game.player.PlayerCollection;
 import forge.game.spellability.SpellAbility;
 import forge.game.spellability.TargetRestrictions;
 
@@ -48,26 +51,41 @@ public class MustAttackEffect extends SpellAbilityEffect {
         final List<Player> tgtPlayers = getTargetPlayers(sa);
         final TargetRestrictions tgt = sa.getTargetRestrictions();
         final String defender = sa.getParam("Defender");
-        final GameEntity entity;
+        final boolean thisTurn = sa.hasParam("ThisTurn");
+        GameEntity entity = null;
         if (defender.equals("Self")) {
             entity = sa.getHostCard();
-        } else if (defender.equals("You")) {
-            entity = sa.getActivatingPlayer();
-        } else if (defender.equals("ParentTargeted")) {
-            entity = (GameEntity)sa.getParent().getTargets().getFirstTargetedPlayer();
         } else {
-            throw new RuntimeException("Illegal defender " + defender + " for MustAttackEffect in card " + sa.getHostCard());
+            PlayerCollection defPlayers = AbilityUtils.getDefinedPlayers(sa.getHostCard(), defender, sa);
+            CardCollection defPWs = AbilityUtils.getDefinedCards(sa.getHostCard(), defender, sa);
+            if ((defPlayers.isEmpty() && defPWs.isEmpty()) || defPlayers.size() > 1 || defPWs.size() > 1) {
+                throw new RuntimeException("Illegal (nonexistent or not uniquely defined) defender " + defender + " for MustAttackEffect in card " + sa.getHostCard());
+            }
+            if (!defPlayers.isEmpty()) {
+                entity = defPlayers.getFirst();
+            } else if (!defPWs.isEmpty()) {
+                entity = defPWs.getFirst();
+            }
         }
-        // System.out.println("Setting mustAttackEntity to: "+entity);
+        //System.out.println("Setting mustAttackEntity to: "+entity);
 
         for (final Player p : tgtPlayers) {
-            if ((tgt == null) || p.canBeTargetedBy(sa) && p != entity) {
-                p.setMustAttackEntity(entity);
+            if ((tgt == null) || p.canBeTargetedBy(sa)) {
+                if (thisTurn) {
+                    p.setMustAttackEntityThisTurn(entity);
+                } else {
+                    p.setMustAttackEntity(entity);
+                }
+
             }
         }
         for (final Card c : getTargetCards(sa)) {
-            if ((tgt == null) || c.canBeTargetedBy(sa) && c.getController() != entity) {
-                c.setMustAttackEntity(entity);
+            if ((tgt == null) || c.canBeTargetedBy(sa)) {
+                if (thisTurn) {
+                    c.setMustAttackEntityThisTurn(entity);
+                } else {
+                    c.setMustAttackEntity(entity);
+                }
             }
         }
 

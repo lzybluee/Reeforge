@@ -12,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.util.List;
 
 import javax.swing.Icon;
@@ -38,7 +37,6 @@ import forge.toolbox.FSkin;
 import forge.toolbox.FSkin.SkinColor;
 import forge.toolbox.FSkin.SkinnedLabel;
 import forge.util.ReflectionUtil;
-import forge.util.RestartUtil;
 
 @SuppressWarnings("serial")
 public class FNavigationBar extends FTitleBarBase {
@@ -204,25 +202,6 @@ public class FNavigationBar extends FTitleBarBase {
             public void mousePressed(final MouseEvent e) {
                 if (btnForge.isEnabled() && System.currentTimeMillis() - timeMenuHidden > 250) { //time comparsion needed clicking button a second time to hide menu
                     showForgeMenu(true);
-                }
-            }
-
-            @Override
-            public void mouseReleased(final MouseEvent e) {
-                if(e.getButton() == MouseEvent.BUTTON3) {
-                    File file = new File("run-forge.bat");
-                    if(file.exists()) {
-                        try {
-                            Runtime.getRuntime().exec("\"" + file.getAbsolutePath() + "\"");
-                        } catch (Exception e1) {
-                            e1.printStackTrace();
-                        }
-                        System.exit(0);
-                    } else {
-                        if (RestartUtil.prepareForRestart()) {
-                            System.exit(0);
-                        }
-                    }
                 }
             }
         });

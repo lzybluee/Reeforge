@@ -28,6 +28,7 @@ import forge.game.spellability.SpellAbility;
 import forge.game.zone.Zone;
 import forge.game.zone.ZoneType;
 import forge.util.FileSection;
+import forge.util.TextUtil;
 import forge.util.Visitor;
 
 import org.apache.commons.lang3.StringUtils;
@@ -52,7 +53,6 @@ public class ReplacementHandler {
         final Object affected = runParams.get("Affected");
         Player decider = null;
 
-        
         // Figure out who decides which of multiple replacements to apply
         // as well as whether or not to apply optional replacements.
         if (affected instanceof Player) {
@@ -61,26 +61,9 @@ public class ReplacementHandler {
             decider = ((Card) affected).getController();
         }
 
-        if (runParams.get("Event").equals("Moved")) {
-            ReplacementResult res = run(runParams, ReplacementLayer.Control, decider);
-            if (res != ReplacementResult.NotReplaced) {
-                return res;
-            }
-            res = run(runParams, ReplacementLayer.Copy, decider);
-            if (res != ReplacementResult.NotReplaced) {
-                return res;
-            }
-            res = run(runParams, ReplacementLayer.Other, decider);
-            if (res != ReplacementResult.NotReplaced) {
-                return res;
-            }
-            res = run(runParams, ReplacementLayer.None, decider);
-            if (res != ReplacementResult.NotReplaced) {
-                return res;
-            }
-        }
-        else {
-            ReplacementResult res = run(runParams, ReplacementLayer.None, decider);
+        // try out all layer
+        for (ReplacementLayer layer : ReplacementLayer.values()) {
+            ReplacementResult res = run(runParams, layer, decider);
             if (res != ReplacementResult.NotReplaced) {
                 return res;
             }
@@ -149,23 +132,12 @@ public class ReplacementHandler {
             return ReplacementResult.NotReplaced;
         }
 
-        int redirectToPlaneswalkerNum = 0;
-        List<ReplacementEffect> replacers = new ArrayList<ReplacementEffect>(possibleReplacers);
-        for(ReplacementEffect re : replacers) {
-            if(re.toString().startsWith("Redirect damage to ") && re.getHostCard().isPlaneswalker()) {
-                if(redirectToPlaneswalkerNum > 0) {
-                    possibleReplacers.remove(re);
-                }
-                redirectToPlaneswalkerNum++;
-            }
-        }
-
         ReplacementEffect chosenRE = decider.getController().chooseSingleReplacementEffect("Choose a replacement effect to apply first.", possibleReplacers, runParams);
 
         possibleReplacers.remove(chosenRE);
 
         chosenRE.setHasRun(true);
-        ReplacementResult res = this.executeReplacement(runParams, chosenRE, decider, game, redirectToPlaneswalkerNum > 1);
+        ReplacementResult res = this.executeReplacement(runParams, chosenRE, decider, game);
         if (res == ReplacementResult.NotReplaced) {
             if (!possibleReplacers.isEmpty()) {
                 res = run(runParams);
@@ -177,7 +149,7 @@ public class ReplacementHandler {
         String message = chosenRE.toString();
         if ( !StringUtils.isEmpty(message))
         	if (chosenRE.getHostCard() != null) {
-        		message = message.replaceAll("CARDNAME", chosenRE.getHostCard().getName());
+        		message = TextUtil.fastReplace(message, "CARDNAME", chosenRE.getHostCard().getName());
         	}
             game.getGameLog().add(GameLogEntryType.EFFECT_REPLACED, message);
         return res;
@@ -191,7 +163,7 @@ public class ReplacementHandler {
      *            the replacement effect to run
      */
     private ReplacementResult executeReplacement(final Map<String, Object> runParams,
-        final ReplacementEffect replacementEffect, final Player decider, final Game game, boolean redirectToPlaneswalkers) {
+        final ReplacementEffect replacementEffect, final Player decider, final Game game) {
         final Map<String, String> mapParams = replacementEffect.getMapParams();
 
         SpellAbility effectSA = null;
@@ -250,13 +222,10 @@ public class ReplacementHandler {
             }
 
             Card cardForUi = host.getCardForUi();
-            String effectDesc = replacementEffect.toString().replaceAll("CARDNAME", cardForUi.getName());
-            String question = replacementEffect instanceof ReplaceDiscard
-                ? String.format("Apply replacement effect of %s to %s?\r\n(%s)", cardForUi, runParams.get("Card").toString(), effectDesc)
-                : String.format("Apply replacement effect of %s?\r\n(%s)", cardForUi, effectDesc);
-            if(redirectToPlaneswalkers) {
-                question = "Apply replacement effect?\r\n(Redirect damage to one of the planeswalkers.)";
-            }
+            String effectDesc = TextUtil.fastReplace(replacementEffect.toString(), "CARDNAME", cardForUi.getName());
+            final String question = replacementEffect instanceof ReplaceDiscard
+                ? TextUtil.concatWithSpace("Apply replacement effect of", cardForUi.toString(), "to", TextUtil.addSuffix(runParams.get("Card").toString(),"?\r\n"), TextUtil.enclosedParen(effectDesc))
+                : TextUtil.concatWithSpace("Apply replacement effect of", TextUtil.addSuffix(cardForUi.toString(),"?\r\n"), TextUtil.enclosedParen(effectDesc));
             boolean confirmed = optDecider.getController().confirmReplacementEffect(replacementEffect, effectSA, question);
             if (!confirmed) {
                 return ReplacementResult.NotReplaced;
@@ -279,7 +248,7 @@ public class ReplacementHandler {
             final Card repHost = host;
             String repType = repHost.getSVar(mapParams.get("ManaReplacement"));
             if (repType.contains("Chosen") && repHost.hasChosenColor()) {
-                repType = repType.replace("Chosen", MagicColor.toShortString(repHost.getChosenColor()));
+                repType = TextUtil.fastReplace(repType, "Chosen", MagicColor.toShortString(repHost.getChosenColor()));
             }
             manaAb.getManaPart().setManaReplaceType(repType);
             manaAb.getManaPart().produceMana(rep, player1, manaAb);

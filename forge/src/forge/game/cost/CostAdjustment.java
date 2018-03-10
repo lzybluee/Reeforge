@@ -1,14 +1,7 @@
 package forge.game.cost;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import forge.card.CardStateName;
 import forge.card.mana.ManaAtom;
 import forge.card.mana.ManaCost;
@@ -16,12 +9,8 @@ import forge.card.mana.ManaCostShard;
 import forge.game.Game;
 import forge.game.GameObject;
 import forge.game.ability.AbilityUtils;
-import forge.game.card.Card;
-import forge.game.card.CardCollection;
-import forge.game.card.CardCollectionView;
-import forge.game.card.CardFactoryUtil;
-import forge.game.card.CardLists;
-import forge.game.card.CardPredicates;
+import forge.game.card.*;
+import forge.game.keyword.KeywordInterface;
 import forge.game.mana.ManaCostBeingPaid;
 import forge.game.player.Player;
 import forge.game.spellability.AbilityActivated;
@@ -31,6 +20,11 @@ import forge.game.spellability.TargetChoices;
 import forge.game.staticability.StaticAbility;
 import forge.game.trigger.TriggerType;
 import forge.game.zone.ZoneType;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class CostAdjustment {
 
@@ -51,6 +45,14 @@ public class CostAdjustment {
             host.setState(CardStateName.FaceDown, false);
             isStateChangeToFaceDown = true;
         } // isSpell
+
+        // Commander Tax there
+        if (sa.isSpell() && host.isCommander() && ZoneType.Command.equals(host.getCastFrom())) {
+            int n = player.getCommanderCast(host) * 2;
+            if (n > 0) {
+                result.add(new Cost(ManaCost.get(n), false));
+            }
+        }
     
         CardCollection cardsOnBattlefield = new CardCollection(game.getCardsIn(ZoneType.Battlefield));
         cardsOnBattlefield.addAll(game.getCardsIn(ZoneType.Stack));
@@ -208,7 +210,7 @@ public class CostAdjustment {
         }
 
         if (sa.isSpell()) {
-            if (sa.isDelve()) {
+            if (sa.getHostCard().hasKeyword("Delve")) {
                 sa.getHostCard().clearDelved();
 
                 final CardCollection delved = new CardCollection();
@@ -221,7 +223,7 @@ public class CostAdjustment {
                         cardsToDelveOut.add(c);
                     } else if (!test) {
                         sa.getHostCard().addDelved(c);
-                        delved.add(game.getAction().exile(c, null));
+                        delved.add(game.getAction().exile(c, null, Maps.newHashMap()));
                     }
                 }
                 if (!delved.isEmpty()) {
@@ -256,10 +258,6 @@ public class CostAdjustment {
             untappedCards = CardLists.filter(untappedCards, CardPredicates.Presets.CREATURES);
         }
 
-        if (untappedCards.size() == 0) {
-            return;
-        }
-
         Map<Card, ManaCostShard> convokedCards = sa.getActivatingPlayer().getController().chooseCardsForConvokeOrImprovise(sa, cost.toManaCost(), untappedCards, improvise);
         
         // Convoked creats are tapped here with triggers suppressed,
@@ -277,7 +275,8 @@ public class CostAdjustment {
 
     private static void adjustCostByOffering(final ManaCostBeingPaid cost, final SpellAbility sa) {
         String offeringType = "";
-        for (String kw : sa.getHostCard().getKeywords()) {
+        for (KeywordInterface inst : sa.getHostCard().getKeywords()) {
+            final String kw = inst.getOriginal();
             if (kw.endsWith(" offering")) {
                 offeringType = kw.split(" ")[0];
                 break;
@@ -521,30 +520,41 @@ public class CostAdjustment {
             }
         }
         if (params.containsKey("ValidTarget")) {
-            if (!sa.usesTargeting()) {
-                return false;
-            }
+            SpellAbility curSa = sa;
             boolean targetValid = false;
-            for (GameObject target : sa.getTargets().getTargets()) {
-                if (target.isValid(params.get("ValidTarget").split(","), hostCard.getController(), hostCard, sa)) {
-                    targetValid = true;
+            outer: while (curSa != null) {
+                if (!curSa.usesTargeting()) {
+                    curSa = curSa.getSubAbility();
+                    continue;
                 }
+                for (GameObject target : curSa.getTargets().getTargets()) {
+                    if (target.isValid(params.get("ValidTarget").split(","), hostCard.getController(), hostCard, curSa)) {
+                        targetValid = true;
+                        break outer;
+                    }
+                }
+                curSa = curSa.getSubAbility();
             }
             if (!targetValid) {
                 return false;
             }
         }
         if (params.containsKey("ValidSpellTarget")) {
-            if (!sa.usesTargeting()) {
-                return false;
-            }
+            SpellAbility curSa = sa;
             boolean targetValid = false;
-            for (SpellAbility target : sa.getTargets().getTargetSpells()) {
-                Card targetCard = target.getHostCard();
-                if (targetCard.isValid(params.get("ValidSpellTarget").split(","), hostCard.getController(), hostCard, sa)) {
-                    targetValid = true;
-                    break;
+            outer: while (curSa != null) {
+                if (!curSa.usesTargeting()) {
+                    curSa = curSa.getSubAbility();
+                    continue;
                 }
+                for (SpellAbility target : curSa.getTargets().getTargetSpells()) {
+                    Card targetCard = target.getHostCard();
+                    if (targetCard.isValid(params.get("ValidSpellTarget").split(","), hostCard.getController(), hostCard, curSa)) {
+                        targetValid = true;
+                        break outer;
+                    }
+                }
+                curSa = curSa.getSubAbility();
             }
             if (!targetValid) {
                 return false;

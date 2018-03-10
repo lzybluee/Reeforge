@@ -21,13 +21,14 @@ import java.util.Comparator;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 
 import forge.game.combat.CombatUtil;
+import forge.game.keyword.KeywordInterface;
 import forge.game.player.Player;
 import forge.game.spellability.SpellAbility;
+import forge.game.zone.Zone;
+import forge.game.zone.ZoneType;
 import forge.util.collect.FCollectionView;
-import forge.util.PredicateString;
 
 
 /**
@@ -36,7 +37,7 @@ import forge.util.PredicateString;
  * </p>
  * 
  * @author Forge
- * @version $Id: CardPredicates.java 35179 2017-08-23 12:53:44Z Agetian $
+ * @version $Id$
  */
 public final class CardPredicates {
 
@@ -87,7 +88,12 @@ public final class CardPredicates {
         return new Predicate<Card>() {
             @Override
             public boolean apply(final Card c) {
-                return Iterables.any(c.getKeywords(), PredicateString.contains(keyword));
+                for (KeywordInterface k : c.getKeywords()) {
+                    if (k.getOriginal().contains(keyword)) {
+                        return true;
+                    }
+                }
+                return false;
             }
         };
     }
@@ -366,6 +372,33 @@ public final class CardPredicates {
             @Override
             public int compare(Card arg0, Card arg1) {
                 return Long.compare(arg0.getTimestamp(), arg1.getTimestamp());
+            }
+        };
+    }
+
+    public static final Predicate<Card> inZone(final ZoneType zt) {
+        return new Predicate<Card>() {
+            @Override
+            public boolean apply(final Card c) {
+                Zone z = c.getLastKnownZone();
+                return z != null && z.is(zt);
+            }
+        };
+    }
+
+    public static final Predicate<Card> inZone(final Iterable<ZoneType> zt) {
+        return new Predicate<Card>() {
+            @Override
+            public boolean apply(final Card c) {
+                Zone z = c.getLastKnownZone();
+                if (z != null) {
+                    for (ZoneType t : zt) {
+                        if (z.is(t)) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
             }
         };
     }

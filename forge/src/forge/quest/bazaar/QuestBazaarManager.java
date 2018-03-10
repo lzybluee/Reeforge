@@ -53,7 +53,7 @@ import forge.util.XmlUtil;
  * </p>
  *
  * @author Forge
- * @version $Id: QuestBazaarManager.java 29414 2015-05-17 11:28:21Z elcnesh $
+ * @version $Id$
  */
 public class QuestBazaarManager {
     private final File xmlFile;

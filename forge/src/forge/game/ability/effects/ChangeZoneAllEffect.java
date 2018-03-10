@@ -2,22 +2,19 @@ package forge.game.ability.effects;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
-
 import forge.card.CardStateName;
 import forge.game.Game;
+import forge.game.GameActionUtil;
 import forge.game.ability.AbilityUtils;
 import forge.game.ability.SpellAbilityEffect;
-import forge.game.card.Card;
-import forge.game.card.CardCollection;
-import forge.game.card.CardLists;
-import forge.game.card.CardPredicates;
-import forge.game.card.CardUtil;
+import forge.game.card.*;
 import forge.game.player.Player;
 import forge.game.spellability.SpellAbility;
 import forge.game.trigger.TriggerType;
 import forge.game.zone.Zone;
 import forge.game.zone.ZoneType;
 import forge.util.Lang;
+import forge.util.TextUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -97,7 +94,7 @@ public class ChangeZoneAllEffect extends SpellAbilityEffect {
             final String targets = Lang.joinHomogenous(cards);
             final String message;
             if (sa.hasParam("OptionQuestion")) {
-            	message = sa.getParam("OptionQuestion").replace("TARGETS", targets); 
+            	message = TextUtil.fastReplace(sa.getParam("OptionQuestion"), "TARGETS", targets);
             } else {
             	final StringBuilder sb = new StringBuilder();
 
@@ -131,26 +128,12 @@ public class ChangeZoneAllEffect extends SpellAbilityEffect {
 
         if ((destination == ZoneType.Library || destination == ZoneType.PlanarDeck)
         		&& !sa.hasParam("Shuffle") && cards.size() >= 2 && !random) {
-            CardCollection orderedCards = new CardCollection();
-            for(Player p : game.getPlayers()) {
-                CardCollection ordered = new CardCollection();
-                CardCollection token = new CardCollection();
-                for(Card c : cards) {
-                    if(c.getOwner() == p) {
-                        if(c.isToken()) {
-                            token.add(c);
-                        } else {
-                            ordered.add(c);
-                        }
-                    }
-                }
-                if(ordered.size() > 1) {
-                    ordered = (CardCollection) p.getController().orderMoveToZoneList(ordered, destination);
-                }
-                orderedCards.addAll(ordered);
-                orderedCards.addAll(token);
-            }
-            cards = new CardCollection(orderedCards);
+            Player p = AbilityUtils.getDefinedPlayers(source, sa.getParamOrDefault("DefinedPlayer", "You"), sa).get(0);
+            cards = (CardCollection) p.getController().orderMoveToZoneList(cards, destination);
+        }
+
+        if (destination == ZoneType.Graveyard) {
+            cards = (CardCollection) GameActionUtil.orderCardsByTheirOwners(game, cards, ZoneType.Graveyard);
         }
 
         if (destination.equals(ZoneType.Library) && random) {
@@ -184,9 +167,9 @@ public class ChangeZoneAllEffect extends SpellAbilityEffect {
             Card movedCard = null;
             if (sa.hasParam("GainControl")) {
                 c.setController(sa.getActivatingPlayer(), game.getNextTimestamp());
-                movedCard = game.getAction().moveToPlay(c, sa.getActivatingPlayer(), null);
+                movedCard = game.getAction().moveToPlay(c, sa.getActivatingPlayer(), sa);
             } else {
-                movedCard = game.getAction().moveTo(destination, c, libraryPos, null);
+                movedCard = game.getAction().moveTo(destination, c, libraryPos, sa);
                 if (destination == ZoneType.Exile && !c.isToken()) {
                     Card host = sa.getOriginalHost();
                     if (host == null) {

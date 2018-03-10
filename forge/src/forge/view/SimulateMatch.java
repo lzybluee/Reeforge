@@ -3,23 +3,21 @@ package forge.view;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import forge.LobbyPlayer;
 import forge.deck.DeckGroup;
+import forge.game.*;
 import forge.properties.ForgeConstants;
 import forge.tournament.system.*;
+import forge.util.TextUtil;
 import forge.util.storage.IStorage;
 import org.apache.commons.lang3.text.WordUtils;
 import org.apache.commons.lang3.time.StopWatch;
 
 import forge.deck.Deck;
 import forge.deck.io.DeckSerializer;
-import forge.game.Game;
-import forge.game.GameLogEntry;
-import forge.game.GameRules;
-import forge.game.GameType;
-import forge.game.GameLogEntryType;
-import forge.game.Match;
 import forge.game.player.RegisteredPlayer;
 import forge.model.FModel;
 import forge.player.GamePlayerUtil;
@@ -102,13 +100,13 @@ public class SimulateMatch {
             for(String deck : params.get("d")) {
                 Deck d = deckFromCommandLineParameter(deck, type);
                 if (d == null) {
-                    System.out.println(String.format("Could not load deck - %s, match cannot start", deck));
+                    System.out.println(TextUtil.concatNoSpace("Could not load deck - ", deck, ", match cannot start"));
                     return;
                 }
                 if (i > 1) {
                     sb.append(" vs ");
                 }
-                String name = String.format("Ai(%s)-%s", i, d.getName());
+                String name = TextUtil.concatNoSpace("Ai(", String.valueOf(i), ")-", d.getName());
                 sb.append(name);
 
                 RegisteredPlayer rp;
@@ -160,14 +158,38 @@ public class SimulateMatch {
         System.out.println("\tq - Quiet flag. Output just the game result, not the entire game log.");
     }
 
-    private static void simulateSingleMatch(Match mc, int iGame, boolean outputGamelog) {
-        StopWatch sw = new StopWatch();
+
+
+    private static void simulateSingleMatch(final Match mc, int iGame, boolean outputGamelog) {
+        final StopWatch sw = new StopWatch();
         sw.start();
 
-        Game g1 = mc.createGame();
+        final Game g1 = mc.createGame();
         // will run match in the same thread
-        mc.startGame(g1);
-        sw.stop();
+
+        long startTime = System.currentTimeMillis();
+        try {
+            TimeLimitedCodeBlock.runWithTimeout(new Runnable() {
+                @Override
+                public void run() {
+                    mc.startGame(g1);
+                    sw.stop();
+                }
+            }, 120, TimeUnit.SECONDS);
+        }
+        catch (TimeoutException e) {
+            System.out.println("Stopping slow match as draw");
+            g1.setGameOver(GameEndReason.Draw);
+            sw.stop();
+        }catch (Exception e){
+            e.printStackTrace();
+            g1.setGameOver(GameEndReason.Draw);
+            sw.stop();
+        }catch(StackOverflowError e){
+            g1.setGameOver(GameEndReason.Draw);
+            sw.stop();
+        }
+
 
         List<GameLogEntry> log;
         if (outputGamelog) {
@@ -195,7 +217,7 @@ public class SimulateMatch {
             for(String deck : params.get("d")) {
                 Deck d = deckFromCommandLineParameter(deck, rules.getGameType());
                 if (d == null) {
-                    System.out.println(String.format("Could not load deck - %s, match cannot start", deck));
+                    System.out.println(TextUtil.concatNoSpace("Could not load deck - ", deck, ", match cannot start"));
                     return;
                 }
 
@@ -220,7 +242,7 @@ public class SimulateMatch {
                 })) {
                     Deck d = DeckSerializer.fromFile(deck);
                     if (d == null) {
-                        System.out.println(String.format("Could not load deck - %s, match cannot start", deck.getName()));
+                        System.out.println(TextUtil.concatNoSpace("Could not load deck - ", deck.getName(), ", match cannot start"));
                         return;
                     }
                     deckGroup.addAiDeck(d);
@@ -251,16 +273,17 @@ public class SimulateMatch {
 
         String lastWinner = "";
         int curRound = 0;
-        System.out.println(String.format("Starting a %s tournament with %d players over %d rounds", tournament,
-                numPlayers, tourney.getTotalRounds()));
+        System.out.println(TextUtil.concatNoSpace("Starting a ", tournament, " tournament with ",
+                String.valueOf(numPlayers), " players over ",
+                String.valueOf(tourney.getTotalRounds()), " rounds"));
         while(!tourney.isTournamentOver()) {
             if (tourney.getActiveRound() != curRound) {
                 if (curRound != 0) {
-                    System.out.println(String.format("End Round - %d", curRound));
+                    System.out.println(TextUtil.concatNoSpace("End Round - ", String.valueOf(curRound)));
                 }
                 curRound = tourney.getActiveRound();
                 System.out.println("");
-                System.out.println(String.format("Round %d Pairings:", curRound));
+                System.out.println(TextUtil.concatNoSpace("Round ", String.valueOf(curRound) ," Pairings:"));
 
                 for(TournamentPairing pairing : tourney.getActivePairings()) {
                     System.out.println(pairing.outputHeader());
@@ -303,7 +326,7 @@ public class SimulateMatch {
                     if (winner.equals(tp.getPlayer())) {
                         pairing.setWinner(tp);
                         lastWinner = winner.getName();
-                        System.out.println(String.format("Match Winner - %s!", lastWinner));
+                        System.out.println(TextUtil.concatNoSpace("Match Winner - ", lastWinner, "!"));
                         System.out.println("");
                         break;
                     }

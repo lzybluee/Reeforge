@@ -1,26 +1,20 @@
 package forge.ai.ability;
 
-import java.util.List;
-
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
-
-import forge.ai.ComputerUtil;
-import forge.ai.ComputerUtilCard;
-import forge.ai.SpellAbilityAi;
+import forge.ai.*;
 import forge.game.ability.AbilityUtils;
-import forge.game.card.Card;
-import forge.game.card.CardCollection;
-import forge.game.card.CardLists;
-import forge.game.card.CardPredicates;
+import forge.game.card.*;
 import forge.game.card.CardPredicates.Presets;
-import forge.game.card.CardUtil;
+import forge.game.phase.PhaseHandler;
 import forge.game.phase.PhaseType;
 import forge.game.player.Player;
 import forge.game.player.PlayerActionConfirmMode;
 import forge.game.player.PlayerCollection;
 import forge.game.spellability.SpellAbility;
+
+import java.util.List;
 
 public class CopyPermanentAi extends SpellAbilityAi {
     @Override
@@ -28,8 +22,19 @@ public class CopyPermanentAi extends SpellAbilityAi {
         // Card source = sa.getHostCard();
         // TODO - I'm sure someone can do this AI better
 
+        PhaseHandler ph = aiPlayer.getGame().getPhaseHandler();
+        String aiLogic = sa.getParamOrDefault("AILogic", "");
+
         if (ComputerUtil.preventRunAwayActivations(sa)) {
             return false;
+        }
+
+        if ("MimicVat".equals(aiLogic)) {
+            return SpecialCardAi.MimicVat.considerCopy(aiPlayer, sa);
+        } else if ("AtEOT".equals(aiLogic)) {
+            return ph.is(PhaseType.END_OF_TURN);
+        } else if ("AtOppEOT".equals(aiLogic)) {
+            return ph.is(PhaseType.END_OF_TURN) && ph.getPlayerTurn() != aiPlayer;
         }
 
         if (sa.hasParam("AtEOT") && !aiPlayer.getGame().getPhaseHandler().is(PhaseType.MAIN1)) {
@@ -39,6 +44,13 @@ public class CopyPermanentAi extends SpellAbilityAi {
         if (sa.hasParam("Defined")) {
             // If there needs to be an imprinted card, don't activate the ability if nothing was imprinted yet (e.g. Mimic Vat)
             if (sa.getParam("Defined").equals("Imprinted.ExiledWithSource") && sa.getHostCard().getImprintedCards().isEmpty()) {
+                return false;
+            }
+        }
+
+        if (sa.hasParam("Embalm") || sa.hasParam("Eternalize")) {
+            // E.g. Vizier of Many Faces: check to make sure it makes sense to make the token now
+            if (ComputerUtilCard.checkNeedsToPlayReqs(sa.getHostCard(), sa) != AiPlayDecision.WillPlay) {
                 return false;
             }
         }

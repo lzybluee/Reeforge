@@ -28,7 +28,7 @@ import java.util.Map;
  * </p>
  * 
  * @author Forge
- * @version $Id: TriggerBlocks.java 30294 2015-10-16 01:53:32Z friarsol $
+ * @version $Id$
  */
 public class TriggerBlocks extends Trigger {
 

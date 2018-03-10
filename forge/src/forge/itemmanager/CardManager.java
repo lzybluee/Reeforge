@@ -6,11 +6,11 @@ import forge.item.PaperCard;
 import forge.itemmanager.filters.*;
 import forge.model.FModel;
 import forge.quest.QuestWorld;
+import forge.quest.data.QuestPreferences;
 import forge.screens.home.quest.DialogChooseSets;
 import forge.screens.match.controllers.CDetailPicture;
 
 import javax.swing.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -21,8 +21,12 @@ import java.util.Map.Entry;
  */
 @SuppressWarnings("serial")
 public class CardManager extends ItemManager<PaperCard> {
-    public CardManager(final CDetailPicture cDetailPicture, final boolean wantUnique0) {
+    
+    private boolean QuestMode;
+
+    public CardManager(final CDetailPicture cDetailPicture, final boolean wantUnique0, final boolean qm) {
         super(PaperCard.class, cDetailPicture, wantUnique0);
+        QuestMode = qm;
     }
 
     @Override
@@ -60,13 +64,21 @@ public class CardManager extends ItemManager<PaperCard> {
         itemManager.addFilter(new CardColorFilter(itemManager));
         itemManager.addFilter(new CardTypeFilter(itemManager));
         itemManager.addFilter(new CardCMCFilter(itemManager));
+        if (FModel.getQuestPreferences()
+                .getPrefInt(QuestPreferences.QPref.FOIL_FILTER_DEFAULT) == 1) {
+            itemManager.addFilter(new CardFoilFilter(itemManager));
+        }
+        if (FModel.getQuestPreferences()
+                .getPrefInt(QuestPreferences.QPref.RATING_FILTER_DEFAULT) == 1) {
+            itemManager.addFilter(new CardRatingFilter(itemManager));
+        }
     }
 
     public static ItemFilter<PaperCard> createSearchFilter(final ItemManager<? super PaperCard> itemManager) {
         return new CardSearchFilter(itemManager);
     }
 
-    public static void buildAddFilterMenu(JMenu menu, final ItemManager<? super PaperCard> itemManager) {
+    public void buildAddFilterMenu(JMenu menu, final ItemManager<? super PaperCard> itemManager) {
         GuiUtils.addSeparator(menu); //separate from current search item
 
         JMenu fmt = GuiUtils.createMenu("Format");
@@ -163,6 +175,15 @@ public class CardManager extends ItemManager<PaperCard> {
                 itemManager.addFilter(new CardFoilFilter(itemManager));
             }
         }, itemManager.getFilter(CardFoilFilter.class) == null);
+
+        if (QuestMode) {
+            GuiUtils.addMenuItem(menu, "Personal Rating", null, new Runnable() {
+                @Override
+                public void run() {
+                    itemManager.addFilter(new CardRatingFilter(itemManager));
+                }
+            }, itemManager.getFilter(CardRatingFilter.class) == null);
+        }
 
         GuiUtils.addSeparator(menu);
 

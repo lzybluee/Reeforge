@@ -35,7 +35,7 @@ import java.util.List;
  * </p>
  * 
  * @author Forge
- * @version $Id: DeckGenerator5Color.java 35016 2017-08-13 01:44:36Z Max mtg $
+ * @version $Id$
  */
 public class DeckGenerator5Color extends DeckGeneratorBase {
     @Override

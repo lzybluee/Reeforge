@@ -242,6 +242,16 @@ public enum VSubmenuQuestPrefs implements IVSubmenu<CSubmenuQuestPrefs> {
         pnlRewards.add(new FLabel.Builder().text("Alternative Win").fontAlign(SwingConstants.RIGHT).build(), labelConstraints);
         pnlRewards.add(new PrefInput(QPref.REWARDS_ALTERNATIVE, QuestPreferencesErrType.REWARDS), fieldConstraints);
 
+        FLabel winMulti = new FLabel.Builder().text("Bonus Multiplier per Win").fontAlign(SwingConstants.RIGHT).build();
+        winMulti.setToolTipText("Each previous win increases your reward by this much after winning a match.");
+        pnlRewards.add(winMulti, labelConstraints);
+        pnlRewards.add(new PrefInput(QPref.REWARDS_WINS_MULTIPLIER, QuestPreferencesErrType.REWARDS), fieldConstraints);
+
+        FLabel winMultiMax = new FLabel.Builder().text("Max Wins for Multiplier").fontAlign(SwingConstants.RIGHT).build();
+        winMultiMax.setToolTipText("Reward stops increasing after you have this many wins.");
+        pnlRewards.add(winMultiMax, labelConstraints);
+        pnlRewards.add(new PrefInput(QPref.REWARDS_WINS_MULTIPLIER_MAX, QuestPreferencesErrType.REWARDS), fieldConstraints);
+
         pnlRewards.add(new FLabel.Builder().text("Win by Turn 15").fontAlign(SwingConstants.RIGHT).build(), labelConstraints);
         pnlRewards.add(new PrefInput(QPref.REWARDS_TURN15, QuestPreferencesErrType.REWARDS), fieldConstraints);
 
@@ -253,6 +263,9 @@ public enum VSubmenuQuestPrefs implements IVSubmenu<CSubmenuQuestPrefs> {
 
         pnlRewards.add(new FLabel.Builder().text("First Turn Win").fontAlign(SwingConstants.RIGHT).build(), labelConstraints);
         pnlRewards.add(new PrefInput(QPref.REWARDS_TURN1, QuestPreferencesErrType.REWARDS), fieldConstraints);
+
+        pnlRewards.add(new FLabel.Builder().text("Max Life Diff. Bonus").fontAlign(SwingConstants.RIGHT).build(), labelConstraints);
+        pnlRewards.add(new PrefInput(QPref.REWARDS_HEALTH_DIFF_MAX, QuestPreferencesErrType.REWARDS), fieldConstraints);
     }
 
     private void populateDifficulty() {
@@ -329,12 +342,6 @@ public enum VSubmenuQuestPrefs implements IVSubmenu<CSubmenuQuestPrefs> {
         pnlDifficulty.add(new FLabel.Builder().text("Wins for New Challenge").fontAlign(SwingConstants.RIGHT).build(), labelConstraints);
         pnlDifficulty.add(new PrefInput(QPref.WINS_NEW_CHALLENGE, QuestPreferencesErrType.DIFFICULTY), fieldConstraints + ", wrap");
         
-        pnlDifficulty.add(new FLabel.Builder().text("Wins for New Draft").fontAlign(SwingConstants.RIGHT).build(), labelConstraints);
-        pnlDifficulty.add(new PrefInput(QPref.WINS_NEW_DRAFT, QuestPreferencesErrType.DIFFICULTY), fieldConstraints + ", wrap");
-
-        pnlDifficulty.add(new FLabel.Builder().text("Wins per Draft Rotation").fontAlign(SwingConstants.RIGHT).build(), labelConstraints);
-        pnlDifficulty.add(new PrefInput(QPref.WINS_ROTATE_DRAFT, QuestPreferencesErrType.DIFFICULTY), fieldConstraints + ", wrap");
-
         pnlDifficulty.add(new FLabel.Builder().text("Starting Snow Lands").fontAlign(SwingConstants.RIGHT).build(), labelConstraints);
         pnlDifficulty.add(new PrefInput(QPref.STARTING_SNOW_LANDS, QuestPreferencesErrType.DIFFICULTY), fieldConstraints + ", wrap");
 
@@ -441,6 +448,12 @@ public enum VSubmenuQuestPrefs implements IVSubmenu<CSubmenuQuestPrefs> {
         pnlShop.add(new FLabel.Builder().text("Item Level Restriction").fontAlign(SwingConstants.RIGHT).build(), labelConstraints);
         pnlShop.add(new PrefInput(QPref.ITEM_LEVEL_RESTRICTION, QuestPreferencesErrType.SHOP), fieldConstraints);
 
+        pnlShop.add(new FLabel.Builder().text("Foil filter Always On").fontAlign(SwingConstants.RIGHT).build(), labelConstraints);
+        pnlShop.add(new PrefInput(QPref.FOIL_FILTER_DEFAULT, QuestPreferencesErrType.SHOP), fieldConstraints);
+
+        pnlShop.add(new FLabel.Builder().text("Ratings filter Always On").fontAlign(SwingConstants.RIGHT).build(), labelConstraints);
+        pnlShop.add(new PrefInput(QPref.RATING_FILTER_DEFAULT, QuestPreferencesErrType.SHOP), fieldConstraints);
+
     }
 
     private void populateDraftTournaments() {
@@ -454,6 +467,19 @@ public enum VSubmenuQuestPrefs implements IVSubmenu<CSubmenuQuestPrefs> {
         randomAIMatches.setToolTipText("If set to 1, AI vs. AI matches in draft tournaments will not be played and their outcome will be decided randomly instead.");
         pnlDraftTournaments.add(randomAIMatches, labelConstraints);
         pnlDraftTournaments.add(new PrefInput(QPref.SIMULATE_AI_VS_AI_RESULTS, QuestPreferencesErrType.DRAFT_TOURNAMENTS), fieldConstraints);
+
+        pnlDraftTournaments.add(new FLabel.Builder().text("Wins for New Draft").fontAlign(SwingConstants.RIGHT).build(), labelConstraints);
+        pnlDraftTournaments.add(new PrefInput(QPref.WINS_NEW_DRAFT, QuestPreferencesErrType.DIFFICULTY), fieldConstraints + ", wrap");
+
+        FLabel rotationAmount = new FLabel.Builder().text("Wins per Draft Rotation").fontAlign(SwingConstants.RIGHT).build();
+        rotationAmount.setToolTipText("If a Draft is not played for this many match wins, it will be removed or replaced.");
+        pnlDraftTournaments.add(rotationAmount, labelConstraints);
+        pnlDraftTournaments.add(new PrefInput(QPref.WINS_ROTATE_DRAFT, QuestPreferencesErrType.DIFFICULTY), fieldConstraints + ", wrap");
+
+        FLabel rotationType = new FLabel.Builder().text("Rotation Type").fontAlign(SwingConstants.RIGHT).build();
+        rotationType.setToolTipText("If set to 0, old drafts disappear, if set to 1, they are replaced with another one using different sets.");
+        pnlDraftTournaments.add(rotationType, labelConstraints);
+        pnlDraftTournaments.add(new PrefInput(QPref.DRAFT_ROTATION, QuestPreferencesErrType.DIFFICULTY), fieldConstraints + ", wrap");
 
     }
 

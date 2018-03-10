@@ -17,13 +17,14 @@
  */
 package forge.card;
 
-import java.util.StringTokenizer;
-
-import org.apache.commons.lang3.StringUtils;
-
+import com.google.common.collect.Iterables;
 import forge.card.mana.IParserManaCost;
 import forge.card.mana.ManaCost;
 import forge.card.mana.ManaCostShard;
+import forge.util.TextUtil;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.StringTokenizer;
 
 /**
  * A collection of methods containing full
@@ -33,6 +34,7 @@ import forge.card.mana.ManaCostShard;
  * @version $Id: CardRules.java 9708 2011-08-09 19:34:12Z jendave $
  */
 public final class CardRules implements ICardCharacteristics {
+    private String normalizedName;
     private CardSplitType splitType;
     private ICardFace mainPart;
     private ICardFace otherPart;
@@ -123,6 +125,9 @@ public final class CardRules implements ICardCharacteristics {
         }
     }
 
+    public String getNormalizedName() { return normalizedName; }
+    public void setNormalizedName(String filename) { normalizedName = filename; }
+
     public CardAiHints getAiHints() {
         return aiHints;
     }
@@ -198,15 +203,13 @@ public final class CardRules implements ICardCharacteristics {
         return mainPart.getOracleText().contains("can be your commander");
     }
 
+    public boolean canBePartnerCommander() {
+        return canBeCommander() && Iterables.contains(mainPart.getKeywords(), "Partner");
+    }
+
     public String getMeldWith() {
         return meldWith;
     }
-
-//    public Set<String> getSets() { return this.setsPrinted.keySet(); }
-//    public CardInSet getEditionInfo(final String setCode) {
-//        final CardInSet result = this.setsPrinted.get(setCode);
-//        return result; // if returns null, String.format("Card '%s' was never printed in set '%s'", this.getName(), setCode);
-//    }
 
     // vanguard card fields, they don't use sides.
     private int deltaHand;
@@ -217,16 +220,20 @@ public final class CardRules implements ICardCharacteristics {
     public void setVanguardProperties(String pt) {
         final int slashPos = pt == null ? -1 : pt.indexOf('/');
         if (slashPos == -1) {
-            throw new RuntimeException(String.format("Vanguard '%s' has bad hand/life stats", this.getName()));
+            throw new RuntimeException("Vanguard '" + this.getName() + "' has bad hand/life stats");
         }
-        this.deltaHand = Integer.parseInt(pt.substring(0, slashPos).replace("+", ""));
-        this.deltaLife = Integer.parseInt(pt.substring(slashPos+1).replace("+", ""));
+        this.deltaHand = Integer.parseInt(TextUtil.fastReplace(pt.substring(0, slashPos), "+", ""));
+        this.deltaLife = Integer.parseInt(TextUtil.fastReplace(pt.substring(slashPos+1), "+", ""));
     }
 
     // Downloadable image
     private String dlUrl;
     private String dlUrlOtherSide;
+
+    @Deprecated
     public String getPictureUrl(boolean backface ) { return backface ? dlUrlOtherSide : dlUrl; }
+
+    @Deprecated
     public void setDlUrls(String[] dlUrls) { this.dlUrl = dlUrls[0]; this.dlUrlOtherSide = dlUrls[1]; }
 
     public ColorSet getColorIdentity() {
@@ -251,6 +258,7 @@ public final class CardRules implements ICardCharacteristics {
         private CardSplitType altMode = CardSplitType.None;
         private String meldWith = "";
         private String handLife = null;
+        private String normalizedName = "";
 
         // fields to build CardAiHints
         private boolean removedFromAIDecks = false;
@@ -278,6 +286,7 @@ public final class CardRules implements ICardCharacteristics {
             this.hints = null;
             this.has = null;
             this.meldWith = "";
+            this.normalizedName = "";
         }
 
         /**
@@ -290,6 +299,8 @@ public final class CardRules implements ICardCharacteristics {
             faces[0].assignMissingFields();
             if (null != faces[1]) faces[1].assignMissingFields();
             final CardRules result = new CardRules(faces, altMode, cah);
+
+            result.setNormalizedName(this.normalizedName);
             result.meldWith = this.meldWith;
             result.setDlUrls(pictureUrl);
             if (StringUtils.isNotBlank(handLife))
@@ -297,7 +308,7 @@ public final class CardRules implements ICardCharacteristics {
             return result;
         }
 
-        public final CardRules readCard(final Iterable<String> script) {
+        public final CardRules readCard(final Iterable<String> script, String filename) {
             this.reset();
             for (String line : script) {
                 if (line.isEmpty() || line.charAt(0) == '#') {
@@ -305,7 +316,12 @@ public final class CardRules implements ICardCharacteristics {
                 }
                 this.parseLine(line);
             }
+            this.normalizedName = filename;
             return this.getCard();
+        }
+
+        public final CardRules readCard(final Iterable<String> script) {
+            return readCard(script, null);
         }
 
         /**

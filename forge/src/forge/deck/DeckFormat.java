@@ -17,20 +17,9 @@
  */
 package forge.deck;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import org.apache.commons.lang3.Range;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableSet;
-
 import forge.StaticData;
 import forge.card.CardRules;
 import forge.card.CardRulesPredicates;
@@ -42,6 +31,12 @@ import forge.deck.generation.IDeckGenPool;
 import forge.item.IPaperCard;
 import forge.item.PaperCard;
 import forge.util.Aggregates;
+import forge.util.TextUtil;
+import org.apache.commons.lang3.Range;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * GameType is an enum to determine the type of current game. :)
@@ -51,7 +46,28 @@ public enum DeckFormat {
     Constructed    ( Range.between(60, Integer.MAX_VALUE), Range.between(0, 15), 4),
     QuestDeck      ( Range.between(40, Integer.MAX_VALUE), Range.between(0, 15), 4),
     Limited        ( Range.between(40, Integer.MAX_VALUE), null, Integer.MAX_VALUE),
-    Commander      ( Range.is(99),                         Range.between(0, 10), 1),
+    Commander      ( Range.is(99),                         Range.between(0, 10), 1, new Predicate<CardRules>() {
+        private final Set<String> bannedCards = new HashSet<String>(Arrays.asList(
+               "Adriana's Valor", "Advantageous Proclamation", "Amulet of Quoz", "Ancestral Recall", "Assemble the Rank and Vile",
+               "Backup Plan", "Balance", "Biorhythm", "Black Lotus", "Brago's Favor", "Braids, Cabal Minion", "Bronze Tablet",
+               "Channel", "Chaos Orb", "Coalition Victory", "Contract from Below", "Darkpact", "Demonic Attorney", "Double Stroke",
+               "Echoing Boon", "Emissary's Ploy", "Emrakul, the Aeons Torn", "Erayo, Soratami Ascendant", "Falling Star",
+               "Fastbond", "Gifts Ungiven", "Griselbrand", "Hired Heist", "Hold the Perimeter", "Hymn of the Wilds", "Immediate Action",
+               "Incendiary Dissent", "Iterative Analysis", "Jeweled Bird", "Karakas", "Leovold, Emissary of Trest", "Library of Alexandria",
+               "Limited Resources", "Mox Emerald", "Mox Jet", "Mox Pearl", "Mox Ruby", "Mox Sapphire", "Muzzio's Preparations",
+               "Natural Unity", "Painter's Servant", "Panoptic Mirror", "Power Play", "Primeval Titan", "Prophet of Kruphix",
+               "Rebirth", "Recurring Nightmare", "Rofellos, Llanowar Emissary", "Secret Summoning", "Secrets of Paradise",
+               "Sentinel Dispatch", "Shahrazad", "Sovereign's Realm", "Summoner's Bond", "Sundering Titan", "Sway of the Stars",
+               "Sylvan Primordial", "Tempest Efreet", "Time Vault", "Time Walk", "Timmerian Fiends", "Tinker", "Tolarian Academy",
+               "Trade Secrets", "Unexpected Potential", "Upheaval", "Weight Advantage", "Worldfire", "Worldknit", "Yawgmoth's Bargain"));
+        @Override
+        public boolean apply(CardRules rules) {
+            if (bannedCards.contains(rules.getName())) {
+                return false;
+            }
+            return true;
+        }
+    }),
     TinyLeaders    ( Range.is(49),                         Range.between(0, 10), 1, new Predicate<CardRules>() {
         private final Set<String> bannedCards = new HashSet<String>(Arrays.asList(
                 "Ancestral Recall", "Balance", "Black Lotus", "Black Vise", "Channel", "Chaos Orb", "Contract From Below", "Counterbalance", "Darkpact", "Demonic Attorney", "Demonic Tutor", "Earthcraft", "Edric, Spymaster of Trest", "Falling Star",
@@ -102,6 +118,7 @@ public enum DeckFormat {
     private final int maxCardCopies;
     private final Predicate<CardRules> cardPoolFilter;
     private final static String ADVPROCLAMATION = "Advantageous Proclamation";
+    private final static String SOVREALM = "Sovereign's Realm";
 
     private DeckFormat(Range<Integer> mainRange0, Range<Integer> sideRange0, int maxCardCopies0) {
         this(mainRange0, sideRange0, maxCardCopies0, null);
@@ -169,11 +186,13 @@ public enum DeckFormat {
 
         int min = getMainRange().getMinimum();
         int max = getMainRange().getMaximum();
+        boolean noBasicLands = false;
 
         // Adjust minimum base on number of Advantageous Proclamation or similar cards
         CardPool conspiracies = deck.get(DeckSection.Conspiracy);
         if (conspiracies != null) {
             min -= (5 * conspiracies.countByName(ADVPROCLAMATION, false));
+            noBasicLands = conspiracies.countByName(SOVREALM, false) > 0;
         }
 
         if (hasCommander()) { // 1 Commander, or 2 Partner Commanders
@@ -249,11 +268,11 @@ public enum DeckFormat {
         }
 
         if (deckSize < min) {
-            return String.format("should have at least %d cards", min);
+            return TextUtil.concatWithSpace("should have at least", String.valueOf(min), "cards");
         }
 
         if (deckSize > max) {
-            return String.format("should have no more than %d cards", max);
+            return TextUtil.concatWithSpace("should have no more than", String.valueOf(max), "cards");
         }
 
         if (cardPoolFilter != null) {
@@ -287,12 +306,12 @@ public enum DeckFormat {
             for (final Entry<String, Integer> cp : Aggregates.groupSumBy(allCards, PaperCard.FN_GET_NAME)) {
                 final IPaperCard simpleCard = StaticData.instance().getCommonCards().getCard(cp.getKey());
                 if (simpleCard == null) {
-                    return String.format("contains the nonexisting card %s", cp.getKey());
+                    return TextUtil.concatWithSpace("contains the nonexisting card", cp.getKey());
                 }
 
                 final boolean canHaveMultiple = simpleCard.getRules().getType().isBasicLand() || limitExceptions.contains(cp.getKey());
                 if (!canHaveMultiple && cp.getValue() > maxCopies) {
-                    return String.format("must not contain more than %d copies of the card %s", maxCopies, cp.getKey());
+                    return TextUtil.concatWithSpace("must not contain more than", String.valueOf(maxCopies), "copies of the card", cp.getKey());
                 }
             }
         }
@@ -302,8 +321,8 @@ public enum DeckFormat {
         Range<Integer> sbRange = getSideRange();
         if (sbRange != null && sideboardSize > 0 && !sbRange.contains(sideboardSize)) {
             return sbRange.getMinimum() == sbRange.getMaximum()
-            ? String.format("must have a sideboard of %d cards or no sideboard at all", sbRange.getMaximum())
-            : String.format("must have a sideboard of %d to %d cards or no sideboard at all", sbRange.getMinimum(), sbRange.getMaximum());
+            ? TextUtil.concatWithSpace("must have a sideboard of", String.valueOf(sbRange.getMinimum()), "cards or no sideboard at all")
+            : TextUtil.concatWithSpace("must have a sideboard of", String.valueOf(sbRange.getMinimum()), "to", String.valueOf(sbRange.getMaximum()), "cards or no sideboard at all");
         }
 
         return null;
@@ -337,7 +356,7 @@ public enum DeckFormat {
 
         for (Entry<PaperCard, Integer> cp : schemes) {
             if (cp.getValue() > 2) {
-                return String.format("must not contain more than 2 copies of any Scheme, but has %d of '%s'", cp.getValue(), cp.getKey().getName());
+                return TextUtil.concatWithSpace("must not contain more than 2 copies of any Scheme, but has", String.valueOf(cp.getValue()), "of", TextUtil.enclosedSingleQuote(cp.getKey().getName()));
             }
         }
         return null;
@@ -423,5 +442,13 @@ public enum DeckFormat {
             cmdCI |= p.getRules().getColorIdentity().getColor();
         }
         return Predicates.compose(CardRulesPredicates.hasColorIdentity(cmdCI), PaperCard.FN_GET_RULES);
+    }
+
+    public Predicate<PaperCard> isLegalCardForCommanderOrLegalPartnerPredicate(List<PaperCard> commanders) {
+        byte cmdCI = 0;
+        for (final PaperCard p : commanders) {
+            cmdCI |= p.getRules().getColorIdentity().getColor();
+        }
+        return Predicates.compose(Predicates.or(CardRulesPredicates.hasColorIdentity(cmdCI), CardRulesPredicates.hasKeyword("Partner")), PaperCard.FN_GET_RULES);
     }
 }

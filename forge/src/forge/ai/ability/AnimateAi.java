@@ -1,28 +1,15 @@
 package forge.ai.ability;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import forge.ai.AiCardMemory;
-import forge.ai.ComputerUtil;
-import forge.ai.ComputerUtilCard;
-import forge.ai.ComputerUtilCost;
-import forge.ai.SpellAbilityAi;
+import forge.ai.*;
 import forge.card.CardType;
 import forge.game.Game;
 import forge.game.ability.AbilityFactory;
 import forge.game.ability.AbilityUtils;
 import forge.game.ability.ApiType;
-import forge.game.card.Card;
-import forge.game.card.CardCollection;
-import forge.game.card.CardCollectionView;
-import forge.game.card.CardLists;
-import forge.game.card.CardPredicates;
-import forge.game.card.CardUtil;
+import forge.game.card.*;
 import forge.game.phase.PhaseHandler;
 import forge.game.phase.PhaseType;
 import forge.game.player.Player;
@@ -37,6 +24,10 @@ import forge.game.trigger.Trigger;
 import forge.game.trigger.TriggerHandler;
 import forge.game.zone.ZoneType;
 import forge.util.collect.FCollectionView;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -172,11 +163,17 @@ public class AnimateAi extends SpellAbilityAi {
                         }
                     }
                     if (power + toughness > c.getCurrentPower() + c.getCurrentToughness()) {
-                        bFlag = true;
+                        if (!c.isTapped() || (game.getCombat() != null && game.getCombat().isAttacking(c))) {
+                            bFlag = true;
+                        }
                     }
                 }
 
                 if (!SpellAbilityAi.isSorcerySpeed(sa) && !sa.hasParam("Permanent")) {
+                    if (sa.hasParam("Crew") && c.isCreature()) {
+                        // Do not try to crew a vehicle which is already a creature
+                        return false;
+                    }
                     Card animatedCopy = becomeAnimated(c, sa);
                     if (ph.isPlayerTurn(aiPlayer)
                             && !ComputerUtilCard.doesSpecifiedCreatureAttackAI(aiPlayer, animatedCopy)) {
@@ -186,8 +183,20 @@ public class AnimateAi extends SpellAbilityAi {
                             && !ComputerUtilCard.doesSpecifiedCreatureBlock(aiPlayer, animatedCopy)) {
                         return false;
                     }
-                    this.rememberAnimatedThisTurn(aiPlayer, c);
+                    // also check if maybe there are static effects applied to the animated copy that would matter
+                    // (e.g. Myth Realized)
+                    if (animatedCopy.getCurrentPower() + animatedCopy.getCurrentToughness() >
+                            c.getCurrentPower() + c.getCurrentToughness()) {
+                        if (!isAnimatedThisTurn(aiPlayer, sa.getHostCard())) {
+                            if (!sa.getHostCard().isTapped() || (game.getCombat() != null && game.getCombat().isAttacking(sa.getHostCard()))) {
+                                bFlag = true;
+                            }
+                        }
+                    }
                 }
+            }
+            if (bFlag) {
+                this.rememberAnimatedThisTurn(aiPlayer, sa.getHostCard());
             }
             return bFlag; // All of the defined stuff is animated, not very useful
         } else {
@@ -251,13 +260,8 @@ public class AnimateAi extends SpellAbilityAi {
             // need to targetable
             list = CardLists.getTargetableCards(list, sa);
 
-            // try to look for AI targets if able
-            if (sa.hasParam("AITgts")) {
-                CardCollection prefList = CardLists.getValidCards(list, sa.getParam("AITgts").split(","), ai, source, sa);
-                if(!prefList.isEmpty() || sa.hasParam("AITgtsStrict")) {
-                    list = prefList;
-                }
-            }
+            // Filter AI-specific targets if provided
+            list = ComputerUtil.filterAITgts(sa, ai, (CardCollection)list, false);
 
             // list is empty, no possible targets
             if (list.isEmpty()) {
@@ -301,8 +305,9 @@ public class AnimateAi extends SpellAbilityAi {
                 // if its player turn,
                 // check if its Permanent or that creature would attack
                 if (ph.isPlayerTurn(ai)) {
-                    if (!sa.hasParam("Permanent") && 
-                            !ComputerUtilCard.doesSpecifiedCreatureAttackAI(ai, animatedCopy)) {
+                    if (!sa.hasParam("Permanent")
+                            && !ComputerUtilCard.doesSpecifiedCreatureAttackAI(ai, animatedCopy)
+                            && !sa.hasParam("UntilHostLeavesPlay")) {
                         continue;
                     }
                 }

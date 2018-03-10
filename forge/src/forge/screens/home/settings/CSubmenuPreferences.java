@@ -8,6 +8,7 @@ import forge.game.GameLogEntryType;
 import forge.gui.framework.FScreen;
 import forge.gui.framework.ICDoc;
 import forge.model.FModel;
+import forge.net.server.FServerManager;
 import forge.player.GamePlayerUtil;
 import forge.properties.ForgeConstants;
 import forge.properties.ForgePreferences;
@@ -63,6 +64,11 @@ public enum CSubmenuPreferences implements ICDoc {
             @Override
             public void itemStateChanged(final ItemEvent arg0) {
                 if (updating) { return; }
+                // prevent changing DEV_MODE while network game running
+                if (FServerManager.getInstance().isMatchActive()) {
+                    System.out.println("Can't change DEV_MODE while a network match is in progress!");
+                    return;
+                }
 
                 final boolean toggle = view.getCbDevMode().isSelected();
                 prefs.setPref(FPref.DEV_MODE_ENABLED, String.valueOf(toggle));
@@ -88,7 +94,6 @@ public enum CSubmenuPreferences implements ICDoc {
         lstControls.add(Pair.of(view.getCbAnte(), FPref.UI_ANTE));
         lstControls.add(Pair.of(view.getCbAnteMatchRarity(), FPref.UI_ANTE_MATCH_RARITY));
         lstControls.add(Pair.of(view.getCbManaBurn(), FPref.UI_MANABURN));
-        lstControls.add(Pair.of(view.getCbUniquePlaneswalker(), FPref.UI_UNIQUE_PLANESWALKER));
         lstControls.add(Pair.of(view.getCbScaleLarger(), FPref.UI_SCALE_LARGER));
         lstControls.add(Pair.of(view.getCbRenderBlackCardBorders(), FPref.UI_RENDER_BLACK_BORDERS));
         lstControls.add(Pair.of(view.getCbLargeCardViewers(), FPref.UI_LARGE_CARD_VIEWERS));
@@ -97,6 +102,7 @@ public enum CSubmenuPreferences implements ICDoc {
         lstControls.add(Pair.of(view.getCbEnforceDeckLegality(), FPref.ENFORCE_DECK_LEGALITY));
         lstControls.add(Pair.of(view.getCbCloneImgSource(), FPref.UI_CLONE_MODE_SOURCE));
         lstControls.add(Pair.of(view.getCbRemoveSmall(), FPref.DECKGEN_NOSMALL));
+        lstControls.add(Pair.of(view.getCbCardBased(), FPref.DECKGEN_CARDBASED));
         lstControls.add(Pair.of(view.getCbRemoveArtifacts(), FPref.DECKGEN_ARTIFACTS));
         lstControls.add(Pair.of(view.getCbSingletons(), FPref.DECKGEN_SINGLETONS));
         lstControls.add(Pair.of(view.getCbEnableAICheats(), FPref.UI_ENABLE_AI_CHEATS));
@@ -122,6 +128,7 @@ public enum CSubmenuPreferences implements ICDoc {
         lstControls.add(Pair.of(view.getCbDetailedPaymentDesc(), FPref.UI_DETAILED_SPELLDESC_IN_PROMPT));
         lstControls.add(Pair.of(view.getCbPreselectPrevAbOrder(), FPref.UI_PRESELECT_PREVIOUS_ABILITY_ORDER));
         lstControls.add(Pair.of(view.getCbShowStormCount(), FPref.UI_SHOW_STORM_COUNT_IN_PROMPT));
+        lstControls.add(Pair.of(view.getCbRemindOnPriority(), FPref.UI_REMIND_ON_PRIORITY));
 
         lstControls.add(Pair.of(view.getCbFilterLandsByColorId(), FPref.UI_FILTER_LANDS_BY_COLOR_IDENTITY));
 
@@ -197,6 +204,7 @@ public enum CSubmenuPreferences implements ICDoc {
         initializeAutoYieldModeComboBox();
         initializeCounterDisplayTypeComboBox();
         initializeCounterDisplayLocationComboBox();
+        initializeGraveyardOrderingComboBox();
         initializePlayerNameButton();
     }
 
@@ -338,6 +346,16 @@ public enum CSubmenuPreferences implements ICDoc {
         final String[] elems = {ForgeConstants.AUTO_YIELD_PER_ABILITY, ForgeConstants.AUTO_YIELD_PER_CARD};
         final FPref userSetting = FPref.UI_AUTO_YIELD_MODE;
         final FComboBoxPanel<String> panel = this.view.getAutoYieldModeComboBoxPanel();
+        final FComboBox<String> comboBox = createComboBox(elems, userSetting);
+        final String selectedItem = this.prefs.getPref(userSetting);
+        panel.setComboBox(comboBox, selectedItem);
+    }
+
+    private void initializeGraveyardOrderingComboBox() {
+        final String[] elems = {ForgeConstants.GRAVEYARD_ORDERING_NEVER, ForgeConstants.GRAVEYARD_ORDERING_OWN_CARDS,
+                ForgeConstants.GRAVEYARD_ORDERING_ALWAYS};
+        final FPref userSetting = FPref.UI_ALLOW_ORDER_GRAVEYARD_WHEN_NEEDED;
+        final FComboBoxPanel<String> panel = this.view.getCbpGraveyardOrdering();
         final FComboBox<String> comboBox = createComboBox(elems, userSetting);
         final String selectedItem = this.prefs.getPref(userSetting);
         panel.setComboBox(comboBox, selectedItem);

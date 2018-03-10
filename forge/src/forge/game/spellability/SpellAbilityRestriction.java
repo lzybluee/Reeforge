@@ -43,7 +43,7 @@ import forge.util.Expressions;
  * </p>
  * 
  * @author Forge
- * @version $Id: SpellAbilityRestriction.java 35129 2017-08-19 09:18:14Z Agetian $
+ * @version $Id$
  */
 public class SpellAbilityRestriction extends SpellAbilityVariables {
     // A class for handling SpellAbility Restrictions. These restrictions
@@ -89,6 +89,9 @@ public class SpellAbilityRestriction extends SpellAbilityVariables {
             }
             if (value.equals("Desert")) {
                 this.setDesert(true);
+            }
+            if (value.equals("Blessing")) {
+                this.setBlessing(true);
             }
             if (value.startsWith("Prowl")) {
                 final List<String> prowlTypes = Lists.newArrayList();
@@ -214,16 +217,18 @@ public class SpellAbilityRestriction extends SpellAbilityVariables {
 
         // for Bestow need to check the animated State
         if (sa.isSpell() && sa.hasParam("Bestow")) {
-            cp = CardUtil.getLKICopy(c);
-            cp.animateBestow();
-        }
+            // already bestowed or in battlefield, no need to check for spell
+            if (c.isBestowed() || c.isInZone(ZoneType.Battlefield)) {
+                return false;
+            }
 
-        if (sa.toString().startsWith("Fuse (") && !cardZone.is(ZoneType.Hand, activator)) {
-            return false;
-        }
+            if (!c.isLKI()) {
+                cp = CardUtil.getLKICopy(c);
+            }
 
-        if (sa.isAftermath() && !cardZone.is(ZoneType.Graveyard, activator)) {
-            return false;
+            if (!cp.isBestowed()) {
+                cp.animateBestow();
+            }
         }
 
         if (cardZone == null || this.getZone() == null || !cardZone.is(this.getZone())) {
@@ -260,14 +265,13 @@ public class SpellAbilityRestriction extends SpellAbilityVariables {
                                 break;
                             }
                         }
+                        if (cardZone.is(ZoneType.Graveyard) && sa.isAftermath()) {
+                            // Special exclusion for Aftermath, useful for e.g. As Foretold
+                            return true;
+                        }
                         if (!hasOtherGrantor) {
                             return false;
                         }
-                    }
-
-                    if (cardZone.is(ZoneType.Graveyard) && sa.isAftermath()) {
-                        // Special exclusion for Aftermath, useful for e.g. As Foretold
-                        return true;
                     }
 
                     if (params.containsKey("Affected")) {
@@ -412,6 +416,11 @@ public class SpellAbilityRestriction extends SpellAbilityVariables {
         }
         if (this.isDesert()) {
             if (!activator.hasDesert()) {
+                return false;
+            }
+        }
+        if (this.isBlessing()) {
+            if (!activator.hasBlessing()) {
                 return false;
             }
         }

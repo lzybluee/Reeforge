@@ -30,7 +30,7 @@ import forge.game.zone.ZoneType;
  * </p>
  * 
  * @author Forge
- * @version $Id: SpellAbilityVariables.java 34317 2017-06-19 18:00:38Z Hanmac $
+ * @version $Id$
  * @since 1.0.15
  */
 public class SpellAbilityVariables implements Cloneable {
@@ -154,6 +154,7 @@ public class SpellAbilityVariables implements Cloneable {
     private boolean hellbent = false;
     private boolean revolt = false;
     private boolean desert = false;
+    private boolean blessing = false;
 
     private boolean allTargetsLegal = false;
 
@@ -470,6 +471,8 @@ public class SpellAbilityVariables implements Cloneable {
     public void setRevolt(final boolean bRevolt) { revolt = bRevolt; }
 
     public void setDesert(final boolean bDesert) { desert = bDesert; }
+    
+    public void setBlessing(final boolean bBlessing) { blessing = bBlessing; }
 
     /** Optional Costs */
     protected boolean kicked = false;
@@ -678,6 +681,7 @@ public class SpellAbilityVariables implements Cloneable {
     public final boolean isRevolt() {     return this.revolt;  }
 
     public final boolean isDesert() {     return this.desert;  }
+    public final boolean isBlessing() {     return this.blessing;  }
 
     public String getShareAllColors() {
         return shareAllColors;

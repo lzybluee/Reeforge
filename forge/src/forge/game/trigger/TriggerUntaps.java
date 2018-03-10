@@ -28,7 +28,7 @@ import java.util.Map;
  * </p>
  * 
  * @author Forge
- * @version $Id: TriggerUntaps.java 31143 2016-04-20 17:47:28Z friarsol $
+ * @version $Id$
  */
 public class TriggerUntaps extends Trigger {
 

@@ -28,6 +28,7 @@ import forge.StaticData;
 import forge.card.CardDb;
 import forge.card.CardRarity;
 import forge.card.CardRules;
+import forge.util.TextUtil;
 
 /**
  * A lightweight version of a card that matches real-world cards, to use outside of games (eg. inventory, decks, trade).
@@ -211,9 +212,13 @@ public final class PaperCard implements Comparable<IPaperCard>, InventoryItemFro
         // default deserialization
         ois.defaultReadObject();
 
-        final IPaperCard pc = StaticData.instance().getCommonCards().getCard(name, edition, artIndex);
+        IPaperCard pc = null;
+        pc = StaticData.instance().getCommonCards().getCard(name, edition, artIndex);
         if (pc == null) {
-            throw new IOException(String.format("Card %s not found", name));
+            pc = StaticData.instance().getVariantCards().getCard(name, edition, artIndex);
+            if (pc == null) {
+                throw new IOException(TextUtil.concatWithSpace("Card", name, "not found"));
+            }
         }
         rules = pc.getRules();
         rarity = pc.getRarity();

@@ -40,6 +40,7 @@ public final class CDev implements ICDoc {
         view.getLblCardToLibrary().addMouseListener(madCardToLibrary);
         view.getLblCardToGraveyard().addMouseListener(madCardToGraveyard);
         view.getLblCardToExile().addMouseListener(madCardToExile);
+        view.getLblCastSpell().addMouseListener(madCastASpell);
         view.getLblRepeatAddCard().addMouseListener(madRepeatAddCard);
         view.getLblCounterPermanent().addMouseListener(madCounter);
         view.getLblTapPermanent().addMouseListener(madTap);
@@ -90,11 +91,11 @@ public final class CDev implements ICDoc {
     private final MouseListener madMana = new MouseAdapter() {
         @Override
         public void mousePressed(final MouseEvent e) {
-            generateMana(e.getButton() == MouseEvent.BUTTON3);
+            generateMana();
         }
     };
-    public void generateMana(boolean empty) {
-        getController().cheat().generateMana(empty);
+    public void generateMana() {
+        getController().cheat().generateMana();
     }
 
     private final MouseListener madSetup = new MouseAdapter() {
@@ -120,11 +121,11 @@ public final class CDev implements ICDoc {
     private final MouseListener madTutor = new MouseAdapter() {
         @Override
         public void mousePressed(final MouseEvent e) {
-            tutorForCard(e.getButton() == MouseEvent.BUTTON3);
+            tutorForCard();
         }
     };
-    public void tutorForCard(boolean sideboard) {
-        getController().cheat().tutorForCard(sideboard);
+    public void tutorForCard() {
+        getController().cheat().tutorForCard();
     }
 
     private final MouseListener madCardToHand = new MouseAdapter() {
@@ -167,6 +168,16 @@ public final class CDev implements ICDoc {
         getController().cheat().addCardToExile();
     }
 
+    private final MouseListener madCastASpell = new MouseAdapter() {
+        @Override
+        public void mousePressed(final MouseEvent e) {
+            castASpell();
+        }
+    };
+    public void castASpell() {
+        getController().cheat().castASpell();
+    }
+
     private final MouseListener madRepeatAddCard = new MouseAdapter() {
         @Override
         public void mousePressed(final MouseEvent e) {
@@ -200,41 +211,41 @@ public final class CDev implements ICDoc {
     private final MouseListener madTap = new MouseAdapter() {
         @Override
         public void mousePressed(final MouseEvent e) {
-            tapPermanent(e.getButton() == MouseEvent.BUTTON3);
+            tapPermanent();
         }
     };
-    public void tapPermanent(boolean all) {
-        getController().cheat().tapPermanents(all);
+    public void tapPermanent() {
+        getController().cheat().tapPermanents();
     }
 
     private final MouseListener madUntap = new MouseAdapter() {
         @Override
         public void mousePressed(final MouseEvent e) {
-            untapPermanent(e.getButton() == MouseEvent.BUTTON3);
+            untapPermanent();
         }
     };
-    public void untapPermanent(boolean all) {
-        getController().cheat().untapPermanents(all);
+    public void untapPermanent() {
+        getController().cheat().untapPermanents();
     }
 
     private final MouseListener madLife = new MouseAdapter() {
         @Override
         public void mousePressed(final MouseEvent e) {
-            setPlayerLife(e.getButton() == MouseEvent.BUTTON3);
+            setPlayerLife();
         }
     };
-    public void setPlayerLife(boolean maxlife) {
-        getController().cheat().setPlayerLife(maxlife);
+    public void setPlayerLife() {
+        getController().cheat().setPlayerLife();
     }
 
     private final MouseListener madWinGame = new MouseAdapter() {
         @Override
         public void mousePressed(final MouseEvent e) {
-            winGame(e.getButton() == MouseEvent.BUTTON3);
+            winGame();
         }
     };
-    public void winGame(boolean lose) {
-        getController().cheat().winGame(lose);
+    public void winGame() {
+        getController().cheat().winGame();
     }
 
     private final MouseListener madCardToBattlefield = new MouseAdapter() {

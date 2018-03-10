@@ -23,6 +23,7 @@ import forge.card.CardStateName;
 import forge.game.Game;
 import forge.game.card.Card;
 import forge.game.card.CardCollection;
+import forge.game.card.CardUtil;
 import forge.game.cost.Cost;
 import forge.game.cost.CostPayment;
 import forge.game.player.Player;
@@ -36,7 +37,7 @@ import forge.util.collect.FCollectionView;
  * </p>
  * 
  * @author Forge
- * @version $Id: Spell.java 34490 2017-06-30 07:12:31Z Agetian $
+ * @version $Id$
  */
 public abstract class Spell extends SpellAbility implements java.io.Serializable, Cloneable {
 
@@ -93,14 +94,21 @@ public abstract class Spell extends SpellAbility implements java.io.Serializable
             // Rule 601.3: cast Bestow with Flash
             // for the check the card does need to be animated
             // otherwise the StaticAbility will not found them
+            
+            Card lki = card.isLKI() ? card : CardUtil.getLKICopy(card);
+            
+            lki.animateBestow(false);
 
-            // LKI copy does not work, need to check for the Static Abilities which might effect this card
-            card.animateBestow(false); // when animating and unanimating Bestow, do not update the view to prevent flickering
-            game.getAction().checkStaticAbilities(false, Sets.newHashSet(card));
-            flash = card.hasKeyword("Flash");
-            card.unanimateBestow(false);
+            CardCollection preList = new CardCollection(lki);
+            game.getAction().checkStaticAbilities(false, Sets.newHashSet(lki), preList);
+            
+            flash = lki.hasKeyword("Flash");
+            
             // need to check again to reset the Keywords and other effects
-            game.getAction().checkStaticAbilities(false, Sets.newHashSet(card));
+            if (card.isLKI()) {
+                lki.unanimateBestow(false);
+                game.getAction().checkStaticAbilities(false, Sets.newHashSet(lki), preList);
+            }
         }
 
         if (!(isInstant || activator.canCastSorcery() || flash
@@ -108,7 +116,7 @@ public abstract class Spell extends SpellAbility implements java.io.Serializable
                || activator.hasKeyword("You may cast nonland cards as though they had flash.")
                || card.hasStartOfKeyword("You may cast CARDNAME as though it had flash.")
                || this.hasSVar("IsCastFromPlayEffect")
-               || (card.isFaceDown() && !card.getZone().is(ZoneType.Battlefield) && card.getState(CardStateName.Original).getType().isInstant()))) {
+               || (card.isFaceDown() && !card.getLastKnownZone().is(ZoneType.Battlefield) && card.getState(CardStateName.Original).getType().isInstant()))) {
             return false;
         }
 

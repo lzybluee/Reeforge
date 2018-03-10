@@ -27,6 +27,8 @@ import forge.ai.AiProfileUtil;
 import forge.card.CardPreferences;
 import forge.card.CardType;
 import forge.deck.CardRelationMatrixGenerator;
+import forge.deck.DeckFormat;
+import forge.deck.io.CardThemedMatrixIO;
 import forge.deck.io.DeckPreferences;
 import forge.game.GameFormat;
 import forge.game.GameType;
@@ -53,11 +55,11 @@ import forge.util.storage.IStorage;
 import forge.util.storage.StorageBase;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.Function;
+import com.google.common.collect.Maps;
 
 /**
  * The default Model implementation for Forge.
@@ -145,7 +147,9 @@ public final class FModel {
 
         final CardStorageReader reader = new CardStorageReader(ForgeConstants.CARD_DATA_DIR, progressBarBridge,
                 FModel.getPreferences().getPrefBoolean(FPref.LOAD_CARD_SCRIPTS_LAZILY));
-        magicDb = new StaticData(reader, ForgeConstants.EDITIONS_DIR, ForgeConstants.BLOCK_DATA_DIR);
+        final CardStorageReader tokenReader = new CardStorageReader(ForgeConstants.TOKEN_DATA_DIR, progressBarBridge,
+                FModel.getPreferences().getPrefBoolean(FPref.LOAD_CARD_SCRIPTS_LAZILY));
+        magicDb = new StaticData(reader, tokenReader, ForgeConstants.EDITIONS_DIR, ForgeConstants.BLOCK_DATA_DIR);
 
         //create profile dirs if they don't already exist
         for (final String dname : ForgeConstants.PROFILE_DIRS) {
@@ -202,21 +206,30 @@ public final class FModel {
         ItemManagerConfig.load();
         ConquestUtil.updateRarityFilterOdds();
 
-        achievements = new HashMap<>();
+        achievements = Maps.newHashMap();
         achievements.put(GameType.Constructed, new ConstructedAchievements());
         achievements.put(GameType.Draft, new DraftAchievements());
         achievements.put(GameType.Sealed, new SealedAchievements());
         achievements.put(GameType.Quest, new QuestAchievements());
         achievements.put(GameType.PlanarConquest, new PlanarConquestAchievements());
         achievements.put(GameType.Puzzle, new PuzzleAchievements());
+        
+        
 
         //preload AI profiles
         AiProfileUtil.loadAllProfiles(ForgeConstants.AI_PROFILE_DIR);
 
         //generate Deck Gen matrix
-        if(!FModel.getPreferences().getPrefBoolean(FPref.LOAD_CARD_SCRIPTS_LAZILY)) {
-            CardRelationMatrixGenerator.initialize();
+        if(!FModel.getPreferences().getPrefBoolean(FPref.LOAD_CARD_SCRIPTS_LAZILY)
+                &&FModel.getPreferences().getPrefBoolean(FPref.DECKGEN_CARDBASED)) {
+            deckGenMatrixLoaded=CardRelationMatrixGenerator.initialize();
         }
+    }
+
+    private static boolean deckGenMatrixLoaded=false;
+
+    public static boolean isdeckGenMatrixLoaded(){
+        return deckGenMatrixLoaded;
     }
 
     public static QuestController getQuest() {
@@ -238,24 +251,28 @@ public final class FModel {
 
             List<String> tList = null;
 
-            if (!typeListFile.isEmpty()) {
-                for (final String s : typeListFile) {
-                    if (s.equals("[BasicTypes]")) {
-                        tList = CardType.Constant.BASIC_TYPES;
-                    } else if (s.equals("[LandTypes]")) {
-                        tList = CardType.Constant.LAND_TYPES;
-                    } else if (s.equals("[CreatureTypes]")) {
-                        tList = CardType.Constant.CREATURE_TYPES;
-                    } else if (s.equals("[SpellTypes]")) {
-                        tList = CardType.Constant.SPELL_TYPES;
-                    } else if (s.equals("[EnchantmentTypes]")) {
-                        tList = CardType.Constant.ENCHANTMENT_TYPES;
-                    } else if (s.equals("[ArtifactTypes]")) {
-                        tList = CardType.Constant.ARTIFACT_TYPES;
-                    } else if (s.equals("[WalkerTypes]")) {
-                        tList = CardType.Constant.WALKER_TYPES;
-                    } else if (s.length() > 1) {
-                        if (tList != null) {
+            for (final String s : typeListFile) {
+                if (s.equals("[BasicTypes]")) {
+                    tList = CardType.Constant.BASIC_TYPES;
+                } else if (s.equals("[LandTypes]")) {
+                    tList = CardType.Constant.LAND_TYPES;
+                } else if (s.equals("[CreatureTypes]")) {
+                    tList = CardType.Constant.CREATURE_TYPES;
+                } else if (s.equals("[SpellTypes]")) {
+                    tList = CardType.Constant.SPELL_TYPES;
+                } else if (s.equals("[EnchantmentTypes]")) {
+                    tList = CardType.Constant.ENCHANTMENT_TYPES;
+                } else if (s.equals("[ArtifactTypes]")) {
+                    tList = CardType.Constant.ARTIFACT_TYPES;
+                } else if (s.equals("[WalkerTypes]")) {
+                    tList = CardType.Constant.WALKER_TYPES;
+                } else if (s.length() > 1) {
+                    if (tList != null) {
+                        if (s.contains(":")) {
+                            String k[] = s.split(":");
+                            tList.add(k[0]);
+                            CardType.Constant.pluralTypes.put(k[0], k[1]);
+                        } else {
                             tList.add(s);
                         }
                     }

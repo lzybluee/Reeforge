@@ -3,11 +3,15 @@ package forge.match;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import forge.LobbyPlayer;
+import forge.interfaces.IGameController;
+import forge.util.TextUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.ImmutableMap;
@@ -54,6 +58,7 @@ public class HostedMatch {
     private Match match;
     private Game game;
     private String title;
+    public HashMap<LobbySlot, IGameController> gameControllers = null;
     private Runnable startGameHook = null;
     private final List<PlayerControllerHuman> humanControllers = Lists.newArrayList();
     private Map<RegisteredPlayer, IGuiGame> guis;
@@ -74,7 +79,6 @@ public class HostedMatch {
         gameRules.setPlayForAnte(FModel.getPreferences().getPrefBoolean(FPref.UI_ANTE));
         gameRules.setMatchAnteRarity(FModel.getPreferences().getPrefBoolean(FPref.UI_ANTE_MATCH_RARITY));
         gameRules.setManaBurn(FModel.getPreferences().getPrefBoolean(FPref.UI_MANABURN));
-        gameRules.setPlaneswalkerIsUnique(FModel.getPreferences().getPrefBoolean(FPref.UI_UNIQUE_PLANESWALKER));
         gameRules.setCanCloneUseTargetsImage(FModel.getPreferences().getPrefBoolean(FPref.UI_CLONE_MODE_SOURCE));
         return gameRules;
     }
@@ -113,9 +117,9 @@ public class HostedMatch {
         });
 
         if (sortedPlayers.size() == 2) {
-            title = String.format("%s vs %s", sortedPlayers.get(0).getPlayer().getName(), sortedPlayers.get(1).getPlayer().getName());
+            title = TextUtil.concatNoSpace(sortedPlayers.get(0).getPlayer().getName(), " vs ", sortedPlayers.get(1).getPlayer().getName());
         } else {
-            title = String.format("Multiplayer Game (%d players)", sortedPlayers.size());
+            title = TextUtil.concatNoSpace("Multiplayer Game (", String.valueOf(sortedPlayers.size()), " players)");
         }
         this.match = new Match(gameRules, sortedPlayers, title);
         startGame();
@@ -180,6 +184,12 @@ public class HostedMatch {
 
                 game.subscribeToEvents(new FControlGameEventHandler(humanController));
                 playersPerGui.add(gui, p.getView());
+
+                if (gameControllers != null ) {
+                    LobbySlot lobbySlot = getLobbySlot(p.getLobbyPlayer());
+                    gameControllers.put(lobbySlot, humanController);
+                }
+
                 humanControllers.add(humanController);
                 humanCount++;
             }
@@ -236,6 +246,18 @@ public class HostedMatch {
                 }
             }
         });
+    }
+
+    private LobbySlot getLobbySlot(LobbyPlayer lobbyPlayer) {
+        for (LobbySlot key: gameControllers.keySet()) {
+            IGameController value = gameControllers.get(key);
+            if (value instanceof PlayerControllerHuman) {
+                if (lobbyPlayer == ((PlayerControllerHuman) value).getLobbyPlayer()) {
+                    return key;
+                }
+            }
+        }
+        return null;
     }
 
     public void registerSpectator(final IGuiGame gui) {

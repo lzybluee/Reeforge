@@ -28,7 +28,7 @@ import java.util.Map;
  * </p>
  * 
  * @author Forge
- * @version $Id: TriggerClashed.java 30290 2015-10-15 02:52:51Z friarsol $
+ * @version $Id$
  */
 public class TriggerClashed extends Trigger {
 

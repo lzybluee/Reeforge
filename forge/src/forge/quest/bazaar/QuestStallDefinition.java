@@ -31,7 +31,7 @@ import forge.assets.FSkinProp;
  * </p>
  * 
  * @author Forge
- * @version $Id: QuestStallDefinition.java 27409 2014-09-15 12:12:02Z elcnesh $
+ * @version $Id$
  */
 @XStreamAlias("stall")
 public class QuestStallDefinition {

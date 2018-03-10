@@ -23,7 +23,7 @@ package forge.game.card;
  * </p>
  * 
  * @author Forge
- * @version $Id: CardPowerToughness.java 32344 2016-10-14 14:24:22Z friarsol $
+ * @version $Id$
  */
 public class CardPowerToughness {
 

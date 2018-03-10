@@ -34,7 +34,7 @@ import java.util.List;
  * </p>
  * 
  * @author Forge
- * @version $Id: TargetChoices.java 33118 2017-01-11 07:41:22Z Agetian $
+ * @version $Id$
  */
 public class TargetChoices implements Cloneable {
     private int numTargeted = 0;

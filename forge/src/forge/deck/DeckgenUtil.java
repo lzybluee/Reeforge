@@ -16,6 +16,7 @@ import forge.game.GameFormat;
 import forge.game.GameType;
 import forge.item.PaperCard;
 import forge.itemmanager.IItemManager;
+import forge.limited.CardThemedCommanderDeckBuilder;
 import forge.limited.CardThemedDeckBuilder;
 import forge.model.FModel;
 import forge.properties.ForgePreferences.FPref;
@@ -43,11 +44,12 @@ public class DeckgenUtil {
 
     public static Deck buildCardGenDeck(GameFormat format, boolean isForAI){
         Random random    = new Random();
-        List<String> keys      = new ArrayList<>(CardRelationMatrixGenerator.cardPools.get(format).keySet());
-        String       randomKey = keys.get( random.nextInt(keys.size()) );
-        Predicate<PaperCard> cardFilter = Predicates.and(format.getFilterPrinted(),PaperCard.Predicates.name(randomKey));
-        PaperCard keyCard = FModel.getMagicDb().getCommonCards().getAllCards(cardFilter).get(0);
         try {
+            List<String> keys      = new ArrayList<>(CardRelationMatrixGenerator.cardPools.get(format.getName()).keySet());
+            String       randomKey = keys.get( random.nextInt(keys.size()) );
+            Predicate<PaperCard> cardFilter = Predicates.and(format.getFilterPrinted(),PaperCard.Predicates.name(randomKey));
+            PaperCard keyCard = FModel.getMagicDb().getCommonCards().getAllCards(cardFilter).get(0);
+
             return buildCardGenDeck(keyCard,format,isForAI);
         }catch (Exception e){
             e.printStackTrace();
@@ -118,7 +120,7 @@ public class DeckgenUtil {
      */
     public static Deck buildCardGenDeck(PaperCard card, GameFormat format, boolean isForAI){
         List<Map.Entry<PaperCard,Integer>> potentialCards = new ArrayList<>();
-        potentialCards.addAll(CardRelationMatrixGenerator.cardPools.get(format).get(card.getName()));
+        potentialCards.addAll(CardRelationMatrixGenerator.cardPools.get(format.getName()).get(card.getName()));
         Collections.sort(potentialCards,new CardDistanceComparator());
         Collections.reverse(potentialCards);
         //get second keycard
@@ -145,7 +147,7 @@ public class DeckgenUtil {
             randMax=preSelectedCards.size();
         }
         PaperCard secondKeycard = preSelectedCards.get(r.nextInt(randMax));
-        List<Map.Entry<PaperCard,Integer>> potentialSecondCards = CardRelationMatrixGenerator.cardPools.get(format).get(secondKeycard.getName());
+        List<Map.Entry<PaperCard,Integer>> potentialSecondCards = CardRelationMatrixGenerator.cardPools.get(format.getName()).get(secondKeycard.getName());
 
         //combine card distances from second key card and re-sort
         if(potentialSecondCards !=null && potentialSecondCards.size()>0) {
@@ -485,7 +487,7 @@ public class DeckgenUtil {
         return res;
     }
 
-    /** Generate a 2-color Commander deck. */
+    /** Generate a 2-5-color Commander deck. */
     public static Deck generateCommanderDeck(boolean forAi, GameType gameType) {
         final Deck deck;
         IDeckGenPool cardDb = FModel.getMagicDb().getCommonCards();
@@ -503,7 +505,6 @@ public class DeckgenUtil {
                         return format.isLegalCommander(rules);
                     }
                 },
-                CardRulesPredicates.Presets.IS_MULTICOLOR,
                 canPlay), PaperCard.FN_GET_RULES));
 
         do {
@@ -533,15 +534,117 @@ public class DeckgenUtil {
         return deck;
     }
 
+    /** Generate a ramdom Commander deck. */
+    public static Deck generateRandomCommanderDeck(PaperCard commander, DeckFormat format, boolean forAi, boolean isCardGen) {
+        final Deck deck;
+        IDeckGenPool cardDb;
+        DeckGeneratorBase gen = null;
+        PaperCard selectedPartner=null;
+        if(isCardGen){
+            List<Map.Entry<PaperCard,Integer>> potentialCards = new ArrayList<>();
+            potentialCards.addAll(CardRelationMatrixGenerator.cardPools.get(DeckFormat.Commander.toString()).get(commander.getName()));
+            Random r = new Random();
+            //Collections.shuffle(potentialCards, r);
+            List<PaperCard> preSelectedCards = new ArrayList<>();
+            for(Map.Entry<PaperCard,Integer> pair:potentialCards){
+                if(format.isLegalCard(pair.getKey())) {
+                    preSelectedCards.add(pair.getKey());
+                }
+            }
+            //check for partner commanders
+            List<PaperCard> partners=new ArrayList<>();
+            for(PaperCard c:preSelectedCards){
+                if(c.getRules().canBePartnerCommander()){
+                    partners.add(c);
+                }
+            }
+
+            if(partners.size()>0&&commander.getRules().canBePartnerCommander()){
+                selectedPartner=partners.get(MyRandom.getRandom().nextInt(partners.size()));
+                preSelectedCards.remove(selectedPartner);
+            }
+            //randomly remove cards
+            int removeCount=0;
+            int i=0;
+            List<PaperCard> toRemove = new ArrayList<>();
+            for(PaperCard c:preSelectedCards){
+                if(!format.isLegalCard(c)){
+                    toRemove.add(c);
+                    removeCount++;
+                }
+                if(preSelectedCards.size()<75){
+                    break;
+                }
+                if(r.nextInt(100)>60+(15-(i/preSelectedCards.size())*preSelectedCards.size()) && removeCount<4 //randomly remove some cards - more likely as distance increases
+                        &&!c.getName().contains("Urza")&&!c.getName().contains("Wastes")){ //avoid breaking Tron decks
+                    toRemove.add(c);
+                    removeCount++;
+                }
+                ++i;
+            }
+            preSelectedCards.removeAll(toRemove);
+            gen = new CardThemedCommanderDeckBuilder(commander, selectedPartner,preSelectedCards,forAi,format);
+        }else{
+            cardDb = FModel.getMagicDb().getCommonCards();
+            //shuffle first 400 random cards
+            Iterable<PaperCard> colorList = Iterables.filter(format.getCardPool(cardDb).getAllCards(),
+                    Predicates.compose(Predicates.or(new CardThemedDeckBuilder.MatchColorIdentity(commander.getRules().getColorIdentity()),
+                            DeckGeneratorBase.COLORLESS_CARDS), PaperCard.FN_GET_RULES));
+            List<PaperCard> cardList = Lists.newArrayList(colorList);
+            Collections.shuffle(cardList, new Random());
+            List<PaperCard> shortList = cardList.subList(1, 400);
+            gen = new CardThemedCommanderDeckBuilder(commander, selectedPartner,shortList,forAi,format);
+
+        }
+
+
+
+        gen.setSingleton(true);
+        gen.setUseArtifacts(!FModel.getPreferences().getPrefBoolean(FPref.DECKGEN_ARTIFACTS));
+        CardPool cards = gen.getDeck(format.getMainRange().getMaximum(), forAi);
+
+        // After generating card lists, build deck.
+        if(selectedPartner!=null){
+            deck = new Deck("Generated " + format.toString() + " deck (" + commander.getName() +
+                    "--" + selectedPartner.getName() + ")");
+        }else{
+            deck = new Deck("Generated " + format.toString() + " deck (" + commander.getName() + ")");
+        }
+        deck.setDirectory("generated/commander");
+        deck.getMain().addAll(cards);
+        deck.getOrCreate(DeckSection.Commander).add(commander);
+        if(selectedPartner!=null){
+            deck.getOrCreate(DeckSection.Commander).add(selectedPartner);
+        }
+
+        return deck;
+    }
+
     public static Map<ManaCostShard, Integer> suggestBasicLandCount(Deck d) {
         int W=0, U=0, R=0, B=0, G=0, total=0;
         List<PaperCard> cards = d.getOrCreate(DeckSection.Main).toFlatList();
+        HashMap<ManaCostShard, Integer> suggestionMap = new HashMap<>();
+
+        // determine how many additional lands we need, but don't take lands already in deck into consideration,
+        // or we risk incorrectly determining the target deck size
+        int numLands = Iterables.size(Iterables.filter(cards, Predicates.compose(CardRulesPredicates.Presets.IS_LAND, PaperCard.FN_GET_RULES)));
+        int sizeNoLands = cards.size() - numLands;
 
         // attempt to determine if building for sealed, constructed or EDH
-        int targetDeckSize = cards.size() < 30 ? 40 
-                : cards.size() > 60 ? 100 : 60; 
+        int targetDeckSize = sizeNoLands < 30 ? 40
+                : sizeNoLands > 60 ? 100 : 60;
 
         int numLandsToAdd = targetDeckSize - cards.size();
+
+        if (numLandsToAdd == 0) {
+            // already at target deck size, do nothing
+            suggestionMap.put(ManaCostShard.WHITE, 0);
+            suggestionMap.put(ManaCostShard.BLUE, 0);
+            suggestionMap.put(ManaCostShard.RED, 0);
+            suggestionMap.put(ManaCostShard.BLACK, 0);
+            suggestionMap.put(ManaCostShard.GREEN, 0);
+            return suggestionMap;
+        }
 
         for (PaperCard c : d.getMain().toFlatList()) {
             ManaCost m = c.getRules().getManaCost();
@@ -553,19 +656,24 @@ public class DeckgenUtil {
         }
         total = W + U + R + B + G;
 
-        int whiteSources = Math.round(numLandsToAdd * ((float)W / (float)total));
+        int whiteSources = Math.max(0, Math.round(numLandsToAdd * ((float)W / (float)total)));
+        if (W > 0) { whiteSources = Math.max(1, whiteSources); }
         numLandsToAdd -= whiteSources;
         total -= W;
-        int blueSources = Math.round(numLandsToAdd * ((float)U / (float)total));
+        int blueSources = Math.max(0, Math.round(numLandsToAdd * ((float)U / (float)total)));
+        if (U > 0) { blueSources = Math.max(1, blueSources); }
         numLandsToAdd -= blueSources;
         total -= U;
-        int blackSources = Math.round(numLandsToAdd * ((float)B / (float)total));
+        int blackSources = Math.max(0, Math.round(numLandsToAdd * ((float)B / (float)total)));
+        if (B > 0) { blackSources = Math.max(1, blackSources); }
         numLandsToAdd -= blackSources;
         total -= B;
-        int redSources = Math.round(numLandsToAdd * ((float)R / (float)total));
+        int redSources = Math.max(0, Math.round(numLandsToAdd * ((float)R / (float)total)));
+        if (R > 0) { redSources = Math.max(1, redSources); }
         numLandsToAdd -= redSources;
         total -= R;
-        int greenSources = Math.round(numLandsToAdd * ((float)G / (float)total));
+        int greenSources = Math.max(0, Math.round(numLandsToAdd * ((float)G / (float)total)));
+        if (G > 0) { greenSources = Math.max(1, greenSources); }
         numLandsToAdd -= greenSources;
         total -= G;
         
@@ -578,7 +686,6 @@ public class DeckgenUtil {
             else if (greenSources > 0) { greenSources += numLandsToAdd; }
         }
 
-        HashMap<ManaCostShard, Integer> suggestionMap = new HashMap<>();
         suggestionMap.put(ManaCostShard.WHITE, whiteSources);
         suggestionMap.put(ManaCostShard.BLUE, blueSources);
         suggestionMap.put(ManaCostShard.RED, redSources);

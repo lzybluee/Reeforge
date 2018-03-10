@@ -41,7 +41,7 @@ import forge.quest.data.QuestPreferences;
  * - such is a tradeoff for speed of development
  * 
  * @author Forge
- * @version $Id: QuestPetController.java 27955 2014-10-15 14:52:47Z drdev $
+ * @version $Id$
  */
 public class QuestPetController implements IQuestBazaarItem {
 

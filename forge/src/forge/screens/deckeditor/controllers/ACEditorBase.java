@@ -19,34 +19,15 @@ package forge.screens.deckeditor.controllers;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import java.awt.Toolkit;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map.Entry;
-
-import javax.swing.JMenu;
-import javax.swing.JPopupMenu;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
-
 import forge.UiCommand;
 import forge.assets.FSkinProp;
-import forge.deck.CardPool;
-import forge.deck.Deck;
-import forge.deck.DeckBase;
-import forge.deck.DeckGroup;
-import forge.deck.DeckSection;
+import forge.deck.*;
 import forge.gui.GuiChoose;
 import forge.gui.GuiUtils;
-import forge.gui.framework.DragCell;
-import forge.gui.framework.FScreen;
-import forge.gui.framework.ICDoc;
-import forge.gui.framework.IVDoc;
-import forge.gui.framework.SRearrangingUtil;
+import forge.gui.framework.*;
 import forge.item.InventoryItem;
 import forge.item.PaperCard;
+import forge.itemmanager.CardManager;
 import forge.itemmanager.ItemManager;
 import forge.itemmanager.SItemManagerUtil;
 import forge.menus.IMenuProvider;
@@ -63,6 +44,14 @@ import forge.toolbox.FSkin;
 import forge.util.Aggregates;
 import forge.util.ItemPool;
 import forge.view.FView;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map.Entry;
 
 /**
  * Maintains a generically typed architecture for various editing
@@ -431,7 +420,7 @@ public abstract class ACEditorBase<TItem extends InventoryItem, TModel extends D
             isAddContextMenu = isAddContextMenu0;
         }
 
-        private ItemManager<TItem> getItemManager() {
+        public ItemManager<TItem> getItemManager() {
             return isAddContextMenu ? catalogManager : deckManager;
         }
 
@@ -439,6 +428,10 @@ public abstract class ACEditorBase<TItem extends InventoryItem, TModel extends D
             return isAddContextMenu ? deckManager : catalogManager;
         }
 
+        public JPopupMenu getMenu() {
+            return menu;
+        }
+        
         @Override
         public void buildContextMenu(final JPopupMenu menu) {
             this.menu = menu; //cache menu while controller populates menu
@@ -478,6 +471,62 @@ public abstract class ACEditorBase<TItem extends InventoryItem, TModel extends D
                     getItemManager().focusSearch();
                 }
             });
+        }
+
+        /**
+         * Add context menu entries for foiling cards
+         */
+        public void addMakeFoils() {
+            final int max = getMaxMoveQuantity();
+            if (max == 0) { return; }
+
+            addMakeFoil(1);
+            if (max == 1) { return; }
+
+            int qty = FModel.getPreferences().getPrefInt(FPref.DECK_DEFAULT_CARD_LIMIT);
+            if (qty > max) {
+                qty = max;
+            }
+
+            addMakeFoil(qty);
+            if (max == 2) { return; }
+
+            addMakeFoil(-max);
+        }
+
+        /**
+         * Adds the individual context menu entry for foiling the requested number of cards
+         *
+         * @param qty           a negative quantity will prompt the user for a number
+         */
+        private void addMakeFoil(final int qty) {
+            final int shortcutModifiers = 0;
+            String label = "Foil " + SItemManagerUtil.getItemDisplayString(getItemManager().getSelectedItems(), qty, false);
+
+            GuiUtils.addMenuItem(menu, label, null, new Runnable() {
+                        @Override public void run() {
+                            Integer quantity = qty;
+                            if (quantity < 0) {
+                                quantity = GuiChoose.getInteger("Choose a value for X", 1, -quantity, 20);
+                                if (quantity == null) { return; }
+                            }
+                            // get the currently selected card from the editor
+                            CardManager cardManager = (CardManager) CDeckEditorUI.SINGLETON_INSTANCE.getCurrentEditorController().getDeckManager();
+                            PaperCard existingCard = cardManager.getSelectedItem();
+                            // make a foiled version based on the original
+                            PaperCard foiledCard = new PaperCard(
+                                    existingCard.getRules(),
+                                    existingCard.getEdition(),
+                                    existingCard.getRarity(),
+                                    existingCard.getArtIndex(),
+                                    true);
+                            // remove *quantity* instances of existing card
+                            CDeckEditorUI.SINGLETON_INSTANCE.removeSelectedCards(false, quantity);
+                            // add *quantity* into the deck and set them as selected
+                            cardManager.addItem(foiledCard, quantity);
+                            cardManager.setSelectedItem(foiledCard);
+                        }
+                    }, true, shortcutModifiers == 0);
         }
 
         private void addItem(final String verb, final String dest, final boolean toAlternate, final int qty, final int shortcutModifiers) {

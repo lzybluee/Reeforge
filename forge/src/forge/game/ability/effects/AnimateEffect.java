@@ -345,7 +345,6 @@ public class AnimateEffect extends AnimateEffectBase {
                 c.addSpellAbility(revertSA);
             }
 
-            c.updateAbilityText();
             game.fireEvent(new GameEventCardStatsChanged(c));
         }
         

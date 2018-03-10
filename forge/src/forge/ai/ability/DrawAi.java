@@ -132,7 +132,7 @@ public class DrawAi extends SpellAbilityAi {
             // LifeLessThan logic presupposes activation as soon as possible in an
             // attempt to save the AI from dying
             return true;
-        } else if (logic.equals("AtEndOfOppTurn")) {
+        } else if (logic.equals("AlwaysAtOppEOT")) {
             return ph.is(PhaseType.END_OF_TURN) && ph.getNextTurn().equals(ai);
         }
 
@@ -251,6 +251,20 @@ public class DrawAi extends SpellAbilityAi {
             }
         }
 
+        if (num != null && num.equals("ChosenX")) {
+            // Necrologia, Pay X Life : Draw X Cards
+            if (sa.getSVar("X").equals("XChoice")) {
+                // Draw up to max hand size but leave at least 3 in library
+                numCards = Math.min(computerMaxHandSize - computerHandSize, computerLibrarySize - 3);
+                // But no more than what's "safe" and doesn't risk a near death experience
+                // Maybe would be better to check for "serious danger" and take more risk?
+                while ((ComputerUtil.aiLifeInDanger(ai, false, numCards) && (numCards > 0))) {
+                    numCards--;
+                }
+                sa.setSVar("ChosenX", Integer.toString(numCards));
+                source.setSVar("ChosenX", Integer.toString(numCards));
+            }
+        }
         // Logic for cards that require special handling
         if ("YawgmothsBargain".equals(logic)) {
             return SpecialCardAi.YawgmothsBargain.consider(ai, sa);

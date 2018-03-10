@@ -72,7 +72,7 @@ public enum FNetOverlay implements IOnlineChatInterface {
     }
     
     private final FTextArea txtLog = new FTextArea();
-    private final FTextField txtInput = new FTextField.Builder().maxLength(60).build();
+    private final FTextField txtInput = new FTextField.Builder().maxLength(255).build();
     private final FLabel cmdSend = new FLabel.ButtonBuilder().text("Send").build(); 
 
     //private boolean minimized = false;
@@ -97,6 +97,10 @@ public enum FNetOverlay implements IOnlineChatInterface {
             }
         }
     };
+
+    public FTextField getTxtInput(){
+        return txtInput;
+    }
 
     /**
      * Semi-transparent overlay panel. Should be used with layered panes.
@@ -125,6 +129,12 @@ public enum FNetOverlay implements IOnlineChatInterface {
         
         txtInput.addActionListener(onSend);
         cmdSend.setCommand(new Runnable() { @Override public void run() { onSend.actionPerformed(null); } });
+    }
+
+    public void reset() {
+        setGameClient(null);
+        txtLog.setText("");
+        hide();
     }
 
     public void hide() {

@@ -17,10 +17,10 @@ import javax.swing.*;
 public enum VSubmenuPuzzleSolve implements IVSubmenu<CSubmenuPuzzleSolve> {
     SINGLETON_INSTANCE;
 
-    private final FList<Object> puzzleList;
+    private final FList puzzleList;
     private final FScrollPane puzzleListPane;
 
-    final DefaultListModel<Object> model = new DefaultListModel<Object>();
+    final DefaultListModel model = new DefaultListModel();
 
     private final StartButton btnStart  = new StartButton();
 
@@ -85,11 +85,11 @@ public enum VSubmenuPuzzleSolve implements IVSubmenu<CSubmenuPuzzleSolve> {
         return this.parentCell;
     }
 
-    public JList<Object> getList() {
+    public JList getList() {
         return puzzleList;
     }
 
-    public DefaultListModel<Object> getModel() {
+    public DefaultListModel getModel() {
         return model;
     }
 

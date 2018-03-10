@@ -32,17 +32,17 @@ public enum TriggerType {
     ChangesZone(TriggerChangesZone.class),
     ChangesZoneAll(TriggerChangesZoneAll.class),
     Clashed(TriggerClashed.class),
-    CombatDamageDoneOnce(TriggerCombatDamageDoneOnce.class),
     CounterAdded(TriggerCounterAdded.class),
     CounterAddedOnce(TriggerCounterAddedOnce.class),
     Countered(TriggerCountered.class),
     CounterRemoved(TriggerCounterRemoved.class),
     Crewed(TriggerCrewed.class),
     Cycled(TriggerCycled.class),
+    DamageDealtOnce(TriggerDamageDealtOnce.class),
     DamageDone(TriggerDamageDone.class),
+    DamageDoneOnce(TriggerDamageDoneOnce.class),
     DamagePrevented(TriggerDamagePrevented.class),
     DamagePreventedOnce(TriggerDamagePreventedOnce.class),
-    DealtCombatDamageOnce(TriggerDealtCombatDamageOnce.class),
     Destroyed(TriggerDestroyed.class),
     Devoured(TriggerDevoured.class),
     Discarded(TriggerDiscarded.class),
@@ -50,6 +50,7 @@ public enum TriggerType {
     Evolved(TriggerEvolved.class),
     Exerted(TriggerExerted.class),
     Exploited(TriggerExploited.class),
+    Explores(TriggerExplores.class),
     Fight(TriggerFight.class),
     FlippedCoin(TriggerFlippedCoin.class),
     Investigated(TriggerInvestigated.class),
@@ -66,6 +67,7 @@ public enum TriggerType {
     PlanarDice(TriggerPlanarDice.class),
     PlaneswalkedFrom(TriggerPlaneswalkedFrom.class),
     PlaneswalkedTo(TriggerPlaneswalkedTo.class),
+    Regenerated(TriggerRegenerated.class),
     Revealed(TriggerRevealed.class),
     Sacrificed(TriggerSacrificed.class),
     Scry(TriggerScry.class),
@@ -84,11 +86,9 @@ public enum TriggerType {
     Untaps(TriggerUntaps.class),
     Vote(TriggerVote.class);
 
-    private final Class<? extends Trigger> classTrigger;
     private final Constructor<? extends Trigger> constructor;
 
     private TriggerType(Class<? extends Trigger> clasz) {
-        classTrigger = clasz;
         constructor = findConstructor(clasz);
     }
 
@@ -119,16 +119,6 @@ public enum TriggerType {
         }
 
         throw new RuntimeException("Element " + value + " not found in TriggerType enum");
-    }
-    
-    public static TriggerType getTypeFor(Trigger t) {
-        final Class<? extends Trigger> cls = t.getClass();
-        for (final TriggerType v : TriggerType.values()) {
-            if (v.classTrigger.equals(cls)) {
-                return v;
-            }
-        }
-        return null;
     }
 
     /**

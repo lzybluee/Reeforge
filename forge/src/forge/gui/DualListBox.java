@@ -24,7 +24,6 @@ import javax.swing.event.ListSelectionListener;
 import forge.game.card.Card;
 import forge.game.card.CardView;
 import forge.game.card.CardView.CardStateView;
-import forge.game.replacement.ReplacementEffect;
 import forge.game.spellability.SpellAbilityView;
 import forge.game.trigger.WrappedAbility;
 import forge.item.IPaperCard;
@@ -330,12 +329,10 @@ public class DualListBox<T> extends FDialog {
         }
 
         final CardView card;
-        if (obj instanceof CardStateView) {
-            card = ((CardStateView) obj).getCard();
-        } else if (obj instanceof CardView) {
+        if (obj instanceof CardView) {
             card = (CardView) obj;
-        } else if (obj instanceof Card) {
-            card = CardView.get((Card) obj);
+        } else if (obj instanceof CardStateView) {
+            card = ((CardStateView) obj).getCard();
         } else if (obj instanceof SpellAbilityView) {
             card = ((SpellAbilityView) obj).getHostCard();
         } else if (obj instanceof WrappedAbility) {
@@ -343,8 +340,6 @@ public class DualListBox<T> extends FDialog {
             card = host != null ? host.getView() : null;
         } else if (obj instanceof PaperCard) {
             card = Card.getCardForUi((IPaperCard) obj).getView();
-        } else if (obj instanceof ReplacementEffect) {
-            card = ((ReplacementEffect) obj).getCardView();
         } else {
             card = null;
         }

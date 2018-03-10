@@ -1,29 +1,26 @@
 package forge.ai.ability;
 
-import forge.ai.AiController;
-import forge.ai.AiProps;
-import forge.ai.ComputerUtilAbility;
-import java.util.Iterator;
-
-import forge.ai.ComputerUtilCost;
-import forge.ai.ComputerUtilMana;
-import forge.ai.PlayerControllerAi;
-import forge.ai.SpecialCardAi;
-import forge.ai.SpellAbilityAi;
+import forge.ai.*;
 import forge.game.Game;
 import forge.game.ability.AbilityUtils;
 import forge.game.ability.ApiType;
 import forge.game.card.Card;
 import forge.game.card.CardFactoryUtil;
 import forge.game.cost.Cost;
+import forge.game.cost.CostDiscard;
+import forge.game.cost.CostExile;
+import forge.game.cost.CostSacrifice;
 import forge.game.player.Player;
 import forge.game.spellability.SpellAbility;
 import forge.game.spellability.SpellAbilityStackInstance;
 import forge.game.spellability.TargetRestrictions;
+import forge.game.zone.ZoneType;
 import forge.util.MyRandom;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.Iterator;
 
 public class CounterAi extends SpellAbilityAi {
 
@@ -66,6 +63,8 @@ public class CounterAi extends SpellAbilityAi {
                 // might as well check for player's friendliness
                 return false;
             }
+
+            // check if the top ability on the stack corresponds to the AI-specific targeting declaration, if provided
             if (sa.hasParam("AITgts") && (topSA.getHostCard() == null
                     || !topSA.getHostCard().isValid(sa.getParam("AITgts"), sa.getActivatingPlayer(), source, sa))) {
                 return false;
@@ -73,6 +72,12 @@ public class CounterAi extends SpellAbilityAi {
 
             if (sa.hasParam("CounterNoManaSpell") && topSA.getTotalManaSpent() > 0) {
                 return false;
+            }
+
+            if ("OppDiscardsHand".equals(sa.getParam("AILogic"))) {
+                if (topSA.getActivatingPlayer().getCardsIn(ZoneType.Hand).size() < 2) {
+                    return false;
+                }
             }
 
             sa.resetTargets();
@@ -151,14 +156,31 @@ public class CounterAi extends SpellAbilityAi {
         boolean ctrCmc0ManaPerms = aic.getBooleanProperty(AiProps.ALWAYS_COUNTER_CMC_0_MANA_MAKING_PERMS);
         boolean ctrDamageSpells = aic.getBooleanProperty(AiProps.ALWAYS_COUNTER_DAMAGE_SPELLS);
         boolean ctrRemovalSpells = aic.getBooleanProperty(AiProps.ALWAYS_COUNTER_REMOVAL_SPELLS);
+        boolean ctrPumpSpells = aic.getBooleanProperty(AiProps.ALWAYS_COUNTER_PUMP_SPELLS);
+        boolean ctrAuraSpells = aic.getBooleanProperty(AiProps.ALWAYS_COUNTER_AURAS);
         boolean ctrOtherCounters = aic.getBooleanProperty(AiProps.ALWAYS_COUNTER_OTHER_COUNTERSPELLS);
+        int ctrChanceCMC1 = aic.getIntProperty(AiProps.CHANCE_TO_COUNTER_CMC_1);
+        int ctrChanceCMC2 = aic.getIntProperty(AiProps.CHANCE_TO_COUNTER_CMC_2);
+        int ctrChanceCMC3 = aic.getIntProperty(AiProps.CHANCE_TO_COUNTER_CMC_3);
         String ctrNamed = aic.getProperty(AiProps.ALWAYS_COUNTER_SPELLS_FROM_NAMED_CARDS);
+        boolean dontCounter = false;
+
+        if (tgtCMC == 1 && !MyRandom.percentTrue(ctrChanceCMC1)) {
+            dontCounter = true;
+        } else if (tgtCMC == 2 && !MyRandom.percentTrue(ctrChanceCMC2)) {
+            dontCounter = true;
+        } else if (tgtCMC == 3 && !MyRandom.percentTrue(ctrChanceCMC3)) {
+            dontCounter = true;
+        }
+
         if (tgtSA != null && tgtCMC < aic.getIntProperty(AiProps.MIN_SPELL_CMC_TO_COUNTER)) {
-            boolean dontCounter = true;
+            dontCounter = true;
             Card tgtSource = tgtSA.getHostCard();
             if ((tgtSource != null && tgtCMC == 0 && tgtSource.isPermanent() && !tgtSource.getManaAbilities().isEmpty() && ctrCmc0ManaPerms)
                     || (tgtSA.getApi() == ApiType.DealDamage || tgtSA.getApi() == ApiType.LoseLife || tgtSA.getApi() == ApiType.DamageAll && ctrDamageSpells)
                     || (tgtSA.getApi() == ApiType.Counter && ctrOtherCounters)
+                    || ((tgtSA.getApi() == ApiType.Pump || tgtSA.getApi() == ApiType.PumpAll) && ctrPumpSpells)
+                    || (tgtSA.getApi() == ApiType.Attach && ctrAuraSpells)
                     || (tgtSA.getApi() == ApiType.Destroy || tgtSA.getApi() == ApiType.DestroyAll || tgtSA.getApi() == ApiType.Sacrifice
                        || tgtSA.getApi() == ApiType.SacrificeAll && ctrRemovalSpells)) {
                 dontCounter = false;
@@ -171,8 +193,8 @@ public class CounterAi extends SpellAbilityAi {
                     }
                 }
             }
-                
-            // should not refrain from countering a  CMC X spell if that's the only CMC
+
+            // should not refrain from countering a CMC X spell if that's the only CMC
             // counterable with that particular counterspell type (e.g. Mental Misstep vs. CMC 1 spells)
             if (sa.getParamOrDefault("ValidTgts", "").startsWith("Card.cmcEQ")) {
                 int validTgtCMC = AbilityUtils.calculateAmount(source, sa.getParam("ValidTgts").substring(10), sa);
@@ -180,12 +202,31 @@ public class CounterAi extends SpellAbilityAi {
                     dontCounter = false;
                 }
             }
+        }
 
-            if (dontCounter) {
-                return false;
+        // Should ALWAYS counter if it doesn't spend a card, otherwise it wastes an opportunity
+        // to gain card advantage
+        if (sa.isAbility()
+                && (!sa.getPayCosts().hasSpecificCostType(CostDiscard.class))
+                && (!sa.getPayCosts().hasSpecificCostType(CostSacrifice.class))
+                && (!sa.getPayCosts().hasSpecificCostType(CostExile.class))) {
+            // TODO: maybe also disallow CostPayLife?
+            dontCounter = false;
+        }
+
+        // Null Brooch is special - it has a discard cost, but the AI will be
+        // discarding no cards, or is playing a deck where discarding is a benefit
+        // as defined in SpecialCardAi.NullBrooch
+        if (sa.hasParam("AILogic")) {
+            if ("NullBrooch".equals(sa.getParam("AILogic"))) {
+                dontCounter = false;
             }
         }
-        
+
+        if (dontCounter) {
+            return false;
+        }
+
         return toReturn;
     }
 

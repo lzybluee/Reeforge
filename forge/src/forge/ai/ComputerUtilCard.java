@@ -3,7 +3,9 @@ package forge.ai;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import forge.card.CardType;
 import forge.card.ColorSet;
 import forge.card.MagicColor;
@@ -21,6 +23,8 @@ import forge.game.combat.Combat;
 import forge.game.combat.CombatUtil;
 import forge.game.cost.CostPayEnergy;
 import forge.game.keyword.Keyword;
+import forge.game.keyword.KeywordCollection;
+import forge.game.keyword.KeywordInterface;
 import forge.game.phase.PhaseHandler;
 import forge.game.phase.PhaseType;
 import forge.game.player.Player;
@@ -33,6 +37,7 @@ import forge.game.zone.MagicStack;
 import forge.game.zone.ZoneType;
 import forge.item.PaperCard;
 import forge.util.Aggregates;
+import forge.util.Expressions;
 import forge.util.MyRandom;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.MutablePair;
@@ -40,7 +45,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 import java.util.Map.Entry;
-
 
 public class ComputerUtilCard {
     public static Card getMostExpensivePermanentAI(final CardCollectionView list, final SpellAbility spell, final boolean targeted) {
@@ -349,7 +353,12 @@ public class ComputerUtilCard {
         }
     
         if (hasEnchantmants || hasArtifacts) {
-            final List<Card> ae = CardLists.filter(list, Predicates.<Card>or(CardPredicates.Presets.ARTIFACTS, CardPredicates.Presets.ENCHANTMENTS));
+            final List<Card> ae = CardLists.filter(list, Predicates.and(Predicates.<Card>or(CardPredicates.Presets.ARTIFACTS, CardPredicates.Presets.ENCHANTMENTS), new Predicate<Card>() {
+                @Override
+                public boolean apply(Card card) {
+                    return !card.hasSVar("DoNotDiscardIfAble");
+                }
+            }));
             return getCheapestPermanentAI(ae, null, false);
         }
     
@@ -360,6 +369,32 @@ public class ComputerUtilCard {
         // Planeswalkers fall through to here, lands will fall through if there
         // aren't very many
         return getCheapestPermanentAI(list, null, false);
+    }
+
+    public static final Card getCheapestSpellAI(final Iterable<Card> list) {
+        if (!Iterables.isEmpty(list)) {
+            CardCollection cc = CardLists.filter(new CardCollection(list),
+                    Predicates.or(CardPredicates.isType("Instant"), CardPredicates.isType("Sorcery")));
+            Collections.sort(cc, CardLists.CmcComparatorInv);
+
+            if (cc.isEmpty()) {
+                return null;
+            }
+
+            Card cheapest = cc.getLast();
+            if (cheapest.hasSVar("DoNotDiscardIfAble")) {
+                for (int i = cc.size() - 1; i >= 0; i--) {
+                    if (!cc.get(i).hasSVar("DoNotDiscardIfAble")) {
+                        cheapest = cc.get(i);
+                        break;
+                    }
+                }
+            }
+
+            return cheapest;
+        }
+
+        return null;
     }
 
     public static final Comparator<Card> EvaluateCreatureComparator = new Comparator<Card>() {
@@ -382,6 +417,10 @@ public class ComputerUtilCard {
      */
     public static int evaluateCreature(final Card c) {
         return creatureEvaluator.evaluateCreature(c);
+    }
+
+    public static int evaluateCreature(final Card c, final boolean considerPT, final boolean considerCMC) {
+        return creatureEvaluator.evaluateCreature(c, considerPT, considerCMC);
     }
 
     public static int evaluatePermanentList(final CardCollectionView list) {
@@ -1160,6 +1199,18 @@ public class ComputerUtilCard {
         final PhaseHandler phase = game.getPhaseHandler();
         final Combat combat = phase.getCombat();
         final boolean isBerserk = "Berserk".equals(sa.getParam("AILogic"));
+        final boolean loseCardAtEOT = "Sacrifice".equals(sa.getParam("AtEOT")) || "Exile".equals(sa.getParam("AtEOT"))
+                || "Destroy".equals(sa.getParam("AtEOT")) || "ExileCombat".equals(sa.getParam("AtEOT"));
+
+        boolean combatTrick = false;
+        boolean holdCombatTricks = false;
+        int chanceToHoldCombatTricks = -1;
+
+        if (ai.getController().isAI()) {
+            AiController aic = ((PlayerControllerAi)ai.getController()).getAi();
+            holdCombatTricks = aic.getBooleanProperty(AiProps.TRY_TO_HOLD_COMBAT_TRICKS_UNTIL_BLOCK);
+            chanceToHoldCombatTricks = aic.getIntProperty(AiProps.CHANCE_TO_HOLD_COMBAT_TRICKS_UNTIL_BLOCK);
+        }
         
         if (!c.canBeTargetedBy(sa)) {
             return false;
@@ -1172,11 +1223,11 @@ public class ComputerUtilCard {
         /* -- currently disabled until better conditions are devised and the spell prediction is made smarter --
         // Determine if some mana sources need to be held for the future spell to cast in Main 2 before determining whether to pump.
         AiController aic = ((PlayerControllerAi)ai.getController()).getAi();
-        if (aic.getCardMemory().isMemorySetEmpty(AiCardMemory.MemorySet.HELD_MANA_SOURCES)) {
+        if (aic.getCardMemory().isMemorySetEmpty(AiCardMemory.MemorySet.HELD_MANA_SOURCES_FOR_MAIN2)) {
             // only hold mana sources once
             SpellAbility futureSpell = aic.predictSpellToCastInMain2(ApiType.Pump);
             if (futureSpell != null && futureSpell.getHostCard() != null) {
-                aic.reserveManaSourcesForMain2(futureSpell);
+                aic.reserveManaSources(futureSpell);
             }
         }
         */
@@ -1190,8 +1241,8 @@ public class ComputerUtilCard {
             return true;
         }
 
-        // buff attacker/blocker using triggered pump
-        if (immediately && phase.getPhase().isBefore(PhaseType.COMBAT_DECLARE_ATTACKERS)) {
+        // buff attacker/blocker using triggered pump (unless it's lethal and we don't want to be reckless)
+        if (immediately && phase.getPhase().isBefore(PhaseType.COMBAT_DECLARE_ATTACKERS) && !loseCardAtEOT) {
             if (phase.isPlayerTurn(ai)) {
                 if (CombatUtil.canAttack(c)) {
                     return true;
@@ -1220,6 +1271,28 @@ public class ComputerUtilCard {
                     threat *= 4;    //over-value self +attack for 0 power creatures which may be pumped further after attacking 
                 }
                 chance += threat;
+
+                // -- Hold combat trick (the AI will try to delay the pump until Declare Blockers) --
+                // Enable combat trick mode only in case it's a pure buff spell in hand with no keywords or with Trample,
+                // First Strike, or Double Strike, otherwise the AI is unlikely to cast it or it's too late to
+                // cast it during Declare Blockers, thus ruining its attacker
+                if (holdCombatTricks && sa.getApi() == ApiType.Pump
+                        && sa.hasParam("NumAtt") && sa.getHostCard() != null
+                        && sa.getHostCard().getZone() != null && sa.getHostCard().getZone().is(ZoneType.Hand)
+                        && c.getNetPower() > 0 // too obvious if attacking with a 0-power creature
+                        && sa.getHostCard().isInstant() // only do it for instant speed spells in hand
+                        && ComputerUtilMana.hasEnoughManaSourcesToCast(sa, ai)) {
+                    combatTrick = true;
+
+                    final List<String> kws = sa.hasParam("KW") ? Arrays.asList(sa.getParam("KW").split(" & "))
+                            : Lists.<String>newArrayList();
+                    for (String kw : kws) {
+                        if (!kw.equals("Trample") && !kw.equals("First Strike") && !kw.equals("Double Strike")) {
+                            combatTrick = false;
+                            break;
+                        }
+                    }
+                }
             }
             
             //2. grant haste
@@ -1247,7 +1320,7 @@ public class ComputerUtilCard {
             boolean pumpedWillDie = false;
             final boolean isAttacking = combat.isAttacking(c);
 
-            if (isBerserk && isAttacking) { pumpedWillDie = true; }
+            if ((isBerserk && isAttacking) || loseCardAtEOT) { pumpedWillDie = true; }
 
             if (isAttacking) {
                 pumpedCombat.addAttacker(pumped, opp);
@@ -1305,6 +1378,16 @@ public class ComputerUtilCard {
             if (combat.isAttacking(c) && opp.getLife() > 0) {
                 int dmg = ComputerUtilCombat.damageIfUnblocked(c, opp, combat, true);
                 int pumpedDmg = ComputerUtilCombat.damageIfUnblocked(pumped, opp, pumpedCombat, true);
+                int poisonOrig = opp.canReceiveCounters(CounterType.POISON) ? ComputerUtilCombat.poisonIfUnblocked(c, ai) : 0;
+                int poisonPumped = opp.canReceiveCounters(CounterType.POISON) ? ComputerUtilCombat.poisonIfUnblocked(pumped, ai) : 0;
+
+                // predict Infect
+                if (pumpedDmg == 0 && c.hasKeyword("Infect")) {
+                    if (poisonPumped > poisonOrig) {
+                        pumpedDmg = poisonPumped;
+                    }
+                }
+
                 if (combat.isBlocked(c)) {
                     if (!c.hasKeyword("Trample")) {
                         dmg = 0;
@@ -1317,8 +1400,11 @@ public class ComputerUtilCard {
                         pumpedDmg = 0;
                     }
                 }
-                if (pumpedDmg >= opp.getLife()) {
-                    return true;
+                if (pumpedDmg > dmg) {
+                    if ((!c.hasKeyword("Infect") && pumpedDmg >= opp.getLife())
+                            || (c.hasKeyword("Infect") && opp.canReceiveCounters(CounterType.POISON) && pumpedDmg >= opp.getPoisonCounters())) {
+                        return true;
+                    }
                 }
                 // try to determine if pumping a creature for more power will give lethal on board
                 // considering all unblocked creatures after the blockers are already declared
@@ -1381,12 +1467,45 @@ public class ComputerUtilCard {
         
         if (isBerserk) {
             // if we got here, Berserk will result in the pumped creature dying at EOT and the opponent will not lose
+            // (other similar cards with AILogic$ Berserk that do not die only when attacking are excluded from consideration)
             if (ai.getController() instanceof PlayerControllerAi) {
-                boolean aggr = ((PlayerControllerAi)ai.getController()).getAi().getBooleanProperty(AiProps.USE_BERSERK_AGGRESSIVELY);
+                boolean aggr = ((PlayerControllerAi)ai.getController()).getAi().getBooleanProperty(AiProps.USE_BERSERK_AGGRESSIVELY)
+                        || sa.hasParam("AtEOT");
                 if (!aggr) {
                     return false;
                 }
             }
+        }
+
+        boolean wantToHoldTrick = holdCombatTricks;
+        if (chanceToHoldCombatTricks >= 0) {
+            // Obey the chance specified in the AI profile for holding combat tricks
+            wantToHoldTrick &= MyRandom.percentTrue(chanceToHoldCombatTricks);
+        } else {
+            // Use standard considerations dependent solely on the buff chance determined above
+            wantToHoldTrick &= MyRandom.getRandom().nextFloat() < chance;
+        }
+
+        boolean isHeldCombatTrick = combatTrick && wantToHoldTrick;
+
+        if (isHeldCombatTrick) {
+           if (AiCardMemory.isMemorySetEmpty(ai, AiCardMemory.MemorySet.TRICK_ATTACKERS)) {
+               // Attempt to hold combat tricks until blockers are declared, and try to lure the opponent into blocking
+               // (The AI will only do it for one attacker at the moment, otherwise it risks running his attackers into
+               // an army of opposing blockers with only one combat trick in hand)
+               AiCardMemory.rememberCard(ai, c, AiCardMemory.MemorySet.MANDATORY_ATTACKERS);
+               AiCardMemory.rememberCard(ai, c, AiCardMemory.MemorySet.TRICK_ATTACKERS);
+               // Reserve the mana until Declare Blockers such that the AI doesn't tap out before having a chance to use
+               // the combat trick
+               if (ai.getController().isAI()) {
+                   ((PlayerControllerAi) ai.getController()).getAi().reserveManaSources(sa, PhaseType.COMBAT_DECLARE_BLOCKERS);
+               }
+               return false;
+           } else {
+               // Don't try to mix "lure" and "precast" paradigms for combat tricks, since that creates issues with
+               // the AI overextending the attack
+               return false;
+           }
         }
 
         return MyRandom.getRandom().nextFloat() < chance;
@@ -1416,9 +1535,16 @@ public class ComputerUtilCard {
             }
         }
 
-        // Berserk
+        // Berserk (and other similar cards)
         final boolean isBerserk = "Berserk".equals(sa.getParam("AILogic"));
-        final int berserkPower = isBerserk ? c.getCurrentPower() : 0;
+        int berserkPower = 0;
+        if (isBerserk && sa.hasSVar("X")) {
+            if ("Targeted$CardPower".equals(sa.getSVar("X"))) {
+                berserkPower = c.getCurrentPower();
+            } else {
+                berserkPower = AbilityUtils.calculateAmount(sa.getHostCard(), "X", sa);
+            }
+        }
 
         // Electrostatic Pummeler
         for (SpellAbility ab : c.getSpellAbilities()) {
@@ -1441,19 +1567,21 @@ public class ComputerUtilCard {
         if (c.isTapped()) {
             pumped.setTapped(true);
         }
-        final List<String> copiedKeywords = pumped.getKeywords();
-        List<String> toCopy = new ArrayList<String>();
-        for (String kw : c.getKeywords()) {
-            if (!copiedKeywords.contains(kw)) {
-                if (kw.startsWith("HIDDEN")) {
-                    pumped.addHiddenExtrinsicKeyword(kw);
+
+        KeywordCollection copiedKeywords = new KeywordCollection();
+        copiedKeywords.insertAll(pumped.getKeywords());
+        List<KeywordInterface> toCopy = Lists.newArrayList();
+        for (KeywordInterface k : c.getKeywords()) {
+            if (!copiedKeywords.contains(k.getOriginal())) {
+                if (k.getHidden()) {
+                    pumped.addHiddenExtrinsicKeyword(k);
                 } else {
-                    toCopy.add(kw);
+                    toCopy.add(k);
                 }
             }
         }
         final long timestamp2 = c.getGame().getNextTimestamp(); //is this necessary or can the timestamp be re-used?
-        pumped.addChangedCardKeywords(toCopy, new ArrayList<String>(), false, timestamp2);
+        pumped.addChangedCardKeywordsInternal(toCopy, Lists.<KeywordInterface>newArrayList(), false, timestamp2, true);
         ComputerUtilCard.applyStaticContPT(ai.getGame(), pumped, new CardCollection(c));
         return pumped;
     }
@@ -1606,5 +1734,96 @@ public class ComputerUtilCard {
         }
 
         return maxEnergyCost;
+    }
+
+    public static CardCollection prioritizeCreaturesWorthRemovingNow(final Player ai, CardCollection oppCards, final boolean temporary) {
+        if (!CardLists.getNotType(oppCards, "Creature").isEmpty()) {
+            // non-creatures were passed, nothing to do here
+            return oppCards;
+        }
+
+        boolean enablePriorityRemoval = false;
+        boolean priorityRemovalOnlyInDanger = false;
+        int priorityRemovalThreshold = 0;
+        int lifeInDanger = 5;
+        if (ai.getController().isAI()) {
+            AiController aic = ((PlayerControllerAi)ai.getController()).getAi();
+            enablePriorityRemoval = aic.getBooleanProperty(AiProps.ACTIVELY_DESTROY_IMMEDIATELY_UNBLOCKABLE);
+            priorityRemovalThreshold = aic.getIntProperty(AiProps.DESTROY_IMMEDIATELY_UNBLOCKABLE_THRESHOLD);
+            priorityRemovalOnlyInDanger = aic.getBooleanProperty(AiProps.DESTROY_IMMEDIATELY_UNBLOCKABLE_ONLY_IN_DNGR);
+            lifeInDanger = aic.getIntProperty(AiProps.DESTROY_IMMEDIATELY_UNBLOCKABLE_LIFE_IN_DNGR);
+        }
+
+        if (!enablePriorityRemoval) {
+            // Nothing to do here, the profile does not allow prioritizing
+            return oppCards;
+        }
+
+        CardCollection aiCreats = CardLists.filter(ai.getCardsIn(ZoneType.Battlefield), CardPredicates.Presets.CREATURES);
+        if (temporary) {
+            // Pump effects that add "CARDNAME can't attack" and similar things. Only do it if something is untapped.
+            oppCards = CardLists.filter(oppCards, CardPredicates.Presets.UNTAPPED);
+        }
+
+        CardCollection priorityCards = new CardCollection();
+        for (Card atk : oppCards) {
+            if (isUselessCreature(atk.getController(), atk)) {
+                continue;
+            }
+            for (Card blk : aiCreats) {
+                if (!CombatUtil.canBlock(atk, blk, true)) {
+                    boolean threat = atk.getNetCombatDamage() >= ai.getLife() - lifeInDanger;
+                    if (!priorityRemovalOnlyInDanger || threat) {
+                        priorityCards.add(atk);
+                    }
+                }
+            }
+        }
+
+        if (!priorityCards.isEmpty() && priorityCards.size() <= priorityRemovalThreshold) {
+            return priorityCards;
+        }
+
+        return oppCards;
+    }
+
+    public static AiPlayDecision checkNeedsToPlayReqs(final Card card, final SpellAbility sa) {
+        Game game = card.getGame();
+        boolean isRightSplit = sa != null && sa.isRightSplit();
+        String needsToPlayName = isRightSplit ? "SplitNeedsToPlay" : "NeedsToPlay";
+        String needsToPlayVarName = isRightSplit ? "SplitNeedsToPlayVar" : "NeedsToPlayVar";
+
+        if (card.hasSVar(needsToPlayName)) {
+            final String needsToPlay = card.getSVar(needsToPlayName);
+            CardCollectionView list = game.getCardsIn(ZoneType.Battlefield);
+
+            list = CardLists.getValidCards(list, needsToPlay.split(","), card.getController(), card, null);
+            if (list.isEmpty()) {
+                return AiPlayDecision.MissingNeededCards;
+            }
+        }
+        if (card.getSVar(needsToPlayVarName).length() > 0) {
+            final String needsToPlay = card.getSVar(needsToPlayVarName);
+            int x = 0;
+            int y = 0;
+            String sVar = needsToPlay.split(" ")[0];
+            String comparator = needsToPlay.split(" ")[1];
+            String compareTo = comparator.substring(2);
+            try {
+                x = Integer.parseInt(sVar);
+            } catch (final NumberFormatException e) {
+                x = CardFactoryUtil.xCount(card, card.getSVar(sVar));
+            }
+            try {
+                y = Integer.parseInt(compareTo);
+            } catch (final NumberFormatException e) {
+                y = CardFactoryUtil.xCount(card, card.getSVar(compareTo));
+            }
+            if (!Expressions.compare(x, comparator, y)) {
+                return AiPlayDecision.NeedsToPlayCriteriaNotMet;
+            }
+        }
+
+        return AiPlayDecision.WillPlay;
     }
 }

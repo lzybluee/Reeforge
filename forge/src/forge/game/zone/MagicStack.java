@@ -62,9 +62,9 @@ import forge.game.spellability.Spell;
 import forge.game.spellability.SpellAbility;
 import forge.game.spellability.SpellAbilityStackInstance;
 import forge.game.spellability.TargetChoices;
-import forge.game.trigger.Trigger;
 import forge.game.trigger.TriggerType;
 import forge.game.trigger.WrappedAbility;
+import forge.util.TextUtil;
 
 /**
  * <p>
@@ -72,7 +72,7 @@ import forge.game.trigger.WrappedAbility;
  * </p>
  * 
  * @author Forge
- * @version $Id: MagicStack.java 34517 2017-07-01 05:43:36Z swordshine $
+ * @version $Id$
  */
 public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbilityStackInstance> {
     private final List<SpellAbility> simultaneousStackEntryList = Lists.newArrayList();
@@ -141,7 +141,7 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
         if (ability.isSpell()) {
             final Card source = ability.getHostCard();
             if (!source.isCopiedSpell() && !source.isInZone(ZoneType.Stack)) {
-                ability.setHostCard(game.getAction().moveToStack(source, ability));
+                ability.setHostCard(game.getAction().moveToStack(source, ability, Maps.newHashMap()));
             }
         }
 
@@ -284,7 +284,7 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
                     boolean hasPaid = false;
                     do {
                         int mkMagnitude = source.getPseudoKickerMagnitude();
-                        String prompt = String.format("Additional Cost for %s\r\nTimes Kicked: %d\r\n", source, mkMagnitude );
+                        String prompt = TextUtil.concatWithSpace("Additional Cost for",source.toString(),"\r\nTimes Kicked:",  String.valueOf(mkMagnitude),"\r\n");
                         hasPaid = activator.getController().payManaOptional(source, costPseudoKicker, sp, prompt, ManaPaymentPurpose.Multikicker);
                         if (hasPaid) {
                             source.addPseudoMultiKickerMagnitude(1);
@@ -324,7 +324,7 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
                         boolean hasPaid = false;
                         int replicateCMC = source.getManaCost().getCMC();
                         do {
-                            String prompt = String.format("Replicate for %s\r\nTimes Replicated: %d\r\n", source, magnitude);
+                            String prompt = TextUtil.concatWithSpace("Replicate for", source.toString(),"\r\nTimes Replicated:", magnitude.toString(),"\r\n");
                             hasPaid = activator.getController().payManaOptional(source, costReplicate, sp, prompt, ManaPaymentPurpose.Replicate);
                             if (hasPaid) {
                                 magnitude++;
@@ -334,7 +334,7 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
                     }
 
                     // Replicate Trigger
-                    String effect = String.format("DB$ CopySpellAbility | Cost$ 0 | Defined$ Parent | Amount$ %d", magnitude);
+                    String effect = TextUtil.concatWithSpace("DB$ CopySpellAbility | Cost$ 0 | Defined$ Parent | Amount$", magnitude.toString());
                     AbilitySub sa = (AbilitySub) AbilityFactory.getAbility(effect, source);
                     sa.setParent(sp);
                     sa.setDescription("Replicate - " + source);
@@ -364,6 +364,9 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
 
             // Run SpellCast triggers
             if (sp.isSpell()) {
+                if (source.isCommander()) {
+                    activator.incCommanderCast(source);
+                }
                 game.getTriggerHandler().runTrigger(TriggerType.SpellCast, runParams, true);
                 executeCastCommand(si.getSpellAbility(true).getHostCard());
             }
@@ -474,9 +477,6 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
         if (sp.isAbility() && sp.getRestrictions().isPwAbility()) {
             sp.getActivatingPlayer().setActivateLoyaltyAbilityThisTurn(true);
         }
-        if (sp.isSpell() && sp.getHostCard() != null && sp.getHostCard().isCommander() && sp.getHostCard().getCastFrom() == ZoneType.Command) {
-            sp.getActivatingPlayer().increaseCommanderCast(sp.getHostCard());
-        }
         game.updateStackForView();
         game.fireEvent(new GameEventSpellAbilityCast(sp, si, false));
         return si;
@@ -532,16 +532,18 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
         if (isEmpty()) {
             game.copyLastState();
             // FIXME: assuming that if the stack is empty, no reason to hold on to old LKI data (everything is a new object). Is this correct?
-            //game.clearChangeZoneLKIInfo();
+            game.clearChangeZoneLKIInfo();
         }
     }
 
     private final void finishResolving(final SpellAbility sa, final boolean fizzle) {
-        // remove SA and card from the stack
-        removeCardFromStack(sa, fizzle);
+
         // SpellAbility is removed from the stack here
         // temporarily removed removing SA after resolution
         final SpellAbilityStackInstance si = getInstanceFromSpellAbility(sa);
+
+        // remove SA and card from the stack
+        removeCardFromStack(sa, si, fizzle);
         
         if (si != null) {
             remove(si);
@@ -573,7 +575,7 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
         // sa.getHostCard().setXManaCostPaid(0);
     }
 
-    private final void removeCardFromStack(final SpellAbility sa, final boolean fizzle) {
+    private final void removeCardFromStack(final SpellAbility sa, final SpellAbilityStackInstance si, final boolean fizzle) {
         Card source = sa.getHostCard();
 
         // need to update active trigger
@@ -582,44 +584,14 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
         if (source.isCopiedSpell() || sa.isAbility()) {
             // do nothing
         }
-        else if ((source.hasKeyword("Move CARDNAME to your hand as it resolves") || sa.isBuyBackAbility()) && !fizzle) {
-            // Handle cards that need to be moved differently
-            // TODO: replacement effects: Rebound, Buyback and Soulfire Grand Master
-            source.removeAllExtrinsicKeyword("Move CARDNAME to your hand as it resolves");
-            game.getAction().moveToHand(source, sa);
-        }
-        else if (sa.isFlashBackAbility()) {
-            game.getAction().exile(source, sa);
-            sa.setFlashBackAbility(false);
-        }
-        else if (sa.isAftermath()) {
-            game.getAction().exile(source, sa);
-        }
-        else if (source.hasKeyword("Rebound")
-                && !fizzle
-                && source.getCastFrom() == ZoneType.Hand
-                && game.getZoneOf(source).is(ZoneType.Stack)
-                && source.getOwner().equals(source.getController())) //"If you cast this spell from your hand"
-        {
-            //Move rebounding card to exile
-            source = game.getAction().exile(source, null);
-
-            source.setSVar("ReboundAbilityTrigger", "DB$ Play | Defined$ Self "
-                    + "| WithoutManaCost$ True | Optional$ True");
-
-            //Setup a Rebound-trigger
-            final Trigger reboundTrigger = forge.game.trigger.TriggerHandler.parseTrigger("Mode$ Phase "
-                    + "| Phase$ Upkeep | ValidPlayer$ You | OptionalDecider$ You | Execute$ ReboundAbilityTrigger "
-                    + "| TriggerDescription$ At the beginning of your next upkeep, you may cast " + source.toString()
-                    + " without paying it's manacost.", source, true);
-
-            game.getTriggerHandler().registerDelayedTrigger(reboundTrigger);
-        }
-        else if (!source.isCopiedSpell() &&
-                (source.isInstant() || source.isSorcery() || fizzle) &&
+        else if ((source.isInstant() || source.isSorcery() || fizzle) &&
                 source.isInZone(ZoneType.Stack)) {
             // If Spell and still on the Stack then let it goto the graveyard or replace its own movement
-            game.getAction().moveToGraveyard(source, null);
+            Map<String, Object> params = Maps.newHashMap();
+            params.put("StackSa", sa);
+            params.put("StackSi", si);
+            params.put("Fizzle", fizzle);
+            game.getAction().moveToGraveyard(source, null, params);
         }
     }
 
@@ -920,6 +892,6 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
     
     @Override 
     public String toString() {
-        return String.format("%s==%s==%s", simultaneousStackEntryList, frozenStack.toString(), stack.toString()); 
+        return TextUtil.concatNoSpace(simultaneousStackEntryList.toString(),"==", frozenStack.toString(), "==", stack.toString());
     }
 }

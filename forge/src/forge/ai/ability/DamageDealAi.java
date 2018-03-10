@@ -1,21 +1,13 @@
 package forge.ai.ability;
 
-import java.util.List;
-import java.util.Map;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import forge.ai.*;
 import forge.game.Game;
 import forge.game.GameObject;
 import forge.game.ability.AbilityUtils;
-import forge.game.card.Card;
-import forge.game.card.CardCollection;
-import forge.game.card.CardLists;
-import forge.game.card.CardPredicates;
-import forge.game.card.CounterType;
+import forge.game.card.*;
 import forge.game.cost.Cost;
 import forge.game.phase.PhaseHandler;
 import forge.game.phase.PhaseType;
@@ -27,6 +19,9 @@ import forge.game.spellability.TargetChoices;
 import forge.game.spellability.TargetRestrictions;
 import forge.game.zone.ZoneType;
 import forge.util.Aggregates;
+
+import java.util.List;
+import java.util.Map;
 
 public class DamageDealAi extends DamageAiBase {
     @Override
@@ -98,6 +93,29 @@ public class DamageDealAi extends DamageAiBase {
                 source.setSVar("PayX", Integer.toString(dmg));
             } else if (sa.getSVar(damage).equals("Count$CardsInYourHand") && source.getZone().is(ZoneType.Hand)) {
                 dmg--; // the card will be spent casting the spell, so actual damage is 1 less
+            } else if (sa.getSVar(damage).equals("TargetedPlayer$CardsInHand")) {
+                // cards that deal damage by the number of cards in target player's hand, e.g. Sudden Impact
+                if (sa.getTargetRestrictions().canTgtPlayer()) {
+                    int maxDmg = 0;
+                    Player maxDamaged = null;
+                    for (Player p : ai.getOpponents()) {
+                        if (p.canBeTargetedBy(sa)) {
+                            if (p.getCardsIn(ZoneType.Hand).size() > maxDmg) {
+                                maxDmg = p.getCardsIn(ZoneType.Hand).size();
+                                maxDamaged = p;
+                            }
+                        }
+                    }
+                    if (maxDmg > 0 && maxDamaged != null) {
+                        if (shouldTgtP(ai, sa, maxDmg, false)) {
+                            sa.resetTargets();
+                            sa.getTargets().add(maxDamaged);
+                            return true;
+                        }
+                    } else {
+                        return false;
+                    }
+                }
             }
         }
 
@@ -105,9 +123,20 @@ public class DamageDealAi extends DamageAiBase {
             dmg += 2;
         }
         
-        String logic = sa.getParam("AILogic");
+        String logic = sa.getParamOrDefault("AILogic", "");
         if ("DiscardLands".equals(logic)) {
             dmg = 2;
+        } else if (logic.startsWith("ProcRaid.")) {
+            if (ai.getGame().getPhaseHandler().isPlayerTurn(ai) && ai.getGame().getPhaseHandler().getPhase().isBefore(PhaseType.COMBAT_DECLARE_BLOCKERS)) {
+                for (Card potentialAtkr : ai.getCreaturesInPlay()) {
+                    if (ComputerUtilCard.doesCreatureAttackAI(ai, potentialAtkr)) {
+                        return false;
+                    }
+                }
+            }
+            if (ai.getAttackedWithCreatureThisTurn()) {
+                dmg = Integer.parseInt(logic.substring(logic.indexOf(".") + 1));
+            }
         } else if ("WildHunt".equals(logic)) {
             // This dummy ability will just deal 0 damage, but holds the logic for the AI for Master of Wild Hunt
             List<Card> wolves = CardLists.getValidCards(ai.getCardsIn(ZoneType.Battlefield), "Creature.Wolf+untapped+YouCtrl+Other", ai, source);
@@ -131,6 +160,18 @@ public class DamageDealAi extends DamageAiBase {
             } else {
                 return false;
             }
+        } else if ("NinThePainArtist".equals(logic)) {
+            // Make sure not to mana lock ourselves + make the opponent draw cards into an immediate discard
+            if (ai.getGame().getPhaseHandler().is(PhaseType.END_OF_TURN)) {
+                boolean doTarget = damageTargetAI(ai, sa, dmg, true);
+                if (doTarget) {
+                    Card tgt = sa.getTargets().getFirstTargetedCard();
+                    if (tgt != null) {
+                        return ai.getGame().getPhaseHandler().getPlayerTurn() == tgt.getController();
+                    }
+                }
+            }
+            return false;
         }
         
         if (sourceName.equals("Sorin, Grim Nemesis")) {
@@ -250,14 +291,18 @@ public class DamageDealAi extends DamageAiBase {
         }
         hPlay = CardLists.getTargetableCards(hPlay, sa);
 
-        final List<Card> killables = CardLists.filter(hPlay, new Predicate<Card>() {
+        List<Card> killables = CardLists.filter(hPlay, new Predicate<Card>() {
             @Override
             public boolean apply(final Card c) {
-                return c.getSVar("Targeting").equals("Dies") 
-                        || (ComputerUtilCombat.getEnoughDamageToKill(c, d, source, false, noPrevention) <= d) && !ComputerUtil.canRegenerate(ai, c)
+                return c.getSVar("Targeting").equals("Dies")
+                        || (ComputerUtilCombat.getEnoughDamageToKill(c, d, source, false, noPrevention) <= d)
+                            && !ComputerUtil.canRegenerate(ai, c)
                             && !(c.getSVar("SacMe").length() > 0);
             }
         });
+
+        // Filter AI-specific targets if provided
+        killables = ComputerUtil.filterAITgts(sa, ai, new CardCollection(killables), true);
 
         Card targetCard = null;
         if (pl.isOpponentOf(ai) && activator.equals(ai) && !killables.isEmpty()) {
@@ -346,7 +391,7 @@ public class DamageDealAi extends DamageAiBase {
         final boolean oppTargetsChoice = sa.hasParam("TargetingPlayer");
 
         Player enemy = ComputerUtil.getOpponentFor(ai);
-        
+
         if ("PowerDmg".equals(sa.getParam("AILogic"))) {
             // check if it is better to target the player instead, the original target is already set in PumpAi.pumpTgtAI()
             if (tgt.canTgtCreatureAndPlayer() && this.shouldTgtP(ai, sa, dmg, noPrevention)){
@@ -365,6 +410,11 @@ public class DamageDealAi extends DamageAiBase {
         sa.resetTargets();
         // target loop
         TargetChoices tcs = sa.getTargets();
+
+        // Do not use if would kill self
+        if (("SelfDamage".equals(sa.getParam("AILogic"))) && (ai.getLife() <= Integer.parseInt(source.getSVar("SelfDamageAmount")))) {
+            return false;
+        }
 
         if ("ChoiceBurn".equals(sa.getParam("AILogic"))) {
             // do not waste burns on player if other choices are present
@@ -486,7 +536,7 @@ public class DamageDealAi extends DamageAiBase {
                     }
                 }
 
-                if (freePing && sa.canTarget(enemy)) {
+                if (freePing && sa.canTarget(enemy) && (!avoidTargetP(ai, sa))) {
                     tcs.add(enemy);
                     if (divided) {
                         tgt.addDividedAllocation(enemy, dmg);
@@ -528,10 +578,11 @@ public class DamageDealAi extends DamageAiBase {
             // TODO: Improve Damage, we shouldn't just target the player just
             // because we can
             else if (sa.canTarget(enemy)) {
-                if ((phase.is(PhaseType.END_OF_TURN) && phase.getNextTurn().equals(ai))
+                if (((phase.is(PhaseType.END_OF_TURN) && phase.getNextTurn().equals(ai))
                         || (SpellAbilityAi.isSorcerySpeed(sa) && phase.is(PhaseType.MAIN2))
                         || sa.getPayCosts() == null || immediately
-                        || this.shouldTgtP(ai, sa, dmg, noPrevention)) {
+                        || this.shouldTgtP(ai, sa, dmg, noPrevention)) &&
+                        (!avoidTargetP(ai, sa))) {
                 	tcs.add(enemy);
                     if (divided) {
                         tgt.addDividedAllocation(enemy, dmg);

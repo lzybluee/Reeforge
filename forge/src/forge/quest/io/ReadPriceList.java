@@ -17,7 +17,6 @@
  */
 package forge.quest.io;
 
-import com.esotericsoftware.minlog.Log;
 import forge.card.MagicColor;
 import forge.properties.ForgeConstants;
 import forge.util.FileUtil;
@@ -34,7 +33,7 @@ import java.util.Random;
  * </p>
  *
  * @author Forge
- * @version $Id: ReadPriceList.java 33827 2017-04-23 15:23:37Z Agetian $
+ * @version $Id$
  */
 public class ReadPriceList {
 
@@ -115,7 +114,7 @@ public class ReadPriceList {
 
                 map.put(name, val);
             } catch (final NumberFormatException nfe) {
-                Log.warn("NumberFormatException: " + nfe.getMessage());
+                System.err.println("NumberFormatException: " + nfe.getMessage());
             }
         }
         return map;

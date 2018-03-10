@@ -25,6 +25,7 @@ import forge.card.ColorSet;
 import forge.card.MagicColor;
 import forge.card.mana.ManaCost;
 import forge.game.Game;
+import forge.game.ability.AbilityFactory;
 import forge.game.ability.AbilityUtils;
 import forge.game.ability.ApiType;
 import forge.game.card.*;
@@ -37,9 +38,14 @@ import forge.game.phase.PhaseType;
 import forge.game.player.Player;
 import forge.game.player.PlayerPredicates;
 import forge.game.spellability.SpellAbility;
+import forge.game.spellability.SpellPermanent;
 import forge.game.staticability.StaticAbility;
+import forge.game.trigger.Trigger;
 import forge.game.zone.ZoneType;
 import forge.util.Aggregates;
+import forge.util.TextUtil;
+import forge.util.maps.LinkedHashMapToAmount;
+import forge.util.maps.MapToAmount;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Arrays;
@@ -70,7 +76,7 @@ public class SpecialCardAi {
 
     // Black Lotus and Lotus Bloom
     public static class BlackLotus {
-        public static boolean consider(Player ai, SpellAbility sa, ManaCostBeingPaid cost) {
+        public static boolean consider(final Player ai, final SpellAbility sa, final ManaCostBeingPaid cost) {
             CardCollection manaSources = ComputerUtilMana.getAvailableManaSources(ai, true);
             int numManaSrcs = manaSources.size();
 
@@ -97,49 +103,9 @@ public class SpecialCardAi {
         }
     }
 
-    // Bonds of Faith
-    public static class BondsOfFaith {
-        public static Card getBestAttachTarget(final Player ai, SpellAbility sa, List<Card> list) {
-            Card chosen = null;
-            
-            List<Card> aiHumans = CardLists.filter(list, new Predicate<Card>() {
-                @Override
-                public boolean apply(final Card c) {
-                    // Don't buff opponent's humans
-                    if (!c.getController().equals(ai)) {
-                        return false;
-                    }
-                    return c.getType().hasCreatureType("Human");
-                }
-            });
-            List<Card> oppNonHumans = CardLists.filter(list, new Predicate<Card>() {
-                @Override
-                public boolean apply(final Card c) {
-                    // Don't debuff AI's own non-humans
-                    if (c.getController().equals(ai)) {
-                        return false;
-                    }
-                    return !c.getType().hasCreatureType("Human") && !ComputerUtilCard.isUselessCreature(ai, c);
-                }
-            });
-
-            if (!aiHumans.isEmpty() && !oppNonHumans.isEmpty()) {
-                Card bestAi = ComputerUtilCard.getBestCreatureAI(aiHumans);
-                Card bestOpp = ComputerUtilCard.getBestCreatureAI(oppNonHumans);
-                chosen = ComputerUtilCard.evaluateCreature(bestAi) > ComputerUtilCard.evaluateCreature(bestOpp) ? bestAi : bestOpp;
-            } else if (!aiHumans.isEmpty()) {
-                chosen = ComputerUtilCard.getBestCreatureAI(aiHumans);
-            } else if (!oppNonHumans.isEmpty()) {
-                chosen = ComputerUtilCard.getBestCreatureAI(oppNonHumans);
-            }
-            
-            return chosen;
-        }
-    }
-
     // Chain of Acid
     public static class ChainOfAcid {
-        public static boolean consider(Player ai, SpellAbility sa) {
+        public static boolean consider(final Player ai, final SpellAbility sa) {
             List<Card> AiLandsOnly = CardLists.filter(ai.getCardsIn(ZoneType.Battlefield),
                     CardPredicates.Presets.LANDS);
             List<Card> OppPerms = CardLists.filter(ai.getOpponents().getCardsIn(ZoneType.Battlefield),
@@ -155,7 +121,7 @@ public class SpecialCardAi {
 
     // Chain of Smog
     public static class ChainOfSmog {
-        public static boolean consider(Player ai, SpellAbility sa) {
+        public static boolean consider(final Player ai, final SpellAbility sa) {
             if (ai.getCardsIn(ZoneType.Hand).isEmpty()) {
                 // to avoid failure to add to stack, provide a legal target opponent first (choosing random at this point)
                 // TODO: this makes the AI target opponents with 0 cards in hand, but bailing from here causes a
@@ -180,7 +146,7 @@ public class SpecialCardAi {
 
     // Cursed Scroll
     public static class CursedScroll {
-        public static boolean consider(Player ai, SpellAbility sa) {
+        public static boolean consider(final Player ai, final SpellAbility sa) {
             CardCollectionView hand = ai.getCardsIn(ZoneType.Hand);
             if (hand.isEmpty()) {
                 return false;
@@ -190,7 +156,7 @@ public class SpecialCardAi {
             return CardLists.filter(hand, CardPredicates.nameEquals(hand.getFirst().getName())).size() == hand.size();
         }
 
-        public static String chooseCard(Player ai, SpellAbility sa) {
+        public static String chooseCard(final Player ai, final SpellAbility sa) {
             int maxCount = 0;
             Card best = null;
             CardCollectionView hand = ai.getCardsIn(ZoneType.Hand);
@@ -207,11 +173,37 @@ public class SpecialCardAi {
         }
     }
 
+    // Deathgorge Scavenger
+    public static class DeathgorgeScavenger {
+        public static boolean consider(final Player ai, final SpellAbility sa) {
+            Card worstCreat = ComputerUtilCard.getWorstAI(CardLists.filter(ai.getOpponents().getCardsIn(ZoneType.Graveyard), CardPredicates.Presets.CREATURES));
+            Card worstNonCreat = ComputerUtilCard.getWorstAI(CardLists.filter(ai.getOpponents().getCardsIn(ZoneType.Graveyard), Predicates.not(CardPredicates.Presets.CREATURES)));
+            if (worstCreat == null) {
+                worstCreat = ComputerUtilCard.getWorstAI(CardLists.filter(ai.getCardsIn(ZoneType.Graveyard), CardPredicates.Presets.CREATURES));
+            }
+            if (worstNonCreat == null) {
+                worstNonCreat = ComputerUtilCard.getWorstAI(CardLists.filter(ai.getCardsIn(ZoneType.Graveyard), Predicates.not(CardPredicates.Presets.CREATURES)));
+            }
+
+            sa.resetTargets();
+            if (worstCreat != null && ai.getLife() <= ai.getStartingLife() / 4) {
+                sa.getTargets().add(worstCreat);
+            } else if (worstNonCreat != null && ai.getGame().getCombat() != null
+                    && ai.getGame().getCombat().isAttacking(sa.getHostCard())) {
+                sa.getTargets().add(worstNonCreat);
+            } else if (worstCreat != null) {
+                sa.getTargets().add(worstCreat);
+            }
+
+            return sa.getTargets().getNumTargeted() > 0;
+        }
+    }
+
     // Desecration Demon
     public static class DesecrationDemon {
         private static final int demonSacThreshold = Integer.MAX_VALUE; // if we're in dire conditions, sac everything from worst to best hoping to find an answer
 
-        public static boolean considerSacrificingCreature(Player ai, SpellAbility sa) {
+        public static boolean considerSacrificingCreature(final Player ai, final SpellAbility sa) {
             CardCollection flyingCreatures = CardLists.filter(ai.getCardsIn(ZoneType.Battlefield), Predicates.and(CardPredicates.Presets.UNTAPPED, Predicates.or(CardPredicates.hasKeyword("Flying"), CardPredicates.hasKeyword("Reach"))));
             boolean hasUsefulBlocker = false;
 
@@ -235,7 +227,7 @@ public class SpecialCardAi {
 
     // Donate
     public static class Donate {
-        public static boolean considerTargetingOpponent(Player ai, SpellAbility sa) {
+        public static boolean considerTargetingOpponent(final Player ai, final SpellAbility sa) {
             final Card donateTarget = ComputerUtil.getCardPreference(ai, sa.getHostCard(), "DonateMe", CardLists.filter(
                     ai.getCardsIn(ZoneType.Battlefield).threadSafeIterable(), CardPredicates.hasSVar("DonateMe")));
             if (donateTarget != null) {
@@ -271,7 +263,7 @@ public class SpecialCardAi {
             return false;
         }
 
-        public static boolean considerDonatingPermanent(Player ai, SpellAbility sa) {
+        public static boolean considerDonatingPermanent(final Player ai, final SpellAbility sa) {
             Card donateTarget = ComputerUtil.getCardPreference(ai, sa.getHostCard(), "DonateMe", CardLists.filter(ai.getCardsIn(ZoneType.Battlefield).threadSafeIterable(), CardPredicates.hasSVar("DonateMe")));
             if (donateTarget != null) {
                 sa.resetTargets();
@@ -287,12 +279,11 @@ public class SpecialCardAi {
 
     // Electrostatic Pummeler
     public static class ElectrostaticPummeler {
-        public static boolean consider(Player ai, SpellAbility sa) {
-            // Activate Electrostatic Pummeler's pump only as a combat trick
+        public static boolean consider(final Player ai, final SpellAbility sa) {
             final Card source = sa.getHostCard();
             Game game = ai.getGame();
             Combat combat = game.getCombat();
-            Pair<Integer, Integer> predictedPT = getPumpedPT(ai, source.getNetPower(), source.getNetToughness());
+            Pair<Integer, Integer> predictedPT = getPumpedPT(ai, source.getNetCombatDamage(), source.getNetToughness());
 
             // Try to save the Pummeler from death by pumping it if it's threatened with a damage spell
             if (ComputerUtil.predictThreatenedObjects(ai, null, true).contains(source)) {
@@ -300,8 +291,7 @@ public class SpecialCardAi {
 
                 if (saTop.getApi() == ApiType.DealDamage || saTop.getApi() == ApiType.DamageAll) {
                     int dmg = AbilityUtils.calculateAmount(saTop.getHostCard(), saTop.getParam("NumDmg"), saTop);
-                    if (source.getNetToughness() <= dmg && predictedPT.getRight() > dmg)
-                    // Try to save the Pummeler from death by pumping it
+                    if (source.getNetToughness() - source.getDamage() <= dmg && predictedPT.getRight() - source.getDamage() > dmg)
                     return true;
                 }
             }
@@ -331,7 +321,7 @@ public class SpecialCardAi {
             boolean cantDie = ComputerUtilCombat.attackerCantBeDestroyedInCombat(ai, source);
 
             CardCollection opposition = isBlocking ? combat.getAttackersBlockedBy(source) : combat.getBlockers(source);
-            int oppP = Aggregates.sum(opposition, CardPredicates.Accessors.fnGetNetPower);
+            int oppP = Aggregates.sum(opposition, CardPredicates.Accessors.fnGetAttack);
             int oppT = Aggregates.sum(opposition, CardPredicates.Accessors.fnGetNetToughness);
 
             boolean oppHasFirstStrike = false;
@@ -341,7 +331,13 @@ public class SpecialCardAi {
 
             if (!isBlocking && combat.getDefenderByAttacker(source) instanceof Card) {
                 int loyalty = ((Card)combat.getDefenderByAttacker(source)).getCounters(CounterType.LOYALTY);
-                if (source.getNetPower() >= oppT + loyalty) {
+                int totalDamageToPW = 0;
+                for (Card atk : (combat.getAttackersOf(combat.getDefenderByAttacker(source)))) {
+                    if (combat.isUnblocked(atk)) {
+                        totalDamageToPW += atk.getNetCombatDamage();
+                    }
+                }
+                if (totalDamageToPW >= oppT + loyalty) {
                     // Already enough damage to take care of the planeswalker
                     return false;
                 }
@@ -349,6 +345,7 @@ public class SpecialCardAi {
                     // Can pump to kill the planeswalker, go for it
                     return true;
                 }
+
             }
 
             for (Card c : opposition) {
@@ -371,15 +368,15 @@ public class SpecialCardAi {
                 }
             }
 
-            if (predictedPT.getRight() <= oppP && oppHasFirstStrike && !cantDie) {
+            if (predictedPT.getRight() - source.getDamage() <= oppP && oppHasFirstStrike && !cantDie) {
                 // Can't survive first strike or double strike, don't pump
                 return false;
             }
-            if (predictedPT.getLeft() < oppT && (!cantDie || predictedPT.getRight() <= oppP)) {
+            if (predictedPT.getLeft() < oppT && (!cantDie || predictedPT.getRight() - source.getDamage() <= oppP)) {
                 // Can't pump enough to kill the blockers and survive, don't pump
                 return false;
             }
-            if (source.getNetPower() > oppT && source.getNetToughness() > oppP) {
+            if (source.getNetCombatDamage() > oppT && source.getNetToughness() > oppP) {
                 // Already enough to kill the blockers and survive, don't overpump
                 return false;
             }
@@ -394,7 +391,7 @@ public class SpecialCardAi {
             return true;
         }
 
-        public static boolean predictOverwhelmingDamage(Player ai, SpellAbility sa) {
+        public static boolean predictOverwhelmingDamage(final Player ai, final SpellAbility sa) {
             final Card source = sa.getHostCard();
             int oppLife = ai.getWeakestOpponent().getLife();
             CardCollection oppInPlay = ai.getWeakestOpponent().getCreaturesInPlay();
@@ -406,7 +403,7 @@ public class SpecialCardAi {
                 }
             }
 
-            Pair<Integer, Integer> predictedPT = getPumpedPT(ai, source.getNetPower(), source.getNetToughness());
+            Pair<Integer, Integer> predictedPT = getPumpedPT(ai, source.getNetCombatDamage(), source.getNetToughness());
             int oppT = Aggregates.sum(potentialBlockers, CardPredicates.Accessors.fnGetNetToughness);
 
             if (potentialBlockers.isEmpty() || (sa.getHostCard().hasKeyword("Trample") && predictedPT.getLeft() - oppT >= oppLife)) {
@@ -429,9 +426,50 @@ public class SpecialCardAi {
             return Pair.of(power, toughness);
         }
     }
+
+    // Extraplanar Lens
+    public static class ExtraplanarLens {
+        public static boolean consider(final Player ai, final SpellAbility sa) {
+            Card bestBasic = null;
+            Card bestBasicSelfOnly = null;
+
+            CardCollection aiLands = CardLists.filter(ai.getCardsIn(ZoneType.Battlefield), CardPredicates.Presets.LANDS_PRODUCING_MANA);
+            CardCollection oppLands = CardLists.filter(ai.getOpponents().getCardsIn(ZoneType.Battlefield),
+                    CardPredicates.Presets.LANDS_PRODUCING_MANA);
+
+            int bestCount = 0;
+            int bestSelfOnlyCount = 0;
+            for (String landType : MagicColor.Constant.BASIC_LANDS) {
+                CardCollection landsOfType = CardLists.filter(aiLands, CardPredicates.nameEquals(landType));
+                CardCollection oppLandsOfType = CardLists.filter(oppLands, CardPredicates.nameEquals(landType));
+
+                int numCtrl = CardLists.filter(aiLands, CardPredicates.nameEquals(landType)).size();
+                if (numCtrl > bestCount) {
+                    bestCount = numCtrl;
+                    bestBasic = ComputerUtilCard.getWorstLand(landsOfType);
+                }
+                if (numCtrl > bestSelfOnlyCount && numCtrl > 1 && oppLandsOfType.isEmpty() && bestBasicSelfOnly == null) {
+                    bestSelfOnlyCount = numCtrl;
+                    bestBasicSelfOnly = ComputerUtilCard.getWorstLand(landsOfType);
+                }
+            }
+
+            sa.resetTargets();
+            if (bestBasicSelfOnly != null) {
+                sa.getTargets().add(bestBasicSelfOnly);
+                return true;
+            } else if (bestBasic != null) {
+                sa.getTargets().add(bestBasic);
+                return true;
+            }
+
+            return false;
+        }
+    }
+
     // Force of Will
     public static class ForceOfWill {
-        public static boolean consider(Player ai, SpellAbility sa) {
+        public static boolean consider(final Player ai, final SpellAbility sa) {
             CardCollection blueCards = CardLists.filter(ai.getCardsIn(ZoneType.Hand), CardPredicates.isColor(MagicColor.BLUE));
 
             boolean isExileMode = false;
@@ -460,7 +498,7 @@ public class SpecialCardAi {
 
     // Guilty Conscience
     public static class GuiltyConscience {
-        public static Card getBestAttachTarget(final Player ai, SpellAbility sa, List<Card> list) {
+        public static Card getBestAttachTarget(final Player ai, final SpellAbility sa, final List<Card> list) {
             Card chosen = null;
             
             List<Card> aiStuffies = CardLists.filter(list, new Predicate<Card>() {
@@ -494,10 +532,146 @@ public class SpecialCardAi {
             return chosen;
         }
     }
-    
-    // Living Death (and possibly other similar cards using AILogic LivingDeath)
+
+    // Intuition (and any other card that might potentially let you pick N cards from the library,
+    // one of which will then be picked for you by the opponent)
+    public static class Intuition {
+        public static CardCollection considerMultiple(final Player ai, final SpellAbility sa) {
+            if (ai.getController().isAI()) {
+                if (!((PlayerControllerAi) ai.getController()).getAi().getBooleanProperty(AiProps.INTUITION_ALTERNATIVE_LOGIC)) {
+                    return new CardCollection(); // fall back to standard ChangeZoneAi considerations
+                }
+            }
+
+            int changeNum = AbilityUtils.calculateAmount(sa.getHostCard(), sa.getParam("ChangeNum"), sa);
+            CardCollection lib = CardLists.filter(ai.getCardsIn(ZoneType.Library),
+                    Predicates.not(CardPredicates.nameEquals(sa.getHostCard().getName())));
+            Collections.sort(lib, CardLists.CmcComparatorInv);
+
+            // Additional cards which are difficult to auto-classify but which are generally good to Intuition for
+            List<String> highPriorityNamedCards = Lists.newArrayList("Accumulated Knowledge", "Take Inventory");
+
+            // figure out how many of each card we have in deck
+            MapToAmount<String> cardAmount = new LinkedHashMapToAmount<>();
+            for (Card c : lib) {
+                cardAmount.add(c.getName());
+            }
+
+            // Trix: see if we can complete the combo (if it looks like we might win shortly or if we need to get a Donate stat)
+            boolean donateComboMightWin = false;
+            int numIllusionsOTB = CardLists.filter(ai.getCardsIn(ZoneType.Battlefield), CardPredicates.nameEquals("Illusions of Grandeur")).size();
+            if (ai.getOpponentsSmallestLifeTotal() < 20 || numIllusionsOTB > 0) {
+                donateComboMightWin = true;
+                int numIllusionsInHand = CardLists.filter(ai.getCardsIn(ZoneType.Hand), CardPredicates.nameEquals("Illusions of Grandeur")).size();
+                int numDonateInHand = CardLists.filter(ai.getCardsIn(ZoneType.Hand), CardPredicates.nameEquals("Donate")).size();
+                int numIllusionsInLib = CardLists.filter(ai.getCardsIn(ZoneType.Library), CardPredicates.nameEquals("Illusions of Grandeur")).size();
+                int numDonateInLib = CardLists.filter(ai.getCardsIn(ZoneType.Library), CardPredicates.nameEquals("Donate")).size();
+                CardCollection comboList = new CardCollection();
+                if ((numIllusionsInHand > 0 || numIllusionsOTB > 0) && numDonateInHand == 0 && numDonateInLib >= 3) {
+                    for (Card c : lib) {
+                        if (c.getName().equals("Donate")) {
+                            comboList.add(c);
+                        }
+                    }
+                    return comboList;
+                } else if (numDonateInHand > 0 && numIllusionsInHand == 0 && numIllusionsInLib >= 3) {
+                    for (Card c : lib) {
+                        if (c.getName().equals("Illusions of Grandeur")) {
+                            comboList.add(c);
+                        }
+                    }
+                    return comboList;
+                }
+            }
+
+            // Create a priority list for cards that we have no more than 4 of and that are not lands
+            CardCollection libPriorityList = new CardCollection();
+            CardCollection libHighPriorityList = new CardCollection();
+            CardCollection libLowPriorityList = new CardCollection();
+            List<String> processed = Lists.newArrayList();
+            for (int i = 4; i > 0; i--) {
+                for (Card c : lib) {
+                    if (!donateComboMightWin && (c.getName().equals("Illusions of Grandeur") || c.getName().equals("Donate"))) {
+                        // Probably not worth putting two of the combo pieces into the graveyard
+                        // since one Illusions-Donate is likely to not be enough
+                        continue;
+                    }
+                    if (cardAmount.get(c.getName()) == i && !c.isLand() && !processed.contains(c.getName())) {
+                        // if it's a card that is generally good to place in the graveyard, also add it
+                        // to the mix
+                        boolean canRetFromGrave = false;
+                        String name = c.getName().replace(',', ';');
+                        for (Trigger t : c.getTriggers()) {
+                            SpellAbility ab = null;
+                            if (t.hasParam("Execute")) {
+                                ab = AbilityFactory.getAbility(c.getSVar(t.getParam("Execute")), c);
+                            }
+                            if (ab == null) { continue; }
+
+                            if (ab.getApi() == ApiType.ChangeZone
+                                    && "Self".equals(ab.getParam("Defined"))
+                                    && "Graveyard".equals(ab.getParam("Origin"))
+                                    && "Battlefield".equals(ab.getParam("Destination"))) {
+                                canRetFromGrave = true;
+                            }
+                            if (ab.getApi() == ApiType.ChangeZoneAll
+                                    && TextUtil.concatNoSpace("Creature.named", name).equals(ab.getParam("ChangeType"))
+                                    && "Graveyard".equals(ab.getParam("Origin"))
+                                    && "Battlefield".equals(ab.getParam("Destination"))) {
+                                canRetFromGrave = true;
+                            }
+                        }
+                        boolean isGoodToPutInGrave = c.hasSVar("DiscardMe") || canRetFromGrave
+                                || (ComputerUtil.isPlayingReanimator(ai) && c.isCreature());
+
+                        for (Card c1 : lib) {
+                            if (c1.getName().equals(c.getName())) {
+                                if (CardLists.filter(ai.getCardsIn(ZoneType.Hand), CardPredicates.nameEquals(c1.getName())).isEmpty()
+                                        && ComputerUtilMana.hasEnoughManaSourcesToCast(c1.getFirstSpellAbility(), ai)) {
+                                    // Try not to search for things we already have in hand or that we can't cast
+                                    libPriorityList.add(c1);
+                                } else {
+                                    libLowPriorityList.add(c1);
+                                }
+                                if (isGoodToPutInGrave || highPriorityNamedCards.contains(c.getName())) {
+                                    libHighPriorityList.add(c1);
+                                }
+                            }
+                        }
+                        processed.add(c.getName());
+                    }
+                }
+            }
+
+            // If we're playing Reanimator, we're really interested just in the highest CMC spells, not the
+            // ones we necessarily have multiples of
+            if (ComputerUtil.isPlayingReanimator(ai)) {
+                Collections.sort(libHighPriorityList, CardLists.CmcComparatorInv);
+            }
+
+            // Otherwise, try to grab something that is hopefully decent to grab, in priority order
+            CardCollection chosen = new CardCollection();
+            if (libHighPriorityList.size() >= changeNum) {
+                for (int i = 0; i < changeNum; i++) {
+                    chosen.add(libHighPriorityList.get(i));
+                }
+            } else if (libPriorityList.size() >= changeNum) {
+                for (int i = 0; i < changeNum; i++) {
+                    chosen.add(libPriorityList.get(i));
+                }
+            } else if (libLowPriorityList.size() >= changeNum) {
+                for (int i = 0; i < changeNum; i++) {
+                    chosen.add(libLowPriorityList.get(i));
+                }
+            }
+
+            return chosen;
+        }
+    }
+
+    // Living Death (and other similar cards using AILogic LivingDeath or AILogic ReanimateAll)
     public static class LivingDeath {
-        public static boolean consider(Player ai, SpellAbility sa) {
+        public static boolean consider(final Player ai, final SpellAbility sa) {
             int aiBattlefieldPower = 0, aiGraveyardPower = 0;
             int threshold = 320; // approximately a 4/4 Flying creature worth of extra value
 
@@ -545,7 +719,7 @@ public class SpecialCardAi {
     public static class MairsilThePretender {
         // Scan the fetch list for a card with at least one activated ability.
         // TODO: can be improved to a full consider(sa, ai) logic which would scan the graveyard first and hand last
-        public static Card considerCardFromList(CardCollection fetchList) {
+        public static Card considerCardFromList(final CardCollection fetchList) {
             for (Card c : CardLists.filter(fetchList, Predicates.or(CardPredicates.Presets.ARTIFACTS, CardPredicates.Presets.CREATURES))) {
                 for (SpellAbility ab : c.getSpellAbilities()) {
                     if (ab.isAbility() && !ab.isTrigger()) {
@@ -569,9 +743,36 @@ public class SpecialCardAi {
         }
     }
 
+    // Mimic Vat
+    public static class MimicVat {
+        public static boolean considerExile(final Player ai, final SpellAbility sa) {
+            final Card source = sa.getHostCard();
+            final Card exiledWith = source.getImprintedCards().isEmpty() ? null : source.getImprintedCards().getFirst();
+            final List<Card> defined = AbilityUtils.getDefinedCards(sa.getHostCard(), sa.getParam("Defined"), sa);
+            final Card tgt = defined.isEmpty() ? null : defined.get(0);
+
+            return exiledWith == null || (tgt != null && ComputerUtilCard.evaluateCreature(tgt) > ComputerUtilCard.evaluateCreature(exiledWith));
+        }
+
+        public static boolean considerCopy(final Player ai, final SpellAbility sa) {
+            final Card source = sa.getHostCard();
+            final Card exiledWith = source.getImprintedCards().isEmpty() ? null : source.getImprintedCards().getFirst();
+
+            if (exiledWith == null) {
+                return false;
+            }
+
+            // We want to either be able to attack with the creature, or keep it until our opponent's end of turn as a
+            // potential blocker
+            return ComputerUtilCard.doesSpecifiedCreatureAttackAI(ai, exiledWith)
+                    || (ai.getGame().getPhaseHandler().getPlayerTurn().isOpponentOf(ai) && ai.getGame().getCombat() != null
+                    && !ai.getGame().getCombat().getAttackers().isEmpty());
+        }
+    }
+
     // Momir Vig, Simic Visionary Avatar
     public static class MomirVigAvatar {
-        public static boolean consider(Player ai, SpellAbility sa) {
+        public static boolean consider(final Player ai, final SpellAbility sa) {
             Card source = sa.getHostCard();
 
             if (source.getGame().getPhaseHandler().getPhase().isBefore(PhaseType.MAIN1)) {
@@ -597,7 +798,7 @@ public class SpecialCardAi {
 
     // Necropotence
     public static class Necropotence {
-        public static boolean consider(Player ai, SpellAbility sa) {
+        public static boolean consider(final Player ai, final SpellAbility sa) {
             Game game = ai.getGame();
             int computerHandSize = ai.getZone(ZoneType.Hand).size();
             int maxHandSize = ai.getMaxHandSize();
@@ -652,7 +853,7 @@ public class SpecialCardAi {
 
     // Null Brooch
     public static class NullBrooch {
-        public static boolean consider(Player ai, SpellAbility sa) {
+        public static boolean consider(final Player ai, final SpellAbility sa) {
             // TODO: improve the detection of Ensnaring Bridge type effects ("GTX", "X" need generalization)
             boolean hasEnsnaringBridgeEffect = false;
             for (Card otb : ai.getCardsIn(ZoneType.Battlefield)) {
@@ -677,7 +878,7 @@ public class SpecialCardAi {
 
     // Nykthos, Shrine to Nyx
     public static class NykthosShrineToNyx {
-        public static boolean consider(Player ai, SpellAbility sa) {
+        public static boolean consider(final Player ai, final SpellAbility sa) {
             Game game = ai.getGame();
             PhaseHandler ph = game.getPhaseHandler();
             if (!ph.isPlayerTurn(ai) || ph.getPhase().isBefore(PhaseType.MAIN2)) {
@@ -736,7 +937,7 @@ public class SpecialCardAi {
 
     // Phyrexian Dreadnought
     public static class PhyrexianDreadnought {
-        public static CardCollection reviseCreatureSacList(Player ai, SpellAbility sa, CardCollection choices) {
+        public static CardCollection reviseCreatureSacList(final Player ai, final SpellAbility sa, final CardCollection choices) {
             choices.sort(Collections.reverseOrder(ComputerUtilCard.EvaluateCreatureComparator));
             int power = 0;
             List<Card> toKeep = Lists.newArrayList();
@@ -758,13 +959,71 @@ public class SpecialCardAi {
         }
     }
 
+    // Price of Progress
+    public static class PriceOfProgress {
+        public static boolean consider(final Player ai, final SpellAbility sa) {
+            // Don't play in early game - opponent likely still has lands to play
+            if (ai.getGame().getPhaseHandler().getTurn() < 10) {
+                return false;
+            }
+
+            int aiLands = CardLists.filter(ai.getCardsIn(ZoneType.Battlefield), Predicates.and(CardPredicates.Presets.LANDS, Predicates.not(CardPredicates.Presets.BASIC_LANDS))).size();
+
+            boolean hasBridge = false;
+            for (Card c : ai.getCardsIn(ZoneType.Battlefield)) {
+                // Do we have a card in play that makes us want to empty out hand?
+                if (c.hasSVar("PreferredHandSize") && ai.getCardsIn(ZoneType.Hand).size() > Integer.parseInt(c.getSVar("PreferredHandSize"))) {
+                    hasBridge = true;
+                    break;
+                }
+            }
+
+            // Do if we need to lose cards to activate Ensnaring Bridge or Cursed Scroll
+            // even if suboptimal play, but don't waste the card too early even then!
+            if ((hasBridge) && (ai.getGame().getPhaseHandler().getTurn() >= 10)) {
+                return true;
+            }
+
+            for (Player opp : ai.getOpponents()) {
+                int oppLands = CardLists.filter(opp.getCardsIn(ZoneType.Battlefield), Predicates.and(CardPredicates.Presets.LANDS, Predicates.not(CardPredicates.Presets.BASIC_LANDS))).size();
+                // Always if enemy would die and we don't!
+                // TODO : predict actual damage instead of assuming it'll be 2*lands
+                // Don't if we lose, unless we lose anyway to unblocked creatures next turn
+                if ((ai.getLife() <= aiLands * 2) &&
+                        (!(ComputerUtil.aiLifeInDanger(ai, true, 0)) && ((ai.getOpponentsSmallestLifeTotal()) <= oppLands * 2))) {
+                    return false;
+                }
+                // Do if we can win
+                if ((ai.getOpponentsSmallestLifeTotal()) <= oppLands * 2) {
+                    return true;
+                }
+                // Don't if we'd lose a larger percentage of our remaining life than enemy
+                if ((aiLands / ((double) ai.getLife())) >
+                        (oppLands / ((double) ai.getOpponentsSmallestLifeTotal()))) {
+                    return false;
+                }
+                // Don't if no enemy nonbasic lands
+                if (oppLands == 0) {
+                    return false;
+                }
+                // Don't if loss is equal in percentage but we lose more points
+                if (((aiLands / ((double) ai.getLife())) == (oppLands / ((double) ai.getOpponentsSmallestLifeTotal())))
+                        && (aiLands > oppLands)) {
+                    return false;
+                }
+
+            }
+            return true;
+        }
+    }
+
     // Sarkhan the Mad
     public static class SarkhanTheMad {
-        public static boolean considerDig(Player ai, SpellAbility sa) {
+        public static boolean considerDig(final Player ai, final SpellAbility sa) {
             return sa.getHostCard().getCounters(CounterType.LOYALTY) == 1;
         }
 
-        public static boolean considerMakeDragon(Player ai, SpellAbility sa) {
+        public static boolean considerMakeDragon(final Player ai, final SpellAbility sa) {
             // TODO: expand this logic to make the AI force the opponent to sacrifice a big threat bigger than a 5/5 flier?
             CardCollection creatures = ai.getCreaturesInPlay();
             boolean hasValidTgt = !CardLists.filter(creatures, new Predicate<Card>() {
@@ -781,7 +1040,7 @@ public class SpecialCardAi {
             return false;
         }
 
-        public static boolean considerUltimate(Player ai, SpellAbility sa, Player weakestOpp) {
+        public static boolean considerUltimate(final Player ai, final SpellAbility sa, final Player weakestOpp) {
             int minLife = weakestOpp.getLife();
 
             int dragonPower = 0;
@@ -794,9 +1053,140 @@ public class SpecialCardAi {
         }
     }
 
+    // Survival of the Fittest
+    public static class SurvivalOfTheFittest {
+        public static Card considerDiscardTarget(final Player ai) {
+            // The AI here only checks the number of available creatures of various CMC, which is equivalent to knowing
+            // your deck composition and checking (and counting) the cards in other zones so you know what you have left
+            // in the library. As such, this does not cause unfair advantage, at least unless there are cards that are
+            // face down (on the battlefield or in exile). Might need some kind of an update to consider hidden information
+            // like that properly (probably by adding all those cards to the evaluation mix so the AI doesn't "know" which
+            // ones are already face down in play and which are still in the library)
+            CardCollectionView creatsInLib = CardLists.filter(ai.getCardsIn(ZoneType.Library), CardPredicates.Presets.CREATURES);
+            CardCollectionView creatsInHand = CardLists.filter(ai.getCardsIn(ZoneType.Hand), CardPredicates.Presets.CREATURES);
+            CardCollectionView manaSrcsInHand = CardLists.filter(ai.getCardsIn(ZoneType.Hand), CardPredicates.Presets.LANDS_PRODUCING_MANA);
+
+            if (creatsInHand.isEmpty() || creatsInLib.isEmpty()) { return null; }
+
+            int numManaSrcs = ComputerUtilMana.getAvailableManaEstimate(ai, false)
+                    + Math.min(1, manaSrcsInHand.size());
+
+            // Cards in library that are either below/at (preferred) or above the max CMC affordable by the AI
+            // (the latter might happen if we're playing a Reanimator deck with lots of fatties)
+            CardCollection atTargetCMCInLib = CardLists.filter(creatsInLib, new Predicate<Card>() {
+                @Override
+                public boolean apply(Card card) {
+                    return ComputerUtilMana.hasEnoughManaSourcesToCast(card.getSpellPermanent(), ai);
+                }
+            });
+            if (atTargetCMCInLib.isEmpty()) {
+                atTargetCMCInLib = CardLists.filter(creatsInLib, CardPredicates.greaterCMC(numManaSrcs));
+            }
+            Collections.sort(atTargetCMCInLib, CardLists.CmcComparatorInv);
+            if (atTargetCMCInLib.isEmpty()) {
+                // Nothing to aim for?
+                return null;
+            }
+
+            // Cards in hand that are below the max CMC affordable by the AI
+            CardCollection belowMaxCMC = CardLists.filter(creatsInHand, CardPredicates.lessCMC(numManaSrcs - 1));
+            Collections.sort(belowMaxCMC, Collections.reverseOrder(CardLists.CmcComparatorInv));
+
+            // Cards in hand that are above the max CMC affordable by the AI
+            CardCollection aboveMaxCMC = CardLists.filter(creatsInHand, CardPredicates.greaterCMC(numManaSrcs + 1));
+            Collections.sort(aboveMaxCMC, CardLists.CmcComparatorInv);
+
+            Card maxCMC = !aboveMaxCMC.isEmpty() ? aboveMaxCMC.getFirst() : null;
+            Card minCMC = !belowMaxCMC.isEmpty() ? belowMaxCMC.getFirst() : null;
+            Card bestInLib = !atTargetCMCInLib.isEmpty() ? atTargetCMCInLib.getFirst() : null;
+
+            int maxCMCdiff = 0;
+            if (maxCMC != null) {
+                maxCMCdiff = maxCMC.getCMC() - numManaSrcs; // how far are we from viably casting it?
+            }
+
+            // We have something too fat to viably cast in the nearest future, discard it hoping to
+            // grab something more immediately valuable (or maybe we're playing Reanimator and we want
+            // it to be in the graveyard anyway)
+            if (maxCMCdiff >= 3) {
+                return maxCMC;
+            }
+            // We have a card in hand that is worse than the one in library, so discard the worst card
+            if (maxCMCdiff <= 0 && minCMC != null
+                    && ComputerUtilCard.evaluateCreature(bestInLib) > ComputerUtilCard.evaluateCreature(minCMC)) {
+                return minCMC;
+            }
+            // We have a card in the library that is closer to being castable than the one in hand, and
+            // no options with smaller CMC, so discard the one that is harder to cast for the one that is
+            // easier to cast right now, but only if the best card in the library is at least CMC 3
+            // (probably not worth it to grab low mana cost cards this way)
+            if (maxCMC != null && maxCMC.getCMC() < bestInLib.getCMC() && bestInLib.getCMC() >= 3) {
+                return maxCMC;
+            }
+            // We appear to be playing Reanimator (or we have a reanimator card in hand already), so it's
+            // worth to fill the graveyard now
+            if (ComputerUtil.isPlayingReanimator(ai) && !creatsInLib.isEmpty()) {
+                CardCollection creatsInHandByCMC = new CardCollection(creatsInHand);
+                Collections.sort(creatsInHandByCMC, CardLists.CmcComparatorInv);
+                return creatsInHandByCMC.getFirst();
+            }
+
+            // probably nothing that is worth changing, so bail
+            return null;
+        }
+
+        public static Card considerCardToGet(final Player ai, final SpellAbility sa) {
+            CardCollectionView creatsInLib = CardLists.filter(ai.getCardsIn(ZoneType.Library), CardPredicates.Presets.CREATURES);
+            if (creatsInLib.isEmpty()) { return null; }
+
+            CardCollectionView manaSrcsInHand = CardLists.filter(ai.getCardsIn(ZoneType.Hand), CardPredicates.Presets.LANDS_PRODUCING_MANA);
+            int numManaSrcs = ComputerUtilMana.getAvailableManaEstimate(ai, false)
+                    + Math.min(1, manaSrcsInHand.size());
+
+            CardCollection atTargetCMCInLib = CardLists.filter(creatsInLib, new Predicate<Card>() {
+                @Override
+                public boolean apply(Card card) {
+                    return ComputerUtilMana.hasEnoughManaSourcesToCast(card.getSpellPermanent(), ai);
+                }
+            });
+            if (atTargetCMCInLib.isEmpty()) {
+                atTargetCMCInLib = CardLists.filter(creatsInLib, CardPredicates.greaterCMC(numManaSrcs));
+            }
+            Collections.sort(atTargetCMCInLib, CardLists.CmcComparatorInv);
+
+            Card bestInLib = atTargetCMCInLib != null ? atTargetCMCInLib.getFirst() : null;
+
+            if (bestInLib == null && ComputerUtil.isPlayingReanimator(ai)) {
+                // For Reanimator, we don't mind grabbing the biggest thing possible to recycle it again with SotF later.
+                CardCollection creatsInLibByCMC = new CardCollection(creatsInLib);
+                Collections.sort(creatsInLibByCMC, CardLists.CmcComparatorInv);
+                return creatsInLibByCMC.getFirst();
+            }
+
+            return bestInLib;
+        }
+    }
+
+    // The Scarab God
+    public static class TheScarabGod {
+        public static boolean consider(final Player ai, final SpellAbility sa) {
+            Card bestOppCreat = ComputerUtilCard.getBestAI(CardLists.filter(ai.getOpponents().getCardsIn(ZoneType.Graveyard), CardPredicates.Presets.CREATURES));
+            Card worstOwnCreat = ComputerUtilCard.getWorstAI(CardLists.filter(ai.getCardsIn(ZoneType.Graveyard), CardPredicates.Presets.CREATURES));
+
+            sa.resetTargets();
+            if (bestOppCreat != null) {
+                sa.getTargets().add(bestOppCreat);
+            } else if (worstOwnCreat != null) {
+                sa.getTargets().add(worstOwnCreat);
+            }
+
+            return sa.getTargets().getNumTargeted() > 0;
+        }
+    }
+
     // Timetwister
     public static class Timetwister {
-        public static boolean consider(Player ai, SpellAbility sa) {
+        public static boolean consider(final Player ai, final SpellAbility sa) {
             final int aiHandSize = ai.getCardsIn(ZoneType.Hand).size();
             int maxOppHandSize = 0;
 
@@ -820,7 +1210,14 @@ public class SpecialCardAi {
 
     // Volrath's Shapeshifter
     public static class VolrathsShapeshifter {
-        public static boolean consider(Player ai, SpellAbility sa) {
+        public static boolean consider(final Player ai, final SpellAbility sa) {
+            PhaseHandler ph = ai.getGame().getPhaseHandler();
+            if (ph.getPhase().isBefore(PhaseType.COMBAT_BEGIN)) {
+                // try not to do this too early to at least attempt to avoid situations where the AI
+                // would cast a spell which would ruin the shapeshifting
+                return false;
+            }
+
             CardCollectionView aiGY = ai.getCardsIn(ZoneType.Graveyard);
             Card topGY = null;
             Card creatHand = ComputerUtilCard.getBestCreatureAI(ai.getCardsIn(ZoneType.Hand));
@@ -830,16 +1227,20 @@ public class SpecialCardAi {
                 topGY = ai.getCardsIn(ZoneType.Graveyard).get(0);
             }
 
-            if ((topGY != null && !topGY.isCreature()) || creatHand != null) {
-                if (numCreatsInHand > 1 || !ComputerUtilMana.canPayManaCost(creatHand.getSpellPermanent(), ai, 0)) {
-                    return true;
+            if (creatHand != null) {
+                if (topGY == null
+                        || !topGY.isCreature()
+                        || ComputerUtilCard.evaluateCreature(creatHand) > ComputerUtilCard.evaluateCreature(topGY) + 80) {
+                    if (numCreatsInHand > 1 || !ComputerUtilMana.canPayManaCost(creatHand.getSpellPermanent(), ai, 0)) {
+                        return true;
+                    }
                 }
             }
 
             return false;
         }
 
-        public static CardCollection targetBestCreature(Player ai, SpellAbility sa) {
+        public static CardCollection targetBestCreature(final Player ai, final SpellAbility sa) {
             Card creatHand = ComputerUtilCard.getBestCreatureAI(ai.getCardsIn(ZoneType.Hand));
             if (creatHand != null) {
                 CardCollection cc = new CardCollection();
@@ -855,7 +1256,7 @@ public class SpecialCardAi {
 
     // Ugin, the Spirit Dragon
     public static class UginTheSpiritDragon {
-        public static boolean considerPWAbilityPriority(Player ai, SpellAbility sa, ZoneType origin, CardCollectionView oppType, CardCollectionView computerType) {
+        public static boolean considerPWAbilityPriority(final Player ai, final SpellAbility sa, final ZoneType origin, CardCollectionView oppType, CardCollectionView computerType) {
             Card source = sa.getHostCard();
             Game game = source.getGame();
             
@@ -914,7 +1315,7 @@ public class SpecialCardAi {
 
     // Yawgmoth's Bargain
     public static class YawgmothsBargain {
-        public static boolean consider(Player ai, SpellAbility sa) {
+        public static boolean consider(final Player ai, final SpellAbility sa) {
             Game game = ai.getGame();
             PhaseHandler ph = game.getPhaseHandler();
 
@@ -955,11 +1356,15 @@ public class SpecialCardAi {
         }
     }
     
-    // Yawgmoth's Will (can potentially be expanded for other broadly similar effects too)
+    // Yawgmoth's Will and other cards with similar effect, e.g. Magus of the Will
     public static class YawgmothsWill {
-        public static boolean consider(Player ai, SpellAbility sa) {
+        public static boolean consider(final Player ai, final SpellAbility sa) {
             CardCollectionView cardsInGY = ai.getCardsIn(ZoneType.Graveyard);
             if (cardsInGY.size() == 0) {
+                return false;
+            } else if (ai.getGame().getPhaseHandler().getPlayerTurn() != ai) {
+                // The AI is not very good at deciding for what to viably do during the opp's turn when this
+                // comes from an instant speed effect (e.g. Magus of the Will)
                 return false;
             }
 
@@ -977,8 +1382,8 @@ public class SpecialCardAi {
                     continue;
                 }
 
-                if (ComputerUtilAbility.getAbilitySourceName(ab).equals(ComputerUtilAbility.getAbilitySourceName(sa))
-                        || ab.hasParam("AINoRecursiveCheck")) {
+                if ((ComputerUtilAbility.getAbilitySourceName(ab).equals(ComputerUtilAbility.getAbilitySourceName(sa))
+                        && !(ab instanceof SpellPermanent)) || ab.hasParam("AINoRecursiveCheck")) {
                     // prevent infinitely recursing abilities that are susceptible to reentry
                     continue;
                 }

@@ -60,7 +60,7 @@ import java.util.List;
  * MODEL - Static utility methods to help with minor tasks around Quest.
  *
  * @author Forge
- * @version $Id: QuestUtil.java 34245 2017-06-13 04:27:34Z KrazyTheFox $
+ * @version $Id$
  */
 public class QuestUtil {
     private static final DecimalFormat CREDITS_FORMATTER = new DecimalFormat("#,###");
@@ -443,7 +443,7 @@ public class QuestUtil {
 
         if (FModel.getQuest().getAssets() != null) {
             d = FModel.getQuest().getMyDecks().get(
-                FModel.getQuestPreferences().getPref(QPref.CURRENT_DECK));
+                    FModel.getQuest().getCurrentDeck());
         }
 
         return d;
@@ -581,7 +581,6 @@ public class QuestUtil {
         rules.setMatchAnteRarity(matchAnteRarity);
         rules.setGamesPerMatch(qData.getMatchLength());
         rules.setManaBurn(FModel.getPreferences().getPrefBoolean(FPref.UI_MANABURN));
-        rules.setPlaneswalkerIsUnique(FModel.getPreferences().getPrefBoolean(FPref.UI_UNIQUE_PLANESWALKER));
         rules.setCanCloneUseTargetsImage(FModel.getPreferences().getPrefBoolean(FPref.UI_CLONE_MODE_SOURCE));
         final HostedMatch hostedMatch = GuiBase.getInterface().hostMatch();
         final IGuiGame gui = GuiBase.getInterface().getNewGuiGame();

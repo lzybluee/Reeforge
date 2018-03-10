@@ -37,7 +37,7 @@ import forge.util.MultiplexOutputStream;
  * the user.
  * 
  * @author Forge
- * @version $Id: ExceptionHandler.java 27838 2014-10-06 04:49:03Z drdev $
+ * @version $Id$
  */
 public class ExceptionHandler implements UncaughtExceptionHandler {
     static {

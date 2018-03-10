@@ -17,15 +17,15 @@
  */
 package forge.game.cost;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import forge.game.Game;
 import forge.game.card.Card;
 import forge.game.spellability.SpellAbility;
+import forge.game.zone.ZoneType;
 
 import java.util.List;
 import java.util.Map;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 /**
  * <p>
@@ -33,7 +33,7 @@ import com.google.common.collect.Maps;
  * </p>
  * 
  * @author Forge
- * @version $Id: CostPayment.java 34732 2017-07-13 05:05:05Z Hanmac $
+ * @version $Id$
  */
 public class CostPayment {
     private final Cost cost;
@@ -169,13 +169,16 @@ public class CostPayment {
         // Set all of the decisions before attempting to pay anything
 
         final Game game = decisionMaker.getPlayer().getGame();
+
         for (final CostPart part : parts) {
             PaymentDecision decision = part.accept(decisionMaker);
+            // the AI will try to exile the same card repeatedly unless it does it immediately
+            final boolean payImmediately = part instanceof CostExile && ((CostExile) part).from == ZoneType.Library;
             if (null == decision) return false;
 
             // wrap the payment and push onto the cost stack
             game.costPaymentStack.push(part, this);
-            if (decisionMaker.paysRightAfterDecision() && !part.payAsDecided(decisionMaker.getPlayer(), decision, ability)) {
+            if ((decisionMaker.paysRightAfterDecision() || payImmediately) && !part.payAsDecided(decisionMaker.getPlayer(), decision, ability)) {
                 game.costPaymentStack.pop(); // cost is resolved
                 return false;
             }

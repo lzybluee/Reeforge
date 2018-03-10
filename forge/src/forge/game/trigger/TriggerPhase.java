@@ -26,7 +26,7 @@ import forge.game.spellability.SpellAbility;
  * </p>
  * 
  * @author Forge
- * @version $Id: TriggerPhase.java 30293 2015-10-16 00:03:23Z friarsol $
+ * @version $Id$
  */
 public class TriggerPhase extends Trigger {
 

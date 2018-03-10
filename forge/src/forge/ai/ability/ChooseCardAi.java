@@ -18,6 +18,7 @@ import forge.game.card.Card;
 import forge.game.card.CardCollection;
 import forge.game.card.CardCollectionView;
 import forge.game.card.CardLists;
+import forge.game.card.CardPredicates;
 import forge.game.card.CardPredicates.Presets;
 import forge.game.card.CounterType;
 import forge.game.combat.Combat;
@@ -230,6 +231,13 @@ public class ChooseCardAi extends SpellAbilityAi {
                 Collections.reverse(creats);
                 choice = creats.get(0);
             }
+        } else if ("NegativePowerFirst".equals(logic)) {
+            Card lowest = Aggregates.itemWithMin(options, CardPredicates.Accessors.fnGetNetPower);
+            if (lowest.getNetPower() <= 0) {
+                choice = lowest;
+            } else {
+                choice = ComputerUtilCard.getBestCreatureAI(options);
+            }
         } else if ("TangleWire".equals(logic)) {
             CardCollectionView betterList = CardLists.filter(options, new Predicate<Card>() {
                 @Override
@@ -261,6 +269,10 @@ public class ChooseCardAi extends SpellAbilityAi {
 
             Card chosen = ComputerUtilCard.getBestCreatureAI(aiCreatures);
             return chosen;
+        } else if (logic.equals("OrzhovAdvokist")) {
+            if (ai.equals(sa.getActivatingPlayer())) {
+                choice = ComputerUtilCard.getBestAI(options);
+            } // TODO: improve ai
         } else {
             choice = ComputerUtilCard.getBestAI(options);
         }

@@ -26,7 +26,6 @@ import java.util.concurrent.ExecutionException;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.lang3.StringUtils;
-import org.imgscalr.Scalr;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader.InvalidCacheLoadException;
@@ -202,22 +201,9 @@ public class ImageCache {
             
             int destWidth  = (int)(original.getWidth()  * bestFitScale);
             int destHeight = (int)(original.getHeight() * bestFitScale);
-
-            String scaleLib = FModel.getPreferences().getPref(FPref.UI_SCALE_LIB);
-            if (scaleLib.startsWith("Scalr")) {
-                Scalr.Method method = Scalr.Method.QUALITY;
-                if (scaleLib.endsWith("Auto")) {
-                    if (destWidth * 8 < original.getWidth()) {
-                        method = Scalr.Method.SPEED;
-                    } else if (destWidth * 3 < original.getWidth()) {
-                        method = Scalr.Method.BALANCED;
-                    }
-                }
-                result = Scalr.resize(original, method, Scalr.Mode.FIT_EXACT, destWidth, destHeight);
-            } else {
-                ResampleOp resampler = new ResampleOp(destWidth, destHeight);
-                result = resampler.filter(original, null);
-            }
+                         
+            ResampleOp resampler = new ResampleOp(destWidth, destHeight);
+            result = resampler.filter(original, null);
         }
         
         //System.out.println("caching image: " + resizedKey);

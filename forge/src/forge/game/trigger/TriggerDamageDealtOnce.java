@@ -32,11 +32,11 @@ import java.util.Set;
  * @author Forge
  * @version $Id: TriggerDamageDone.java 21390 2013-05-08 07:44:50Z Max mtg $
  */
-public class TriggerDealtCombatDamageOnce extends Trigger {
+public class TriggerDamageDealtOnce extends Trigger {
 
     /**
      * <p>
-     * Constructor for TriggerCombatDamageDoneOnc.
+     * Constructor for TriggerDamageDealtOnce.
      * </p>
      * 
      * @param params
@@ -46,7 +46,7 @@ public class TriggerDealtCombatDamageOnce extends Trigger {
      * @param intrinsic
      *            the intrinsic
      */
-    public TriggerDealtCombatDamageOnce(final java.util.Map<String, String> params, final Card host, final boolean intrinsic) {
+    public TriggerDamageDealtOnce(final java.util.Map<String, String> params, final Card host, final boolean intrinsic) {
         super(params, host, intrinsic);
     }
 
@@ -57,6 +57,18 @@ public class TriggerDealtCombatDamageOnce extends Trigger {
         final Card srcs = (Card) runParams2.get("DamageSource");
         final Set<GameEntity> tgt = (Set<GameEntity>) runParams2.get("DamageTargets");
 
+        if (this.mapParams.containsKey("CombatDamage")) {
+            if (this.mapParams.get("CombatDamage").equals("True")) {
+                if (!((Boolean) runParams2.get("IsCombatDamage"))) {
+                    return false;
+                }
+            } else if (this.mapParams.get("CombatDamage").equals("False")) {
+                if (((Boolean) runParams2.get("IsCombatDamage"))) {
+                    return false;
+                }
+            }
+        }
+        
         if (this.mapParams.containsKey("ValidTarget")) {
             boolean valid = false;
             for (GameEntity c : tgt) {
@@ -85,11 +97,6 @@ public class TriggerDealtCombatDamageOnce extends Trigger {
             if (!Expressions.compare(actualAmount, operator, operand)) {
                 return false;
             }
-
-            System.out.print("DealtCombatDamageOnce Amount Operator: ");
-            System.out.println(operator);
-            System.out.print("DealtCombatDamageOnce Amount Operand: ");
-            System.out.println(operand);
         }
 
         return true;
@@ -108,7 +115,7 @@ public class TriggerDealtCombatDamageOnce extends Trigger {
         StringBuilder sb = new StringBuilder();
         sb.append("Damage Source: ").append(sa.getTriggeringObject("Source")).append(", ");
         sb.append("Damaged: ").append(sa.getTriggeringObject("Targets")).append(", ");
-        sb.append("Amount: ").append(sa.getTriggeringObject("Amount"));
+        sb.append("Amount: ").append(sa.getTriggeringObject("DamageAmount"));
         return sb.toString();
     }
 }

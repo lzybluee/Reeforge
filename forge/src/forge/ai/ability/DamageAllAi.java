@@ -55,6 +55,7 @@ public class  DamageAllAi extends SpellAbilityAi {
             x = source.getCounters(CounterType.LOYALTY);
         }
         if (x == -1) {
+            Player bestOpp = determineOppToKill(ai, sa, source, dmg);
             if (determineOppToKill(ai, sa, source, dmg) != null) {
                 // we already know we can kill a player, so go for it
                 return true;

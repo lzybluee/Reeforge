@@ -17,20 +17,10 @@
  */
 package forge.game.staticability;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import forge.card.CardStateName;
-import forge.game.card.*;
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-
 import forge.GameCommand;
+import forge.card.CardStateName;
 import forge.card.MagicColor;
 import forge.game.Game;
 import forge.game.GlobalRuleChange;
@@ -39,6 +29,7 @@ import forge.game.StaticEffects;
 import forge.game.ability.AbilityFactory;
 import forge.game.ability.AbilityUtils;
 import forge.game.ability.ApiType;
+import forge.game.card.*;
 import forge.game.cost.Cost;
 import forge.game.player.Player;
 import forge.game.replacement.ReplacementEffect;
@@ -49,6 +40,11 @@ import forge.game.spellability.SpellAbility;
 import forge.game.trigger.Trigger;
 import forge.game.trigger.TriggerHandler;
 import forge.game.zone.ZoneType;
+import forge.util.TextUtil;
+
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.*;
 
 /**
  * The Class StaticAbility_Continuous.
@@ -72,8 +68,8 @@ public final class StaticAbilityContinuous {
      * @see #applyContinuousAbility(StaticAbility, CardCollectionView,
      *      StaticAbilityLayer)
      */
-	public static CardCollectionView applyContinuousAbility(final StaticAbility stAb, final StaticAbilityLayer layer) {
-        final CardCollectionView affectedCards = getAffectedCards(stAb);
+	public static CardCollectionView applyContinuousAbility(final StaticAbility stAb, final StaticAbilityLayer layer, final CardCollectionView preList) {
+        final CardCollectionView affectedCards = getAffectedCards(stAb, preList);
         return applyContinuousAbility(stAb, affectedCards, layer);
     }
 
@@ -130,6 +126,7 @@ public final class StaticAbilityContinuous {
         String[] addStatics = null;
         List<SpellAbility> addFullAbs = null;
         boolean removeAllAbilities = false;
+        boolean removeNonMana = false;
         boolean removeSuperTypes = false;
         boolean removeCardTypes = false;
         boolean removeSubTypes = false;
@@ -250,6 +247,9 @@ public final class StaticAbilityContinuous {
 
         if (layer == StaticAbilityLayer.ABILITIES1 && params.containsKey("RemoveAllAbilities")) {
             removeAllAbilities = true;
+            if (params.containsKey("ExceptManaAbilities")) {
+                removeNonMana = true;
+            }
         }
 
         if (layer == StaticAbilityLayer.ABILITIES2 && params.containsKey("AddAbility")) {
@@ -369,12 +369,12 @@ public final class StaticAbilityContinuous {
             cardsIGainedAbilitiesFrom = CardLists.getValidCards(cardsIGainedAbilitiesFrom, valids, hostCard.getController(), hostCard, null);
 
             if (cardsIGainedAbilitiesFrom.size() > 0) {
-                addFullAbs = new ArrayList<SpellAbility>();
+                addFullAbs = Lists.newArrayList();
 
                 for (Card c : cardsIGainedAbilitiesFrom) {
                     for (SpellAbility sa : c.getSpellAbilities()) {
                         if (sa instanceof AbilityActivated) {
-                            SpellAbility newSA = ((AbilityActivated) sa).getCopy();
+                            SpellAbility newSA = sa.copy(hostCard, false);
                             if (params.containsKey("GainsAbilitiesLimitPerTurn")) {
                                 newSA.setRestrictions(sa.getRestrictions());
                                 newSA.getRestrictions().setLimitToCheck(params.get("GainsAbilitiesLimitPerTurn"));
@@ -382,7 +382,6 @@ public final class StaticAbilityContinuous {
                             newSA.setOriginalHost(c);
                             newSA.setIntrinsic(false);
                             newSA.setTemporary(true);
-                            newSA.setHostCard(hostCard);
                             addFullAbs.add(newSA);
                         }
                     }
@@ -476,55 +475,66 @@ public final class StaticAbilityContinuous {
 
             // Gain text from another card
             if (layer == StaticAbilityLayer.TEXT) {
-                // Restore the original text in case it was remembered before
-                if (affectedCard.getStates().contains(CardStateName.OriginalText)) {
-                    affectedCard.clearTriggersNew();
-                    List<SpellAbility> saToRemove = Lists.newArrayList();
-                    for (SpellAbility saTemp : affectedCard.getSpellAbilities()) {
-                        if (saTemp.isTemporary()) {
-                            saToRemove.add(saTemp);
-                        }
-                    }
-                    for (SpellAbility saRem : saToRemove) {
-                        affectedCard.removeSpellAbility(saRem);
-                    }
-                    CardFactory.copyState(affectedCard, CardStateName.OriginalText, affectedCard, CardStateName.Original, false);
+                // Make no changes in case the target for the ability is still the same as before
+                boolean noChange = false;
+                if (gainTextSource != null && affectedCard.hasSVar("GainingTextFrom") && affectedCard.hasSVar("GainingTextFromTimestamp")
+                        && gainTextSource.getName() == affectedCard.getSVar("GainingTextFrom")
+                        && gainTextSource.getTimestamp() == Long.parseLong(affectedCard.getSVar("GainingTextFromTimestamp"))) {
+                    noChange = true;
                 }
 
-                if (gainTextSource != null) {
-                    if (!affectedCard.getStates().contains(CardStateName.OriginalText)) {
-                        // Remember the original text first in case it hasn't been done yet
-                        CardFactory.copyState(affectedCard, CardStateName.Original, affectedCard, CardStateName.OriginalText, false);
-                    }
-
-                    CardFactory.copyState(gainTextSource, CardStateName.Original, affectedCard, CardStateName.Original, false);
-
-                    // Do not clone the set code and rarity from the target card
-                    affectedCard.getState(CardStateName.Original).setSetCode(affectedCard.getState(CardStateName.OriginalText).getSetCode());
-                    affectedCard.getState(CardStateName.Original).setRarity(affectedCard.getState(CardStateName.OriginalText).getRarity());
-
-                    // Enable this in case Volrath's original image is to be used
-                    affectedCard.getState(CardStateName.Original).setImageKey(affectedCard.getState(CardStateName.OriginalText).getImageKey());
-
-                    // Activated abilities (statics and repleffects are apparently copied vis copyState?)
-                    for (SpellAbility sa : gainTextSource.getSpellAbilities()) {
-                        if (sa instanceof AbilityActivated) {
-                            SpellAbility newSA = ((AbilityActivated) sa).getCopy();
-                            newSA.setOriginalHost(gainTextSource);
-                            newSA.setIntrinsic(false);
-                            newSA.setTemporary(true);
-                            newSA.setHostCard(affectedCard);
-                            affectedCard.addSpellAbility(newSA);
+                if (!noChange) {
+                    // Restore the original text in case it was remembered before
+                    if (affectedCard.getStates().contains(CardStateName.OriginalText)) {
+                        affectedCard.clearTriggersNew();
+                        List<SpellAbility> saToRemove = Lists.newArrayList();
+                        for (SpellAbility saTemp : affectedCard.getSpellAbilities()) {
+                            if (saTemp.isTemporary()) {
+                                saToRemove.add(saTemp);
+                            }
                         }
-                    }
-                    // Triggered abilities
-                    for (Trigger t: gainTextSource.getTriggers()) {
-                        affectedCard.addTrigger(t.getCopyForHostCard(affectedCard));
+                        for (SpellAbility saRem : saToRemove) {
+                            affectedCard.removeSpellAbility(saRem);
+                        }
+                        CardFactory.copyState(affectedCard, CardStateName.OriginalText, affectedCard, CardStateName.Original, false);
                     }
 
-                    // Volrath's Shapeshifter shapeshifting ability needs to be added onto the new text
-                    if (params.containsKey("GainedTextHasThisStaticAbility")) {
-                        affectedCard.getCurrentState().addStaticAbility(stAb);
+                    // TODO: find a better way to ascertain that the card will essentially try to copy its exact duplicate
+                    // (e.g. Volrath's Shapeshifter copying the text of another pristine Volrath's Shapeshifter), since the
+                    // check by name may fail in case one of the cards is modified in some way while the other is not
+                    // (probably not very relevant for Volrath's Shapeshifter itself since it copies text on cards in GY).
+                    if (gainTextSource != null && !gainTextSource.getCurrentState().getName().equals(affectedCard.getCurrentState().getName())) {
+                        if (!affectedCard.getStates().contains(CardStateName.OriginalText)) {
+                            // Remember the original text first in case it hasn't been done yet
+                            CardFactory.copyState(affectedCard, CardStateName.Original, affectedCard, CardStateName.OriginalText, false);
+                        }
+
+                        CardFactory.copyState(gainTextSource, CardStateName.Original, affectedCard, CardStateName.Original, false);
+
+                        // Do not clone the set code and rarity from the target card
+                        affectedCard.getState(CardStateName.Original).setSetCode(affectedCard.getState(CardStateName.OriginalText).getSetCode());
+                        affectedCard.getState(CardStateName.Original).setRarity(affectedCard.getState(CardStateName.OriginalText).getRarity());
+
+                        // Enable this in case Volrath's original image is to be used
+                        affectedCard.getState(CardStateName.Original).setImageKey(affectedCard.getState(CardStateName.OriginalText).getImageKey());
+
+                        // Volrath's Shapeshifter shapeshifting ability needs to be added onto the new text
+                        if (params.containsKey("GainedTextHasThisStaticAbility")) {
+                            affectedCard.getCurrentState().addStaticAbility(stAb);
+                        }
+
+                        // Add the ability "{2}: Discard a card" for Volrath's Shapeshifter
+                        // TODO: Make this generic so that other SAs can be added onto custom cards if need be
+                        if (params.containsKey("GainVolrathsDiscardAbility")) {
+                            String abDiscard = "AB$ Discard | Cost$ 2 | Defined$ You | NumCards$ 1 | Mode$ TgtChoose | AILogic$ VolrathsShapeshifter | SpellDescription$ Discard a card.";
+                            SpellAbility ab = AbilityFactory.getAbility(abDiscard, affectedCard);
+                            affectedCard.addSpellAbility(ab);
+                        }
+
+                        // Remember the name and the timestamp of the card we're gaining text from, so we don't modify
+                        // the card too aggressively when unnecessary
+                        affectedCard.setSVar("GainingTextFrom", String.valueOf(gainTextSource.getName()));
+                        affectedCard.setSVar("GainingTextFromTimestamp", String.valueOf(gainTextSource.getTimestamp()));
                     }
                 }
             }
@@ -632,10 +642,10 @@ public final class StaticAbilityContinuous {
             if (addAbilities != null) {
                 for (String abilty : addAbilities) {
                     if (abilty.contains("CardManaCost")) {
-                        abilty = abilty.replace("CardManaCost", affectedCard.getManaCost().getShortString());
+                        abilty = TextUtil.fastReplace(abilty, "CardManaCost", affectedCard.getManaCost().getShortString());
                     } else if (abilty.contains("ConvertedManaCost")) {
                         final String costcmc = Integer.toString(affectedCard.getCMC());
-                        abilty = abilty.replace("ConvertedManaCost", costcmc);
+                        abilty = TextUtil.fastReplace(abilty, "ConvertedManaCost", costcmc);
                     }
                     if (abilty.startsWith("AB") || abilty.startsWith("ST")) { // grant the ability
                         final SpellAbility sa = AbilityFactory.getAbility(abilty, affectedCard);
@@ -694,7 +704,7 @@ public final class StaticAbilityContinuous {
                 for (String s : addStatics) {
                     if (s.contains("ConvertedManaCost")) {
                         final String costcmc = Integer.toString(affectedCard.getCMC());
-                        s = s.replace("ConvertedManaCost", costcmc);
+                        s = TextUtil.fastReplace(s, "ConvertedManaCost", costcmc);
                     }
 
                     StaticAbility stat = affectedCard.addStaticAbility(s);
@@ -712,9 +722,15 @@ public final class StaticAbilityContinuous {
 
             // remove activated and static abilities
             if (removeAllAbilities) {
-                for (final SpellAbility ab : affectedCard.getSpellAbilities()) {
-                    ab.setTemporarilySuppressed(true);
-                }
+                if (removeNonMana) { // Blood Sun
+            	    for (final SpellAbility mana : affectedCard.getNonManaAbilities()) {
+            		    mana.setTemporarilySuppressed(true);
+                    }
+                } else {
+                    for (final SpellAbility ab : affectedCard.getSpellAbilities()) {
+                        ab.setTemporarilySuppressed(true);
+                    }
+            	}
                 for (final StaticAbility stA : affectedCard.getStaticAbilities()) {
                     stA.setTemporarilySuppressed(true);
                 }
@@ -801,7 +817,7 @@ public final class StaticAbilityContinuous {
         return players;
     }
 
-    private static CardCollectionView getAffectedCards(final StaticAbility stAb) {
+    private static CardCollectionView getAffectedCards(final StaticAbility stAb, final CardCollectionView preList) {
         final Map<String, String> params = stAb.getMapParams();
         final Card hostCard = stAb.getHostCard();
         final Game game = hostCard.getGame();
@@ -812,11 +828,23 @@ public final class StaticAbilityContinuous {
         }
 
         // non - CharacteristicDefining
-        CardCollection affectedCards;
+        CardCollection affectedCards = new CardCollection();
+
+        // add preList in addition to the normal affected cards
+        // need to add before game cards to have preference over them
+        if (!preList.isEmpty()) {
+            if (params.containsKey("AffectedZone")) {
+                affectedCards.addAll(CardLists.filter(preList, CardPredicates.inZone(
+                        ZoneType.listValueOf(params.get("AffectedZone")))));
+            } else {
+                affectedCards.addAll(CardLists.filter(preList, CardPredicates.inZone(ZoneType.Battlefield)));
+            }
+        }
+
         if (params.containsKey("AffectedZone")) {
-            affectedCards = new CardCollection(game.getCardsIn(ZoneType.listValueOf(params.get("AffectedZone"))));
+            affectedCards.addAll(game.getCardsIn(ZoneType.listValueOf(params.get("AffectedZone"))));
         } else {
-            affectedCards = new CardCollection(game.getCardsIn(ZoneType.Battlefield));
+            affectedCards.addAll(game.getCardsIn(ZoneType.Battlefield));
         }
 
         if (params.containsKey("Affected") && !params.get("Affected").contains(",")) {

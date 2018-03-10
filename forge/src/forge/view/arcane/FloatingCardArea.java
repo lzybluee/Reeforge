@@ -81,24 +81,7 @@ public class FloatingCardArea extends CardArea {
         return cardArea;
     }
     public static CardPanel getCardPanel(final CMatchUI matchUI, final CardView card) {
-        FloatingCardArea window = _init(matchUI, card.getController(), ZoneType.Flashback);
-        CardPanel cardPanel = window.getCardPanel(card.getId());
-        if(cardPanel == null) {
-            for(PlayerView player : card.getController().getOpponents()) {
-                window = _init(matchUI, player, ZoneType.Flashback);
-                cardPanel = window.getCardPanel(card.getId());
-                if(cardPanel != null) {
-                    cardPanel.setFlashbackPlayer(player);
-                    break;
-                }
-            }
-        } else {
-            cardPanel.setFlashbackPlayer(card.getController());
-        }
-        if(cardPanel == null) {
-            window = _init(matchUI, card.getController(), card.getZone());
-            cardPanel = window.getCardPanel(card.getId());
-        }
+        final FloatingCardArea window = _init(matchUI, card.getController(), card.getZone());
         return window.getCardPanel(card.getId());
     }
     public static void refresh(final PlayerView player, final ZoneType zone) {

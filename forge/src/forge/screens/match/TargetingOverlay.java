@@ -79,10 +79,6 @@ public class TargetingOverlay {
             x2 = end.x;
             y2 = end.y;
         }
-
-        public boolean equals(final Point end, final Point start) {
-            return x1 == start.x && y1 == start.y && x2 == end.x && y2 == end.y;
-        }
     }
 
     private final Set<CardView> cardsVisualized = new HashSet<CardView>();
@@ -389,41 +385,24 @@ public class TargetingOverlay {
             return;
         }
 
-        boolean alreadyAdded = false;
-
         switch (connects) {
             case Friends:
             case FriendsStackTargeting:
-                for(Arc arc : arcsFriend) {
-                    if(arc.equals(end, start)) {
-                        alreadyAdded = true;
-                    }
-                }
-                if(!alreadyAdded) arcsFriend.add(new Arc(end, start));
+                arcsFriend.add(new Arc(end, start));
                 break;
             case FoesAttacking:
-                for(Arc arc : arcsFoeAtk) {
-                    if(arc.equals(end, start)) {
-                        alreadyAdded = true;
-                    }
-                }
-                if(!alreadyAdded) arcsFoeAtk.add(new Arc(end, start));
+                arcsFoeAtk.add(new Arc(end, start));
                 break;
             case FoesBlocking:
             case FoesStackTargeting:
-                for(Arc arc : arcsFoeDef) {
-                    if(arc.equals(end, start)) {
-                        alreadyAdded = true;
-                    }
-                }
-                if(!alreadyAdded) arcsFoeDef.add(new Arc(end, start));
+                arcsFoeDef.add(new Arc(end, start));
         }
     }
 
     private void addArcsForCard(final CardView c, final Map<Integer, Point> endpoints, final CombatView combat) {
-        //if (!cardsVisualized.add(c)) {
-        //    return; //don't add arcs for cards if card already visualized
-        //}
+        if (!cardsVisualized.add(c)) {
+            return; //don't add arcs for cards if card already visualized
+        }
 
         final CardView enchanting = c.getEnchantingCard();
         final CardView equipping = c.getEquipping();

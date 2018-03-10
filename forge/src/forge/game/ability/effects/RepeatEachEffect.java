@@ -1,20 +1,13 @@
 package forge.game.ability.effects;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import forge.GameCommand;
 import forge.game.Game;
 import forge.game.ability.AbilityUtils;
 import forge.game.ability.SpellAbilityEffect;
-import forge.game.card.Card;
-import forge.game.card.CardCollection;
-import forge.game.card.CardCollectionView;
-import forge.game.card.CardLists;
-import forge.game.card.CounterType;
+import forge.game.card.*;
 import forge.game.player.Player;
 import forge.game.spellability.AbilitySub;
 import forge.game.spellability.SpellAbility;
@@ -22,22 +15,27 @@ import forge.game.zone.ZoneType;
 import forge.util.Aggregates;
 import forge.util.collect.FCollection;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 public class RepeatEachEffect extends SpellAbilityEffect {
 
     /* (non-Javadoc)
      * @see forge.card.abilityfactory.SpellEffect#resolve(forge.card.spellability.SpellAbility)
      */
+    @SuppressWarnings("serial")
     @Override
     public void resolve(SpellAbility sa) {
         Card source = sa.getHostCard();
 
-        AbilitySub repeat = sa.getAdditonalAbility("RepeatSubAbility");        
+        AbilitySub repeat = sa.getAdditionalAbility("RepeatSubAbility");
 
-        if (repeat != null && !repeat.getHostCard().equals(source)) {
+        if (repeat != null && !repeat.getHostCard().equalsWithTimestamp(source)) {
             // TODO: for some reason, the host card of the original additional SA is set to the cloned card when
             // the ability is copied (e.g. Clone Legion + Swarm Intelligence). Couldn't figure out why this happens,
             // so this hack is necessary for now to work around this issue.
-            System.out.println("Warning: RepeatSubAbility had the wrong host set (potentially after cloning the root SA), attempting to correct...");
+            System.out.println("Warning: RepeatSubAbility had the wrong host set (potentially after cloning the root SA or changing zones), attempting to correct...");
             repeat.setHostCard(source);
         }
 
@@ -110,6 +108,7 @@ public class RepeatEachEffect extends SpellAbilityEffect {
                 source.clearRemembered();
             }
             boolean optional = sa.hasParam("RepeatOptionalForEachPlayer");
+            boolean nextTurn = sa.hasParam("NextTurnForEachPlayer");
             if (sa.hasParam("StartingWithActivator")) {
                 int size = repeatPlayers.size();
                 Player activator = sa.getActivatingPlayer();
@@ -121,9 +120,20 @@ public class RepeatEachEffect extends SpellAbilityEffect {
                 if (optional && !p.getController().confirmAction(repeat, null, sa.getParam("RepeatOptionalMessage"))) {
                     continue;
                 }
-                source.addRemembered(p);
-                AbilityUtils.resolve(repeat);
-                source.removeRemembered(p);
+                if (nextTurn) {
+                    game.getUntap().addUntil(p, new GameCommand() {
+                        @Override
+                        public void run() {
+                            source.addRemembered(p);
+                            AbilityUtils.resolve(repeat);
+                            source.removeRemembered(p);
+                        }
+                    });
+                } else {
+                    source.addRemembered(p);
+                    AbilityUtils.resolve(repeat);
+                    source.removeRemembered(p);
+                }
             }
         }
 

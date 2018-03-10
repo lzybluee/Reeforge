@@ -25,7 +25,6 @@ import forge.game.ability.effects.ChangeZoneEffect;
 import forge.game.ability.effects.ManaEffect;
 import forge.game.ability.effects.ManaReflectedEffect;
 import forge.game.card.Card;
-import forge.game.card.CardFactory;
 import forge.game.cost.Cost;
 
 import java.util.Map;
@@ -36,7 +35,7 @@ import java.util.Map;
  * </p>
  * 
  * @author Forge
- * @version $Id: AbilitySub.java 32588 2016-11-21 06:17:04Z Hanmac $
+ * @version $Id$
  */
 public final class AbilitySub extends SpellAbility implements java.io.Serializable, Cloneable {
     /** Constant <code>serialVersionUID=4650634415821733134L</code>. */
@@ -100,13 +99,6 @@ public final class AbilitySub extends SpellAbility implements java.io.Serializab
         if (effect instanceof ChangeZoneEffect || effect instanceof ChangeZoneAllEffect) {
             AbilityFactory.adjustChangeZoneTarget(mapParams, this);
         }
-    }
-
-    public AbilitySub getCopy() {
-        TargetRestrictions t = getTargetRestrictions() == null ? null : new TargetRestrictions(getTargetRestrictions());
-        AbilitySub res = new AbilitySub(api, getHostCard(), t, mapParams);
-        CardFactory.copySpellAbility(this, res);
-        return res;
     }
 
     @Override

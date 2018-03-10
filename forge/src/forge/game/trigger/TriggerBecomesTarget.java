@@ -28,7 +28,7 @@ import java.util.Map;
  * </p>
  * 
  * @author Forge
- * @version $Id: TriggerBecomesTarget.java 30294 2015-10-16 01:53:32Z friarsol $
+ * @version $Id$
  * @since 1.0.15
  */
 public class TriggerBecomesTarget extends Trigger {

@@ -1,7 +1,11 @@
 package forge.deck;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import forge.card.CardEdition;
 import forge.game.GameFormat;
+import forge.item.PaperCard;
+import forge.model.FModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +16,17 @@ import java.util.List;
 public class CardThemedDeckGenerator extends DeckProxy implements Comparable<CardThemedDeckGenerator> {
     public static List<DeckProxy> getMatrixDecks(GameFormat format, boolean isForAi){
         final List<DeckProxy> decks = new ArrayList<DeckProxy>();
-        for(String card: CardRelationMatrixGenerator.cardPools.get(format).keySet()) {
+        for(String card: CardRelationMatrixGenerator.cardPools.get(format.getName()).keySet()) {
+            //exclude non AI playables as keycards for AI decks
+            if(isForAi&&FModel.getMagicDb().getCommonCards().getUniqueByName(card).getRules().getAiHints().getRemAIDecks()){
+                continue;
+            }
             decks.add(new CardThemedDeckGenerator(card, format, isForAi));
         }
         return decks;
     }
     private final String name;
+    private final int index;
     private final GameFormat format;
     private final boolean isForAi;
 
@@ -25,6 +34,7 @@ public class CardThemedDeckGenerator extends DeckProxy implements Comparable<Car
     private CardThemedDeckGenerator(String cardName, GameFormat format0, boolean isForAi0) {
         super();
         name = cardName;
+        index = 0;
         format=format0;
         isForAi=isForAi0;
     }
@@ -58,5 +68,16 @@ public class CardThemedDeckGenerator extends DeckProxy implements Comparable<Car
     @Override
     public boolean isGeneratedDeck() {
         return true;
+    }
+
+    public String getImageKey(boolean altState) {
+/*        Predicate<PaperCard> cardFilter = Predicates.and(format.getFilterPrinted(),PaperCard.Predicates.name(name));
+        List<PaperCard> cards=FModel.getMagicDb().getCommonCards().getAllCards(cardFilter);
+        return cards.get(cards.size()-1).getImageKey(altState);*/
+        return FModel.getMagicDb().getCommonCards().getUniqueByName(name).getImageKey(altState);
+    }
+
+    public PaperCard getPaperCard(){
+        return FModel.getMagicDb().getCommonCards().getUniqueByName(name);
     }
 }

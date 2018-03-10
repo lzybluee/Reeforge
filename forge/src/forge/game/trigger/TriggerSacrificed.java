@@ -29,7 +29,7 @@ import forge.game.zone.CostPaymentStack;
  * </p>
  * 
  * @author Forge
- * @version $Id: TriggerSacrificed.java 33758 2017-04-17 19:56:06Z Hanmac $
+ * @version $Id$
  */
 public class TriggerSacrificed extends Trigger {
 

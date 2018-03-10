@@ -1,16 +1,8 @@
 package forge.game.player;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
-
 import forge.LobbyPlayer;
 import forge.card.ColorSet;
 import forge.card.ICardFace;
@@ -22,28 +14,25 @@ import forge.game.GameEntity;
 import forge.game.GameObject;
 import forge.game.GameOutcome.AnteResult;
 import forge.game.GameType;
-import forge.game.card.Card;
-import forge.game.card.CardCollection;
-import forge.game.card.CardCollectionView;
-import forge.game.card.CardShields;
-import forge.game.card.CardView;
-import forge.game.card.CounterType;
+import forge.game.card.*;
 import forge.game.combat.Combat;
 import forge.game.cost.Cost;
 import forge.game.cost.CostPart;
 import forge.game.cost.CostPartMana;
 import forge.game.mana.Mana;
 import forge.game.replacement.ReplacementEffect;
-import forge.game.spellability.AbilitySub;
-import forge.game.spellability.OptionalCostValue;
-import forge.game.spellability.SpellAbility;
-import forge.game.spellability.SpellAbilityStackInstance;
-import forge.game.spellability.TargetChoices;
+import forge.game.spellability.*;
 import forge.game.trigger.WrappedAbility;
 import forge.game.zone.ZoneType;
 import forge.item.PaperCard;
-import forge.util.collect.FCollectionView;
 import forge.util.ITriggerEvent;
+import forge.util.collect.FCollectionView;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /** 
  * A prototype for player controller class
@@ -149,7 +138,10 @@ public abstract class PlayerController {
     public abstract void notifyOfValue(SpellAbility saSource, GameObject realtedTarget, String value);
     public abstract ImmutablePair<CardCollection, CardCollection> arrangeForScry(CardCollection topN);
     public abstract boolean willPutCardOnTop(Card c);
-    public abstract CardCollectionView orderMoveToZoneList(CardCollectionView cards, ZoneType destinationZone);
+    public final CardCollectionView orderMoveToZoneList(CardCollectionView cards, ZoneType destinationZone) {
+        return orderMoveToZoneList(cards, destinationZone, null);
+    }
+    public abstract CardCollectionView orderMoveToZoneList(CardCollectionView cards, ZoneType destinationZone, SpellAbility source);
 
     /** p = target player, validCards - possible discards, min cards to discard */
     public abstract CardCollectionView chooseCardsToDiscardFrom(Player playerDiscard, SpellAbility sa, CardCollection validCards, int min, int max);
@@ -204,7 +196,6 @@ public abstract class PlayerController {
     public abstract boolean confirmPayment(CostPart costPart, String string, SpellAbility sa);
     public abstract ReplacementEffect chooseSingleReplacementEffect(String prompt, List<ReplacementEffect> possibleReplacers, Map<String, Object> runParams);
     public abstract String chooseProtectionType(String string, SpellAbility sa, List<String> choices);
-    public abstract CardShields chooseRegenerationShield(Card c);
 
     // these 4 need some refining.
     public abstract boolean payCostToPreventEffect(Cost cost, SpellAbility sa, boolean alreadyPaid, FCollectionView<Player> allPayers);
@@ -212,7 +203,7 @@ public abstract class PlayerController {
     public abstract void playTrigger(Card host, WrappedAbility wrapperAbility, boolean isMandatory);
 
     public abstract boolean playSaFromPlayEffect(SpellAbility tgtSA);
-    public abstract Map<GameEntity, CounterType> chooseProliferation(SpellAbility sa, int max);
+    public abstract Map<GameEntity, CounterType> chooseProliferation(SpellAbility sa);
     public abstract boolean chooseCardsPile(SpellAbility sa, CardCollectionView pile1, CardCollectionView pile2, String faceUp);
 
     public abstract void revealAnte(String message, Multimap<Player, PaperCard> removedAnteCards);
@@ -237,7 +228,6 @@ public abstract class PlayerController {
     public abstract String chooseCardName(SpellAbility sa, List<ICardFace> faces, String message);
     // better to have this odd method than those if playerType comparison in ChangeZone  
     public abstract Card chooseSingleCardForZoneChange(ZoneType destination, List<ZoneType> origin, SpellAbility sa, CardCollection fetchList, DelayedReveal delayedReveal, String selectPrompt, boolean isOptional, Player decider);
-    public abstract CardCollection chooseCardsForZoneChange(ZoneType destination, List<ZoneType> origin, SpellAbility sa, CardCollection fetchList, DelayedReveal delayedReveal, String selectPrompt, boolean isOptional, Player decider, int changeNum);
 
     public abstract void autoPassCancel();
 

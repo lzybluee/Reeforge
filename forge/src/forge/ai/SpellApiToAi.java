@@ -1,13 +1,12 @@
 package forge.ai;
 
-import java.util.Map;
-
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-
 import forge.ai.ability.*;
 import forge.game.ability.ApiType;
 import forge.util.ReflectionUtil;
+
+import java.util.Map;
 
 public enum SpellApiToAi {
     Converter;
@@ -25,6 +24,7 @@ public enum SpellApiToAi {
             .put(ApiType.Animate, AnimateAi.class)
             .put(ApiType.AnimateAll, AnimateAllAi.class)
             .put(ApiType.Attach, AttachAi.class)
+            .put(ApiType.Ascend, AlwaysPlayAi.class)
             .put(ApiType.Balance, BalanceAi.class)
             .put(ApiType.BecomeMonarch, AlwaysPlayAi.class)
             .put(ApiType.BecomesBlocked, BecomesBlockedAi.class)
@@ -72,12 +72,14 @@ public enum SpellApiToAi {
             .put(ApiType.ExchangeControlVariant, CannotPlayAi.class)
             .put(ApiType.ExchangePower, PowerExchangeAi.class)
             .put(ApiType.ExchangeZone, ZoneExchangeAi.class)
+            .put(ApiType.Explore, ExploreAi.class)
             .put(ApiType.Fight, FightAi.class)
             .put(ApiType.FlipACoin, FlipACoinAi.class)
             .put(ApiType.Fog, FogAi.class)
             .put(ApiType.GainControl, ControlGainAi.class)
             .put(ApiType.GainLife, LifeGainAi.class)
             .put(ApiType.GainOwnership, CannotPlayAi.class)
+            .put(ApiType.GameDrawn, CannotPlayAi.class)
             .put(ApiType.GenericChoice, ChooseGenericEffectAi.class)
             .put(ApiType.Goad, GoadAi.class)
             .put(ApiType.Haunt, HauntAi.class)
@@ -115,6 +117,7 @@ public enum SpellApiToAi {
             .put(ApiType.RearrangeTopOfLibrary, RearrangeTopOfLibraryAi.class)
             .put(ApiType.Regenerate, RegenerateAi.class)
             .put(ApiType.RegenerateAll, RegenerateAllAi.class)
+            .put(ApiType.Regeneration, AlwaysPlayAi.class)
             .put(ApiType.RemoveCounter, CountersRemoveAi.class)
             .put(ApiType.RemoveCounterAll, CannotPlayAi.class)
             .put(ApiType.RemoveFromCombat, RemoveFromCombatAi.class)

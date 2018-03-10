@@ -28,7 +28,7 @@ import forge.item.PaperCard;
  * </p>
  *
  * @author Forge
- * @version $Id: IBoosterDraft.java 32013 2016-08-18 20:22:10Z friarsol $
+ * @version $Id$
  */
 public interface IBoosterDraft {
 

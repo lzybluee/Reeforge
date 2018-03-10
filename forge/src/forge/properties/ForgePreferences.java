@@ -34,6 +34,22 @@ public class ForgePreferences extends PreferencesStore<ForgePreferences.FPref> {
         CONSTRUCTED_P6_DECK_STATE(""),
         CONSTRUCTED_P7_DECK_STATE(""),
         CONSTRUCTED_P8_DECK_STATE(""),
+        COMMANDER_P1_DECK_STATE(""),
+        COMMANDER_P2_DECK_STATE(""),
+        COMMANDER_P3_DECK_STATE(""),
+        COMMANDER_P4_DECK_STATE(""),
+        COMMANDER_P5_DECK_STATE(""),
+        COMMANDER_P6_DECK_STATE(""),
+        COMMANDER_P7_DECK_STATE(""),
+        COMMANDER_P8_DECK_STATE(""),
+        TINY_LEADER_P1_DECK_STATE(""),
+        TINY_LEADER_P2_DECK_STATE(""),
+        TINY_LEADER_P3_DECK_STATE(""),
+        TINY_LEADER_P4_DECK_STATE(""),
+        TINY_LEADER_P5_DECK_STATE(""),
+        TINY_LEADER_P6_DECK_STATE(""),
+        TINY_LEADER_P7_DECK_STATE(""),
+        TINY_LEADER_P8_DECK_STATE(""),
         UI_LANDSCAPE_MODE ("false"),
         UI_COMPACT_MAIN_MENU ("false"),
         UI_USE_OLD ("false"),
@@ -45,7 +61,6 @@ public class ForgePreferences extends PreferencesStore<ForgePreferences.FPref> {
         UI_OVERLAY_CARD_POWER ("true"),
         UI_OVERLAY_CARD_MANA_COST ("true"),
         UI_OVERLAY_CARD_ID ("true"),
-        UI_SCALE_LIB ("Scalr Quality"),
         UI_ENABLE_ONLINE_IMAGE_FETCHER ("false"),
         UI_OVERLAY_FOIL_EFFECT ("true"),
         UI_HIDE_REMINDER_TEXT ("false"),
@@ -69,13 +84,10 @@ public class ForgePreferences extends PreferencesStore<ForgePreferences.FPref> {
         UI_ANTE ("false"),
         UI_ANTE_MATCH_RARITY ("false"),
         UI_MANABURN("false"),
-        UI_UNIQUE_PLANESWALKER("false"),
         UI_SKIN ("Default"),
         UI_PREFERRED_AVATARS_ONLY ("false"),
         UI_TARGETING_OVERLAY ("0"),
         UI_TIMED_TARGETING_OVERLAY_UPDATES ("true"),
-        UI_SKIP_RESTORE_DECK ("true"),
-        UI_START_PLAYER ("Random"),
         UI_ENABLE_SOUNDS ("true"),
         UI_ENABLE_MUSIC ("true"),
         UI_ALT_SOUND_SYSTEM ("false"),
@@ -95,9 +107,15 @@ public class ForgePreferences extends PreferencesStore<ForgePreferences.FPref> {
         UI_PRESELECT_PREVIOUS_ABILITY_ORDER ("false"),
         UI_AUTO_YIELD_MODE (ForgeConstants.AUTO_YIELD_PER_ABILITY),
         UI_SHOW_STORM_COUNT_IN_PROMPT ("false"),
+        UI_REMIND_ON_PRIORITY ("false"),
         UI_CARD_COUNTER_DISPLAY_TYPE(ForgeConstants.CounterDisplayType.TEXT.getName()),
         UI_CARD_COUNTER_DISPLAY_LOCATION(ForgeConstants.CounterDisplayLocation.TOP.getName()),
         UI_ANDROID_MINIMIZE_ON_SCRLOCK("false"),
+        UI_ROTATE_PLANE_OR_PHENOMENON("false"),
+        UI_ROTATE_SPLIT_CARDS("true"),
+        UI_DYNAMIC_PLANECHASE_BG("false"),
+        UI_DISABLE_IMAGES_EFFECT_CARDS("false"),
+        UI_ALLOW_ORDER_GRAVEYARD_WHEN_NEEDED ("Never"),
 
         UI_FOR_TOUCHSCREN("false"),
 
@@ -138,6 +156,7 @@ public class ForgePreferences extends PreferencesStore<ForgePreferences.FPref> {
         DECKGEN_SINGLETONS ("false"),
         DECKGEN_ARTIFACTS ("false"),
         DECKGEN_NOSMALL ("false"),
+        DECKGEN_CARDBASED ("true"),
 
         PHASE_AI_UPKEEP ("false"),
         PHASE_AI_DRAW ("false"),
@@ -208,6 +227,19 @@ public class ForgePreferences extends PreferencesStore<ForgePreferences.FPref> {
             CONSTRUCTED_P3_DECK_STATE, CONSTRUCTED_P4_DECK_STATE,
             CONSTRUCTED_P5_DECK_STATE, CONSTRUCTED_P6_DECK_STATE,
             CONSTRUCTED_P7_DECK_STATE, CONSTRUCTED_P8_DECK_STATE };
+
+        public static FPref[] COMMANDER_DECK_STATES = {
+                COMMANDER_P1_DECK_STATE, COMMANDER_P2_DECK_STATE,
+                COMMANDER_P3_DECK_STATE, COMMANDER_P4_DECK_STATE,
+                COMMANDER_P5_DECK_STATE, COMMANDER_P6_DECK_STATE,
+                COMMANDER_P7_DECK_STATE, COMMANDER_P8_DECK_STATE };
+
+        public static FPref[] TINY_LEADER_DECK_STATES = {
+                TINY_LEADER_P1_DECK_STATE, TINY_LEADER_P2_DECK_STATE,
+                TINY_LEADER_P3_DECK_STATE, TINY_LEADER_P4_DECK_STATE,
+                TINY_LEADER_P5_DECK_STATE, TINY_LEADER_P6_DECK_STATE,
+                TINY_LEADER_P7_DECK_STATE, TINY_LEADER_P8_DECK_STATE };
+
     }
 
     /** Instantiates a ForgePreferences object. */

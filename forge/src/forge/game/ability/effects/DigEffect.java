@@ -2,6 +2,7 @@ package forge.game.ability.effects;
 
 import forge.card.CardStateName;
 import forge.game.Game;
+import forge.game.GameActionUtil;
 import forge.game.ability.AbilityUtils;
 import forge.game.ability.SpellAbilityEffect;
 import forge.game.card.Card;
@@ -16,13 +17,9 @@ import forge.game.spellability.TargetRestrictions;
 import forge.game.zone.PlayerZone;
 import forge.game.zone.ZoneType;
 import forge.util.Lang;
-import forge.util.MessageUtil;
+import forge.util.TextUtil;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class DigEffect extends SpellAbilityEffect {
 
@@ -131,7 +128,7 @@ public class DigEffect extends SpellAbilityEffect {
                     game.getAction().reveal(top, p, false);
                 }
                 else if (sa.hasParam("RevealOptional")) {
-                    String question = "Reveal: " + Lang.joinHomogenous(top) +"?";
+                    String question = TextUtil.concatWithSpace("Reveal:", TextUtil.addSuffix(Lang.joinHomogenous(top),"?"));
 
                     hasRevealed = p.getController().confirmAction(sa, null, question);
                     if (hasRevealed) {
@@ -211,7 +208,7 @@ public class DigEffect extends SpellAbilityEffect {
                     // Optional abilities that use a dialog box to prompt the user to skip the ability (e.g. Explorer's Scope, Quest for Ula's Temple)
                     if (optional && mayBeSkipped && !valid.isEmpty()) {
                         String prompt = !optionalAbilityPrompt.isEmpty() ? optionalAbilityPrompt : "Would you like to proceed with the optional ability for " + sa.getHostCard() + "?\n\n(" + sa.getDescription() + ")";
-                        if (!p.getController().confirmAction(sa, null, prompt.replaceAll("CARDNAME", sa.getHostCard().getName()))) {
+                        if (!p.getController().confirmAction(sa, null, TextUtil.fastReplace(prompt, "CARDNAME", sa.getHostCard().getName()))) {
                             return;
                         }
                     }
@@ -232,9 +229,6 @@ public class DigEffect extends SpellAbilityEffect {
                         else {
                             prompt = "Choose a card to leave in {player's} " + destZone2.name();
                         }
-
-                        if(prompt != null)
-                            prompt = MessageUtil.formatMessage(prompt, chooser.getController().getPlayer(), p);
 
                         Card chosen = chooser.getController().chooseSingleEntityForEffect(valid, delayedReveal, sa, prompt, false, p);
                         movedCards.remove(chosen);
@@ -258,9 +252,6 @@ public class DigEffect extends SpellAbilityEffect {
                                 }
                             }
                         }
-
-                        if(prompt != null)
-                            prompt = MessageUtil.formatMessage(prompt, chooser.getController().getPlayer(), p);
 
                         movedCards = new CardCollection();
                         for (int i = 0; i < destZone1ChangeNum || (anyNumber && i < numToDig); i++) {
@@ -347,13 +338,18 @@ public class DigEffect extends SpellAbilityEffect {
                     }
 
                     // now, move the rest to destZone2
-                    if (destZone2 == ZoneType.Library || destZone2 == ZoneType.PlanarDeck || destZone2 == ZoneType.SchemeDeck) {
+                    if (destZone2 == ZoneType.Library || destZone2 == ZoneType.PlanarDeck || destZone2 == ZoneType.SchemeDeck
+                            || destZone2 == ZoneType.Graveyard) {
                         CardCollection afterOrder = rest;
                         if (sa.hasParam("RestRandomOrder")) {
                             CardLists.shuffle(afterOrder);
                         }
                         else if (!skipReorder && rest.size() > 1) {
-                            afterOrder = (CardCollection)chooser.getController().orderMoveToZoneList(rest, destZone2);
+                            if (destZone2 == ZoneType.Graveyard) {
+                                afterOrder = (CardCollection) GameActionUtil.orderCardsByTheirOwners(game, rest, destZone2);
+                            } else {
+                                afterOrder = (CardCollection) chooser.getController().orderMoveToZoneList(rest, destZone2);
+                            }
                         }
                         if (libraryPosition2 != -1) {
                             // Closest to top

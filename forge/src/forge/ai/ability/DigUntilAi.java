@@ -41,6 +41,11 @@ public class DigUntilAi extends SpellAbilityAi {
             if (ai.getCardsIn(ZoneType.Library).size() < 20) {
                 return false;
             }
+            if ("Land.Basic".equals(sa.getParam("Valid"))
+                    && !CardLists.filter(ai.getCardsIn(ZoneType.Hand), CardPredicates.Presets.LANDS_PRODUCING_MANA).isEmpty()) {
+                // We already have a mana-producing land in hand, so bail
+                return false;
+            }
         }
 
         if (sa.usesTargeting()) {
@@ -121,6 +126,7 @@ public class DigUntilAi extends SpellAbilityAi {
                 // or none in play with one in library, oath
                 return creaturesInLibrary.size() > 2
                         || (creaturesInBattlefield.size() == 0 && creaturesInLibrary.size() > 0);
+
             }
         }
         return true;

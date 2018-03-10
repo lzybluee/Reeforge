@@ -40,7 +40,7 @@ import org.apache.commons.lang3.StringUtils;
  * </p>
  * 
  * @author Forge
- * @version $Id: ManaCostBeingPaid.java 34087 2017-05-26 15:50:18Z Hanmac $
+ * @version $Id$
  */
 public class ManaCostBeingPaid {
     private class ManaCostBeingPaidIterator implements IParserManaCost {

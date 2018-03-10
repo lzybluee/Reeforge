@@ -33,7 +33,7 @@ import java.util.List;
  * </p>
  * 
  * @author Forge
- * @version $Id: Phase.java 29414 2015-05-17 11:28:21Z elcnesh $
+ * @version $Id$
  */
 public class Phase implements java.io.Serializable {
 

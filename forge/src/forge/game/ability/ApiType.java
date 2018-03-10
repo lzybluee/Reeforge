@@ -1,12 +1,11 @@
 package forge.game.ability;
 
 
+import com.google.common.collect.Maps;
 import forge.game.ability.effects.*;
 import forge.util.ReflectionUtil;
 
 import java.util.Map;
-
-import com.google.common.collect.Maps;
 
 /** 
  * TODO: Write javadoc for this type.
@@ -21,6 +20,7 @@ public enum ApiType {
     Animate (AnimateEffect.class),
     AnimateAll (AnimateAllEffect.class),
     Attach (AttachEffect.class),
+    Ascend (AscendEffect.class),
     Balance (BalanceEffect.class),
     BecomeMonarch (BecomeMonarchEffect.class),
     BecomesBlocked (BecomesBlockedEffect.class),
@@ -69,12 +69,14 @@ public enum ApiType {
     ExchangeControlVariant (ControlExchangeVariantEffect.class),
     ExchangePower (PowerExchangeEffect.class),
     ExchangeZone (ZoneExchangeEffect.class),
+    Explore (ExploreEffect.class),
     Fight (FightEffect.class),
     FlipACoin (FlipCoinEffect.class),
     Fog (FogEffect.class),
     GainControl (ControlGainEffect.class),
     GainLife (LifeGainEffect.class),
     GainOwnership (OwnershipGainEffect.class),
+    GameDrawn (GameDrawEffect.class),
     GenericChoice (ChooseGenericEffect.class),
     Goad (GoadEffect.class),
     Haunt (HauntEffect.class),
@@ -113,6 +115,7 @@ public enum ApiType {
     RearrangeTopOfLibrary (RearrangeTopOfLibraryEffect.class),
     Regenerate (RegenerateEffect.class),
     RegenerateAll (RegenerateAllEffect.class),
+    Regeneration (RegenerationEffect.class),
     RemoveCounter (CountersRemoveEffect.class),
     RemoveCounterAll (CountersRemoveAllEffect.class),
     RemoveFromCombat (RemoveFromCombatEffect.class),

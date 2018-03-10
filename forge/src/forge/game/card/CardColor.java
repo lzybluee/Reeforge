@@ -26,7 +26,7 @@ import forge.card.mana.ManaCostParser;
  * </p>
  * 
  * @author Forge
- * @version $Id: CardColor.java 28728 2015-01-27 14:28:54Z elcnesh $
+ * @version $Id$
  */
 public class CardColor  {
     private final byte colorMask;

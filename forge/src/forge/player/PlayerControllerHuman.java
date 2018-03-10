@@ -1,50 +1,16 @@
 package forge.player;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
-
-import forge.game.ability.AbilityFactory;
-import forge.game.ability.ApiType;
-import forge.game.keyword.Keyword;
-import org.apache.commons.lang3.Range;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
-
+import com.google.common.collect.*;
 import forge.FThreads;
 import forge.GuiBase;
 import forge.LobbyPlayer;
 import forge.achievement.AchievementCollection;
 import forge.ai.GameState;
 import forge.assets.FSkinProp;
-import forge.card.CardDb;
-import forge.card.CardType;
-import forge.card.ColorSet;
-import forge.card.ICardFace;
-import forge.card.MagicColor;
+import forge.card.*;
 import forge.card.mana.ManaCost;
 import forge.card.mana.ManaCostShard;
 import forge.control.FControlGamePlayback;
@@ -52,42 +18,22 @@ import forge.deck.CardPool;
 import forge.deck.Deck;
 import forge.deck.DeckSection;
 import forge.events.UiEventNextGameDecision;
-import forge.game.Game;
-import forge.game.GameEntity;
-import forge.game.GameEntityView;
-import forge.game.GameLogEntryType;
-import forge.game.GameObject;
-import forge.game.GameType;
-import forge.game.PlanarDice;
+import forge.game.*;
+import forge.game.ability.AbilityFactory;
+import forge.game.ability.ApiType;
 import forge.game.ability.effects.CharmEffect;
-import forge.game.card.Card;
-import forge.game.card.CardCollection;
-import forge.game.card.CardCollectionView;
-import forge.game.card.CardLists;
-import forge.game.card.CardPredicates;
-import forge.game.card.CardShields;
-import forge.game.card.CardView;
-import forge.game.card.CounterType;
+import forge.game.card.*;
 import forge.game.combat.Combat;
 import forge.game.combat.CombatUtil;
 import forge.game.cost.Cost;
 import forge.game.cost.CostPart;
 import forge.game.cost.CostPartMana;
+import forge.game.keyword.Keyword;
 import forge.game.mana.Mana;
-import forge.game.player.DelayedReveal;
-import forge.game.player.Player;
-import forge.game.player.PlayerActionConfirmMode;
-import forge.game.player.PlayerController;
-import forge.game.player.PlayerView;
+import forge.game.player.*;
 import forge.game.replacement.ReplacementEffect;
 import forge.game.replacement.ReplacementLayer;
-import forge.game.spellability.AbilityManaPart;
-import forge.game.spellability.AbilitySub;
-import forge.game.spellability.OptionalCostValue;
-import forge.game.spellability.SpellAbility;
-import forge.game.spellability.SpellAbilityStackInstance;
-import forge.game.spellability.SpellAbilityView;
-import forge.game.spellability.TargetChoices;
+import forge.game.spellability.*;
 import forge.game.trigger.Trigger;
 import forge.game.trigger.WrappedAbility;
 import forge.game.zone.MagicStack;
@@ -101,30 +47,26 @@ import forge.interfaces.IMacroSystem;
 import forge.item.IPaperCard;
 import forge.item.PaperCard;
 import forge.match.NextGameDecision;
-import forge.match.input.Input;
-import forge.match.input.InputAttack;
-import forge.match.input.InputBlock;
-import forge.match.input.InputConfirm;
-import forge.match.input.InputConfirmMulligan;
-import forge.match.input.InputPassPriority;
-import forge.match.input.InputPayMana;
-import forge.match.input.InputProliferate;
-import forge.match.input.InputProxy;
-import forge.match.input.InputQueue;
-import forge.match.input.InputSelectCardsForConvokeOrImprovise;
-import forge.match.input.InputSelectCardsFromList;
-import forge.match.input.InputSelectEntitiesFromList;
+import forge.match.input.*;
 import forge.model.FModel;
 import forge.properties.ForgeConstants;
 import forge.properties.ForgePreferences.FPref;
-import forge.util.collect.FCollection;
-import forge.util.collect.FCollectionView;
+import forge.trackable.TrackableObject;
 import forge.util.ITriggerEvent;
 import forge.util.Lang;
 import forge.util.MessageUtil;
 import forge.util.TextUtil;
+import forge.util.collect.FCollection;
+import forge.util.collect.FCollectionView;
 import forge.util.gui.SOptionPane;
-import java.util.Arrays;
+import org.apache.commons.lang3.Range;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.io.*;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * A prototype for player controller class
@@ -299,20 +241,30 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
             if (newMain != null) {
                 String errMsg;
                 if (newMain.size() < deckMinSize) {
-                    errMsg = String.format(
-                            "Too few cards in your main deck (minimum %d), please make modifications to your deck again.",
-                            deckMinSize);
+                    errMsg = TextUtil.concatNoSpace("Too few cards in your main deck (minimum ",
+                            String.valueOf(deckMinSize), "), please make modifications to your deck again.");
                 } else {
-                    errMsg = String.format(
-                            "Too many cards in your sideboard (maximum %d), please make modifications to your deck again.",
-                            sbMax);
+                    errMsg = TextUtil.concatNoSpace("Too many cards in your sideboard (maximum ",
+                            String.valueOf(sbMax), "), please make modifications to your deck again.");
                 }
                 getGui().showErrorDialog(errMsg, "Invalid Deck");
             }
             // Sideboard rules have changed for M14, just need to consider min
             // maindeck and max sideboard sizes
             // No longer need 1:1 sideboarding in non-limited formats
-            newMain = getGui().sideboard(sideboard, main);
+            Object resp = getGui().sideboard(sideboard, main);
+            if (resp instanceof List<?> &&
+                    !((List) resp).isEmpty() &&
+                    ((List) resp).get(0) instanceof PaperCard) {
+                newMain = (List) resp;
+            } else if (resp == null) {
+                // if we got here, the user took too long to reply
+                newMain = main.toFlatList();
+            } else {
+                System.err.println("PlayerControllerHuman.sideboard -- FAILED!");
+                System.err.println("resp instanceof " + resp.getClass().toString());
+                System.err.println("resp = " + resp.toString());
+            }
         } while (conform && (newMain.size() < deckMinSize || combinedDeckSize - newMain.size() > sbMax));
 
         return newMain;
@@ -358,7 +310,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
             final boolean canChooseZero) {
         final int min = canChooseZero ? 0 : 1;
         return getGui().getInteger("Choose " + announce + " for " + ability.getHostCard().getName(), min,
-                Integer.MAX_VALUE, min + 21);
+                Integer.MAX_VALUE, min + 9);
     }
 
     @Override
@@ -489,7 +441,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
             tempShow(delayedReveal.getCards());
         }
         final GameEntityView result = getGui().chooseSingleEntityForEffect(title,
-                GameEntityView.getEntityCollection(optionList), delayedReveal, isOptional, 1);
+                GameEntityView.getEntityCollection(optionList), delayedReveal, isOptional);
         endTempShowCards();
 
         if (result instanceof CardView) {
@@ -527,11 +479,20 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         }
 
         // Show the card that asked for this choice
-        getGui().setPaperCard(CardView.get(sa.getHostCard()));
+        getGui().setCard(CardView.get(sa.getHostCard()));
+
+        // create a mapping between a spell's view and the spell itself
+        HashMap<SpellAbilityView, SpellAbility> spellViewCache = new HashMap<>();
+        for (SpellAbility spellAbility : spells) {
+            spellViewCache.put(spellAbility.getView(), spellAbility);
+        }
+        List<TrackableObject> choices = new ArrayList<>();
+        choices.addAll(spellViewCache.keySet());
+        Object choice = getGui().one(title, choices);
 
         // Human is supposed to read the message and understand from it what to
         // choose
-        return getGui().one(title, spells);
+        return spellViewCache.get(choice);
     }
 
     /*
@@ -543,6 +504,33 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
      */
     @Override
     public boolean confirmAction(final SpellAbility sa, final PlayerActionConfirmMode mode, final String message) {
+        if (sa != null && sa.getHostCard() != null && sa.hasParam("ShowCardInPrompt")) {
+            // The card wants another thing displayed in the prompt on mouse over rather than itself
+            Card show = null;
+            Object o = null;
+            switch (sa.getParam("ShowCardInPrompt")) {
+                case "FirstRemembered":
+                    o = sa.getHostCard().getFirstRemembered();
+                    if (o != null && o instanceof Card) {
+                        show = (Card)o;
+                    }
+                    break;
+                case "LastRemembered":
+                    o = sa.getHostCard().getFirstRemembered();
+                    if (o != null && o instanceof Card) {
+                        show = (Card)o;
+                    }
+                    break;
+            }
+            if (sa != null) {
+                tempShowCard(show);
+                boolean result = InputConfirm.confirm(this, ((Card) sa.getHostCard().getFirstRemembered()).getView(), message);
+                endTempShowCards();
+                return result;
+            }
+        }
+
+        // The general case: display the source of the SA in the prompt on mouse over
         return InputConfirm.confirm(this, sa, message);
     }
 
@@ -582,8 +570,8 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
             // append trigger description unless prompt is compact or detailed
             // descriptions are on
             buildQuestion.append("\n(");
-            buildQuestion.append(
-                    triggerParams.get("TriggerDescription").replaceAll("CARDNAME", regtrig.getHostCard().getName()));
+            buildQuestion.append(TextUtil.fastReplace(triggerParams.get("TriggerDescription"),
+                    "CARDNAME", regtrig.getHostCard().getName()));
             buildQuestion.append(")");
         }
         final Map<String, Object> tos = sa.getTriggeringObjects();
@@ -713,7 +701,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         getGui().setCard(c.getView());
 
         boolean result = false;
-        result = InputConfirm.confirm(this, view, String.format("Put %s on the top or bottom of your library?", view),
+        result = InputConfirm.confirm(this, view, TextUtil.concatNoSpace("Put ", view.toString(), " on the top or bottom of your library?"),
                 true, ImmutableList.of("Top", "Bottom"));
 
         endTempShowCards();
@@ -721,7 +709,29 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
     }
 
     @Override
-    public CardCollectionView orderMoveToZoneList(final CardCollectionView cards, final ZoneType destinationZone) {
+    public CardCollectionView orderMoveToZoneList(final CardCollectionView cards, final ZoneType destinationZone, final SpellAbility source) {
+        if (source == null || source.getApi() != ApiType.ReorderZone) {
+            if (destinationZone == ZoneType.Graveyard) {
+                switch (FModel.getPreferences().getPref(FPref.UI_ALLOW_ORDER_GRAVEYARD_WHEN_NEEDED)) {
+                    case ForgeConstants.GRAVEYARD_ORDERING_NEVER:
+                        // No ordering is ever performed by the player except when done by effect (AF ReorderZone)
+                        return cards;
+                    case ForgeConstants.GRAVEYARD_ORDERING_OWN_CARDS:
+                        // Order only if the relevant cards controlled by the player determine the potential necessity for it
+                        if (!game.isGraveyardOrdered(player)) {
+                            return cards;
+                        }
+                        break;
+                    case ForgeConstants.GRAVEYARD_ORDERING_ALWAYS:
+                        // Always order cards, no matter if there is a determined case for it or not
+                        break;
+                    default:
+                        // By default, assume no special ordering necessary (but should not get here unless the preference file is borked)
+                        return cards;
+                }
+            }
+        }
+
         List<CardView> choices;
         tempShowCards(cards);
         switch (destinationZone) {
@@ -869,8 +879,8 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         final List<String> options = Lists.newArrayList();
         for (int i = 0; i < manaChoices.size(); i++) {
             final Mana m = manaChoices.get(i);
-            options.add(String.format("%d. %s mana from %s", 1 + i, MagicColor.toLongString(m.getColor()),
-                    m.getSourceCard()));
+            options.add(TextUtil.concatNoSpace(String.valueOf(1 + i), ". ", MagicColor.toLongString(m.getColor()),
+                    " mana from ", m.getSourceCard().toString()));
         }
         final String chosen = getGui().one("Pay Mana from Mana Pool", options);
         final String idx = TextUtil.split(chosen, '.')[0];
@@ -1303,8 +1313,8 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
     public List<AbilitySub> chooseModeForAbility(final SpellAbility sa, final int min, final int num,
             boolean allowRepeat) {
         final List<AbilitySub> choices = CharmEffect.makePossibleOptions(sa);
-        final String modeTitle = String.format("%s activated %s - Choose a mode", sa.getActivatingPlayer(),
-                sa.getHostCard());
+        final String modeTitle = TextUtil.concatNoSpace(sa.getActivatingPlayer().toString(), " activated ",
+                sa.getHostCard().toString(), " - Choose a mode");
         final List<AbilitySub> chosen = Lists.newArrayListWithCapacity(num);
         for (int i = 0; i < num; i++) {
             AbilitySub a;
@@ -1477,42 +1487,6 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
                             preselect ? Lists.<SpellAbility>newArrayList() : orderedSAs,
                             preselect ? orderedSAs : Lists.<SpellAbility>newArrayList(), null, false);
                 } else {
-                    String refereceKey = null;
-                    for (String key : orderedSALookup.keySet()) {
-                        boolean found = true;
-                        for (String s : key.split(delim + "")) {
-                            if (!saLookupKey.contains(s)) {
-                                found = false;
-                                break;
-                            }
-                        }
-                        if (found) {
-                            refereceKey = key;
-                            break;
-                        }
-                    }
-                    if (refereceKey != null) {
-                        List<SpellAbility> copyOrderedSAs = Lists.newArrayList(orderedSAs);
-                        List<SpellAbility> newOrderedSAs = Lists.newArrayList();
-                        savedOrder = orderedSALookup.get(refereceKey);
-                        String[] strs = refereceKey.split(delim + "");
-                        for (Integer index : savedOrder) {
-                            if (index >= strs.length) {
-                                continue;
-                            }
-                            for (SpellAbility sa : copyOrderedSAs) {
-                                if (sa.toString().contains(strs[index])) {
-                                    newOrderedSAs.add(sa);
-                                    copyOrderedSAs.remove(sa);
-                                    break;
-                                }
-                            }
-                        }
-                        for (SpellAbility sa : copyOrderedSAs) {
-                            newOrderedSAs.add(sa);
-                        }
-                        orderedSAs = newOrderedSAs;
-                    }
                     orderedSAs = getGui().order("Select order for simultaneous abilities", "Resolve first", orderedSAs,
                             null);
                 }
@@ -1546,8 +1520,8 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
     }
 
     @Override
-    public Map<GameEntity, CounterType> chooseProliferation(final SpellAbility sa, final int max) {
-        final InputProliferate inp = new InputProliferate(this, sa, max);
+    public Map<GameEntity, CounterType> chooseProliferation(final SpellAbility sa) {
+        final InputProliferate inp = new InputProliferate(this, sa);
         inp.setCancelAllowed(true);
         inp.showAndWait();
         if (inp.hasCancelled()) {
@@ -1565,8 +1539,8 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
     @Override
     public boolean chooseCardsPile(final SpellAbility sa, final CardCollectionView pile1,
             final CardCollectionView pile2, final String faceUp) {
-        final String p1Str = String.format("-- Pile 1 (%s cards) --", pile1.size());
-        final String p2Str = String.format("-- Pile 2 (%s cards) --", pile2.size());
+        final String p1Str = TextUtil.concatNoSpace("-- Pile 1 (", String.valueOf(pile1.size()), " cards) --");
+        final String p2Str = TextUtil.concatNoSpace("-- Pile 2 (", String.valueOf(pile2.size()), " cards) --");
 
         /*
          * if (faceUp.equals("True")) { final List<String> possibleValues =
@@ -1618,18 +1592,6 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
     }
 
     @Override
-    public CardShields chooseRegenerationShield(final Card c) {
-        if (c.getShieldCount() < 2) {
-            return Iterables.getFirst(c.getShields(), null);
-        }
-        final List<CardShields> shields = Lists.newArrayList();
-        for (final CardShields shield : c.getShields()) {
-            shields.add(shield);
-        }
-        return getGui().one("Choose a regeneration shield:", shields);
-    }
-
-    @Override
     public List<PaperCard> chooseCardsYouWonToAddToDeck(final List<PaperCard> losses) {
         return getGui().many("Select cards to add to your deck", "Add these to my deck", 0, losses.size(), losses,
                 null);
@@ -1669,86 +1631,6 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
             final SpellAbility sa, final CardCollection fetchList, final DelayedReveal delayedReveal,
             final String selectPrompt, final boolean isOptional, final Player decider) {
         return chooseSingleEntityForEffect(fetchList, delayedReveal, sa, selectPrompt, isOptional, decider);
-    }
-
-    @Override
-    public CardCollection chooseCardsForZoneChange(ZoneType destination,
-            List<ZoneType> origin, SpellAbility sa, CardCollection optionList, DelayedReveal delayedReveal,
-            String selectPrompt, boolean isOptional, Player targetedPlayer, int changeNum) {
-        // Human is supposed to read the message and understand from it what to choose
-        if (optionList.isEmpty()) {
-            if (delayedReveal != null) {
-                reveal(delayedReveal.getCards(), delayedReveal.getZone(), delayedReveal.getOwner(), delayedReveal.getMessagePrefix());
-            }
-            return null;
-        }
-        if (!isOptional && optionList.size() == 1) {
-            if (delayedReveal != null) {
-                reveal(delayedReveal.getCards(), delayedReveal.getZone(), delayedReveal.getOwner(), delayedReveal.getMessagePrefix());
-            }
-            return optionList;
-        }
-
-        boolean canUseSelectCardsInput = true;
-        for (final GameEntity c : optionList) {
-            if (c instanceof Player) {
-                continue;
-            }
-            final Zone cz = ((Card)c).getZone();
-            // can point at cards in own hand and anyone's battlefield
-            final boolean canUiPointAtCards = cz != null && (cz.is(ZoneType.Hand) && cz.getPlayer() == player || cz.is(ZoneType.Battlefield));
-            if (!canUiPointAtCards) {
-                canUseSelectCardsInput = false;
-                break;
-            }
-        }
-
-        if (canUseSelectCardsInput) {
-            if (delayedReveal != null) {
-                reveal(delayedReveal.getCards(), delayedReveal.getZone(), delayedReveal.getOwner(), delayedReveal.getMessagePrefix());
-            }
-            final InputSelectCardsFromList input = new InputSelectCardsFromList(this, isOptional ? 0 : 1, changeNum, optionList, sa);
-            input.setCancelAllowed(isOptional);
-            input.setMessage(MessageUtil.formatMessage(selectPrompt, player, targetedPlayer));
-            input.showAndWait();
-            return new CardCollection(input.getSelected());
-        }
-
-        CardCollection collection = new CardCollection();
-        int i = 0;
-        do {
-            tempShow(optionList);
-            if (delayedReveal != null) {
-                tempShow(delayedReveal.getCards());
-            }
-            final GameEntityView result = getGui().chooseSingleEntityForEffect("[" + (i + 1) + "] " + selectPrompt,
-                    GameEntityView.getEntityCollection(optionList), i == 0 ? delayedReveal : null, isOptional, changeNum);
-            endTempShowCards();
-
-            if(changeNum == 0) {
-                break;
-            }
-
-            boolean redo = false;
-            if(result == null) {
-                if (optionList.isEmpty()) {
-                    break;
-                } else if(confirmAction(sa, PlayerActionConfirmMode.ChangeZoneGeneral, "Cancel?")) {
-                    break;
-                } else {
-                    redo = true;
-                }
-            } else {
-                if (result instanceof CardView) {
-                    collection.add(game.getCard((CardView)result));
-                    optionList.remove(game.getCard((CardView)result));
-                }
-            }
-            if(!redo)
-                i++;
-        } while (i < changeNum);
-
-        return collection;
     }
 
     @Override
@@ -1898,6 +1780,8 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         private ZoneType lastAddedZone;
         private Player lastAddedPlayer;
         private SpellAbility lastAddedSA;
+        private boolean lastTrigs;
+        private boolean lastSummoningSickness;
 
         private DevModeCheats() {
         }
@@ -1931,28 +1815,24 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
          * @see forge.player.IDevModeCheats#generateMana()
          */
         @Override
-        public void generateMana(boolean empty) {
+        public void generateMana() {
             final Player pPriority = game.getPhaseHandler().getPriorityPlayer();
             if (pPriority == null) {
                 getGui().message("No player has priority at the moment, so mana cannot be added to their pool.");
                 return;
             }
 
-            if (empty) {
-                pPriority.getManaPool().clearPool(false);
-            } else {
-                final Card dummy = new Card(-777777, game);
-                dummy.setOwner(pPriority);
-                final Map<String, String> produced = Maps.newHashMap();
-                produced.put("Produced", "W W W W W W W U U U U U U U B B B B B B B G G G G G G G R R R R R R R 7");
-                final AbilityManaPart abMana = new AbilityManaPart(dummy, produced);
-                game.getAction().invoke(new Runnable() {
-                    @Override
-                    public void run() {
-                        abMana.produceMana(null);
-                    }
-                });
-            }
+            final Card dummy = new Card(-777777, game);
+            dummy.setOwner(pPriority);
+            final Map<String, String> produced = Maps.newHashMap();
+            produced.put("Produced", "W W W W W W W U U U U U U U B B B B B B B G G G G G G G R R R R R R R 7");
+            final AbilityManaPart abMana = new AbilityManaPart(dummy, produced);
+            game.getAction().invoke(new Runnable() {
+                @Override
+                public void run() {
+                    abMana.produceMana(null);
+                }
+            });
         }
 
         private GameState createGameStateObject() {
@@ -1974,10 +1854,6 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
             final GameState state = createGameStateObject();
             try {
                 state.initFromGame(game);
-                File dir = new File(ForgeConstants.USER_GAMES_DIR);
-                if(!dir.exists()) {
-                    dir.mkdirs();
-                }
                 final File f = GuiBase.getInterface().getSaveFile(new File(ForgeConstants.USER_GAMES_DIR, "state.txt"));
                 if (f != null
                         && (!f.exists() || getGui().showConfirmDialog("Overwrite existing file?", "File exists!"))) {
@@ -2040,16 +1916,16 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
          * @see forge.player.IDevModeCheats#tutorForCard()
          */
         @Override
-        public void tutorForCard(boolean sideboard) {
+        public void tutorForCard() {
             final Player pPriority = game.getPhaseHandler().getPriorityPlayer();
             if (pPriority == null) {
                 getGui().message("No player has priority at the moment, so their deck can't be tutored from.");
                 return;
             }
 
-            final CardCollection lib = (CardCollection) pPriority.getCardsIn(sideboard ? ZoneType.Sideboard : ZoneType.Library);
+            final CardCollection lib = (CardCollection) pPriority.getCardsIn(ZoneType.Library);
             final List<ZoneType> origin = Lists.newArrayList();
-            origin.add(sideboard ? ZoneType.Sideboard : ZoneType.Library);
+            origin.add(ZoneType.Library);
             final SpellAbility sa = new SpellAbility.EmptySa(new Card(-1, game));
             final Card card = chooseSingleCardForZoneChange(ZoneType.Hand, origin, sa, lib, null, "Choose a card", true,
                     pPriority);
@@ -2084,7 +1960,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
                 return;
             }
 
-            final Integer count = getGui().getInteger("How many counters?", 1, Integer.MAX_VALUE, 21);
+            final Integer count = getGui().getInteger("How many counters?", 1, Integer.MAX_VALUE, 10);
             if (count == null) {
                 return;
             }
@@ -2098,29 +1974,20 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
          * @see forge.player.IDevModeCheats#tapPermanents()
          */
         @Override
-        public void tapPermanents(final boolean all) {
+        public void tapPermanents() {
             game.getAction().invoke(new Runnable() {
                 @Override
                 public void run() {
                     final CardCollectionView untapped = CardLists.filter(game.getCardsIn(ZoneType.Battlefield),
                             Predicates.not(CardPredicates.Presets.TAPPED));
-                    if (all) {
-                        final FCollection<Player> otherPlayers = new FCollection<Player>(game.getPlayers());
-                        otherPlayers.remove(game.getPhaseHandler().getPriorityPlayer());
-                        final CardCollectionView theirUntapped = CardLists.filter(untapped, CardPredicates.isControlledByAnyOf(otherPlayers));
-                        for (final Card c : theirUntapped) {
+                    final InputSelectCardsFromList inp = new InputSelectCardsFromList(PlayerControllerHuman.this, 0,
+                            Integer.MAX_VALUE, untapped);
+                    inp.setCancelAllowed(true);
+                    inp.setMessage("Choose permanents to tap");
+                    inp.showAndWait();
+                    if (!inp.hasCancelled()) {
+                        for (final Card c : inp.getSelected()) {
                             c.tap();
-                        }
-                    } else {
-                        final InputSelectCardsFromList inp = new InputSelectCardsFromList(PlayerControllerHuman.this, 0,
-                                Integer.MAX_VALUE, untapped);
-                        inp.setCancelAllowed(true);
-                        inp.setMessage("Choose permanents to tap");
-                        inp.showAndWait();
-                        if (!inp.hasCancelled()) {
-                            for (final Card c : inp.getSelected()) {
-                                c.tap();
-                            }
                         }
                     }
                 }
@@ -2133,27 +2000,20 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
          * @see forge.player.IDevModeCheats#untapPermanents()
          */
         @Override
-        public void untapPermanents(final boolean all) {
+        public void untapPermanents() {
             game.getAction().invoke(new Runnable() {
                 @Override
                 public void run() {
                     final CardCollectionView tapped = CardLists.filter(game.getCardsIn(ZoneType.Battlefield),
                             CardPredicates.Presets.TAPPED);
-                    if(all) {
-                        final CardCollectionView myTapped = CardLists.filter(tapped, CardPredicates.isController(game.getPhaseHandler().getPriorityPlayer())); 
-                        for (final Card c : myTapped) {
+                    final InputSelectCardsFromList inp = new InputSelectCardsFromList(PlayerControllerHuman.this, 0,
+                            Integer.MAX_VALUE, tapped);
+                    inp.setCancelAllowed(true);
+                    inp.setMessage("Choose permanents to untap");
+                    inp.showAndWait();
+                    if (!inp.hasCancelled()) {
+                        for (final Card c : inp.getSelected()) {
                             c.untap();
-                        }
-                    } else {
-                        final InputSelectCardsFromList inp = new InputSelectCardsFromList(PlayerControllerHuman.this, 0,
-                                Integer.MAX_VALUE, tapped);
-                        inp.setCancelAllowed(true);
-                        inp.setMessage("Choose permanents to untap");
-                        inp.showAndWait();
-                        if (!inp.hasCancelled()) {
-                            for (final Card c : inp.getSelected()) {
-                                c.untap();
-                            }
                         }
                     }
                 }
@@ -2166,21 +2026,16 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
          * @see forge.player.IDevModeCheats#setPlayerLife()
          */
         @Override
-        public void setPlayerLife(boolean maxlife) {
+        public void setPlayerLife() {
             final Player player = game.getPlayer(
                     getGui().oneOrNone("Set life for which player?", PlayerView.getCollection(game.getPlayers())));
             if (player == null) {
                 return;
             }
 
-            Integer life = null;
-            if(maxlife) {
-                life = 99999;
-            } else {
-                life = getGui().getInteger("Set life to what?", 0);
-                if (life == null) {
-                    return;
-                }
+            final Integer life = getGui().getInteger("Set life to what?", 0);
+            if (life == null) {
+                return;
             }
 
             player.setLife(life, null);
@@ -2192,7 +2047,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
          * @see forge.player.IDevModeCheats#winGame()
          */
         @Override
-        public void winGame(boolean lose) {
+        public void winGame() {
             final Input input = inputQueue.getInput();
             if (!(input instanceof InputPassPriority)) {
                 getGui().message("You must have priority to use this feature.", "Win Game");
@@ -2203,7 +2058,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
             final LobbyPlayer guiPlayer = getLobbyPlayer();
             final FCollectionView<Player> players = game.getPlayers();
             for (final Player player : players) {
-                if (player.getLobbyPlayer() != guiPlayer ^ lose) {
+                if (player.getLobbyPlayer() != guiPlayer) {
                     player.setLife(0, null);
                 }
             }
@@ -2219,7 +2074,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
          */
         @Override
         public void addCardToHand() {
-            addCardToZone(ZoneType.Hand, false);
+            addCardToZone(ZoneType.Hand, false, false);
         }
 
         /*
@@ -2229,7 +2084,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
          */
         @Override
         public void addCardToBattlefield() {
-            addCardToZone(ZoneType.Battlefield, false);
+            addCardToZone(ZoneType.Battlefield, false, true);
         }
 
         /*
@@ -2239,7 +2094,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
          */
         @Override
         public void addCardToLibrary() {
-            addCardToZone(ZoneType.Library, false);
+            addCardToZone(ZoneType.Library, false, false);
         }
 
         /*
@@ -2249,7 +2104,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
          */
         @Override
         public void addCardToGraveyard() {
-            addCardToZone(ZoneType.Graveyard, false);
+            addCardToZone(ZoneType.Graveyard, false, false);
         }
 
         /*
@@ -2259,7 +2114,17 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
          */
         @Override
         public void addCardToExile() {
-            addCardToZone(ZoneType.Exile, false);
+            addCardToZone(ZoneType.Exile, false, false);
+        }
+
+        /*
+         * (non-Javadoc)
+         *
+        * @see forge.player.IDevModeCheats#addCardToExile()
+        */
+        @Override
+        public void castASpell() {
+            addCardToZone(ZoneType.Battlefield, false, false);
         }
 
         /*
@@ -2269,14 +2134,16 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
          */
         @Override
         public void repeatLastAddition() {
-            if(lastAddedZone != null) {
-                addCardToZone(null, true);
+            if (lastAdded == null) {
+                return;
             }
+            addCardToZone(null, true, lastTrigs);
         }
 
-        private void addCardToZone(ZoneType zone, final boolean repeatLast) {
+        private void addCardToZone(ZoneType zone, final boolean repeatLast, final boolean noTriggers) {
             final ZoneType targetZone = repeatLast ? lastAddedZone : zone;
-            String zoneStr = targetZone != ZoneType.Battlefield ? "in " + targetZone.name().toLowerCase() : "on the battlefield";
+            String zoneStr = targetZone != ZoneType.Battlefield ? "in " + targetZone.name().toLowerCase()
+                    : noTriggers ? "on the battlefield" : "on the stack / in play";
 
             final Player p = repeatLast ? lastAddedPlayer
                     : game.getPlayer(getGui().oneOrNone("Put card " + zoneStr + " for which player?",
@@ -2304,44 +2171,67 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
                     if (targetZone != ZoneType.Battlefield) {
                         game.getAction().moveTo(targetZone, forgeCard, null);
                     } else {
-                        if (c.getRules().getType().isLand()) {
-                            // this is needed to ensure land abilities fire
-                            game.getAction().moveToHand(forgeCard, null);
-                            game.getAction().moveToPlay(forgeCard, null);
-                            // ensure triggered abilities fire
-                            game.getTriggerHandler().runWaitingTriggers();
-                        } else {
-                            final FCollectionView<SpellAbility> choices = forgeCard.getBasicSpells();
-                            if (choices.isEmpty()) {
-                                return; // when would it happen?
-                            }
-
-                            final SpellAbility sa;
-                            if (choices.size() == 1) {
-                                sa = choices.iterator().next();
+                        if (noTriggers) {
+                            if (forgeCard.isPermanent() && !forgeCard.isAura()) {
+                                if (forgeCard.isCreature()) {
+                                    if (!repeatLast) {
+                                        if (forgeCard.hasKeyword("Haste")) {
+                                            lastSummoningSickness = true;
+                                        } else {
+                                            lastSummoningSickness = getGui().confirm(forgeCard.getView(),
+                                                    TextUtil.concatWithSpace("Should", forgeCard.toString(), "be affected with Summoning Sickness?"));
+                                        }
+                                    }
+                                }
+                                game.getAction().moveTo(targetZone, forgeCard, null);
+                                if (forgeCard.isCreature()) {
+                                    forgeCard.setSickness(lastSummoningSickness);
+                                }
                             } else {
-                                sa = repeatLast ? lastAddedSA : getGui().oneOrNone("Choose", (FCollection<SpellAbility>) choices);
+                                getGui().message("The chosen card is not a permanent or can't exist independently on the battlefield.\nIf you'd like to cast a non-permanent spell, or if you'd like to cast a permanent spell and place it on stack, please use the Cast Spell/Play Land button.", "Error");
+                                return;
                             }
-                            if (sa == null) {
-                                return; // happens if cancelled
+                        } else {
+                            if (c.getRules().getType().isLand()) {
+                                // this is needed to ensure land abilities fire
+                                game.getAction().moveToHand(forgeCard, null);
+                                game.getAction().moveToPlay(forgeCard, null);
+                                // ensure triggered abilities fire
+                                game.getTriggerHandler().runWaitingTriggers();
+                            } else {
+                                final FCollectionView<SpellAbility> choices = forgeCard.getBasicSpells();
+                                if (choices.isEmpty()) {
+                                    return; // when would it happen?
+                                }
+
+                                final SpellAbility sa;
+                                if (choices.size() == 1) {
+                                    sa = choices.iterator().next();
+                                } else {
+                                    sa = repeatLast ? lastAddedSA : getGui().oneOrNone("Choose", (FCollection<SpellAbility>) choices);
+                                }
+                                if (sa == null) {
+                                    return; // happens if cancelled
+                                }
+
+                                lastAddedSA = sa;
+
+                                // this is really needed (for rollbacks at least)
+                                game.getAction().moveToHand(forgeCard, null);
+                                // Human player is choosing targets for an ability
+                                // controlled by chosen player.
+                                sa.setActivatingPlayer(p);
+                                HumanPlay.playSaWithoutPayingManaCost(PlayerControllerHuman.this, game, sa, true);
                             }
-
-                            lastAddedSA = sa;
-
-                            // this is really needed (for rollbacks at least)
-                            game.getAction().moveToHand(forgeCard, null);
-                            // Human player is choosing targets for an ability
-                            // controlled by chosen player.
-                            sa.setActivatingPlayer(p);
-                            HumanPlay.playSaWithoutPayingManaCost(PlayerControllerHuman.this, game, sa, true);
+                            // playSa could fire some triggers
+                            game.getStack().addAllTriggeredAbilitiesToStack();
                         }
-                        // playSa could fire some triggers
-                        game.getStack().addAllTriggeredAbilitiesToStack();
                     }
 
                     lastAdded = f;
                     lastAddedZone = targetZone;
                     lastAddedPlayer = p;
+                    lastTrigs = noTriggers;
                 }
             });
         }
@@ -2766,4 +2656,5 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         return getGui().many("Choose optional Costs", "Optional Costs", 0, optionalCost.size(),
                 optionalCost, choosen.getHostCard().getView());
     }
+
 }

@@ -31,7 +31,7 @@ import java.util.Map;
  * </p>
  * 
  * @author Forge
- * @version $Id: TriggerAttacks.java 32192 2016-09-25 16:39:46Z Hanmac $
+ * @version $Id$
  */
 public class TriggerAttacks extends Trigger {
 

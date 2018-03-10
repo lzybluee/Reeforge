@@ -1,23 +1,14 @@
 package forge.ai;
 
-import java.security.InvalidParameterException;
-import java.util.*;
-
-import forge.card.CardStateName;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-
-import com.esotericsoftware.minlog.Log;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
-
 import forge.LobbyPlayer;
 import forge.ai.ability.ProtectAi;
+import forge.card.CardStateName;
 import forge.card.ColorSet;
 import forge.card.ICardFace;
 import forge.card.MagicColor;
@@ -33,18 +24,12 @@ import forge.game.ability.ApiType;
 import forge.game.card.*;
 import forge.game.card.CardPredicates.Presets;
 import forge.game.combat.Combat;
-import forge.game.cost.Cost;
-import forge.game.cost.CostPart;
-import forge.game.cost.CostPartMana;
+import forge.game.cost.*;
 import forge.game.mana.Mana;
 import forge.game.mana.ManaCostBeingPaid;
 import forge.game.phase.PhaseHandler;
 import forge.game.phase.PhaseType;
-import forge.game.player.DelayedReveal;
-import forge.game.player.Player;
-import forge.game.player.PlayerActionConfirmMode;
-import forge.game.player.PlayerController;
-import forge.game.player.PlayerView;
+import forge.game.player.*;
 import forge.game.replacement.ReplacementEffect;
 import forge.game.spellability.*;
 import forge.game.trigger.WrappedAbility;
@@ -55,6 +40,12 @@ import forge.util.ITriggerEvent;
 import forge.util.MyRandom;
 import forge.util.collect.FCollection;
 import forge.util.collect.FCollectionView;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.security.InvalidParameterException;
+import java.util.*;
 
 
 /** 
@@ -288,7 +279,7 @@ public class PlayerControllerAi extends PlayerController {
         }
 
         // put the rest on top in random order
-        CardLists.shuffle(toTop);
+        Collections.shuffle(toTop);
         return ImmutablePair.of(toTop, toBottom);
     }
 
@@ -298,8 +289,43 @@ public class PlayerControllerAi extends PlayerController {
     }
 
     @Override
-    public CardCollectionView orderMoveToZoneList(CardCollectionView cards, ZoneType destinationZone) {
-        //TODO Add logic for AI ordering here
+    public CardCollectionView orderMoveToZoneList(CardCollectionView cards, ZoneType destinationZone, SpellAbility source) {
+        //TODO Add more logic for AI ordering here
+
+        // In presence of Volrath's Shapeshifter in deck, try to place the best creature on top of the graveyard
+        if (destinationZone == ZoneType.Graveyard) {
+            if (!CardLists.filter(game.getCardsInGame(), new Predicate<Card>() {
+                @Override
+                public boolean apply(Card card) {
+                    // need a custom predicate here since Volrath's Shapeshifter may have a different name OTB
+                    return card.getName().equals("Volrath's Shapeshifter")
+                            || card.getStates().contains(CardStateName.OriginalText) && card.getState(CardStateName.OriginalText).getName().equals("Volrath's Shapeshifter");
+                }
+            }).isEmpty()) {
+                int bestValue = 0;
+                Card bestCreature = null;
+                for (Card c : cards) {
+                    int curValue = ComputerUtilCard.evaluateCreature(c);
+                    if (c.isCreature() && curValue > bestValue) {
+                        bestValue = curValue;
+                        bestCreature = c;
+                    }
+                }
+
+                if (bestCreature != null) {
+                    CardCollection reordered = new CardCollection();
+                    for (Card c : cards) {
+                        if (!c.equals(bestCreature)) {
+                            reordered.add(c);
+                        }
+                    }
+                    reordered.add(bestCreature);
+                    return reordered;
+                }
+            }
+        }
+
+        // Default: return with the same order as was passed into this method
         return cards;
     }
 
@@ -371,7 +397,7 @@ public class PlayerControllerAi extends PlayerController {
         if (StringUtils.isBlank(chosen) && !validTypes.isEmpty())
         {
             chosen = validTypes.get(0);
-            Log.warn("AI has no idea how to choose " + kindOfType +", defaulting to 1st element: chosen");
+            System.err.println("AI has no idea how to choose " + kindOfType +", defaulting to 1st element: chosen");
         }
         game.getAction().nofityOfValue(sa, player, chosen, player);
         return chosen;
@@ -436,6 +462,24 @@ public class PlayerControllerAi extends PlayerController {
     public boolean payManaOptional(Card c, Cost cost, SpellAbility sa, String prompt, ManaPaymentPurpose purpose) {
         final Ability ability = new AbilityStatic(c, cost, null) { @Override public void resolve() {} };
         ability.setActivatingPlayer(c.getController());
+
+        // FIXME: This is a hack to check if the AI can play the "exile from library" pay costs (Cumulative Upkeep,
+        // e.g. Thought Lash). We have to do it and bail early if the AI can't pay, because otherwise the AI will
+        // pay the cost partially, which should not be possible
+        int nExileLib = 0;
+        List<CostPart> parts = CostAdjustment.adjust(cost, sa).getCostParts();
+        for (final CostPart part : parts) {
+            if (part instanceof CostExile) {
+                CostExile exile = (CostExile) part;
+                if (exile.from == ZoneType.Library) {
+                    nExileLib += exile.convertAmount();
+                }
+            }
+        }
+        if (nExileLib > c.getController().getCardsIn(ZoneType.Library).size()) {
+            return false;
+        }
+        // - End of hack for Exile a card from library Cumulative Upkeep -
 
         if (ComputerUtilCost.canPayCost(ability, c.getController())) {
             ComputerUtil.playNoStack(c.getController(), ability, game);
@@ -509,7 +553,41 @@ public class PlayerControllerAi extends PlayerController {
     public boolean chooseBinary(SpellAbility sa, String question, BinaryChoiceType kindOfChoice, Boolean defaultVal) {
         switch(kindOfChoice) {
             case TapOrUntap: return true;
-            case UntapOrLeaveTapped: return defaultVal != null && defaultVal.booleanValue();
+            case UntapOrLeaveTapped:
+                Card source = sa.getHostCard();
+                if (source != null && source.hasSVar("AIUntapPreference")) {
+                    switch (source.getSVar("AIUntapPreference")) {
+                        case "Always":
+                            return true;
+                        case "Never":
+                            return false;
+                        case "NothingRemembered":
+                            if (source.getRememberedCount() == 0) {
+                                return true;
+                            } else {
+                                Card rem = (Card) source.getFirstRemembered();
+                                if (!rem.getZone().is(ZoneType.Battlefield)) {
+                                    return true;
+                                }
+                            }
+                        case "BetterTgtThanRemembered":
+                            if (source.getRememberedCount() > 0) {
+                                Card rem = (Card) source.getFirstRemembered();
+                                if (!rem.getZone().is(ZoneType.Battlefield)) {
+                                    return true;
+                                }
+                                for (Card c : source.getController().getCreaturesInPlay()) {
+                                    if (c != rem && ComputerUtilCard.evaluateCreature(c) > ComputerUtilCard.evaluateCreature(rem) + 30) {
+                                        return true;
+                                    }
+                                }
+                                return false;
+                            }
+                        default:
+                            break;
+                    }
+                }
+                return defaultVal != null && defaultVal.booleanValue();
             case UntapTimeVault: return false; // TODO Should AI skip his turn for time vault?
             case LeftOrRight: return brains.chooseDirection(sa);
             default:
@@ -750,7 +828,7 @@ public class PlayerControllerAi extends PlayerController {
     }
 
     @Override
-    public Map<GameEntity, CounterType> chooseProliferation(SpellAbility sa, int max) {
+    public Map<GameEntity, CounterType> chooseProliferation(SpellAbility sa) {
         return brains.chooseProliferation(sa);
     }
 
@@ -795,11 +873,6 @@ public class PlayerControllerAi extends PlayerController {
     public CardCollectionView cheatShuffle(CardCollectionView list) {
         return brains.getBooleanProperty(AiProps.CHEAT_WITH_MANA_ON_SHUFFLE) ? brains.cheatShuffle(list) : list;
     }
-
-	@Override
-	public CardShields chooseRegenerationShield(Card c) {
-		return Iterables.getFirst(c.getShields(), null);
-	}
 
     @Override
     public List<PaperCard> chooseCardsYouWonToAddToDeck(List<PaperCard> losses) {
@@ -913,32 +986,6 @@ public class PlayerControllerAi extends PlayerController {
             reveal(delayedReveal.getCards(), delayedReveal.getZone(), delayedReveal.getOwner(), delayedReveal.getMessagePrefix());
         }
         return brains.chooseCardToHiddenOriginChangeZone(destination, origin, sa, fetchList, player, decider);
-    }
-
-    @Override
-    public CardCollection chooseCardsForZoneChange(ZoneType destination,
-            List<ZoneType> origin, SpellAbility sa, CardCollection fetchList, DelayedReveal delayedReveal,
-            String selectPrompt, boolean isOptional, Player decider, int changeNum) {
-        if (delayedReveal != null) {
-            reveal(delayedReveal.getCards(), delayedReveal.getZone(), delayedReveal.getOwner(), delayedReveal.getMessagePrefix());
-        }
-        
-        CardCollection collection = new CardCollection();
-        int i = 0;
-        do {
-            Card card = brains.chooseCardToHiddenOriginChangeZone(destination, origin, sa, fetchList, player, decider);
-            if(card == null) {
-                if (fetchList.isEmpty() || decider.getController().confirmAction(sa, PlayerActionConfirmMode.ChangeZoneGeneral, selectPrompt)) {
-                    break;
-                }
-            } else {
-                fetchList.remove(card);
-                collection.add(card);
-            }
-            i++;
-        } while (i < changeNum);
-        
-        return collection;
     }
 
     @Override

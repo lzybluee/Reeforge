@@ -8,6 +8,7 @@ import java.util.Map;
 import forge.game.cost.*;
 import forge.game.spellability.OptionalCostValue;
 import forge.game.spellability.Spell;
+import forge.util.TextUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.base.Predicate;
@@ -221,10 +222,6 @@ public class HumanPlay {
                 if (sa.isSpell() && source.getType().hasStringType("Arcane")) {
                     sa = AbilityUtils.addSpliceEffects(sa);
                 }
-            } else if (sa.isCopied() && !sa.getSVar("CanSelectCharmEffect").isEmpty()) {
-                if (sa.getApi() == ApiType.Charm && !sa.isWrapper()) {
-                    CharmEffect.makeChoices(sa);
-                }
             }
             final CostPayment payment = new CostPayment(sa.getPayCosts(), sa);
 
@@ -311,7 +308,11 @@ public class HumanPlay {
         }
         String orString = prompt == null ? sourceAbility.getStackDescription().trim() : "";
         if (!orString.isEmpty()) {
-            orString = " (or: " + orString + ")";
+            if (sourceAbility.hasParam("UnlessSwitched")) {
+                orString = TextUtil.concatWithSpace(" (if you do:", orString, ")");
+            } else {
+                orString = TextUtil.concatWithSpace(" (or:", orString, ")");
+            }
         }
 
         if (parts.isEmpty() || (costPart.getAmount().equals("0") && parts.size() < 2)) {
@@ -426,14 +427,14 @@ public class HumanPlay {
                 p.addDamage(amount, source, damageMap, preventMap);
 
                 preventMap.triggerPreventDamage(false);
-                damageMap.dealLifelinkDamage();
+                damageMap.triggerDamageDoneOnce(false);
             }
             else if (part instanceof CostPutCounter) {
                 CounterType counterType = ((CostPutCounter) part).getCounter();
                 int amount = getAmountFromPartX(part, source, sourceAbility);
                 if (part.payCostFromSource()) {
                     if (!source.canReceiveCounters(counterType)) {
-                        String message = String.format("Won't be able to pay upkeep for %s but it can't have %s counters put on it.", source, counterType.getName());
+                        String message = TextUtil.concatNoSpace("Won't be able to pay upkeep for ", source.toString(), " but it can't have ", counterType.getName(), " counters put on it.");
                         p.getGame().getGameLog().add(GameLogEntryType.STACK_RESOLVE, message);
                         return false;
                     }
@@ -612,7 +613,7 @@ public class HumanPlay {
                             payableZone.add(player);
                         }
                     }
-                    Player chosen = controller.getGame().getPlayer(SGuiChoose.oneOrNone(String.format("Put cards from whose %s?", from), PlayerView.getCollection(payableZone)));
+                    Player chosen = controller.getGame().getPlayer(SGuiChoose.oneOrNone(TextUtil.concatNoSpace("Put cards from whose ", from.toString(), "?"), PlayerView.getCollection(payableZone)));
                     if (chosen == null) {
                         return false;
                     }

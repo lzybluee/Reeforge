@@ -2,13 +2,13 @@ package forge.ai.ability;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-
 import forge.ai.*;
 import forge.game.GameObject;
 import forge.game.ability.AbilityFactory;
 import forge.game.ability.AbilityUtils;
 import forge.game.ability.ApiType;
 import forge.game.card.*;
+import forge.game.combat.Combat;
 import forge.game.combat.CombatUtil;
 import forge.game.cost.Cost;
 import forge.game.cost.CostPart;
@@ -24,7 +24,10 @@ import forge.game.trigger.Trigger;
 import forge.game.trigger.TriggerType;
 import forge.game.zone.ZoneType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class AttachAi extends SpellAbilityAi {
 
@@ -250,6 +253,18 @@ public class AttachAi extends SpellAbilityAi {
                     return false;
                 }
 
+                if (!mandatory) {
+                    if (!c.isCreature() && !c.getType().hasSubtype("Vehicle") && !c.isTapped()) {
+                        // try to identify if this thing can actually tap
+                        for (SpellAbility ab : c.getAllSpellAbilities()) {
+                            if (ab.getPayCosts() != null && ab.getPayCosts().hasTapCost()) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                }
+
                 if (!c.isEnchanted()) {
                     return true;
                 }
@@ -455,6 +470,65 @@ public class AttachAi extends SpellAbilityAi {
         return c;
     }
 
+    // Cards that trigger on dealing damage
+    private static Card attachAICuriosityPreference(final SpellAbility sa, final List<Card> list, final boolean mandatory,
+                                                    final Card attachSource) {
+        Card chosen = null;
+        int priority = 0;
+        for (Card card : list) {
+            int cardPriority = 0;
+            // Prefer Evasion
+            if (card.hasKeyword("Trample")) {
+                cardPriority += 10;
+            }
+            if (card.hasKeyword("Menace")) {
+                cardPriority += 10;
+            }
+            // Avoid this for Sleepers Robe?
+            if (card.hasKeyword("Fear")) {
+                cardPriority += 15;
+            }
+            if (card.hasKeyword("Flying")) {
+                cardPriority += 20;
+            }
+            if (card.hasKeyword("Shadow")) {
+                cardPriority += 30;
+            }
+            if (card.hasKeyword("Horsemanship")) {
+                cardPriority += 40;
+            }
+            if (card.hasKeyword("Unblockable")) {
+                cardPriority += 50;
+            }
+            // Prefer "tap to deal damage"
+            // TODO : Skip this one if triggers on combat damage only?
+            for (SpellAbility sa2 : card.getSpellAbilities()) {
+                if ((sa2.getApi().equals(ApiType.DealDamage))
+                        && (sa2.getTargetRestrictions().canTgtPlayer())) {
+                    cardPriority += 300;
+                }
+            }
+            // Prefer stronger creatures, avoid if can't attack
+            cardPriority += card.getCurrentToughness() * 2;
+            cardPriority += card.getCurrentPower();
+            if (card.getCurrentPower() <= 0) {
+                cardPriority = -100;
+            }
+            if (card.hasKeyword("Defender")) {
+                cardPriority = -100;
+            }
+            if (card.hasKeyword("Indestructible")) {
+                cardPriority += 15;
+            }
+            if (cardPriority > priority) {
+                priority = cardPriority;
+                chosen = card;
+            }
+        }
+
+
+        return chosen;
+    }
     /**
      * Attach ai specific card preference.
      * 
@@ -478,7 +552,9 @@ public class AttachAi extends SpellAbilityAi {
         if ("Guilty Conscience".equals(sourceName)) {
             chosen = SpecialCardAi.GuiltyConscience.getBestAttachTarget(ai, sa, list);
         } else if ("Bonds of Faith".equals(sourceName)) {
-            chosen = SpecialCardAi.BondsOfFaith.getBestAttachTarget(ai, sa, list);
+            chosen = doPumpOrCurseAILogic(ai, sa, list, "Human");
+        } else if ("Clutch of Undeath".equals(sourceName)) {
+            chosen = doPumpOrCurseAILogic(ai, sa, list, "Zombie");
         }
 
         // If Mandatory (brought directly into play without casting) gotta
@@ -488,6 +564,44 @@ public class AttachAi extends SpellAbilityAi {
         }
 
         return chosen;
+    }
+
+    private static Card attachAIInstantReequipPreference(final SpellAbility sa, final Card attachSource) {
+        // e.g. Cranial Plating
+        PhaseHandler ph = attachSource.getGame().getPhaseHandler();
+        Combat combat = attachSource.getGame().getCombat();
+        Card equipped = sa.getHostCard().getEquipping();
+        if (equipped == null) {
+            return null;
+        }
+
+        int powerBuff = 0;
+        for (StaticAbility stAb : sa.getHostCard().getStaticAbilities()) {
+            if ("Card.EquippedBy".equals(stAb.getParam("Affected")) && stAb.hasParam("AddPower")) {
+                powerBuff = AbilityUtils.calculateAmount(sa.getHostCard(), stAb.getParam("AddPower"), null);
+            }
+        }
+        if (combat != null && combat.isAttacking(equipped) && ph.is(PhaseType.COMBAT_DECLARE_BLOCKERS, sa.getActivatingPlayer())) {
+            int damage = 0;
+            for (Card c : combat.getUnblockedAttackers()) {
+                damage += ComputerUtilCombat.predictDamageTo(combat.getDefenderPlayerByAttacker(equipped), c.getNetCombatDamage(), c, true);
+            }
+            if (combat.isBlocked(equipped)) {
+                for (Card atk : combat.getAttackers()) {
+                    if (!combat.isBlocked(atk) && !ComputerUtil.predictThreatenedObjects(sa.getActivatingPlayer(), null).contains(atk)) {
+                        if (ComputerUtilCombat.predictDamageTo(combat.getDefenderPlayerByAttacker(atk),
+                                atk.getNetCombatDamage(), atk, true) > 0) {
+                            if (damage + powerBuff >= combat.getDefenderPlayerByAttacker(atk).getLife()) {
+                                sa.resetTargets(); // this is needed to avoid bugs with adding two targets to a single SA
+                                return atk; // lethal damage, we can win right now, so why not?
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
     // Should generalize this code a bit since they all have similar structures
@@ -1022,9 +1136,9 @@ public class AttachAi extends SpellAbilityAi {
             return null;
         }
         CardCollection prefList = list;
-        if (sa.hasParam("AITgts")) {
-            prefList = CardLists.getValidCards(list, sa.getParam("AITgts"), sa.getActivatingPlayer(), attachSource);
-        }
+
+        // Filter AI-specific targets if provided
+        prefList = ComputerUtil.filterAITgts(sa, aiPlayer, (CardCollection)list, true);
 
         Card c = attachGeneralAI(aiPlayer, sa, prefList, mandatory, attachSource, sa.getParam("AILogic"));
 
@@ -1035,6 +1149,10 @@ public class AttachAi extends SpellAbilityAi {
             if (c.equals(attachSource.getEquipping())) {
                 // Do not equip if equipping the same card already
                 return null;
+            }
+
+            if ("InstantReequipPowerBuff".equals(sa.getParam("AILogic"))) {
+                return c;
             }
 
             boolean uselessCreature = ComputerUtilCard.isUselessCreature(aiPlayer, attachSource.getEquipping());
@@ -1053,10 +1171,10 @@ public class AttachAi extends SpellAbilityAi {
             // make sure to prioritize casting spells in main 2 (creatures, other equipment, etc.) rather than moving equipment around
             boolean decideMoveFromUseless = uselessCreature && aic.getBooleanProperty(AiProps.PRIORITIZE_MOVE_EQUIPMENT_IF_USELESS);
 
-            if (!decideMoveFromUseless && AiCardMemory.isMemorySetEmpty(aiPlayer, AiCardMemory.MemorySet.HELD_MANA_SOURCES)) {
+            if (!decideMoveFromUseless && AiCardMemory.isMemorySetEmpty(aiPlayer, AiCardMemory.MemorySet.HELD_MANA_SOURCES_FOR_MAIN2)) {
                 SpellAbility futureSpell = aic.predictSpellToCastInMain2(ApiType.Attach);
                 if (futureSpell != null && futureSpell.getHostCard() != null) {
-                    aic.reserveManaSourcesForMain2(futureSpell);
+                    aic.reserveManaSources(futureSpell);
                 }
             }
 
@@ -1099,7 +1217,7 @@ public class AttachAi extends SpellAbilityAi {
     private static Card attachGeneralAI(final Player ai, final SpellAbility sa, final List<Card> list, final boolean mandatory,
             final Card attachSource, final String logic) {
         Player prefPlayer = ai.getWeakestOpponent();
-        if ("Pump".equals(logic) || "Animate".equals(logic)) {
+        if ("Pump".equals(logic) || "Animate".equals(logic) || "Curiosity".equals(logic)) {
             prefPlayer = ai;
         }
         // Some ChangeType cards are beneficial, and PrefPlayer should be
@@ -1111,6 +1229,12 @@ public class AttachAi extends SpellAbilityAi {
             prefList = list;
         } else {
             prefList = CardLists.filterControlledBy(list, prefPlayer);
+        }
+
+        // AI logic types that do not require a prefList and that evaluate the
+        // usefulness of attach action autonomously
+        if ("InstantReequipPowerBuff".equals(logic)) {
+            return attachAIInstantReequipPreference(sa, attachSource);
         }
 
         // If there are no preferred cards, and not mandatory bail out
@@ -1127,6 +1251,8 @@ public class AttachAi extends SpellAbilityAi {
             c = attachAICursePreference(sa, prefList, mandatory, attachSource);
         } else if ("Pump".equals(logic)) {
             c = attachAIPumpPreference(ai, sa, prefList, mandatory, attachSource);
+        } else if ("Curiosity".equals(logic)) {
+            c = attachAICuriosityPreference(sa, prefList, mandatory, attachSource);
         } else if ("ChangeType".equals(logic)) {
             c = attachAIChangeTypePreference(sa, prefList, mandatory, attachSource);
         } else if ("KeepTapped".equals(logic)) {
@@ -1263,9 +1389,9 @@ public class AttachAi extends SpellAbilityAi {
             if (card.hasKeyword("Flying") || !CombatUtil.canBlock(card, true)) {
                 return false;
             }
-        } else if (keyword.endsWith("CARDNAME can block an additional creature.")) {
+        } else if (keyword.endsWith("CARDNAME can block an additional creature each combat.")) {
             if (!CombatUtil.canBlock(card, true) || card.hasKeyword("CARDNAME can block any number of creatures.")
-                    || card.hasKeyword("CARDNAME can block an additional ninety-nine creatures.")) {
+                    || card.hasKeyword("CARDNAME can block an additional ninety-nine creatures each combat.")) {
                 return false;
             }
         } else if (keyword.equals("CARDNAME can attack as though it didn't have defender.")) {
@@ -1360,6 +1486,43 @@ public class AttachAi extends SpellAbilityAi {
         }
 
         return true;
+    }
+
+    public static Card doPumpOrCurseAILogic(final Player ai, final SpellAbility sa, final List<Card> list, final String type) {
+        Card chosen = null;
+
+        List<Card> aiType = CardLists.filter(list, new Predicate<Card>() {
+            @Override
+            public boolean apply(final Card c) {
+                // Don't buff opponent's creatures of given type
+                if (!c.getController().equals(ai)) {
+                    return false;
+                }
+                return c.getType().hasCreatureType(type);
+            }
+        });
+        List<Card> oppNonType = CardLists.filter(list, new Predicate<Card>() {
+            @Override
+            public boolean apply(final Card c) {
+                // Don't debuff AI's own creatures not of given type
+                if (c.getController().equals(ai)) {
+                    return false;
+                }
+                return !c.getType().hasCreatureType(type) && !ComputerUtilCard.isUselessCreature(ai, c);
+            }
+        });
+
+        if (!aiType.isEmpty() && !oppNonType.isEmpty()) {
+            Card bestAi = ComputerUtilCard.getBestCreatureAI(aiType);
+            Card bestOpp = ComputerUtilCard.getBestCreatureAI(oppNonType);
+            chosen = ComputerUtilCard.evaluateCreature(bestAi) > ComputerUtilCard.evaluateCreature(bestOpp) ? bestAi : bestOpp;
+        } else if (!aiType.isEmpty()) {
+            chosen = ComputerUtilCard.getBestCreatureAI(aiType);
+        } else if (!oppNonType.isEmpty()) {
+            chosen = ComputerUtilCard.getBestCreatureAI(oppNonType);
+        }
+
+        return chosen;
     }
 
     @Override

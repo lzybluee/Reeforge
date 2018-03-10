@@ -4,12 +4,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import forge.card.MagicColor;
+import forge.util.TextUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.Lists;
 
 import forge.card.CardType;
-import forge.card.MagicColor;
 import forge.game.Game;
 import forge.game.GameObject;
 import forge.game.card.Card;
@@ -43,9 +44,6 @@ public abstract class SpellAbilityEffect {
 
     protected String getStackDescription(final SpellAbility sa) {
         // Unless overriden, let the spell description also be the stack description
-        if (sa.getHostCard() != null) {
-            return sa.getDescription().replaceAll("CARDNAME", sa.getHostCard().getName());
-        }
         return sa.getDescription();
     }
 
@@ -80,7 +78,8 @@ public abstract class SpellAbilityEffect {
         if (stackDesc != null) {
             if ("SpellDescription".equalsIgnoreCase(stackDesc)) { // by typing "none" they want to suppress output
                 if (params.get("SpellDescription") != null) {
-                    sb.append(params.get("SpellDescription").replaceAll("CARDNAME", sa.getHostCard().getName()));
+                    sb.append(TextUtil.fastReplace(params.get("SpellDescription"),
+                            "CARDNAME", sa.getHostCard().getName()));
                 }
                 if (sa.getTargets() != null && !sa.getTargets().getTargets().isEmpty()) {
                     sb.append(" (Targeting: " + sa.getTargets().getTargets() + ")");
@@ -109,12 +108,14 @@ public abstract class SpellAbilityEffect {
         if (sa.hasParam("Announce")) {
             String svar = sa.getParam("Announce");
             int amount = CardFactoryUtil.xCount(sa.getHostCard(), sa.getSVar(svar));
-            sb.append(String.format(" (%s=%d)", svar, amount));
+            sb.append(" ");
+            sb.append(TextUtil.enclosedParen(TextUtil.concatNoSpace(svar,"=",String.valueOf(amount))));
         } else{
             if (sa.getPayCosts() != null && sa.getPayCosts().getCostMana() != null &&
                     sa.getPayCosts().getCostMana().getAmountOfX() > 0) {
                 int amount = sa.getHostCard().getXManaCostPaid();
-                sb.append(String.format(" (%s=%d)", "X", amount));
+                sb.append(" ");
+                sb.append(TextUtil.enclosedParen(TextUtil.concatNoSpace("X","=",String.valueOf(amount))));
             }
         }
 
@@ -145,7 +146,7 @@ public abstract class SpellAbilityEffect {
             if ("}".equals(t)) { isPlainText = true; continue; }
 
             if (isPlainText) {
-                sb.append(t.replaceAll("CARDNAME", sa.getHostCard().getName()));
+                sb.append(TextUtil.fastReplace(t, "CARDNAME", sa.getHostCard().getName()));
             } else {
                 final List<? extends GameObject> objs;
                 if (t.startsWith("p:")) {
@@ -217,30 +218,39 @@ public abstract class SpellAbilityEffect {
         boolean your = location.startsWith("Your");
         boolean combat = location.endsWith("Combat");
 
+        String desc = sa.hasParam("AtEOTDesc") ? sa.getParam("AtEOTDesc") : "";
+        
         if (your) {
             location = location.substring("Your".length());
         }
         if (combat) {
             location = location.substring(0, location.length() - "Combat".length());
         }
+        
+        if (desc.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(location).append(" ");
+            sb.append(Lang.joinHomogenous(crds));
+            sb.append(" at the ");
+            if (combat) {
+                sb.append("end of combat.");
+            } else {
+                sb.append("beginning of ");
+                sb.append(your ? "your" : "the");
+                sb.append(" next end step.");
+            }
+            desc = sb.toString();
+        }
 
         StringBuilder delTrig = new StringBuilder();
-            delTrig.append("Mode$ Phase | Phase$ ");
-            delTrig.append(combat ? "EndCombat "  : "End Of Turn ");
+        delTrig.append("Mode$ Phase | Phase$ ");
+        delTrig.append(combat ? "EndCombat "  : "End Of Turn ");
  
-            if (your) {
-                delTrig.append("| ValidPlayer$ You ");
-            }
-            delTrig.append("| TriggerDescription$ " + location + " ");
-            delTrig.append(Lang.joinHomogenous(crds));
-            delTrig.append(" at the ");
-            if (combat) {
-                delTrig.append("end of combat.");
-            } else {
-                delTrig.append("beginning of ");
-                delTrig.append(your ? "your" : "the");
-                delTrig.append(" next end step.");
-            }
+        if (your) {
+            delTrig.append("| ValidPlayer$ You ");
+        }
+        delTrig.append("| TriggerDescription$ " + desc);
+        
         final Trigger trig = TriggerHandler.parseTrigger(delTrig.toString(), sa.getHostCard(), intrinsic);
         for (final Card c : crds) {
             trig.addRemembered(c);
@@ -252,6 +262,10 @@ public abstract class SpellAbilityEffect {
             trigSA = "DB$ ChangeZone | Defined$ DelayTriggerRemembered | Origin$ Battlefield | Destination$ Exile";
         } else if (location.equals("Destroy")) {
             trigSA = "DB$ Destroy | Defined$ DelayTriggerRemembered";
+        }
+        if (sa.hasParam("AtEOTCondition")) {
+            String var = sa.getParam("AtEOTCondition");
+            trigSA += "| ConditionCheckSVar$ " + var + "| References$ " + var;
         }
         final SpellAbility newSa = AbilityFactory.getAbility(trigSA, sa.getHostCard());
         newSa.setIntrinsic(intrinsic);
@@ -278,9 +292,16 @@ public abstract class SpellAbilityEffect {
     
     protected static void addForgetOnMovedTrigger(final Card card, final String zone) {
         String trig = "Mode$ ChangesZone | ValidCard$ Card.IsRemembered | Origin$ " + zone + " | Destination$ Any | TriggerZones$ Command | Static$ True";
-        String effect = "DB$ Pump | ForgetObjects$ TriggeredCard";
+        String forgetEffect = "DB$ Pump | ForgetObjects$ TriggeredCard";
+        String exileEffect = "DB$ ChangeZone | Defined$ Self | Origin$ Command | Destination$ Exile"
+                + " | ConditionDefined$ Remembered | ConditionPresent$ Card | ConditionCompare$ EQ0";
+        
+        SpellAbility saForget = AbilityFactory.getAbility(forgetEffect, card);
+        AbilitySub saExile = (AbilitySub) AbilityFactory.getAbility(exileEffect, card);
+        saForget.setSubAbility(saExile);
+        
         final Trigger parsedTrigger = TriggerHandler.parseTrigger(trig, card, true);
-        parsedTrigger.setOverridingAbility(AbilityFactory.getAbility(effect, card));
+        parsedTrigger.setOverridingAbility(saForget);
         final Trigger addedTrigger = card.addTrigger(parsedTrigger);
         addedTrigger.setIntrinsic(true);
     }
@@ -340,10 +361,10 @@ public abstract class SpellAbilityEffect {
         final Card eff = new Card(game.nextCardId(), game);
         eff.setTimestamp(game.getNextTimestamp());
         eff.setName(name);
-        // if name includes emplem then it should be one
-        eff.addType(name.endsWith("emblem") ? "Emblem" : "Effect");
+        // if name includes emblem then it should be one
+        eff.addType(name.startsWith("Emblem") ? "Emblem" : "Effect");
         // add Planeswalker types into Emblem for fun
-        if (name.endsWith("emblem") && hostCard.isPlaneswalker()) {
+        if (name.startsWith("Emblem") && hostCard.isPlaneswalker()) {
             for (final String type : hostCard.getType().getSubtypes()) {
                 if (CardType.isAPlaneswalkerType(type)) {
                     eff.addType(type);

@@ -24,11 +24,11 @@ import forge.game.ability.AbilityFactory;
 import forge.game.ability.ApiType;
 import forge.game.ability.effects.CharmEffect;
 import forge.game.card.Card;
+import forge.game.card.CardState;
 import forge.game.phase.PhaseHandler;
 import forge.game.phase.PhaseType;
 import forge.game.player.Player;
 import forge.game.spellability.Ability;
-import forge.game.spellability.AbilitySub;
 import forge.game.spellability.OptionalCost;
 import forge.game.spellability.SpellAbility;
 import forge.game.zone.ZoneType;
@@ -37,6 +37,7 @@ import java.util.*;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import forge.util.TextUtil;
 
 /**
  * <p>
@@ -44,12 +45,11 @@ import com.google.common.collect.Maps;
  * </p>
  * 
  * @author Forge
- * @version $Id: Trigger.java 35006 2017-08-12 09:53:55Z Agetian $
+ * @version $Id$
  */
 public abstract class Trigger extends TriggerReplacementBase {
-
-    /** Constant <code>nextID=0</code>. */
-    private static int nextID = 0;
+    private static int maxId = 0;
+    private static int nextId() { return ++maxId; }
 
     /**
      * <p>
@@ -57,23 +57,12 @@ public abstract class Trigger extends TriggerReplacementBase {
      * </p>
      */
     public static void resetIDs() {
-        Trigger.nextID = 50000;
+        Trigger.maxId = 50000;
     }
 
     /** The ID. */
-    private int id = Trigger.nextID++;
+    private int id;
 
-    /**
-     * <p>
-     * setID.
-     * </p>
-     * 
-     * @param id
-     *            a int.
-     */
-    public final void setID(final int id) {
-        this.id = id;
-    }
 
     /** The run params. */
     private Map<String, Object> runParams;
@@ -129,9 +118,10 @@ public abstract class Trigger extends TriggerReplacementBase {
      *            the intrinsic
      */
     public Trigger(final Map<String, String> params, final Card host, final boolean intrinsic) {
+        this.id = nextId();
         this.intrinsic = intrinsic;
 
-        this.setRunParams(new HashMap<String, Object>());
+        this.setRunParams(Maps.newHashMap());
         this.originalMapParams.putAll(params);
         this.mapParams.putAll(params);
         this.setHostCard(host);
@@ -154,9 +144,15 @@ public abstract class Trigger extends TriggerReplacementBase {
 
             StringBuilder sb = new StringBuilder();
             String desc = this.mapParams.get("TriggerDescription");
-            desc = desc.replaceAll("CARDNAME", active ? getHostCard().toString() : getHostCard().getName());
+            if(active)
+                desc = TextUtil.fastReplace(desc, "CARDNAME", getHostCard().toString());
+            else
+                desc = TextUtil.fastReplace(desc, "CARDNAME", getHostCard().getName());
             if (getHostCard().getEffectSource() != null) {
-                desc = desc.replace("EFFECTSOURCE", active ? getHostCard().getEffectSource().toString() : getHostCard().getEffectSource().getName());
+                if(active)
+                    desc = TextUtil.fastReplace(desc, "EFFECTSOURCE", getHostCard().getEffectSource().toString());
+                else
+                    desc = TextUtil.fastReplace(desc, "EFFECTSOURCE", getHostCard().getEffectSource().getName());
             }
             sb.append(desc);
             if (!this.triggerRemembered.isEmpty()) {
@@ -168,6 +164,21 @@ public abstract class Trigger extends TriggerReplacementBase {
         }
     }
 
+    public final String replaceAbilityText(final String desc, final CardState state) {
+        // this function is for ABILITY
+        if (!desc.contains("ABILITY")) {
+            return desc;
+        }
+        SpellAbility sa = getOverridingAbility();
+        if (sa == null && this.mapParams.containsKey("Execute")) {
+            sa = AbilityFactory.getAbility(state, this.mapParams.get("Execute"));
+            setOverridingAbility(sa);
+        }
+
+        return replaceAbilityText(desc, sa);
+        
+    }
+    
     public final String replaceAbilityText(final String desc, SpellAbility sa) {
         String result = desc;
 
@@ -175,13 +186,8 @@ public abstract class Trigger extends TriggerReplacementBase {
         if (!result.contains("ABILITY")) {
             return result;
         }
-
-        // it has already sa, used in WrappedAbility
         if (sa == null) {
             sa = getOverridingAbility();
-        }
-        if (sa == null && this.mapParams.containsKey("Execute")) {
-             sa = AbilityFactory.getAbility(hostCard, this.mapParams.get("Execute"));
         }
         if (sa != null) {
             String saDesc;
@@ -207,9 +213,10 @@ public abstract class Trigger extends TriggerReplacementBase {
                 // string might have leading whitespace
                 saDesc = saDesc.trim();
                 saDesc = saDesc.substring(0, 1).toLowerCase() + saDesc.substring(1);
-                result = result.replace("ABILITY", saDesc);
+                result = TextUtil.fastReplace(result, "ABILITY", saDesc);
             }
         }
+
         return result;
     }
 
@@ -443,11 +450,23 @@ public abstract class Trigger extends TriggerReplacementBase {
 
     /**
      * Gets the id.
-     * 
+     *
      * @return the id
      */
     public int getId() {
         return this.id;
+    }
+
+    /**
+     * <p>
+     * setID.
+     * </p>
+     *
+     * @param id
+     *            a int.
+     */
+    public final void setId(final int id) {
+        this.id = id;
     }
 
     private Ability triggeredSA;
@@ -496,29 +515,25 @@ public abstract class Trigger extends TriggerReplacementBase {
     void setMode(TriggerType triggerType) {
         mode = triggerType;
     }
-    
 
-    public final Trigger getCopyForHostCard(Card newHost) {
-        final TriggerType tt = TriggerType.getTypeFor(this);
-        final Trigger copy = tt.createTrigger(originalMapParams, newHost, intrinsic); 
+    public final Trigger copy(Card newHost, boolean lki) {
+        final Trigger copy = (Trigger) clone();
 
-        if (this.getOverridingAbility() != null) {
-            SpellAbility old = this.getOverridingAbility();
-            SpellAbility sa = old;
-            // try to copy it if newHost is not the wanted host
-            if (!newHost.equals(old.getHostCard())) {
-	            if (old instanceof AbilitySub) {
-	                sa = ((AbilitySub)old).getCopy();
-	                sa.setHostCard(newHost);
-	            }
-            }
-            copy.setOverridingAbility(sa);
+        copy.originalMapParams.putAll(originalMapParams);
+        copy.mapParams.putAll(originalMapParams);
+        copy.setHostCard(newHost);
+
+        if (getOverridingAbility() != null) {
+            copy.setOverridingAbility(getOverridingAbility().copy(newHost, lki));
         }
 
-        // 2015-03-07 Removing the ID copying which makes copied triggers Identical to each other when removing
-        //copy.setID(this.getId());
-        copy.setMode(this.getMode());
-        copy.setTriggerPhases(this.validPhases);
+        if (!lki) {
+            copy.setId(nextId());
+        }
+
+        if (validPhases != null) {
+            copy.setTriggerPhases(Lists.newArrayList(validPhases));
+        }
         copy.setActiveZone(validHostZones);
         copy.setTemporary(isTemporary());
         return copy;
@@ -548,5 +563,15 @@ public abstract class Trigger extends TriggerReplacementBase {
     public void resetTurnState()
     {
         this.numberTurnActivations = 0;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public final Object clone() {
+        try {
+            return super.clone();
+        } catch (final Exception ex) {
+            throw new RuntimeException("Trigger : clone() error, " + ex);
+        }
     }
 }

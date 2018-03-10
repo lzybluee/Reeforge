@@ -41,6 +41,7 @@ import forge.game.trigger.Trigger;
 import forge.game.trigger.TriggerType;
 import forge.game.zone.ZoneType;
 import forge.util.CollectionSuppliers;
+import forge.util.TextUtil;
 import forge.util.collect.FCollectionView;
 import forge.util.maps.HashMapOfLists;
 import forge.util.maps.MapOfLists;
@@ -180,8 +181,6 @@ public class PhaseHandler implements java.io.Serializable {
 
             final List<Card> lands = CardLists.filter(playerTurn.getLandsInPlay(), Presets.UNTAPPED);
             playerTurn.setNumPowerSurgeLands(lands.size());
-
-            game.fireEvent(new GameEventZone(ZoneType.Battlefield, playerTurn, EventValueChangeType.ComplexUpdate, null));
         }
 
         game.fireEvent(new GameEventTurnPhase(playerTurn, phase, phaseType));
@@ -350,13 +349,8 @@ public class PhaseHandler implements java.io.Serializable {
                     int numDiscard = playerTurn.isUnlimitedHandSize() || handSize <= max || handSize == 0 ? 0 : handSize - max;
 
                     if (numDiscard > 0) {
-                        CardCollection discarded = new CardCollection();
                         for (Card c : playerTurn.getController().chooseCardsToDiscardToMaximumHandSize(numDiscard)){
                             playerTurn.discard(c, null);
-                            discarded.add(c);
-                        }
-                        if(discarded.size() > 0) {
-                            game.getAction().reveal(discarded, playerTurn, true);
                         }
                     }
 
@@ -992,7 +986,7 @@ public class PhaseHandler implements java.io.Serializable {
             if (game.isGameOver() || nextPlayer == null) { return; } // conceded?
 
             if (DEBUG_PHASES) {
-                System.out.println(String.format("%s %s: %s is active, previous was %s", playerTurn, phase, pPlayerPriority, nextPlayer));
+                System.out.println(TextUtil.concatWithSpace(playerTurn.toString(),TextUtil.addSuffix(phase.toString(),":"), pPlayerPriority.toString(),"is active, previous was", nextPlayer.toString()));
             }
             if (pFirstPriority == nextPlayer) {
                 if (game.getStack().isEmpty()) {
@@ -1060,13 +1054,14 @@ public class PhaseHandler implements java.io.Serializable {
 
     // this is a hack for the setup game state mode, do not use outside of devSetupGameState code
     // as it avoids calling any of the phase effects that may be necessary in a less enforced context
-    public final void devModeSet(final PhaseType phase0, final Player player0, boolean endCombat) {
+    public final void devModeSet(final PhaseType phase0, final Player player0, boolean endCombat, int cturn) {
         if (phase0 != null) {
             setPhase(phase0);
         }
         if (player0 != null) {
             setPlayerTurn(player0);
         }
+        turn = cturn;
 
         game.fireEvent(new GameEventTurnPhase(playerTurn, phase, ""));
         if (endCombat) {
@@ -1074,8 +1069,17 @@ public class PhaseHandler implements java.io.Serializable {
         }
     }
     public final void devModeSet(final PhaseType phase0, final Player player0) {
-        devModeSet(phase0, player0, true);
+        devModeSet(phase0, player0, true, 1);
     }
+
+    public final void devModeSet(final PhaseType phase0, final Player player0, int cturn) {
+        devModeSet(phase0, player0, true, cturn);
+    }
+
+    public final void devModeSet(final PhaseType phase0, final Player player0, boolean endCombat) {
+        devModeSet(phase0, player0, endCombat, 0);
+    }
+
 
     public final void endTurnByEffect() {
         endCombat();

@@ -1,10 +1,13 @@
 package forge.ai;
 
 import com.google.common.base.Function;
+
+import forge.game.ability.AbilityUtils;
 import forge.game.ability.ApiType;
 import forge.game.card.Card;
 import forge.game.card.CounterType;
 import forge.game.cost.CostPayEnergy;
+import forge.game.keyword.KeywordInterface;
 import forge.game.spellability.SpellAbility;
 
 public class CreatureEvaluator implements Function<Card, Integer> {
@@ -21,13 +24,18 @@ public class CreatureEvaluator implements Function<Card, Integer> {
     }
 
     public int evaluateCreature(final Card c) {
+        return evaluateCreature(c, true, true);
+    }
+
+    public int evaluateCreature(final Card c, final boolean considerPT, final boolean considerCMC) {
         int value = 80;
         if (!c.isToken()) {
             value += addValue(20, "non-token"); // tokens should be worth less than actual cards
         }
         int power = getEffectivePower(c);
         final int toughness = getEffectiveToughness(c);
-        for (String keyword : c.getKeywords()) {
+        for (KeywordInterface kw : c.getKeywords()) {
+            String keyword = kw.getOriginal();
             if (keyword.equals("Prevent all combat damage that would be dealt by CARDNAME.")
                     || keyword.equals("Prevent all damage that would be dealt by CARDNAME.")
                     || keyword.equals("Prevent all combat damage that would be dealt to and dealt by CARDNAME.")
@@ -36,9 +44,13 @@ public class CreatureEvaluator implements Function<Card, Integer> {
                 break;
             }
         }
-        value += addValue(power * 15, "power");
-        value += addValue(toughness * 10, "toughness: " + toughness);
-        value += addValue(c.getCMC() * 5, "cmc");
+        if (considerPT) {
+            value += addValue(power * 15, "power");
+            value += addValue(toughness * 10, "toughness: " + toughness);
+        }
+        if (considerCMC) {
+            value += addValue(c.getCMC() * 5, "cmc");
+        }
     
         // Evasion keywords
         if (c.hasKeyword("Flying")) {
@@ -117,7 +129,7 @@ public class CreatureEvaluator implements Function<Card, Integer> {
         if (c.hasKeyword("CARDNAME can block creatures with shadow as though they didn't have shadow.")) {
             value += addValue(3, "shadow-block");
         }
-
+    
         // Protection
         if (c.hasKeyword("Indestructible")) {
             value += addValue(70, "darksteel");
@@ -155,11 +167,11 @@ public class CreatureEvaluator implements Function<Card, Integer> {
         } else if (c.hasKeyword("CARDNAME can block only creatures with flying.")) {
             value -= subValue(toughness * 5, "reverse-reach");
         }
-
+    
         if (c.hasSVar("DestroyWhenDamaged")) {
             value -= subValue((toughness - 1) * 9, "dies-to-dmg");
         }
-
+    
         if (c.hasKeyword("CARDNAME can't attack or block.")) {
             value = addValue(50 + (c.getCMC() * 5), "useless"); // reset everything - useless
         }
@@ -179,7 +191,7 @@ public class CreatureEvaluator implements Function<Card, Integer> {
         } else if (c.hasStartOfKeyword("Echo") && c.cameUnderControlSinceLastUpkeep()) {
             value -= subValue(10, "echo-unpaid");
         }
-
+    
         if (c.hasStartOfKeyword("At the beginning of your upkeep, CARDNAME deals")) {
             value -= subValue(20, "upkeep-dmg");
         } 
@@ -192,7 +204,7 @@ public class CreatureEvaluator implements Function<Card, Integer> {
         if (c.getSVar("Targeting").equals("Dies")) {
             value -= subValue(25, "dies");
         }
-
+    
         for (final SpellAbility sa : c.getSpellAbilities()) {
             if (sa.isAbility()) {
                 value += addValue(evaluateSpellAbility(sa), "sa: " + sa);
@@ -201,11 +213,11 @@ public class CreatureEvaluator implements Function<Card, Integer> {
         if (!c.getManaAbilities().isEmpty()) {
             value += addValue(10, "manadork");
         }
-
+    
         if (c.isUntapped()) {
             value += addValue(1, "untapped");
         }
-
+    
         // paired creatures are more valuable because they grant a bonus to the other creature
         if (c.isPaired()) {
             value += addValue(14, "paired");
@@ -213,6 +225,12 @@ public class CreatureEvaluator implements Function<Card, Integer> {
 
         if (!c.getEncodedCards().isEmpty()) {
             value += addValue(24, "encoded");
+        }
+
+        // card-specific evaluation modifier
+        if (c.hasSVar("AIEvaluationModifier")) {
+            int mod = AbilityUtils.calculateAmount(c, c.getSVar("AIEvaluationModifier"), null);
+            value += mod;
         }
 
         return value;

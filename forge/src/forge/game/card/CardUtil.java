@@ -20,7 +20,6 @@ package forge.game.card;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -36,11 +35,14 @@ import forge.game.GameObject;
 import forge.game.ability.AbilityUtils;
 import forge.game.ability.ApiType;
 import forge.game.player.Player;
+import forge.game.replacement.ReplacementEffect;
 import forge.game.spellability.AbilityManaPart;
 import forge.game.spellability.AbilitySub;
 import forge.game.spellability.SpellAbility;
 import forge.game.spellability.TargetRestrictions;
+import forge.game.trigger.Trigger;
 import forge.game.zone.ZoneType;
+import forge.util.TextUtil;
 import forge.util.collect.FCollection;
 
 public final class CardUtil {
@@ -64,262 +66,6 @@ public final class CardUtil {
     public static final ImmutableList<String> modifiableKeywordEndings = ImmutableList.<String>builder().add(
             "walk", "cycling", "offering").build();
 
-    /**
-     * Map of plural type names to the corresponding singular form.
-     * So Clerics maps to Cleric, Demons to Demon, etc.
-     */
-    public static final ImmutableBiMap<String, String> singularTypes = ImmutableBiMap.<String, String>builder()
-            // Creature types
-            .put("Advisors", "Advisor")
-            .put("Aetherborn", "Aetherborn")
-            .put("Allies", "Ally")
-            .put("Angels", "Angel")
-            .put("Antelopes", "Antelope")
-            .put("Apes", "Ape")
-            .put("Archers", "Archer")
-            .put("Archons", "Archon")
-            .put("Artificers", "Artificer")
-            .put("Assassins", "Assassin")
-            .put("Assembly-Workers", "Assembly-Worker")
-            .put("Atogs", "Atog")
-            .put("Aurochs", "Aurochs")
-            .put("Avatars", "Avatar")
-            .put("Badgers", "Badger")
-            .put("Barbarians", "Barbarian")
-            .put("Basilisks", "Basilisk")
-            .put("Bats", "Bat")
-            .put("Bears", "Bear")
-            .put("Beasts", "Beast")
-            .put("Beebles", "Beeble")
-            .put("Berserkers", "Berserker")
-            .put("Birds", "Bird")
-            .put("Blinkmoths", "Blinkmoth")
-            .put("Boars", "Boar")
-            .put("Bringers", "Bringer")
-            .put("Brushwaggs", "Brushwagg")
-            .put("Camarids", "Camarid")
-            .put("Camels", "Camel")
-            .put("Caribous", "Caribou")
-            .put("Carriers", "Carrier")
-            .put("Cats", "Cat")
-            .put("Centaurs", "Centaur")
-            .put("Cephalids", "Cephalid")
-            .put("Chimeras", "Chimera")
-            .put("Citizens", "Citizen")
-            .put("Clerics", "Cleric")
-            .put("Cockatrices", "Cockatrice")
-            .put("Constructs", "Construct")
-            .put("Cowards", "Coward")
-            .put("Crabs", "Crab")
-            .put("Crocodiles", "Crocodile")
-            .put("Cyclopes", "Cyclops")
-            .put("Dauthis", "Dauthi")
-            .put("Demons", "Demon")
-            .put("Deserters", "Deserter")
-            .put("Devils", "Devil")
-            .put("Djinns", "Djinn")
-            .put("Dragons", "Dragon")
-            .put("Drakes", "Drake")
-            .put("Dreadnoughts", "Dreadnought")
-            .put("Drones", "Drone")
-            .put("Druids", "Druid")
-            .put("Dryads", "Dryad")
-            .put("Dwarves", "Dwarf")
-            .put("Efreets", "Efreet")
-            .put("Elders", "Elder")
-            .put("Eldrazi", "Eldrazi")
-            .put("Elementals", "Elemental")
-            .put("Elephants", "Elephant")
-            .put("Elves", "Elf")
-            .put("Elks", "Elk")
-            .put("Eyes", "Eye")
-            .put("Faeries", "Faerie")
-            .put("Ferrets", "Ferret")
-            .put("Fish", "Fish")
-            .put("Flagbearers", "Flagbearer")
-            .put("Foxes", "Fox")
-            .put("Frogs", "Frog")
-            .put("Fungi", "Fungus")
-            .put("Gargoyles", "Gargoyle")
-            .put("Germs", "Germ")
-            .put("Giants", "Giant")
-            .put("Gnomes", "Gnome")
-            .put("Goats", "Goat")
-            .put("Goblins", "Goblin")
-            .put("Gods", "God")
-            .put("Golems", "Golem")
-            .put("Gorgons", "Gorgon")
-            .put("Graveborn", "Graveborn")
-            .put("Gremlins", "Gremlin")
-            .put("Griffins", "Griffin")
-            .put("Hags", "Hag")
-            .put("Harpies", "Harpy")
-            .put("Hellions", "Hellion")
-            .put("Hippos", "Hippo")
-            .put("Hippogriffs", "Hippogriff")
-            .put("Homarids", "Homarid")
-            .put("Homunculi", "Homunculus")
-            .put("Horrors", "Horror")
-            .put("Horses", "Horse")
-            .put("Hounds", "Hound")
-            .put("Humans", "Human")
-            .put("Hydras", "Hydra")
-            .put("Hyenas", "Hyena")
-            .put("Illusions", "Illusion")
-            .put("Imps", "Imp")
-            .put("Incarnations", "Incarnation")
-            .put("Insects", "Insect")
-            .put("Jackals", "Jackal")
-            .put("Jellyfishes", "Jellyfish")
-            .put("Juggernauts", "Juggernaut")
-            .put("Kavu", "Kavu")
-            .put("Kirins", "Kirin")
-            .put("Kithkins", "Kithkin")
-            .put("Knights", "Knight")
-            .put("Kobolds", "Kobold")
-            .put("Kors", "Kor")
-            .put("Krakens", "Kraken")
-            .put("Lamias", "Lamia")
-            .put("Lammasus", "Lammasu")
-            .put("Leeches", "Leech")
-            .put("Leviathans", "Leviathan")
-            .put("Lhurgoyfs", "Lhurgoyf")
-            .put("Licids", "Licid")
-            .put("Lizards", "Lizard")
-            .put("Manticores", "Manticore")
-            .put("Masticores", "Masticore")
-            .put("Mercenaries", "Mercenary")
-            .put("Merfolks", "Merfolk")
-            .put("Metathrans", "Metathran")
-            .put("Minions", "Minion")
-            .put("Minotaurs", "Minotaur")
-            .put("Moles", "Mole")
-            .put("Mongers", "Monger")
-            .put("Mongooses", "Mongoose")
-            .put("Monks", "Monk")
-            .put("Monkeys", "Monkey")
-            .put("Moonfolks", "Moonfolk")
-            .put("Mutants", "Mutant")
-            .put("Myrs", "Myr")
-            .put("Mystics", "Mystic")
-            .put("Nagas", "Naga")
-            .put("Nautili", "Nautilus")
-            .put("Nephilims", "Nephilim")
-            .put("Nightmares", "Nightmare")
-            .put("Nightstalkers", "Nightstalker")
-            .put("Ninjas", "Ninja")
-            .put("Noggles", "Noggle")
-            .put("Nomads", "Nomad")
-            .put("Nymphs", "Nymph")
-            .put("Octopi", "Octopus")
-            .put("Ogres", "Ogre")
-            .put("Oozes", "Ooze")
-            .put("Orbs", "Orb")
-            .put("Orcs", "Orc")
-            .put("Orggs", "Orgg")
-            .put("Ouphes", "Ouphe")
-            .put("Oxen", "Ox")
-            .put("Oysters", "Oyster")
-            .put("Pegasi", "Pegasus")
-            .put("Pentavites", "Pentavite")
-            .put("Pests", "Pest")
-            .put("Phelddagrifs", "Phelddagrif")
-            .put("Phoenixes", "Phoenix")
-            .put("Pilots", "Pilot")
-            .put("Pinchers", "Pincher")
-            .put("Pirates", "Pirate")
-            .put("Plants", "Plant")
-            .put("Praetors", "Praetor")
-            .put("Prisms", "Prism")
-            .put("Processors", "Processor")
-            .put("Rabbits", "Rabbit")
-            .put("Rats", "Rat")
-            .put("Rebels", "Rebel")
-            .put("Reflections", "Reflection")
-            .put("Rhinos", "Rhino")
-            .put("Riggers", "Rigger")
-            .put("Rogues", "Rogue")
-            .put("Sables", "Sable")
-            .put("Salamanders", "Salamander")
-            .put("Samurais", "Samurai")
-            .put("Sands", "Sand")
-            .put("Saprolings", "Saproling")
-            .put("Satyrs", "Satyr")
-            .put("Scarecrows", "Scarecrow")
-            .put("Scions", "Scion")
-            .put("Scorpions", "Scorpion")
-            .put("Scouts", "Scout")
-            .put("Serfs", "Serf")
-            .put("Serpents", "Serpent")
-            .put("Servos", "Servo")
-            .put("Shades", "Shade")
-            .put("Shamans", "Shaman")
-            .put("Shapeshifters", "Shapeshifter")
-            .put("Sheep", "Sheep")
-            .put("Sirens", "Siren")
-            .put("Skeletons", "Skeleton")
-            .put("Sliths", "Slith")
-            .put("Slivers", "Sliver")
-            .put("Slugs", "Slug")
-            .put("Snakes", "Snake")
-            .put("Soldiers", "Soldier")
-            .put("Soltaris", "Soltari")
-            .put("Spawns", "Spawn")
-            .put("Specters", "Specter")
-            .put("Spellshapers", "Spellshaper")
-            .put("Sphinxes", "Sphinx")
-            .put("Spiders", "Spider")
-            .put("Spikes", "Spike")
-            .put("Spirits", "Spirit")
-            .put("Splinters", "Splinter")
-            .put("Sponges", "Sponge")
-            .put("Squids", "Squid")
-            .put("Squirrels", "Squirrel")
-            .put("Starfish", "Starfish")
-            .put("Surrakars", "Surrakar")
-            .put("Survivors", "Survivor")
-            .put("Tetravites", "Tetravite")
-            .put("Thalakoses", "Thalakos")
-            .put("Thopters", "Thopter")
-            .put("Thrulls", "Thrull")
-            .put("Treefolks", "Treefolk")
-            .put("Triskelavites", "Triskelavite")
-            .put("Trolls", "Troll")
-            .put("Turtles", "Turtle")
-            .put("Unicorns", "Unicorn")
-            .put("Vampires", "Vampire")
-            .put("Vedalkens", "Vedalken")
-            .put("Viashinos", "Viashino")
-            .put("Volvers", "Volver")
-            .put("Walls", "Wall")
-            .put("Warriors", "Warrior")
-            .put("Weirds", "Weird")
-            .put("Werewolves", "Werewolf")
-            .put("Whales", "Whale")
-            .put("Wizards", "Wizard")
-            .put("Wolves", "Wolf")
-            .put("Wolverines", "Wolverine")
-            .put("Wombats", "Wombat")
-            .put("Worms", "Worm")
-            .put("Wraiths", "Wraith")
-            .put("Wurms", "Wurm")
-            .put("Yetis", "Yeti")
-            .put("Zombies", "Zombie")
-            .put("Zuberas", "Zubera")
-
-            // Land Types
-            .put("Mountains", "Mountain")
-            .put("Forests", "Forest")
-            .put("Islands", "Island")
-            .put("Swamps", "Swamp")
-
-            .build();
-    /**
-     * Map of singular type names to the corresponding plural form.
-     * So Cleric maps to Clerics, Demon to Demons, etc.
-     */
-    public static final ImmutableBiMap<String, String> pluralTypes = singularTypes.inverse();
-
     public static final boolean isKeywordModifiable(final String kw) {
         for (final String modKw : modifiableKeywords) {
             if (kw.startsWith(modKw)) {
@@ -332,32 +78,6 @@ public final class CardUtil {
             }
         }
         return false;
-    }
-
-    /**
-     * If the input is a plural type, return the corresponding singular form.
-     * Otherwise, simply return the input.
-     * @param type a String.
-     * @return the corresponding type.
-     */
-    public static final String getSingularType(final String type) {
-        if (singularTypes.containsKey(type)) {
-            return singularTypes.get(type);
-        }
-        return type;
-    }
-
-    /**
-     * If the input is a singular type, return the corresponding plural form.
-     * Otherwise, simply return the input.
-     * @param type a String.
-     * @return the corresponding type.
-     */
-    public static final String getPluralType(final String type) {
-        if (pluralTypes.containsKey(type)) {
-            return pluralTypes.get(type);
-        }
-        return type;
     }
 
     public static ColorSet getColors(final Card c) {
@@ -486,23 +206,38 @@ public final class CardUtil {
         newCopy.setSetCode(in.getSetCode());
         newCopy.setOwner(in.getOwner());
         newCopy.setController(in.getController(), 0);
-        newCopy.getCurrentState().copyFrom(in, in.getState(in.getCurrentStateName()));
 
         // needed to ensure that the LKI object has correct CMC info no matter what state the original card was in
         // (e.g. Scrap Trawler + transformed Harvest Hand)
         newCopy.setLKICMC(in.getCMC()); 
+        // used for the purpose of cards that care about the zone the card was known to be in last
+        newCopy.setLastKnownZone(in.getLastKnownZone());
+
+        newCopy.getCurrentState().copyFrom(in.getState(in.getCurrentStateName()), true);
 
         if (in.isCloned()) {
             newCopy.addAlternateState(CardStateName.Cloner, false);
-            newCopy.getState(CardStateName.Cloner).copyFrom(in, in.getState(CardStateName.Cloner));
+            newCopy.getState(CardStateName.Cloner).copyFrom(in.getState(CardStateName.Cloner), true);
         }
 
         newCopy.setType(new CardType(in.getType()));
         newCopy.setToken(in.isToken());
-        newCopy.setTriggers(in.getTriggers(), false);
+
+        // extra copy non Intrinsic traits
         for (SpellAbility sa : in.getSpellAbilities()) {
-            newCopy.addSpellAbility(sa);
-            sa.setHostCard(in);
+            if (!sa.isIntrinsic()) {
+                newCopy.addSpellAbility(sa.copy(newCopy, true));
+            }
+        }
+        for (Trigger tr : in.getTriggers()) {
+            if (!tr.isIntrinsic()) {
+                newCopy.addTrigger(tr.copy(newCopy, true));
+            }
+        }
+        for (ReplacementEffect re : in.getReplacementEffects()) {
+            if (!re.isIntrinsic()) {
+                newCopy.addReplacementEffect(re.copy(newCopy, true));
+            }
         }
 
         // lock in the current P/T without bonus from counters
@@ -542,7 +277,10 @@ public final class CardUtil {
 
         newCopy.setMeldedWith(in.getMeldedWith());
 
-        newCopy.setLastKnownZone(in.getZone()); // used for the purpose of cards that care about the zone the card was known to be in last
+        // update keyword cache on all states
+        for (CardStateName s : newCopy.getStates()) {
+            newCopy.updateKeywordsCache(newCopy.getState(s));
+        }
 
         return newCopy;
     }
@@ -616,7 +354,7 @@ public final class CardUtil {
 
         // Reuse AF_Defined in a slightly different way
         if (validCard.startsWith("Defined.")) {
-            cards = AbilityUtils.getDefinedCards(card, validCard.replace("Defined.", ""), abMana);
+            cards = AbilityUtils.getDefinedCards(card, TextUtil.fastReplace(validCard, "Defined.", ""), abMana);
         } else {
             if (sa.getActivatingPlayer() == null) {
                 sa.setActivatingPlayer(sa.getHostCard().getController());

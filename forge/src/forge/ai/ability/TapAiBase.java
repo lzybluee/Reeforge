@@ -2,11 +2,12 @@ package forge.ai.ability;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-
 import forge.ai.ComputerUtil;
+import forge.ai.ComputerUtilAbility;
 import forge.ai.ComputerUtilCard;
 import forge.ai.SpellAbilityAi;
 import forge.game.Game;
+import forge.game.ability.ApiType;
 import forge.game.card.Card;
 import forge.game.card.CardCollection;
 import forge.game.card.CardLists;
@@ -154,7 +155,12 @@ public abstract class TapAiBase extends SpellAbilityAi  {
                 }
             });
         }
-        
+
+        //try to exclude things that will already be tapped due to something on stack or because something is
+        //already targeted in a parent or sub SA
+        CardCollection toExclude = ComputerUtilAbility.getCardsTargetedWithApi(ai, tapList, sa, ApiType.Tap);
+        tapList.removeAll(toExclude);
+
         if (tapList.isEmpty()) {
         	return false;
         }

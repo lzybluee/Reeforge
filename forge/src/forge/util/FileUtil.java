@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
  * </p>
  * 
  * @author Forge
- * @version $Id: FileUtil.java 30524 2015-12-26 20:54:43Z drdev $
+ * @version $Id$
  */
 public final class FileUtil {
 

@@ -22,12 +22,13 @@ import forge.game.card.Card;
 import forge.game.card.CardFactory;
 import forge.game.card.CardFactoryUtil;
 import forge.game.card.CounterType;
+import forge.game.card.token.TokenInfo;
 import forge.game.combat.Combat;
+import forge.game.keyword.KeywordInterface;
 import forge.game.phase.PhaseHandler;
 import forge.game.phase.PhaseType;
 import forge.game.player.Player;
 import forge.game.player.RegisteredPlayer;
-import forge.game.spellability.AbilityActivated;
 import forge.game.spellability.SpellAbility;
 import forge.game.spellability.SpellAbilityRestriction;
 import forge.game.spellability.SpellAbilityStackInstance;
@@ -96,7 +97,7 @@ public class GameCopier {
 
         PhaseHandler origPhaseHandler = origGame.getPhaseHandler();
         Player newPlayerTurn = playerMap.get(origPhaseHandler.getPlayerTurn());
-        newGame.getPhaseHandler().devModeSet(origPhaseHandler.getPhase(), newPlayerTurn);
+        newGame.getPhaseHandler().devModeSet(origPhaseHandler.getPhase(), newPlayerTurn, origPhaseHandler.getTurn());
         newGame.getTriggerHandler().suppressMode(TriggerType.ChangesZone);
         for (Player p : newGame.getPlayers()) {
             ((PlayerZoneBattlefield) p.getZone(ZoneType.Battlefield)).setTriggers(false);
@@ -236,10 +237,8 @@ public class GameCopier {
     private static final boolean USE_FROM_PAPER_CARD = true;
     private Card createCardCopy(Game newGame, Player newOwner, Card c) {
         if (c.isToken() && !c.isEmblem()) {
-            String tokenStr = new CardFactory.TokenInfo(c).toString();
-            Card result = CardFactory.makeOneToken(CardFactory.TokenInfo.fromString(tokenStr), newOwner);
+            Card result = new TokenInfo(c).makeOneToken(newOwner);
             CardFactory.copyCopiableCharacteristics(c, result);
-            CardFactory.copyCopiableAbilities(c, result);
             return result;
         }
         if (USE_FROM_PAPER_CARD && !c.isEmblem()) {
@@ -263,15 +262,8 @@ public class GameCopier {
             newCard.addStaticAbility(stAb);
         }
         for (SpellAbility sa : c.getSpellAbilities()) {
-            SpellAbility saCopy;
-
-            if (sa instanceof AbilityActivated) {
-                saCopy = ((AbilityActivated)sa).getCopy();
-            } else {
-                saCopy = sa.copy();
-            }
+            SpellAbility saCopy = sa.copy(newCard, true);
             if (saCopy != null) {
-                saCopy.setHostCard(newCard);
                 newCard.addSpellAbility(saCopy);
             } else {
                 System.err.println(sa.toString());
@@ -306,7 +298,7 @@ public class GameCopier {
             newCard.setChangedCardTypes(c.getChangedCardTypesMap());
             newCard.setChangedCardKeywords(c.getChangedCardKeywords());
             // TODO: Is this correct? Does it not duplicate keywords from enchantments and such?
-            for (String kw : c.getHiddenExtrinsicKeywords())
+            for (KeywordInterface kw : c.getHiddenExtrinsicKeywords())
                 newCard.addHiddenExtrinsicKeyword(kw);
             newCard.setExtrinsicKeyword(Lists.newArrayList(c.getExtrinsicKeyword()));
             if (c.isTapped()) {

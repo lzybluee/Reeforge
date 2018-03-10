@@ -30,7 +30,7 @@ import forge.game.cost.Cost;
  * </p>
  * 
  * @author Forge
- * @version $Id: Ability.java 29167 2015-04-02 14:35:42Z elcnesh $
+ * @version $Id$
  */
 public abstract class Ability extends SpellAbility {
 

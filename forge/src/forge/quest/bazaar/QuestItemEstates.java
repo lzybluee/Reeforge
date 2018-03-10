@@ -25,7 +25,7 @@ import forge.quest.data.QuestAssets;
  * </p>
  * 
  * @author Forge
- * @version $Id: QuestItemEstates.java 14797 2012-03-18 18:09:02Z Max mtg $
+ * @version $Id$
  */
 public class QuestItemEstates extends QuestItemBasic {
     /**

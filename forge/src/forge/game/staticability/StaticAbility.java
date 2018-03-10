@@ -17,11 +17,14 @@
  */
 package forge.game.staticability;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import forge.card.CardStateName;
 import forge.card.MagicColor;
 import forge.game.CardTraitBase;
 import forge.game.Game;
 import forge.game.GameEntity;
+import forge.game.GameStage;
 import forge.game.ability.AbilityUtils;
 import forge.game.card.Card;
 import forge.game.card.CardCollection;
@@ -35,14 +38,12 @@ import forge.game.spellability.SpellAbility;
 import forge.game.zone.Zone;
 import forge.game.zone.ZoneType;
 import forge.util.Expressions;
+import forge.util.TextUtil;
 
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 /**
  * The Class StaticAbility.
@@ -173,6 +174,16 @@ public class StaticAbility extends CardTraitBase implements Comparable<StaticAbi
         return layers;
     }
 
+    private void buildCommonAttributes(Card host) {
+        if (mapParams.containsKey("References")) {
+            for (String svar : mapParams.get("References").split(",")) {
+                if (host.hasSVar(svar)) {
+                    this.setSVar(svar, host.getSVar(svar));
+                }
+            }
+        }
+    }
+
     /**
      * <p>
      * toString.
@@ -184,11 +195,11 @@ public class StaticAbility extends CardTraitBase implements Comparable<StaticAbi
     public final String toString() {
         if (hasParam("Description") && !this.isSuppressed()) {
             String desc = getParam("Description");
-            desc = desc.replaceAll("CARDNAME", this.hostCard.getName());
+            desc = TextUtil.fastReplace(desc, "CARDNAME", this.hostCard.getName());
 
             if (desc.contains("ORIGINALTEXTONLY:")) {
                 // Only display the description if the text of the card is not changed via GainTextOf.
-                desc = desc.replace("ORIGINALTEXTONLY:", "");
+                desc = TextUtil.fastReplace(desc, "ORIGINALTEXTONLY:", "");
 
                 boolean hasOrigText = this.hostCard.getStates().contains(CardStateName.OriginalText);
                 if (hasOrigText) {
@@ -198,7 +209,7 @@ public class StaticAbility extends CardTraitBase implements Comparable<StaticAbi
                     if (origName.equals(curName)) {
                         return desc;
                     } else {
-                        return "^ Text changed (" + origName + ") ^";
+                        return TextUtil.concatNoSpace("^ Text changed (", origName, ") ^");
                     }
                 }
             }
@@ -235,6 +246,7 @@ public class StaticAbility extends CardTraitBase implements Comparable<StaticAbi
         this.mapParams.putAll(params);
         this.layers = this.generateLayer();
         this.hostCard = host;
+        buildCommonAttributes(host);
     }
 
     public StaticAbility(StaticAbility stAb, Card host) {
@@ -242,13 +254,15 @@ public class StaticAbility extends CardTraitBase implements Comparable<StaticAbi
         this.mapParams.putAll(stAb.mapParams);
         this.layers = this.generateLayer();
         this.hostCard = host;
+        this.intrinsic = stAb.intrinsic;
+        buildCommonAttributes(host);
     }
 
-    public final CardCollectionView applyContinuousAbility(final StaticAbilityLayer layer) {
+    public final CardCollectionView applyContinuousAbilityBefore(final StaticAbilityLayer layer, final CardCollectionView preList) {
         if (!shouldApplyContinuousAbility(layer, false)) {
             return null;
         }
-        return StaticAbilityContinuous.applyContinuousAbility(this, layer);
+        return StaticAbilityContinuous.applyContinuousAbility(this, layer, preList);
     }
 
     public final CardCollectionView applyContinuousAbility(final StaticAbilityLayer layer, final CardCollectionView affected) {
@@ -439,6 +453,8 @@ public class StaticAbility extends CardTraitBase implements Comparable<StaticAbi
 
         if (mode.equals("CantAttack")) {
             return StaticAbilityCantAttackBlock.applyCantAttackAbility(this, card, target);
+        } else if (mode.equals("CantBlockBy") && target instanceof Card) {
+            return StaticAbilityCantAttackBlock.applyCantBlockByAbility(this, card, (Card)target);
         }
 
         return false;
@@ -513,6 +529,7 @@ public class StaticAbility extends CardTraitBase implements Comparable<StaticAbi
             if (condition.equals("Metalcraft") && !controller.hasMetalcraft()) return false;
             if (condition.equals("Delirium") && !controller.hasDelirium()) return false;
             if (condition.equals("Desert") && !controller.hasDesert()) return false;
+            if (condition.equals("Blessing") && !controller.hasBlessing()) return false;
 
             if (condition.equals("PlayerTurn")) {
                 if (!ph.isPlayerTurn(controller)) {
@@ -577,6 +594,15 @@ public class StaticAbility extends CardTraitBase implements Comparable<StaticAbi
             if (!Expressions.compare(left, compare, right)) {
                 return false;
             }
+        }
+
+        if (hasParam("GameStage")) {
+            String[] stageDefs = TextUtil.split(getParam("GameStage"), ',');
+            boolean isRelevantStage = false;
+            for (String stage : stageDefs) {
+                isRelevantStage |= (game.getAge() == GameStage.valueOf(stage));
+            }
+            return isRelevantStage;
         }
 
         if (hasParam("Presence")) {

@@ -44,6 +44,8 @@ public abstract class CardTraitBase extends GameObject implements IHasCardView {
     /** The temporarily suppressed. */
     protected boolean temporarilySuppressed = false;
 
+    private Map<String, String> sVars = Maps.newHashMap();
+
     /** Keys of descriptive (text) parameters. */
     private static final ImmutableList<String> descriptiveKeys = ImmutableList.<String>builder()
             .add("Description", "SpellDescription", "StackDescription", "TriggerDescription").build();
@@ -168,8 +170,8 @@ public abstract class CardTraitBase extends GameObject implements IHasCardView {
      * @return a boolean.
      */
     public static boolean matchesValid(final Object o, final String[] valids, final Card srcCard) {
-        if (o instanceof GameEntity) {
-            final GameEntity c = (GameEntity) o;
+        if (o instanceof GameObject) {
+            final GameObject c = (GameObject) o;
             return c.isValid(valids, srcCard.getController(), srcCard, null);
         }
 
@@ -213,14 +215,33 @@ public abstract class CardTraitBase extends GameObject implements IHasCardView {
         final Player hostController = this.getHostCard().getController();
         final Game game = hostController.getGame();
         
-        if ("True".equalsIgnoreCase(params.get("Metalcraft")) && !hostController.hasMetalcraft()) return false;
-        if ("True".equalsIgnoreCase(params.get("Delirium")) && !hostController.hasDelirium()) return false;
-        if ("True".equalsIgnoreCase(params.get("Threshold")) && !hostController.hasThreshold()) return false;
-        if ("True".equalsIgnoreCase(params.get("Hellbent")) && !hostController.hasHellbent()) return false;
-        if ("True".equalsIgnoreCase(params.get("Bloodthirst")) && !hostController.hasBloodthirst()) return false;
-        if ("True".equalsIgnoreCase(params.get("FatefulHour")) && hostController.getLife() > 5) return false;
-        if ("True".equalsIgnoreCase(params.get("Revolt")) && !hostController.hasRevolt()) return false;
-        if ("True".equalsIgnoreCase(params.get("Desert")) && !hostController.hasDesert()) return false;
+        if (params.containsKey("Metalcraft")) {
+            if ("True".equalsIgnoreCase(params.get("Metalcraft")) != hostController.hasMetalcraft()) return false;
+        }
+        if (params.containsKey("Delirium")) {
+            if ("True".equalsIgnoreCase(params.get("Delirium")) != hostController.hasDelirium()) return false;
+        }
+        if (params.containsKey("Threshold")) {
+            if ("True".equalsIgnoreCase(params.get("Threshold")) != hostController.hasThreshold()) return false;
+        }
+        if (params.containsKey("Hellbent")) {
+            if ("True".equalsIgnoreCase(params.get("Hellbent")) != hostController.hasHellbent()) return false;
+        }
+        if (params.containsKey("Bloodthirst")) {
+            if ("True".equalsIgnoreCase(params.get("Bloodthirst")) != hostController.hasBloodthirst()) return false;
+        }
+        if (params.containsKey("FatefulHour")) {
+            if ("True".equalsIgnoreCase(params.get("FatefulHour")) != (hostController.getLife() > 5)) return false;
+        }
+        if (params.containsKey("Revolt")) {
+            if ("True".equalsIgnoreCase(params.get("Revolt")) != hostController.hasRevolt()) return false;
+        }
+        if (params.containsKey("Desert")) {
+            if ("True".equalsIgnoreCase(params.get("Desert")) != hostController.hasDesert()) return false;
+        }
+        if (params.containsKey("Blessing")) {
+            if ("True".equalsIgnoreCase(params.get("Blessing")) != hostController.hasBlessing()) return false;
+        }
 
         if (params.containsKey("Presence")) {
             if (hostCard.getCastFrom() == null || hostCard.getCastSA() == null)
@@ -450,5 +471,44 @@ public abstract class CardTraitBase extends GameObject implements IHasCardView {
     @Override
     public CardView getCardView() {
         return CardView.get(hostCard);
+    }
+
+    public String getSvarWithFallback(final String name) {
+        String var = sVars.get(name);
+        if (var == null) {
+            var = hostCard.getSVar(name);
+        }
+        return var;
+    }
+
+    public String getSVar(final String name) {
+        String var = sVars.get(name);
+        if (var == null) {
+            var = "";
+        }
+        return var;
+    }
+
+    public boolean hasSVar(final String name) {
+        return sVars.containsKey(name);
+    }
+
+    public Integer getSVarInt(final String name) {
+        String var = sVars.get(name);
+        if (var != null) {
+            try {
+                return Integer.parseInt(var);
+            }
+            catch (Exception e) {}
+        }
+        return null;
+    }
+
+    public final void setSVar(final String name, final String value) {
+        sVars.put(name, value);
+    }
+
+    public Set<String> getSVars() {
+        return sVars.keySet();
     }
 }

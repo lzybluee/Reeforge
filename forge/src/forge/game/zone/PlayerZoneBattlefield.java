@@ -30,7 +30,7 @@ import forge.game.staticability.StaticAbility;
  * 
  * @author Forge
 
- * @version $Id: PlayerZoneBattlefield.java 31649 2016-07-23 01:26:51Z friarsol $
+ * @version $Id$
  */
 public class PlayerZoneBattlefield extends PlayerZone {
     /** Constant <code>serialVersionUID=5750837078903423978L</code>. */

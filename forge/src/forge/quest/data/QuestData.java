@@ -25,6 +25,7 @@ import forge.quest.io.QuestDataIO;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 //when you create QuestDataOld and AFTER you copy the AI decks over
@@ -37,11 +38,11 @@ import java.util.Map;
  * </p>
  *
  * @author Forge
- * @version $Id: QuestData.java 30285 2015-10-13 22:32:02Z friarsol $
+ * @version $Id$
  */
 public final class QuestData {
     /** Holds the latest version of the Quest Data. */
-    public static final int CURRENT_VERSION_NUMBER = 10;
+    public static final int CURRENT_VERSION_NUMBER = 12;
 
     // This field places the version number into QD instance,
     // but only when the object is created through the constructor
@@ -64,6 +65,10 @@ public final class QuestData {
     private QuestAchievements achievements;
     private final Map<Integer, String> petSlots = new HashMap<>();
     private int matchLength = 3;
+
+    public HashSet<StarRating> Ratings = new HashSet<StarRating>();
+
+    public String currentDeck = "DEFAULT";
 
     public QuestData() { //needed for XML serialization
     }

@@ -46,7 +46,6 @@ import forge.gui.framework.DragCell;
 import forge.gui.framework.DragTab;
 import forge.gui.framework.EDocID;
 import forge.gui.framework.IVDoc;
-import forge.screens.match.CMatchUI;
 import forge.screens.match.controllers.CStack;
 import forge.toolbox.FMouseAdapter;
 import forge.toolbox.FScrollPanel;
@@ -73,8 +72,6 @@ public class VStack implements IVDoc<CStack> {
     private final AbilityMenu abilityMenu = new AbilityMenu();
 
     private StackInstanceTextArea hoveredItem;
-
-    private int lastStackSize = 0;
 
     public StackInstanceTextArea getHoveredItem() {
         return hoveredItem;
@@ -141,14 +138,9 @@ public class VStack implements IVDoc<CStack> {
             //update the Card Picture/Detail when the spell is added to the stack
             if (isFirst) {
                 isFirst = false;
-                controller.getMatchUI().setPaperCard(item.getSourceCard());
+                controller.getMatchUI().setCard(item.getSourceCard());
             }
         }
-
-        if (lastStackSize != items.size()) {
-            controller.getMatchUI().clearPanelSelections();
-        }
-        lastStackSize = items.size();
 
         scroller.revalidate();
         scroller.repaint();
@@ -207,22 +199,11 @@ public class VStack implements IVDoc<CStack> {
                 @Override
                 public void mouseEntered(final MouseEvent e) {
                     hoveredItem = StackInstanceTextArea.this;
-                    CMatchUI matchUI = controller.getMatchUI();
-                    if (matchUI != null) {
-                        matchUI.clearPanelSelections();
-                        if (item.getSourceCard() != null) {
-                            matchUI.setPaperCard(item.getSourceCard());
-                            matchUI.setPanelSelection(item.getSourceCard());
-                        }
-                    }
+                    controller.getMatchUI().setCard(item.getSourceCard());
                 }
 
                 @Override
                 public void mouseExited(final MouseEvent e) {
-                    CMatchUI matchUI = controller.getMatchUI();
-                    if (matchUI != null) {
-                        matchUI.clearPanelSelections();
-                    }
                     if (hoveredItem == StackInstanceTextArea.this) {
                         hoveredItem = null;
                     }
@@ -268,7 +249,7 @@ public class VStack implements IVDoc<CStack> {
             final Graphics2D g2d = (Graphics2D) g;
 
             //draw image for source card
-            final BufferedImage img = cachedImage.getFrontImage();
+            final BufferedImage img = cachedImage.getImage();
             if (img != null) {
                 g2d.drawImage(img, null, PADDING, PADDING);
             }

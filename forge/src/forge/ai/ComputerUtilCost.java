@@ -1,14 +1,8 @@
 package forge.ai;
 
-import java.util.List;
-import java.util.Set;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-
 import forge.ai.ability.AnimateAi;
 import forge.card.ColorSet;
 import forge.game.GameActionUtil;
@@ -27,6 +21,10 @@ import forge.game.zone.ZoneType;
 import forge.util.MyRandom;
 import forge.util.TextUtil;
 import forge.util.collect.FCollectionView;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
+import java.util.Set;
 
 
 public class ComputerUtilCost {
@@ -309,7 +307,7 @@ public class ComputerUtilCost {
                 }
 
                 final CardCollection sacList = new CardCollection();
-                final CardCollection typeList = CardLists.getValidCards(ai.getCardsIn(ZoneType.Battlefield), type.split(","), source.getController(), source, null);
+                final CardCollection typeList = CardLists.getValidCards(ai.getCardsIn(ZoneType.Battlefield), type.split(";"), source.getController(), source, null);
 
                 int count = 0;
                 while (count < amount) {
@@ -367,7 +365,7 @@ public class ComputerUtilCost {
                     final int vehicleValue = ComputerUtilCard.evaluateCreature(vehicle);
                     String type = part.getType();
                     String totalP = type.split("withTotalPowerGE")[1];
-                    type = type.replace("+withTotalPowerGE" + totalP, "");
+                    type = TextUtil.fastReplace(type, TextUtil.concatNoSpace("+withTotalPowerGE", totalP), "");
                     CardCollection exclude = CardLists.getValidCards(
                             new CardCollection(ai.getCardsIn(ZoneType.Battlefield)), type.split(";"),
                             source.getController(), source, sa);
@@ -535,7 +533,7 @@ public class ComputerUtilCost {
             if (payer.getLife() > 3 && payer.canPayLife(2)) {
                 final int landsize = payer.getLandsInPlay().size() + 1;
                 for (Card c : payer.getCardsIn(ZoneType.Hand)) {
-                    // if the new land size would equal the CMC of a card in AIs hand, consider playing it untapped, 
+                    // if the new land size would equal the CMC of a card in AIs hand, consider playing it untapped,
                     // otherwise don't bother running other checks
                     if (landsize != c.getCMC()) {
                         continue; 

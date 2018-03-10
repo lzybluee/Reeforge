@@ -1,24 +1,10 @@
 package forge.ai.ability;
 
 import com.google.common.base.Predicate;
-import forge.ai.AiController;
-import forge.ai.AiProps;
-
-import forge.ai.ComputerUtil;
-import forge.ai.ComputerUtilCard;
-import forge.ai.ComputerUtilCost;
-import forge.ai.ComputerUtilMana;
-import forge.ai.PlayerControllerAi;
-import forge.ai.SpecialCardAi;
-import forge.ai.SpellAbilityAi;
+import forge.ai.*;
 import forge.game.ability.AbilityUtils;
 import forge.game.ability.ApiType;
-import forge.game.card.Card;
-import forge.game.card.CardCollection;
-import forge.game.card.CardFactoryUtil;
-import forge.game.card.CardLists;
-import forge.game.card.CardPredicates;
-import forge.game.card.CounterType;
+import forge.game.card.*;
 import forge.game.cost.Cost;
 import forge.game.cost.CostPart;
 import forge.game.cost.CostSacrifice;
@@ -64,8 +50,42 @@ public class DestroyAi extends SpellAbilityAi {
             hasXCost = abCost.getCostMana() != null ? abCost.getCostMana().getAmountOfX() > 0 : false;
         }
 
+        if ("AtOpponentsCombatOrAfter".equals(sa.getParam("AILogic"))) {
+            PhaseHandler ph = ai.getGame().getPhaseHandler();
+            if (ph.getPlayerTurn() == ai || ph.getPhase().isBefore(PhaseType.COMBAT_DECLARE_ATTACKERS)) {
+                return false;
+            }
+        } else if ("AtEOT".equals(sa.getParam("AILogic"))) {
+            PhaseHandler ph = ai.getGame().getPhaseHandler();
+            if (!ph.is(PhaseType.END_OF_TURN)) {
+                return false;
+            }
+        } else if ("AtEOTIfNotAttacking".equals(sa.getParam("AILogic"))) {
+            PhaseHandler ph = ai.getGame().getPhaseHandler();
+            if (!ph.is(PhaseType.END_OF_TURN) || ai.getAttackedWithCreatureThisTurn()) {
+                return false;
+            }
+        }
+
         if (ComputerUtil.preventRunAwayActivations(sa)) {
             return false;
+        }
+
+        // Ability that's intended to destroy own useless token to trigger Grave Pacts
+        // should be fired at end of turn or when under attack after blocking to make opponent sac something
+        boolean havepact = false;
+
+        // TODO replace it with look for a dies -> sacrifice trigger check
+        havepact |= ai.isCardInPlay("Grave Pact");
+        havepact |= ai.isCardInPlay("Butcher of Malakir");
+        havepact |= ai.isCardInPlay("Dictate of Erebos");
+        if ("Pactivator".equals(logic) && havepact) {
+            if ((!ai.getGame().getPhaseHandler().isPlayerTurn(ai))
+                    && ((ai.getGame().getPhaseHandler().is(PhaseType.END_OF_TURN)) || (ai.getGame().getPhaseHandler().is(PhaseType.COMBAT_DECLARE_BLOCKERS)))
+                    && (ai.getOpponents().getCreaturesInPlay().size() > 0)) {
+                ai.getController().chooseTargetsFor(sa);
+                return true;
+            }
         }
 
         // Targeting
@@ -78,6 +98,11 @@ public class DestroyAi extends SpellAbilityAi {
             }
             if ("MadSarkhanDragon".equals(logic)) {
                 return SpecialCardAi.SarkhanTheMad.considerMakeDragon(ai, sa);
+            } else if (logic != null && logic.startsWith("MinLoyalty.")) {
+                int minLoyalty = Integer.parseInt(logic.substring(logic.indexOf(".") + 1));
+                if (source.getCounters(CounterType.LOYALTY) < minLoyalty) {
+                    return false;
+                }
             } else if ("Polymorph".equals(logic)) {
                 list = CardLists.getTargetableCards(ai.getCardsIn(ZoneType.Battlefield), sa);
                 if (list.isEmpty()) {
@@ -104,26 +129,14 @@ public class DestroyAi extends SpellAbilityAi {
                 final int cmcMax = ai.hasRevolt() ? 4 : 2;
                 list = CardLists.filter(list, CardPredicates.lessCMC(cmcMax));
             }
-            if (sa.hasParam("AITgts")) {
-                if (sa.getParam("AITgts").equals("BetterThanSource")) {
-                    if (source.isEnchanted()) {
-                        if (source.getEnchantedBy(false).get(0).getController().equals(ai)) {
-                            return false;
-                        }
-                    } else {
-                        final int value = ComputerUtilCard.evaluateCreature(source);
-                        list = CardLists.filter(list, new Predicate<Card>() {
-                            @Override
-                            public boolean apply(final Card c) {
-                                return ComputerUtilCard.evaluateCreature(c) > value + 30;
-                            }
-                        });
-                    }
-                } else {
-                    list = CardLists.getValidCards(list, sa.getParam("AITgts"), sa.getActivatingPlayer(), source);
-                }
-            }
+
+            // Filter AI-specific targets if provided
+            list = ComputerUtil.filterAITgts(sa, ai, (CardCollection)list, true);
+
             list = CardLists.getNotKeyword(list, "Indestructible");
+            if (CardLists.getNotType(list, "Creature").isEmpty()) {
+                list = ComputerUtilCard.prioritizeCreaturesWorthRemovingNow(ai, list, false);
+            }
             if (!SpellAbilityAi.playReusable(ai, sa)) {
                 list = CardLists.filter(list, new Predicate<Card>() {
                     @Override
@@ -173,6 +186,11 @@ public class DestroyAi extends SpellAbilityAi {
             if (hasXCost) {
                 // TODO: currently the AI will maximize mana spent on X, trying to maximize damage. This may need improvement.
                 maxTargets = Math.min(ComputerUtilMana.determineMaxAffordableX(ai, sa), abTgt.getMaxTargets(sa.getHostCard(), sa));
+                // X can't be more than the lands we have in our hand for "discard X lands"!
+                if ("ScorchedEarth".equals(logic)) {
+                    int lands = CardLists.filter(ai.getCardsIn(ZoneType.Hand), CardPredicates.Presets.LANDS).size();
+                    maxTargets = Math.min(maxTargets, lands);
+                }
             }
             if (sa.hasParam("AIMaxTgtsCount")) {
                 // Cards that have confusing costs for the AI (e.g. Eliminate the Competition) can have forced max target constraints specified
@@ -300,6 +318,9 @@ public class DestroyAi extends SpellAbilityAi {
 
             CardCollection preferred = CardLists.getNotKeyword(list, "Indestructible");
             preferred = CardLists.filterControlledBy(preferred, ai.getOpponents());
+            if (CardLists.getNotType(preferred, "Creature").isEmpty()) {
+                preferred = ComputerUtilCard.prioritizeCreaturesWorthRemovingNow(ai, preferred, false);
+            }
 
             // If NoRegen is not set, filter out creatures that have a
             // regeneration shield
@@ -314,25 +335,8 @@ public class DestroyAi extends SpellAbilityAi {
                 });
             }
 
-            if (sa.hasParam("AITgts")) {
-            	if (sa.getParam("AITgts").equals("BetterThanSource")) {
-            		if (source.isEnchanted()) {
-            			if (source.getEnchantedBy(false).get(0).getController().equals(ai)) {
-            				preferred.clear();
-            			}
-            		} else {
-            			final int value = ComputerUtilCard.evaluateCreature(source);
-            			preferred = CardLists.filter(preferred, new Predicate<Card>() {
-                            @Override
-                            public boolean apply(final Card c) {
-                                return ComputerUtilCard.evaluateCreature(c) > value + 30;
-                            }
-                        });
-            		}
-            	} else {
-            		preferred = CardLists.getValidCards(preferred, sa.getParam("AITgts"), sa.getActivatingPlayer(), source);
-            	}
-            }
+            // Filter AI-specific targets if provided
+            preferred = ComputerUtil.filterAITgts(sa, ai, (CardCollection)preferred, true);
 
             for (final Card c : preferred) {
                 list.remove(c);
@@ -453,4 +457,5 @@ public class DestroyAi extends SpellAbilityAi {
             return tempoCheck;
         }
     }
+
 }

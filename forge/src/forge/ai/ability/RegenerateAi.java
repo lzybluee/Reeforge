@@ -42,7 +42,7 @@ import java.util.List;
  * </p>
  * 
  * @author Forge
- * @version $Id: RegenerateAi.java 31220 2016-05-15 07:08:23Z excessum $
+ * @version $Id$
  */
 public class RegenerateAi extends SpellAbilityAi {
 

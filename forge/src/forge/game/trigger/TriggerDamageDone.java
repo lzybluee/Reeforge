@@ -6,12 +6,12 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -27,9 +27,9 @@ import forge.util.Expressions;
  * <p>
  * Trigger_DamageDone class.
  * </p>
- * 
+ *
  * @author Forge
- * @version $Id: TriggerDamageDone.java 32373 2016-10-19 10:36:17Z Hanmac $
+ * @version $Id$
  */
 public class TriggerDamageDone extends Trigger {
 
@@ -37,7 +37,7 @@ public class TriggerDamageDone extends Trigger {
      * <p>
      * Constructor for Trigger_DamageDone.
      * </p>
-     * 
+     *
      * @param params
      *            a {@link java.util.HashMap} object.
      * @param host
@@ -134,3 +134,4 @@ public class TriggerDamageDone extends Trigger {
         return sb.toString();
     }
 }
+

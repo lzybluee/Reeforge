@@ -18,6 +18,7 @@
 package forge.util.storage;
 
 import com.google.common.base.Function;
+import forge.util.TextUtil;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -91,13 +92,14 @@ public abstract class StorageReaderFolder<T> extends StorageReaderBase<T> {
                     final String msg = "An object stored in " + file.getPath() + " failed to load.\nPlease submit this as a bug with the mentioned file/directory attached.";
                     throw new RuntimeException(msg);
                 }
+
                 String newKey = keySelector.apply(newDeck);
                 if (result.containsKey(newKey)) {
-                    System.err.println("StorageReader: Overwriting an object with key " + newKey);
+                    System.err.println("StorageReaderFolder: Overwriting an object with key " + newKey);
                 }
                 result.put(newKey, newDeck);
             } catch (final NoSuchElementException ex) {
-                final String message = String.format("%s failed to load because ---- %s", file.getName(), ex.getMessage());
+                final String message = TextUtil.concatWithSpace( file.getName(),"failed to load because ----", ex.getMessage());
                 objectsThatFailedToLoad.add(message);
             }
         }

@@ -52,7 +52,7 @@ import java.util.List;
  * </p>
  * 
  * @author Forge
- * @version $Id: ManaPool.java 35211 2017-08-25 05:49:00Z Agetian $
+ * @version $Id$
  */
 public class ManaPool implements Iterable<Mana> {
     private final Player owner;
@@ -347,12 +347,6 @@ public class ManaPool implements Iterable<Mana> {
         for (final SpellAbility am : payingAbilities) {
             // Recursively refund abilities that were used.
             refundManaPaid(am);
-        }
-
-        for (final SpellAbility am : payingAbilities) {
-            if(am.getManaPart() != null && am.getManaPart().getLastManaProduced() != null) {
-                am.getManaPart().getLastManaProduced().clear();
-            }
         }
 
         payingAbilities.clear();

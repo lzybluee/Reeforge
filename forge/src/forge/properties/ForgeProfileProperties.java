@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
 
+import forge.util.TextUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -40,12 +41,16 @@ public class ForgeProfileProperties {
     private static String cacheDir;
     private static String cardPicsDir;
     private static Map<String, String> cardPicsSubDirs;
+    private static String decksDir;
+    private static String decksConstructedDir;
     private static int serverPort;
 
     private static final String USER_DIR_KEY      = "userDir";
     private static final String CACHE_DIR_KEY     = "cacheDir";
     private static final String CARD_PICS_DIR_KEY = "cardPicsDir";
     private static final String CARD_PICS_SUB_DIRS_KEY = "cardPicsSubDirs";
+    private static final String DECKS_DIR_KEY      = "decksDir";
+    private static final String DECKS_CONSTRUCTED_DIR_KEY = "decksConstructedDir";
     private static final String SERVER_PORT_KEY = "serverPort";
 
     private ForgeProfileProperties() {
@@ -68,6 +73,8 @@ public class ForgeProfileProperties {
         cacheDir    = getDir(props, CACHE_DIR_KEY,     defaults.getRight());
         cardPicsDir = getDir(props, CARD_PICS_DIR_KEY, cacheDir + "pics" + File.separator + "cards" + File.separator);
         cardPicsSubDirs = getMap(props, CARD_PICS_SUB_DIRS_KEY);
+        decksDir    = getDir(props, DECKS_DIR_KEY, userDir + "decks" + File.separator);
+        decksConstructedDir = getDir(props, DECKS_CONSTRUCTED_DIR_KEY, decksDir + "constructed" + File.separator);;
         serverPort = getInt(props, SERVER_PORT_KEY, 36743); // "Forge" using phone keypad
 
         //ensure directories exist
@@ -106,6 +113,18 @@ public class ForgeProfileProperties {
 
     public static Map<String, String> getCardPicsSubDirs() {
         return cardPicsSubDirs;
+    }
+
+    public static String getDecksDir() { return decksDir; }
+    public static void setDecksDir(final String decksDir0) {
+        decksDir = decksDir0;
+        save();
+    }
+
+    public static String getDecksConstructedDir() { return decksConstructedDir; }
+    public static void setDecksConstructedDir(final String decksConstructedDir0) {
+        decksConstructedDir = decksConstructedDir0;
+        save();
     }
 
     public static int getServerPort() {
@@ -156,7 +175,7 @@ public class ForgeProfileProperties {
             throw new RuntimeException("cannot determine OS and user home directory");
         }
 
-        final String fallbackDataDir = String.format("%s/.forge", homeDir);
+        final String fallbackDataDir = TextUtil.concatNoSpace(homeDir, "/.forge");
 
         if (StringUtils.containsIgnoreCase(osName, "windows")) {
             // the split between appdata and localappdata on windows is relatively recent.  If
@@ -175,12 +194,12 @@ public class ForgeProfileProperties {
             return Pair.of(appRoot + File.separator + "Forge", cacheRoot + File.separator + "Forge" + File.separator + "Cache");
         }
         else if (StringUtils.containsIgnoreCase(osName, "mac os x")) {
-            return Pair.of(String.format("%s/Library/Application Support/Forge", homeDir),
-                    String.format("%s/Library/Caches/Forge", homeDir));
+            return Pair.of(TextUtil.concatNoSpace(homeDir, "/Library/Application Support/Forge"),
+                    TextUtil.concatNoSpace(homeDir, "/Library/Caches/Forge"));
         }
 
         // Linux and everything else
-        return Pair.of(fallbackDataDir, String.format("%s/.cache/forge", homeDir));
+        return Pair.of(fallbackDataDir, TextUtil.concatNoSpace(homeDir, "/.cache/forge"));
     }
 
     private static void save() {

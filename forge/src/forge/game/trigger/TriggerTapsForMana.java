@@ -28,7 +28,7 @@ import forge.game.spellability.SpellAbility;
  * </p>
  * 
  * @author Forge
- * @version $Id: TriggerTapsForMana.java 31143 2016-04-20 17:47:28Z friarsol $
+ * @version $Id$
  */
 public class TriggerTapsForMana extends Trigger {
 
@@ -55,7 +55,7 @@ public class TriggerTapsForMana extends Trigger {
         //Check for tapping
         if (!mapParams.containsKey("NoTapCheck")) {
             final SpellAbility manaAbility = (SpellAbility) runParams2.get("AbilityMana");
-            if (manaAbility == null || manaAbility.getPayCosts() == null || !manaAbility.getPayCosts().hasTapCost()) {
+            if (manaAbility == null || manaAbility.getRootAbility().getPayCosts() == null || !manaAbility.getRootAbility().getPayCosts().hasTapCost()) {
                 return false;
             }
         }

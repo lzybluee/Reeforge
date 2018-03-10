@@ -32,7 +32,7 @@ import org.apache.commons.lang3.StringUtils;
  * </p>
  * 
  * @author Forge
- * @version $Id: AddTurnAi.java 31195 2016-05-05 21:20:33Z friarsol $
+ * @version $Id$
  */
 public class AddTurnAi extends SpellAbilityAi {
 

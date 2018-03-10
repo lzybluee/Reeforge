@@ -17,8 +17,6 @@
  */
 package forge.game;
 
-import java.util.*;
-
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.ArrayListMultimap;
@@ -26,16 +24,10 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.eventbus.EventBus;
-
 import forge.card.CardRarity;
+import forge.card.CardStateName;
 import forge.card.CardType.Supertype;
-import forge.game.card.Card;
-import forge.game.card.CardCollection;
-import forge.game.card.CardCollectionView;
-import forge.game.card.CardLists;
-import forge.game.card.CardPredicates;
-import forge.game.card.CardUtil;
-import forge.game.card.CardView;
+import forge.game.card.*;
 import forge.game.combat.Combat;
 import forge.game.cost.Cost;
 import forge.game.event.Event;
@@ -44,11 +36,7 @@ import forge.game.phase.Phase;
 import forge.game.phase.PhaseHandler;
 import forge.game.phase.PhaseType;
 import forge.game.phase.Untap;
-import forge.game.player.IGameEntitiesFactory;
-import forge.game.player.Player;
-import forge.game.player.PlayerCollection;
-import forge.game.player.PlayerView;
-import forge.game.player.RegisteredPlayer;
+import forge.game.player.*;
 import forge.game.replacement.ReplacementHandler;
 import forge.game.spellability.Ability;
 import forge.game.spellability.SpellAbility;
@@ -56,11 +44,15 @@ import forge.game.spellability.SpellAbilityStackInstance;
 import forge.game.spellability.SpellAbilityView;
 import forge.game.trigger.TriggerHandler;
 import forge.game.trigger.TriggerType;
-import forge.game.zone.*;
+import forge.game.zone.CostPaymentStack;
+import forge.game.zone.MagicStack;
+import forge.game.zone.Zone;
+import forge.game.zone.ZoneType;
 import forge.trackable.Tracker;
 import forge.util.Aggregates;
-import forge.util.MyRandom;
 import forge.util.Visitor;
+
+import java.util.*;
 
 /**
  * Represents the state of a <i>single game</i>, a new instance is created for each game.
@@ -254,8 +246,6 @@ public class Game {
     public Game(List<RegisteredPlayer> players0, GameRules rules0, Match match0) { /* no more zones to map here */
         rules = rules0;
         match = match0;
-
-        MyRandom.updateSeed(players0, match0.getPlayedGames().size() + 1);
 
         spabCache.put(PLAY_LAND_SURROGATE.getId(), PLAY_LAND_SURROGATE);
 
@@ -648,8 +638,12 @@ public class Game {
 
     public int getPosition(Player player, Player startingPlayer) {
         int startPosition = ingamePlayers.indexOf(startingPlayer);
-        int position = (ingamePlayers.indexOf(player) + startPosition) % ingamePlayers.size() + 1;
-        return position;
+        int myPosition = ingamePlayers.indexOf(player);
+        if (startPosition > myPosition) {
+            myPosition += ingamePlayers.size();
+        }
+
+        return myPosition - startPosition + 1;
     }
 
     public void onPlayerLost(Player p) {
@@ -803,7 +797,7 @@ public class Game {
                 onePlayerHasTimeShifted = false;
             }
             
-            CardRarity anteRarity = validRarities.get(MyRandom.getRandom().nextInt(validRarities.size()));
+            CardRarity anteRarity = validRarities.get(new Random().nextInt(validRarities.size()));
             
             System.out.println("Rarity chosen for ante: " + anteRarity.name());
             
@@ -833,7 +827,7 @@ public class Game {
                 library.removeAll((Collection<?>)toRemove);
                 
                 if (library.size() > 0) { //Make sure that matches were found. If not, use the original method to choose antes
-                    Card ante = library.get(MyRandom.getRandom().nextInt(library.size()));
+                    Card ante = library.get(new Random().nextInt(library.size()));
                     anteed.put(player, ante);
                 } else {
                     chooseRandomCardsForAnte(player, anteed);
@@ -879,5 +873,25 @@ public class Game {
         spabCache.clear();
         cardCache.clear();
         //playerCache.clear();
+    }
+
+    // Does the player control any cards that care about the order of cards in the graveyard?
+    public boolean isGraveyardOrdered(final Player p) {
+        for (Card c : p.getAllCards()) {
+            if (c.hasSVar("NeedsOrderedGraveyard")) {
+                return true;
+            } else if (c.getStates().contains(CardStateName.OriginalText)) {
+                if (c.getState(CardStateName.OriginalText).hasSVar("NeedsOrderedGraveyard")) {
+                    return true;
+                }
+            }
+        }
+        for (Card c : p.getOpponents().getCardsIn(ZoneType.Battlefield)) {
+            // Bone Dancer is important when an opponent has it active on the battlefield
+            if ("opponent".equalsIgnoreCase(c.getSVar("NeedsOrderedGraveyard"))) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -4,7 +4,6 @@ import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -33,7 +32,7 @@ public class DeckImportController {
     }
 
     private void fillDateDropdowns() {
-        DateFormatSymbols dfs = new DateFormatSymbols(Locale.ENGLISH);
+        DateFormatSymbols dfs = new DateFormatSymbols();
         monthDropdown.removeAllItems();
         String[] months = dfs.getMonths();
         for (String monthName : months) {

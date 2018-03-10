@@ -4,7 +4,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
-
+import forge.card.CardType;
 import forge.card.ColorSet;
 import forge.card.MagicColor;
 import forge.card.mana.ManaAtom;
@@ -17,6 +17,7 @@ import forge.game.GameObject;
 import forge.game.ability.AbilityFactory.AbilityRecordType;
 import forge.game.card.*;
 import forge.game.cost.Cost;
+import forge.game.keyword.KeywordInterface;
 import forge.game.mana.ManaCostBeingPaid;
 import forge.game.player.Player;
 import forge.game.player.PlayerCollection;
@@ -24,9 +25,9 @@ import forge.game.player.PlayerPredicates;
 import forge.game.spellability.*;
 import forge.game.zone.ZoneType;
 import forge.util.Expressions;
+import forge.util.TextUtil;
 import forge.util.collect.FCollection;
 import forge.util.collect.FCollectionView;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -342,7 +343,7 @@ public class AbilityUtils {
      * @param amount
      *            a {@link java.lang.String} object.
      * @param ability
-     *            a {@link forge.game.spellability.SpellAbility} object.
+     *            a {@link forge.game.CardTraitBase} object.
      * @return a int.
      */
     public static int calculateAmount(final Card card, String amount, final CardTraitBase ability) {
@@ -376,8 +377,8 @@ public class AbilityUtils {
         if (amount.indexOf('$') > 0) { // when there is a dollar sign, it's not a reference, it's a raw value!
             svarval = amount;
         }
-        else if (ability != null && ability instanceof SpellAbility) {
-            svarval = ((SpellAbility)ability).getSVar(amount);
+        else if (ability != null) {
+            svarval = ability.getSVar(amount);
         }
         if (StringUtils.isBlank(svarval)) {
             if ((ability != null) && (ability instanceof SpellAbility) && !(ability instanceof SpellPermanent)) {
@@ -795,16 +796,16 @@ public class AbilityUtils {
 
             source = (Card) (o);
             if (type.contains("TriggeredCard")) {
-                type = type.replace("TriggeredCard", "Card");
+                type = TextUtil.fastReplace(type, "TriggeredCard", "Card");
             }
             else if (type.contains("TriggeredAttacker")) {
-                type = type.replace("TriggeredAttacker", "Card");
+                type = TextUtil.fastReplace(type, "TriggeredAttacker", "Card");
             }
             else if (type.contains("TriggeredBlocker")) {
-                type = type.replace("TriggeredBlocker", "Card");
+                type = TextUtil.fastReplace(type, "TriggeredBlocker", "Card");
             }
             else {
-                type = type.replace("Triggered", "Card");
+                type = TextUtil.fastReplace(type, "Triggered", "Card");
             }
         }
         else if (type.startsWith("Targeted")) {
@@ -818,10 +819,10 @@ public class AbilityUtils {
             }
 
             if (type.startsWith("TargetedCard")) {
-                type = type.replace("TargetedCard", "Card");
+                type = TextUtil.fastReplace(type, "TargetedCard", "Card");
             }
             else {
-                type = type.replace("Targeted", "Card");
+                type = TextUtil.fastReplace(type, "Targeted", "Card");
             }
         }
         else if (type.startsWith("Remembered")) {
@@ -830,7 +831,8 @@ public class AbilityUtils {
                 if (object instanceof Card) {
                     hasRememberedCard = true;
                     source = (Card) object;
-                    type = type.replace("Remembered", "Card");
+                    type = TextUtil.fastReplace(type, "Remembered", "Card");
+
                     break;
                 }
             }
@@ -840,11 +842,11 @@ public class AbilityUtils {
             }
         }
         else if (type.startsWith("Imprinted")) {
-            type = type.replace("Imprinted", "Card");
+            type = TextUtil.fastReplace(type, "Imprinted", "Card");
         }
         else if (type.equals("Card.AttachedBy")) {
             source = source.getEnchantingCard();
-            type = type.replace("Card.AttachedBy", "Card.Self");
+            type = TextUtil.fastReplace(type, "Card.AttachedBy", "Card.Self");
         }
 
         String valid = type;
@@ -856,14 +858,15 @@ public class AbilityUtils {
                 if (Character.isLetter(reference)) {
                     String varName = valid.split(",")[0].split(t)[1].split("\\+")[0];
                     if (!sa.getSVar(varName).isEmpty() || source.hasSVar(varName)) {
-                        valid = valid.replace(t + varName, t + Integer.toString(calculateAmount(source, varName, sa)));
+                        valid = TextUtil.fastReplace(valid, TextUtil.concatNoSpace(t, varName),
+                                TextUtil.concatNoSpace(t, Integer.toString(calculateAmount(source, varName, sa))));
                     }
                 }
             }
         }
         if (sa.hasParam("AbilityCount")) { // replace specific string other than "EQ" cases
         	String var = sa.getParam("AbilityCount");
-        	valid = valid.replace(var, Integer.toString(calculateAmount(source, var, sa)));
+        	valid = TextUtil.fastReplace(valid, var, Integer.toString(calculateAmount(source, var, sa)));
         }
         return CardLists.getValidCards(list, valid.split(","), sa.getActivatingPlayer(), source, sa);
     }
@@ -1027,10 +1030,9 @@ public class AbilityUtils {
                 }
                 if (o instanceof List) {
                     final List<?> pList = (List<?>)o;
-                    if (!pList.isEmpty() && pList.get(0) instanceof Player) {
+                    if (!pList.isEmpty()) {
                         for (final Object p : pList) {
-                            if (!players.contains(p) && p instanceof Player) {
-                                // We now know each p in o to be an instance of Player, so cast is safe
+                            if (p instanceof Player && !players.contains(p)) {
                                 players.add((Player) p);
                             }
                         }
@@ -1144,6 +1146,9 @@ public class AbilityUtils {
                 players.add(p);
             }
         }
+        else if (defined.equals("CardController")) {
+            players.add(card.getController());
+        }
         else if (defined.equals("CardOwner")) {
             players.add(card.getOwner());
         }
@@ -1200,7 +1205,7 @@ public class AbilityUtils {
             final SpellAbility sa) {
         final FCollection<SpellAbility> sas = new FCollection<SpellAbility>();
         final String defined = (def == null) ? "Self" : applyAbilityTextChangeEffects(def, sa); // default to Self
-        final Game game = sa.getActivatingPlayer().getGame();
+        final Game game = card.getGame();
 
         SpellAbility s = null;
 
@@ -1293,6 +1298,15 @@ public class AbilityUtils {
         if (sa == null) {
             return;
         }
+
+        // do blessing there before condition checks
+        if (sa.isSpell() && sa.isBlessing() && !sa.getHostCard().isPermanent()) {
+            Player pl = sa.getActivatingPlayer();
+            if (pl != null && pl.getZone(ZoneType.Battlefield).size() >= 10) {
+                pl.setBlessing(true);
+            }
+        }
+
         final ApiType api = sa.getApi();
         if (api == null) {
             sa.resolve();
@@ -1390,7 +1404,8 @@ public class AbilityUtils {
         }
         else if (!StringUtils.isBlank(sa.getSVar(unlessCost)) || !StringUtils.isBlank(source.getSVar(unlessCost))) {
             // check for X costs (stored in SVars
-            int xCost = calculateAmount(source, sa.getParam("UnlessCost").replace(" ", ""), sa);
+            int xCost = calculateAmount(source, TextUtil.fastReplace(sa.getParam("UnlessCost"),
+                    " ", ""), sa);
             //Check for XColor
             ManaCostBeingPaid toPay = new ManaCostBeingPaid(ManaCost.ZERO);
             byte xColor = ManaAtom.fromName(sa.hasParam("UnlessXColor") ? sa.getParam("UnlessXColor") : "1");
@@ -1616,12 +1631,6 @@ public class AbilityUtils {
                 }
             }
         }
-        if(ctb instanceof SpellAbility) {
-            Player activator = ((SpellAbility)ctb).getActivatingPlayer();
-            if(activator != null) {
-                return CardFactoryUtil.xCount(c, s2, activator);
-            }
-        }
         return CardFactoryUtil.xCount(c, s2);
     }
 
@@ -1649,24 +1658,11 @@ public class AbilityUtils {
             }
         }
     }
-    
-    private static boolean checkZone(final Spell spell, final Card card, final Player player) {
-        if (spell.toString().startsWith("Fuse (") && !player.getGame().getZoneOf(card).is(ZoneType.Hand, player)) {
-            return false;
-        }
-        if (spell.isAftermath() && !player.getGame().getZoneOf(card).is(ZoneType.Graveyard, player)) {
-            return false;
-        }
-        return true;
-    }
 
     public static final List<SpellAbility> getBasicSpellsFromPlayEffect(final Card tgtCard, final Player controller) {
         List<SpellAbility> sas = new ArrayList<SpellAbility>();
         for (SpellAbility s : tgtCard.getBasicSpells()) {
             final Spell newSA = (Spell) s.copy();
-            if (!checkZone(newSA, tgtCard, controller)) {
-                continue;
-            }
             newSA.setActivatingPlayer(controller);
             SpellAbilityRestriction res = new SpellAbilityRestriction();
             // timing restrictions still apply
@@ -1745,8 +1741,8 @@ public class AbilityUtils {
         }
         for (final Entry<String, String> e : card.getChangedTextTypeWords().entrySet()) {
             final String key = e.getKey();
-            final String pkey = CardUtil.getPluralType(key);
-            final String pvalue = getReplacedText(pkey, CardUtil.getPluralType(e.getValue()), isDescriptive);
+            final String pkey = CardType.getPluralType(key);
+            final String pvalue = getReplacedText(pkey, CardType.getPluralType(e.getValue()), isDescriptive);
             replaced = replaced.replaceAll("(?<!>)" + pkey, pvalue);
             final String value = getReplacedText(key, e.getValue(), isDescriptive);
             replaced = replaced.replaceAll("(?<!>)" + key, value);
@@ -1834,7 +1830,8 @@ public class AbilityUtils {
 
     public static void addSpliceEffect(final SpellAbility sa, final Card c) {
         Cost spliceCost = null;
-        for (final String k : c.getKeywords()) {
+        for (final KeywordInterface inst : c.getKeywords()) {
+            final String k = inst.getOriginal();
             if (k.startsWith("Splice")) {
                 final String n[] = k.split(":");
                 spliceCost = new Cost(n[2], false);

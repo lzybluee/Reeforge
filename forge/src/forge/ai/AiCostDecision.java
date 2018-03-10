@@ -63,8 +63,8 @@ public class AiCostDecision extends CostDecisionMakerBase {
     @Override
     public PaymentDecision visit(CostDiscard cost) {
         final String type = cost.getType();
+        CardCollectionView hand = player.getCardsIn(ZoneType.Hand);
 
-        final CardCollectionView hand = player.getCardsIn(ZoneType.Hand);
         if (type.equals("LastDrawn")) {
             if (!hand.contains(player.getLastDrawnCard())) {
                 return null;
@@ -79,6 +79,9 @@ public class AiCostDecision extends CostDecisionMakerBase {
             return PaymentDecision.card(source);
         }
         else if (type.equals("Hand")) {
+            if (hand.size() > 1 && ability.getActivatingPlayer() != null) {
+                hand = ability.getActivatingPlayer().getController().orderMoveToZoneList(hand, ZoneType.Graveyard);
+            }
             return PaymentDecision.card(hand);
         }
 
@@ -95,7 +98,11 @@ public class AiCostDecision extends CostDecisionMakerBase {
         }
 
         if (type.equals("Random")) {
-            return PaymentDecision.card(CardLists.getRandomSubList(new CardCollection(hand), c));
+            CardCollectionView randomSubset = CardLists.getRandomSubList(new CardCollection(hand), c);
+            if (randomSubset.size() > 1 && ability.getActivatingPlayer() != null) {
+                randomSubset = ability.getActivatingPlayer().getController().orderMoveToZoneList(randomSubset, ZoneType.Graveyard);
+            }
+            return PaymentDecision.card(randomSubset);
         }
         else {
             final AiController aic = ((PlayerControllerAi)player.getController()).getAi();
@@ -340,6 +347,9 @@ public class AiCostDecision extends CostDecisionMakerBase {
                 if (source.getName().equals("Maralen of the Mornsong Avatar")) {
                     return PaymentDecision.number(2);
                 }
+                if (source.getName().equals("Necrologia")) {
+                    return PaymentDecision.number(Integer.parseInt(ability.getSVar("ChosenX")));
+                }
                 return null;
             } else {
                 c = AbilityUtils.calculateAmount(source, cost.getAmount(), ability);
@@ -373,6 +383,9 @@ public class AiCostDecision extends CostDecisionMakerBase {
 
     @Override
     public PaymentDecision visit(CostPutCardToLib cost) {
+        if (cost.payCostFromSource()) {
+            return PaymentDecision.card(source);
+        }
         Integer c = cost.convertAmount();
         final Game game = player.getGame();
         CardCollection chosen = new CardCollection();
@@ -469,7 +482,7 @@ public class AiCostDecision extends CostDecisionMakerBase {
         CardCollectionView totap;
         if (isVehicle) {
             totalP = type.split("withTotalPowerGE")[1];
-            type = type.replace("+withTotalPowerGE" + totalP, "");
+            type = TextUtil.fastReplace(type, "+withTotalPowerGE", "");
             totap = ComputerUtil.chooseTapTypeAccumulatePower(player, type, ability, !cost.canTapSource, Integer.parseInt(totalP), tapped);
         } else {
             totap = ComputerUtil.chooseTapType(player, type, source, !cost.canTapSource, c, tapped);

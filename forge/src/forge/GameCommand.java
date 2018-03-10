@@ -23,7 +23,7 @@ package forge;
  * </p>
  * 
  * @author Forge
- * @version $Id: GameCommand.java 24794 2014-02-10 08:11:32Z Max mtg $
+ * @version $Id$
  */
 public interface GameCommand extends java.io.Serializable, Runnable {
     /** Constant <code>Blank</code>. */

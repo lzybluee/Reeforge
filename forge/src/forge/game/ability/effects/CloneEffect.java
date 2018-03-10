@@ -8,13 +8,7 @@ import forge.game.Game;
 import forge.game.ability.AbilityFactory;
 import forge.game.ability.AbilityUtils;
 import forge.game.ability.SpellAbilityEffect;
-import forge.game.card.Card;
-import forge.game.card.CardCollectionView;
-import forge.game.card.CardState;
-import forge.game.card.CardFactory;
-import forge.game.card.CardFactoryUtil;
-import forge.game.card.CardLists;
-import forge.game.card.CardUtil;
+import forge.game.card.*;
 import forge.game.event.GameEventCardStatsChanged;
 import forge.game.player.Player;
 import forge.game.replacement.ReplacementEffect;
@@ -141,9 +135,6 @@ public class CloneEffect extends SpellAbilityEffect {
 
         CardFactory.copyCopiableCharacteristics(cardToCopy, tgtCard);
 
-        // must copy abilities before first so cloned added abilities are handled correctly
-        CardFactory.copyCopiableAbilities(cardToCopy, tgtCard);
-        
         // add extra abilities as granted by the copy effect
         addExtraCharacteristics(tgtCard, sa, origSVars);
 
@@ -158,7 +149,7 @@ public class CloneEffect extends SpellAbilityEffect {
 
         // set the host card for copied spellabilities
         for (final SpellAbility newSa : tgtCard.getSpellAbilities()) {
-            newSa.setHostCard(cardToCopy);
+            newSa.setOriginalHost(cardToCopy);
         }
 
         // restore name if it should be unchanged
@@ -278,11 +269,8 @@ public class CloneEffect extends SpellAbilityEffect {
                     keywords.remove(k);
                 }
                 k = keywords.get(i);
+                
                 tgtCard.addIntrinsicKeyword(k);
-
-                CardFactoryUtil.addTriggerAbility(k, tgtCard, null);
-                CardFactoryUtil.addReplacementEffect(k, tgtCard, null);
-                CardFactoryUtil.addSpellAbility(k, tgtCard, null);
             }
         }
 
@@ -335,7 +323,13 @@ public class CloneEffect extends SpellAbilityEffect {
                 shortColors = CardUtil.getShortColorsString(Arrays.asList(colors.split(",")));
             }
         }
-        tgtCard.addColor(shortColors, !sa.hasParam("OverwriteColors"), tgtCard.getTimestamp());
+        if (sa.hasParam("OverwriteColors")) {
+            tgtCard.setColor(shortColors);
+        } else {
+            // TODO: this actually doesn't work for some reason (and fiddling with timestamps doesn't seem to fix it).
+            // No cards currently use this, but if some ever do, this code will require tweaking.
+            tgtCard.addColor(shortColors, true, tgtCard.getTimestamp());
+        }
 
         if (sa.hasParam("Embalm") && tgtCard.isEmbalmed()) {
             tgtCard.addType("Zombie");

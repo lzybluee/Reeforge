@@ -1,6 +1,7 @@
 package forge.screens.home.puzzle;
 
 import forge.GuiBase;
+import forge.UiCommand;
 import forge.assets.FSkinProp;
 import forge.deck.Deck;
 import forge.game.GameRules;
@@ -41,6 +42,14 @@ public enum CSubmenuPuzzleSolve implements ICDoc, IMenuProvider {
                 new ActionListener() { @Override
                 public void actionPerformed(final ActionEvent e) { startPuzzleSolve(); } });
     }
+
+    private final UiCommand cmdStart = new UiCommand() {
+		private static final long serialVersionUID = -367368436333443417L;
+
+		@Override public void run() {
+            startPuzzleSolve();
+        }
+    };
 
     private void updateData() {
         final ArrayList<Puzzle> puzzles = PuzzleIO.loadPuzzles();

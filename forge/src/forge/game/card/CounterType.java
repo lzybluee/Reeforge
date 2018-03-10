@@ -143,6 +143,8 @@ public enum CounterType {
 
     KI("KI", 190, 189, 255),
 
+    LANDMARK("LNMRK", 186, 28, 28),
+
     LEVEL("LEVEL", 60, 222, 185),
 
     LORE("LORE", 209, 198, 161),
@@ -206,6 +208,8 @@ public enum CounterType {
     PHYLACTERY("PHYLA", 117, 219, 153),
 
     POLYP("POLYP", 236, 185, 198),
+
+    PREY("PREY", 240, 0, 0),
 
     PUPA("PUPA", 0, 223, 203),
 

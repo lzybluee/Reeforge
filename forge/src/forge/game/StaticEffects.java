@@ -33,7 +33,7 @@ import forge.game.staticability.StaticAbility;
  * </p>
  * 
  * @author Forge
- * @version $Id: StaticEffects.java 35266 2017-08-28 14:06:28Z Agetian $
+ * @version $Id$
  */
 public class StaticEffects {
 

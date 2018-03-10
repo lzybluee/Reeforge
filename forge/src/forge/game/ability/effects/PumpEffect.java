@@ -9,6 +9,7 @@ import forge.game.ability.SpellAbilityEffect;
 import forge.game.card.Card;
 import forge.game.card.CardUtil;
 import forge.game.event.GameEventCardStatsChanged;
+import forge.game.keyword.KeywordInterface;
 import forge.game.player.Player;
 import forge.game.spellability.SpellAbility;
 import forge.game.spellability.TargetRestrictions;
@@ -22,6 +23,7 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import forge.game.card.CardFactoryUtil;
+import forge.util.TextUtil;
 
 public class PumpEffect extends SpellAbilityEffect {
 
@@ -139,6 +141,10 @@ public class PumpEffect extends SpellAbilityEffect {
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * @see forge.game.ability.SpellAbilityEffect#getStackDescription(forge.game.spellability.SpellAbility)
+     */
     @Override
     protected String getStackDescription(final SpellAbility sa) {
 
@@ -239,7 +245,7 @@ public class PumpEffect extends SpellAbilityEffect {
                 replaced = "CardUID_" + String.valueOf(host.getId());
             }
             for (int i = 0; i < keywords.size(); i++) {
-                keywords.set(i, keywords.get(i).replaceAll(defined, replaced));
+                keywords.set(i, TextUtil.fastReplace(keywords.get(i), defined, replaced));
             }
         }
         if (sa.hasParam("DefinedLandwalk")) {
@@ -257,8 +263,8 @@ public class PumpEffect extends SpellAbilityEffect {
             List<String> choice = Lists.newArrayList();
             List<String> total = Lists.newArrayList(keywords);
             if (sa.hasParam("NoRepetition")) {
-                final List<String> tgtCardskws = tgtCards.get(0).getKeywords();
-                for (String kws : tgtCardskws) {
+                for (KeywordInterface inst : tgtCards.get(0).getKeywords()) {
+                    final String kws = inst.getOriginal();
                     if (total.contains(kws)) {
                         total.remove(kws);
                     }
@@ -275,7 +281,9 @@ public class PumpEffect extends SpellAbilityEffect {
 
         if (sa.hasParam("Optional")) {
             final String targets = Lang.joinHomogenous(tgtCards);
-            final String message = sa.hasParam("OptionQuestion") ? sa.getParam("OptionQuestion").replace("TARGETS", targets) : "Apply pump to " + targets + "?";
+            final String message = sa.hasParam("OptionQuestion")
+                    ? TextUtil.fastReplace(sa.getParam("OptionQuestion"), "TARGETS", targets)
+                    : TextUtil.concatNoSpace("Apply pump to ", targets, "?");
 
             if (!sa.getActivatingPlayer().getController().confirmAction(sa, null, message)) {
                 return;

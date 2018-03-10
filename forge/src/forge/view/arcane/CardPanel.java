@@ -26,7 +26,6 @@ import forge.game.card.Card;
 import forge.game.card.CardView;
 import forge.game.card.CardView.CardStateView;
 import forge.game.card.CounterType;
-import forge.game.player.PlayerView;
 import forge.gui.CardContainer;
 import forge.item.PaperCard;
 import forge.model.FModel;
@@ -97,8 +96,6 @@ public class CardPanel extends SkinnedPanel implements CardContainer, IDisposabl
 
     private static Font smallCounterFont;
     private static Font largeCounterFont;
-
-    private PlayerView flashbackPlayer = null;
 
     static {
 
@@ -367,7 +364,11 @@ public class CardPanel extends SkinnedPanel implements CardContainer, IDisposabl
         boolean noBorderPref = !isPreferenceEnabled(FPref.UI_RENDER_BLACK_BORDERS);
 
         // Borderless cards should be accounted for here
+        // Amonkhet Invocations
         boolean noBorderOnCard = getCard().getCurrentState().getSetCode().equalsIgnoreCase("MPS_AKH");
+        // Unstable basic lands
+        noBorderOnCard |= getCard().getCurrentState().isBasicLand() && getCard().getCurrentState().getSetCode().equalsIgnoreCase("UST");
+
         boolean cardImgHasAlpha = imagePanel != null && imagePanel.getSrcImage() != null && imagePanel.getSrcImage().getColorModel().hasAlpha();
 
         if (!noBorderPref && !(noBorderOnCard && cardImgHasAlpha)) {
@@ -460,7 +461,7 @@ public class CardPanel extends SkinnedPanel implements CardContainer, IDisposabl
 
         }
 
-        final int combatXSymbols = cardXOffset;
+        final int combatXSymbols = (cardXOffset + (cardWidth / 4)) - 16;
         final int stateXSymbols = (cardXOffset + (cardWidth / 2)) - 16;
         final int ySymbols = (cardYOffset + cardHeight) - (cardHeight / 8) - 16;
 
@@ -685,13 +686,14 @@ public class CardPanel extends SkinnedPanel implements CardContainer, IDisposabl
         final CardStateView state = card.getCurrentState();
         String sPt = "";
         if (state.isCreature() && state.isPlaneswalker()) {
-            sPt = String.format("%d/%d (%d)", state.getPower(), state.getToughness(), state.getLoyalty());
+            sPt = state.getPower() + "/" + state.getToughness() +
+                    " (" + String.valueOf(state.getLoyalty()) + ")";
         }
         else if (state.isCreature()) {
-            sPt = String.format("%d/%d", state.getPower(), state.getToughness());
+            sPt = state.getPower() + "/" + state.getToughness();
         }
         else if (state.getType().hasSubtype("Vehicle")) {
-            sPt = String.format("[%d/%d]", state.getPower(), state.getToughness());
+            sPt = "[" + state.getPower() + "/" + state.getToughness() + "]";
         }
         else if (state.isPlaneswalker()) {
             sPt = String.valueOf(state.getLoyalty());
@@ -800,13 +802,5 @@ public class CardPanel extends SkinnedPanel implements CardContainer, IDisposabl
     public void repaintOverlays() {
         repaint();
         doLayout();
-    }
-
-    public PlayerView getFlashbackPlayer() {
-        return flashbackPlayer;
-    }
-
-    public void setFlashbackPlayer(PlayerView player) {
-        flashbackPlayer = player;
     }
 }

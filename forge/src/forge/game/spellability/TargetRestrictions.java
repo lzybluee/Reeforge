@@ -40,7 +40,7 @@ import forge.game.zone.ZoneType;
  * </p>
  * 
  * @author Forge
- * @version $Id: TargetRestrictions.java 34759 2017-07-15 04:29:27Z Agetian $
+ * @version $Id$
  */
 public class TargetRestrictions {
     // Target has two things happening:
@@ -761,15 +761,6 @@ public class TargetRestrictions {
             this.dividedMap.remove(tgt);
         }
         this.dividedMap.put(tgt, portionAllocated);
-    }
-
-    public final int removeDividedAllocation(final Object tgt) {
-        int ret = 0;
-        if (this.dividedMap.containsKey(tgt)) {
-            ret = this.dividedMap.get(tgt);
-            this.dividedMap.remove(tgt);
-        }
-        return ret;
     }
 
     /**

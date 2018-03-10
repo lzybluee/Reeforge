@@ -20,32 +20,25 @@ package forge.game;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-
 import forge.card.MagicColor;
 import forge.card.mana.ManaCostParser;
 import forge.game.ability.AbilityFactory;
 import forge.game.ability.AbilityFactory.AbilityRecordType;
 import forge.game.ability.AbilityUtils;
 import forge.game.ability.ApiType;
-import forge.game.card.Card;
-import forge.game.card.CardCollectionView;
-import forge.game.card.CardPlayOption;
-import forge.game.card.CardPredicates;
-import forge.game.card.CounterType;
+import forge.game.card.*;
 import forge.game.card.CardPlayOption.PayManaCost;
 import forge.game.cost.Cost;
+import forge.game.keyword.KeywordInterface;
 import forge.game.mana.ManaCostBeingPaid;
 import forge.game.player.Player;
 import forge.game.spellability.*;
 import forge.game.zone.ZoneType;
 import forge.util.TextUtil;
-
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 
 /**
@@ -54,7 +47,7 @@ import java.util.Vector;
  * </p>
  * 
  * @author Forge
- * @version $Id: GameActionUtil.java 35014 2017-08-13 00:40:48Z Max mtg $
+ * @version $Id$
  */
 public final class GameActionUtil {
     // Cache these instead of generating them on the fly, to avoid excessive allocations every time
@@ -84,14 +77,6 @@ public final class GameActionUtil {
      * @return the stLandManaAbilities
      */
     public static void grantBasicLandsManaAbilities(List<Card> lands) {
-        HashMap<Card, Vector<String>> removedAbility = new HashMap<Card, Vector<String>>();
-        HashMap<Card, Vector<String>> addedAbility = new HashMap<Card, Vector<String>>();
-        
-        for (final Card land : lands) {
-            removedAbility.put(land, new Vector<String>());
-            addedAbility.put(land, new Vector<String>());
-        }
-
         // remove all abilities granted by this Command
         for (final Card land : lands) {
             List<SpellAbility> origManaAbs = Lists.newArrayList(land.getManaAbilities());
@@ -99,7 +84,6 @@ public final class GameActionUtil {
             for (final SpellAbility sa : origManaAbs) {
                 if (sa.isBasicLandAbility()) {
                     land.getCurrentState().removeManaAbility(sa);
-                    removedAbility.get(land).add(sa.getDescription());
                 }
             }
         }
@@ -114,27 +98,7 @@ public final class GameActionUtil {
                     final SpellAbility sa = AbilityFactory.getAbility(mapParams, type, land, null);
                     sa.setBasicLandAbility(true);
                     land.getCurrentState().addManaAbility(sa);
-                    addedAbility.get(land).add(sa.getDescription());
                 }
-            }
-        }
-
-        for (final Card land : lands) {
-            Vector<String> removed = removedAbility.get(land);
-            Vector<String> added = addedAbility.get(land);
-            if(removed.size() != added.size()) {
-                land.updateAbilityText();
-                continue;
-            }
-            boolean changed = false;
-            for(String s : removed) {
-                if(!added.contains(s)) {
-                    changed = true;
-                    break;
-                }
-            }
-            if(changed) {
-                land.updateAbilityText();
             }
         }
     } // stLandManaAbilities
@@ -184,7 +148,7 @@ public final class GameActionUtil {
                     newSA.setPayCosts(newSA.getPayCosts().copyWithDefinedMana(o.getAltManaCost()));
                     changedManaCost = true;
                     if (host.hasSVar("AsForetoldSplitCMCHack")) {
-                        // FIXME: A temporary workaround for As Foretold interaction with split cards, better solution needed.
+                        // TODO: This is a temporary workaround for As Foretold interaction with split cards, better solution needed.
                         if (sa.isLeftSplit()) {
                             int leftCMC = sa.getHostCard().getCMC(Card.SplitCMCMode.LeftSplitCMC);
                             if (leftCMC > host.getCounters(CounterType.TIME)) {
@@ -198,7 +162,6 @@ public final class GameActionUtil {
                         }
                     }
                 }
-
                 if (changedManaCost) {
                     if ("0".equals(sa.getParam("ActivationLimit")) && sa.getHostCard().getManaCost().isNoCost()) {
                         sar.setLimitToCheck(null);
@@ -238,7 +201,8 @@ public final class GameActionUtil {
             alternatives.add(newSA);
         }
 
-        for (final String keyword : source.getKeywords()) {
+        for (final KeywordInterface inst : source.getKeywords()) {
+            final String keyword = inst.getOriginal();
             if (sa.isSpell() && keyword.startsWith("Flashback")) {
                 // if source has No Mana cost, and flashback doesn't have own one,
                 // flashback can't work
@@ -257,7 +221,7 @@ public final class GameActionUtil {
                 }
                 alternatives.add(flashback);
             }
-            if (sa.isSpell() && keyword.equals("You may cast CARDNAME as though it had flash if you pay 2 more to cast it.")) {
+            if (sa.isSpell() && keyword.equals("You may cast CARDNAME as though it had flash if you pay {2} more to cast it.")) {
                 final SpellAbility newSA = sa.copy();
                 newSA.setBasicSpell(false);
                 ManaCostBeingPaid newCost = new ManaCostBeingPaid(source.getManaCost());
@@ -269,7 +233,7 @@ public final class GameActionUtil {
                 alternatives.add(newSA);
             }
             if (sa.hasParam("Equip") && sa instanceof AbilityActivated && keyword.equals("EquipInstantSpeed")) {
-                final SpellAbility newSA = ((AbilityActivated) sa).getCopy();
+                final SpellAbility newSA = sa.copy();
                 SpellAbilityRestriction sar = newSA.getRestrictions();
                 sar.setSorcerySpeed(false);
                 sar.setInstantSpeed(true);
@@ -286,7 +250,8 @@ public final class GameActionUtil {
             return costs;
         }
         final Card source = sa.getHostCard();
-        for (String keyword : source.getKeywords()) {
+        for (KeywordInterface inst : source.getKeywords()) {
+            final String keyword = inst.getOriginal();
             if (keyword.startsWith("Buyback")) {
                 final Cost cost = new Cost(keyword.substring(8), false);
                 costs.add(new OptionalCostValue(OptionalCost.Buyback, cost));
@@ -357,7 +322,8 @@ public final class GameActionUtil {
             return abilities;
         }
         final Card source = sa.getHostCard();
-        for (String keyword : source.getKeywords()) {
+        for (KeywordInterface inst : source.getKeywords()) {
+            final String keyword = inst.getOriginal();
             if (keyword.startsWith("AlternateAdditionalCost")) {
                 final List<SpellAbility> newAbilities = Lists.newArrayList();
                 String[] costs = TextUtil.split(keyword, ':');
@@ -408,7 +374,8 @@ public final class GameActionUtil {
         }
 
         // Buyback, Kicker
-        for (String keyword : source.getKeywords()) {
+        for (KeywordInterface inst : source.getKeywords()) {
+            final String keyword = inst.getOriginal();
             if (keyword.startsWith("Buyback")) {
                 for (int i = 0; i < abilities.size(); i++) {
                     final SpellAbility newSA = abilities.get(i).copy();
@@ -451,7 +418,7 @@ public final class GameActionUtil {
                         newSA.setBasicSpell(false);
                         final Cost cost1 = new Cost(sCosts[0], false);
                         final Cost cost2 = new Cost(sCosts[1], false);
-                        newSA.setDescription(newSA.getDescription() + String.format(" (Both kickers: %s and %s)", cost1.toSimpleString(), cost2.toSimpleString()));
+                        newSA.setDescription(TextUtil.addSuffix(newSA.getDescription(), TextUtil.concatWithSpace(" (Both kickers:", cost1.toSimpleString(),"and",TextUtil.addSuffix(cost2.toSimpleString(),")"))));
                         newSA.setPayCosts(cost2.add(cost1.add(newSA.getPayCosts())));
                         newSA.addOptionalCost(OptionalCost.Kicker1);
                         newSA.addOptionalCost(OptionalCost.Kicker2);
@@ -576,4 +543,23 @@ public final class GameActionUtil {
         }
         return sb.toString();
     }
+
+    public static CardCollectionView orderCardsByTheirOwners(Game game, CardCollectionView list, ZoneType dest) {
+        CardCollection completeList = new CardCollection();
+        for (Player p : game.getPlayers()) {
+            CardCollection subList = new CardCollection();
+            for (Card c : list) {
+                if (c.getOwner().equals(p)) {
+                    subList.add(c);
+                }
+            }
+            CardCollectionView subListView = subList;
+            if (subList.size() > 1) {
+                subListView = p.getController().orderMoveToZoneList(subList, dest);
+            }
+            completeList.addAll(subListView);
+        }
+        return completeList;
+    }
+
 } // end class GameActionUtil

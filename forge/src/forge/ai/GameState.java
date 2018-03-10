@@ -1,23 +1,9 @@
 package forge.ai;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
-
 import forge.StaticData;
 import forge.card.CardStateName;
 import forge.game.Game;
@@ -27,8 +13,8 @@ import forge.game.ability.effects.DetachedCardEffect;
 import forge.game.card.Card;
 import forge.game.card.CardCollection;
 import forge.game.card.CardCollectionView;
-import forge.game.card.CardFactory;
 import forge.game.card.CounterType;
+import forge.game.card.token.TokenInfo;
 import forge.game.combat.Combat;
 import forge.game.combat.CombatUtil;
 import forge.game.event.GameEventAttackersDeclared;
@@ -44,6 +30,12 @@ import forge.item.PaperCard;
 import forge.util.TextUtil;
 import forge.util.collect.FCollectionView;
 import org.apache.commons.lang3.StringUtils;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.*;
+import java.util.Map.Entry;
 
 public abstract class GameState {
     private static final Map<ZoneType, String> ZONES = new HashMap<ZoneType, String>();
@@ -82,12 +74,15 @@ public abstract class GameState {
     private final Map<String, String> abilityString = new HashMap<>();
 
     private final Set<Card> cardsReferencedByID = new HashSet<>();
+    private final Set<Card> cardsWithoutETBTrigs = new HashSet<>();
 
     private String tChangePlayer = "NONE";
     private String tChangePhase = "NONE";
 
     private String precastHuman = null;
     private String precastAI = null;
+
+    private int turn;
 
     // Targeting for precast spells in a game state (mostly used by Puzzle Mode game states)
     private final int TARGET_NONE = -1; // untargeted spell (e.g. Joraga Invocation)
@@ -115,18 +110,19 @@ public abstract class GameState {
             sb.append("[state]\n");
         }
 
-        sb.append(String.format("humanlife=%d\n", humanLife));
-        sb.append(String.format("ailife=%d\n", computerLife));
+        sb.append(TextUtil.concatNoSpace("humanlife=", String.valueOf(humanLife), "\n"));
+        sb.append(TextUtil.concatNoSpace("ailife=", String.valueOf(computerLife), "\n"));
+        sb.append(TextUtil.concatNoSpace("turn=", String.valueOf(turn), "\n"));
 
         if (!humanCounters.isEmpty()) {
-            sb.append(String.format("humancounters=%s\n", humanCounters));
+            sb.append(TextUtil.concatNoSpace("humancounters=", humanCounters, "\n"));
         }
         if (!computerCounters.isEmpty()) {
-            sb.append(String.format("aicounters=%s\n", computerCounters));
+            sb.append(TextUtil.concatNoSpace("aicounters=", computerCounters, "\n"));
         }
 
-        sb.append(String.format("activeplayer=%s\n", tChangePlayer));
-        sb.append(String.format("activephase=%s\n", tChangePhase));
+        sb.append(TextUtil.concatNoSpace("activeplayer=", tChangePlayer, "\n"));
+        sb.append(TextUtil.concatNoSpace("activephase=", tChangePhase, "\n"));
         appendCards(humanCardTexts, "human", sb);
         appendCards(aiCardTexts, "ai", sb);
         return sb.toString();
@@ -134,7 +130,7 @@ public abstract class GameState {
 
     private void appendCards(Map<ZoneType, String> cardTexts, String categoryPrefix, StringBuilder sb) {
         for (Entry<ZoneType, String> kv : cardTexts.entrySet()) {
-            sb.append(String.format("%s%s=%s\n", categoryPrefix, ZONES.get(kv.getKey()), kv.getValue()));
+            sb.append(TextUtil.concatNoSpace(categoryPrefix, ZONES.get(kv.getKey()), "=", kv.getValue(), "\n"));
         }
     }
 
@@ -156,6 +152,7 @@ public abstract class GameState {
 
         tChangePlayer = game.getPhaseHandler().getPlayerTurn() == ai ? "ai" : "human";
         tChangePhase = game.getPhaseHandler().getPhase().toString();
+        turn = game.getPhaseHandler().getTurn();
         aiCardTexts.clear();
         humanCardTexts.clear();
 
@@ -218,7 +215,7 @@ public abstract class GameState {
             newText.append(";");
         }
         if (c.isToken()) {
-            newText.append("t:" + new CardFactory.TokenInfo(c).toString());
+            newText.append("t:" + new TokenInfo(c).toString());
         } else {
             if (c.getPaperCard() == null) {
                 return;
@@ -347,7 +344,7 @@ public abstract class GameState {
             }
 
             first = false;
-            counterString.append(String.format("%s=%d", kv.getKey().toString(), kv.getValue()));
+            counterString.append(TextUtil.concatNoSpace(kv.getKey().toString(), "=", String.valueOf(kv.getValue())));
         }
         return counterString.toString();
     }
@@ -399,6 +396,11 @@ public abstract class GameState {
 
         boolean isHuman = categoryName.startsWith("human");
 
+        if (categoryName.equals("turn")) {
+            turn = Integer.parseInt(categoryValue);
+        } else {
+            turn = 1;
+        }
         if (categoryName.endsWith("life")) {
             if (isHuman)
                 humanLife = Integer.parseInt(categoryValue);
@@ -506,7 +508,7 @@ public abstract class GameState {
             applyCountersToGameEntity(ai, computerCounters);
         }
 
-        game.getPhaseHandler().devModeSet(newPhase, newPlayerTurn);
+        game.getPhaseHandler().devModeSet(newPhase, newPlayerTurn, turn);
 
         game.getTriggerHandler().setSuppressAllTriggers(true);
 
@@ -537,7 +539,7 @@ public abstract class GameState {
     private void handleCombat(final Game game, final Player attackingPlayer, final Player defendingPlayer, final boolean toDeclareBlockers) {
         // First we need to ensure that all attackers are declared in the Declare Attackers step,
         // even if proceeding straight to Declare Blockers
-        game.getPhaseHandler().devModeSet(PhaseType.COMBAT_DECLARE_ATTACKERS, attackingPlayer);
+        game.getPhaseHandler().devModeSet(PhaseType.COMBAT_DECLARE_ATTACKERS, attackingPlayer, turn);
 
         if (game.getPhaseHandler().getCombat() == null) {
             game.getPhaseHandler().setCombat(new Combat(attackingPlayer));
@@ -720,7 +722,7 @@ public abstract class GameState {
 
                     if (tgtID != TARGET_NONE && svarValue.contains("| Defined$")) {
                         // We want a specific target, so try to undefine a predefined target if possible
-                        svarValue = svarValue.replace("| Defined$", "| Undefined$");
+                        svarValue = TextUtil.fastReplace(svarValue, "| Defined$", "| Undefined$");
                         if (tgtID == TARGET_HUMAN || tgtID == TARGET_AI) {
                             svarValue += " | ValidTgts$ Player";
                         } else {
@@ -773,12 +775,12 @@ public abstract class GameState {
 
         if (spellDef.contains(":")) {
             // targeting via -> will be handled in executeScript
-            scriptID = spellDef.substring(spellDef.indexOf(":") + 1);
-            spellDef = spellDef.substring(0, spellDef.indexOf(":"));
+            scriptID = spellDef.substring(spellDef.indexOf(":") + 1).trim();
+            spellDef = spellDef.substring(0, spellDef.indexOf(":")).trim();
         } else if (spellDef.contains("->")) {
-            String tgtDef = spellDef.substring(spellDef.indexOf("->") + 2);
+            String tgtDef = spellDef.substring(spellDef.indexOf("->") + 2).trim();
             tgtID = parseTargetInScript(tgtDef);
-            spellDef = spellDef.substring(0, spellDef.indexOf("->"));
+            spellDef = spellDef.substring(0, spellDef.indexOf("->")).trim();
         }
 
         PaperCard pc = StaticData.instance().getCommonCards().getCard(spellDef);
@@ -905,14 +907,16 @@ public abstract class GameState {
                     // Note: Not clearCounters() since we want to keep the counters
                     // var as-is.
                     c.setCounters(Maps.<CounterType, Integer>newEnumMap(CounterType.class));
-                    p.getZone(ZoneType.Hand).add(c);
                     if (c.isAura()) {
                         // dummy "enchanting" to indicate that the card will be force-attached elsewhere
                         // (will be overridden later, so the actual value shouldn't matter)
                         c.setEnchanting(c);
+                    }
 
-                        p.getGame().getAction().moveToPlay(c, null);
+                    if (cardsWithoutETBTrigs.contains(c)) {
+                        p.getGame().getAction().moveTo(ZoneType.Battlefield, c, null);
                     } else {
+                        p.getZone(ZoneType.Hand).add(c);
                         p.getGame().getAction().moveToPlay(c, null);
                     }
 
@@ -954,8 +958,9 @@ public abstract class GameState {
             Card c;
             boolean hasSetCurSet = false;
             if (cardinfo[0].startsWith("t:")) {
+                // TODO Make sure Game State conversion works with new tokens
                 String tokenStr = cardinfo[0].substring(2);
-                c = CardFactory.makeOneToken(CardFactory.TokenInfo.fromString(tokenStr), player);
+                c = new TokenInfo(tokenStr).makeOneToken(player);
             } else {
                 PaperCard pc = StaticData.instance().getCommonCards().getCard(cardinfo[0], setCode);
                 if (pc == null) {
@@ -1033,6 +1038,8 @@ public abstract class GameState {
                     } else {
                         cardAttackMap.put(c, null);
                     }
+                } else if (info.equals("NoETBTrigs")) {
+                    cardsWithoutETBTrigs.add(c);
                 }
             }
 

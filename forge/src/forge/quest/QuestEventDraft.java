@@ -37,6 +37,7 @@ import forge.tournament.system.TournamentBracket;
 import forge.tournament.system.TournamentPairing;
 import forge.tournament.system.TournamentPlayer;
 import forge.util.NameGenerator;
+import forge.util.TextUtil;
 import forge.util.storage.IStorage;
 
 import java.text.SimpleDateFormat;
@@ -788,34 +789,18 @@ public class QuestEventDraft implements IQuestEvent {
         if (!allowedQuestSets.isEmpty()) {
             for (final CardBlock block : blocks) {
 
-                boolean blockAllowed = false;
-                boolean largeSetUnlocked = false;
-                int unlockedSets = 0;
-                final boolean allBlocksSanctioned = quest.getFormat().getAllowedSetCodes().isEmpty();
+                // New code : all sets must be unlocked
+                boolean blockAllowed = true;
 
-                for (final CardEdition set : block.getSets()) {
-                    if (!allowedQuestSets.contains(set) && !allBlocksSanctioned) {
-                        continue;
+                for (CardEdition set : block.getSets()) {
+                    if (!allowedQuestSets.contains(set)) {
+                        blockAllowed = false;
                     }
-                    unlockedSets++;
-                    if (set.isLargeSet()) {
-                        largeSetUnlocked = true;
-                    }
-                }
-
-                //Allow partially unlocked blocks if they contain at least one large and one small unlocked set.
-                if (largeSetUnlocked && unlockedSets > 1) {
-                    blockAllowed = true;
-                }
-
-                if (largeSetUnlocked && block.getSets().size() == 1) {
-                    blockAllowed = true;
-                    singleSets.add(block.getSets().get(0).getCode());
                 }
 
                 if (blockAllowed) {
                     possibleFormats.add(new QuestDraftFormat(block));
-                }
+                } 
 
             }
 
@@ -1033,22 +1018,22 @@ public class QuestEventDraft implements IQuestEvent {
 ;
                 if (draftOrder2016) {
                     if (set0.isLargeSet()) {
-                        possibleCombinations.add(String.format("%s/%s/%s", set1.getCode(), set1.getCode(), set0.getCode()));
+                        possibleCombinations.add(TextUtil.concatNoSpace(set1.getCode(), "/", set1.getCode(), "/", set0.getCode()));
                     } else {
-                        possibleCombinations.add(String.format("%s/%s/%s", set0.getCode(), set0.getCode(), set1.getCode()));
+                        possibleCombinations.add(TextUtil.concatNoSpace(set0.getCode(), "/", set0.getCode(), "/", set1.getCode()));
                     }
                 }
                 else {
                     if (set0.isLargeSet()) {
-                        possibleCombinations.add(String.format("%s/%s/%s", set0.getCode(), set0.getCode(), set1.getCode()));
+                        possibleCombinations.add(TextUtil.concatNoSpace(set0.getCode(), "/", set0.getCode(), "/", set1.getCode()));
                     } else {
-                        possibleCombinations.add(String.format("%s/%s/%s", set0.getCode(), set1.getCode(), set1.getCode()));
+                        possibleCombinations.add(TextUtil.concatNoSpace(set0.getCode(), "/", set1.getCode(), "/", set1.getCode()));
                     }
                 }
             }
             if (allowedSets.size() == 3) {
                 CardEdition set2 = allowedSets.get(2);
-                possibleCombinations.add(String.format("%s/%s/%s", set0.getCode(), set1.getCode(), set2.getCode()));
+                possibleCombinations.add(TextUtil.concatNoSpace(set0.getCode(), "/", set1.getCode(), "/", set2.getCode()));
             }
         }
 

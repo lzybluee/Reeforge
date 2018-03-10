@@ -42,7 +42,7 @@ import com.google.common.collect.Maps;
  * </p>
  * 
  * @author Forge
- * @version $Id: StaticEffect.java 35266 2017-08-28 14:06:28Z Agetian $
+ * @version $Id$
  */
 public class StaticEffect {
 

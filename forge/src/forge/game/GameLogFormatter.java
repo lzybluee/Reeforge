@@ -42,7 +42,7 @@ public class GameLogFormatter extends IGameEventVisitor.Base<GameLogEntry> {
     @Override
     public GameLogEntry visit(GameEventGameOutcome ev) {
         for (Player p : ev.result.getPlayers()) {
-            String outcome = String.format("%s has %s", p.getName(), p.getOutcome().toString());
+            String outcome = p.getName() + " has " + p.getOutcome().toString();
             log.add(GameLogEntryType.GAME_OUTCOME, outcome);
         }
         return generateSummary(ev.history);
@@ -51,15 +51,15 @@ public class GameLogFormatter extends IGameEventVisitor.Base<GameLogEntry> {
     @Override
     public GameLogEntry visit(GameEventScry ev) {
         String scryOutcome = "";
-        String toTop = String.format("%s to the top of the library", Lang.nounWithAmount(ev.toTop, "card"));
-        String toBottom = String.format("%s to the bottom of the library", Lang.nounWithAmount(ev.toBottom, "card"));
+        String toTop = Lang.nounWithAmount(ev.toTop, "card") + " to the top of the library";
+        String toBottom = Lang.nounWithAmount(ev.toBottom, "card") + " to the bottom of the library";
 
         if (ev.toTop > 0 && ev.toBottom > 0) {
-            scryOutcome = String.format("%s scried %s and %s.", ev.player, toTop, toBottom);
+            scryOutcome = ev.player.toString() + " scried " + toTop + " and " + toBottom;
         } else if (ev.toBottom == 0) {
-            scryOutcome = String.format("%s scried %s.", ev.player, toTop);
+            scryOutcome = ev.player.toString() + " scried " + toTop;
         } else {
-            scryOutcome = String.format("%s scried %s.", ev.player, toBottom);
+            scryOutcome = ev.player.toString() + " scried " + toBottom;
         }
 
         return new GameLogEntry(GameLogEntryType.STACK_RESOLVE, scryOutcome);
@@ -104,7 +104,7 @@ public class GameLogFormatter extends IGameEventVisitor.Base<GameLogEntry> {
             return null;
         }
 
-        String modeChoiceOutcome = String.format("%s has chosen %s for %s.", ev.player, ev.mode, ev.cardName);
+        String modeChoiceOutcome = ev.player.toString() + " has chosen " + ev.mode + " for " + ev.cardName + ".";
         return new GameLogEntry(GameLogEntryType.STACK_RESOLVE, modeChoiceOutcome);
     }
 
@@ -143,7 +143,7 @@ public class GameLogFormatter extends IGameEventVisitor.Base<GameLogEntry> {
         if (newLobbyPlayer == null) {
             message = p.getName() + " has restored control over themself";
         } else {
-            message =  String.format("%s is controlled by %s", p.getName(), newLobbyPlayer.getName());
+            message = p.getName() + "is controlled by" + newLobbyPlayer.getName();
         }
         return new GameLogEntry(GameLogEntryType.PLAYER_CONROL, message);
     }
@@ -158,15 +158,15 @@ public class GameLogFormatter extends IGameEventVisitor.Base<GameLogEntry> {
     public GameLogEntry visit(GameEventCardDamaged event) {
         String additionalLog = "";
         if (event.type == DamageType.Deathtouch) {
-            additionalLog = "(Deathtouch)";
+            additionalLog = " (Deathtouch)";
         }
         if (event.type == DamageType.M1M1Counters) {
-            additionalLog = "(As -1/-1 Counters)";
+            additionalLog = " (As -1/-1 Counters)";
         }
         if (event.type == DamageType.LoyaltyLoss) {
-            additionalLog = "(Removing " + Lang.nounWithAmount(event.amount, "loyalty counter") + ")";
+            additionalLog = " (Removing " + Lang.nounWithAmount(event.amount, "loyalty counter") + ")";
         }
-        String message = String.format("%s deals %d damage %s to %s.", event.source, event.amount, additionalLog, event.card);
+        String message = event.source.toString() + " deals " + String.valueOf(event.amount) + " damage" + additionalLog + " to " + event.card.toString() + ".";
         return new GameLogEntry(GameLogEntryType.DAMAGE, message);
     }
 
@@ -175,26 +175,27 @@ public class GameLogFormatter extends IGameEventVisitor.Base<GameLogEntry> {
      */
     @Override
     public GameLogEntry visit(GameEventLandPlayed ev) {
-        String message = String.format("%s played %s", ev.player, ev.land);
+        String message = ev.player.toString() + " played " + ev.land.toString();
         return new GameLogEntry(GameLogEntryType.LAND, message);
     }
 
     @Override
     public GameLogEntry visit(GameEventTurnBegan event) {
-        String message = String.format("Turn %d (%s)", event.turnNumber, event.turnOwner);
+        String message = "Turn " + String.valueOf(event.turnNumber) + " (" + event.turnOwner.toString() + ")";
         return new GameLogEntry(GameLogEntryType.TURN, message);
     }
 
     @Override
     public GameLogEntry visit(GameEventPlayerDamaged ev) {
         String extra = ev.infect ? " (as poison counters)" : "";
-        String message = String.format("%s deals %d %s damage to %s%s.", ev.source, ev.amount, ev.combat ? "combat" : "non-combat", ev.target, extra);
+        String damageType = ev.combat ? "combat" : "non-combat";
+        String message = ev.source.toString() + " deals " + String.valueOf(ev.amount) + " " + damageType + " damage to " + ev.target.toString() + extra + ".";
         return new GameLogEntry(GameLogEntryType.DAMAGE, message);
     }
 
     @Override
     public GameLogEntry visit(GameEventPlayerPoisoned ev) {
-        String message = String.format("%s receives %s from %s", ev.receiver, Lang.nounWithAmount(ev.amount, "posion counter"), ev.source);
+        String message = ev.receiver.toString() + " receives " + Lang.nounWithAmount(ev.amount, "posion counter") + " from " + ev.source.toString();
         return new GameLogEntry(GameLogEntryType.DAMAGE, message);
     }
 
@@ -264,7 +265,7 @@ public class GameLogFormatter extends IGameEventVisitor.Base<GameLogEntry> {
 
     @Override
     public GameLogEntry visit(GameEventMulligan ev) {
-        String message = String.format("%s has mulliganed down to %d cards.", ev.player, ev.player.getZone(ZoneType.Hand).size());
+        String message = ev.player.toString() + " has mulliganed down to " + String.valueOf(ev.player.getZone(ZoneType.Hand).size()) + " cards.";
         return new GameLogEntry(GameLogEntryType.MULLIGAN, message);
     }
 

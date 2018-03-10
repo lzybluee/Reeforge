@@ -23,6 +23,7 @@ public class ChooseCardNameAi extends SpellAbilityAi {
 
     @Override
     protected boolean canPlayAI(Player ai, SpellAbility sa) {
+        Card source = sa.getHostCard();
         if (sa.hasParam("AILogic")) {
             // Don't tap creatures that may be able to block
             if (ComputerUtil.waitForBlocking(sa)) {
@@ -87,9 +88,9 @@ public class ChooseCardNameAi extends SpellAbilityAi {
                 Card copy = CardUtil.getLKICopy(card);
                 // for calcing i need only one split side    
                 if (isOther) {
-                    copy.getCurrentState().copyFrom(card, card.getState(CardStateName.RightSplit));                    
+                    copy.getCurrentState().copyFrom(card.getState(CardStateName.RightSplit), true);
                 } else {
-                    copy.getCurrentState().copyFrom(card, card.getState(CardStateName.LeftSplit));
+                    copy.getCurrentState().copyFrom(card.getState(CardStateName.LeftSplit), true);
                 }
                 copy.updateStateForView();
 

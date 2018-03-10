@@ -29,7 +29,7 @@ import forge.game.spellability.SpellAbility;
  * </p>
  * 
  * @author Forge
- * @version $Id: TriggerAttackerBlocked.java 34260 2017-06-14 08:17:32Z swordshine $
+ * @version $Id$
  */
 public class TriggerAttackerBlocked extends Trigger {
 

@@ -17,25 +17,24 @@
  */
 package forge.game.trigger;
 
-import forge.game.GameEntity;
+import java.util.Map;
+
 import forge.game.card.Card;
 import forge.game.spellability.SpellAbility;
 
-import java.util.Set;
-
 /**
  * <p>
- * Trigger_DamageDone class.
+ * Trigger_Destroyed class.
  * </p>
  * 
  * @author Forge
- * @version $Id: TriggerDamageDone.java 21390 2013-05-08 07:44:50Z Max mtg $
+ * @version $Id: TriggerDestroyed.java 17802 2012-10-31 08:05:14Z Max mtg $
  */
-public class TriggerCombatDamageDoneOnce extends Trigger {
+public class TriggerRegenerated extends Trigger {
 
     /**
      * <p>
-     * Constructor for TriggerCombatDamageDoneOnc.
+     * Constructor for Trigger_Destroyed.
      * </p>
      * 
      * @param params
@@ -45,50 +44,38 @@ public class TriggerCombatDamageDoneOnce extends Trigger {
      * @param intrinsic
      *            the intrinsic
      */
-    public TriggerCombatDamageDoneOnce(final java.util.Map<String, String> params, final Card host, final boolean intrinsic) {
+    public TriggerRegenerated(final Map<String, String> params, final Card host, final boolean intrinsic) {
         super(params, host, intrinsic);
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     @Override
-    public final boolean performTest(final java.util.Map<String, Object> runParams2) {
-        final Set<Card> srcs = (Set<Card>) runParams2.get("DamageSources");
-        final GameEntity tgt = (GameEntity) runParams2.get("DamageTarget");
-
-        if (this.mapParams.containsKey("ValidSource")) {
-            boolean valid = false;
-            for (Card c : srcs) {
-                if (c.isValid(this.mapParams.get("ValidSource").split(","), this.getHostCard().getController(),this.getHostCard(), null)) {
-                    valid = true;
-                }
-            }
-            if (!valid) {
+    public final boolean performTest(final Map<String, Object> runParams2) {
+        if (hasParam("ValidCause")) {
+            if (!matchesValid(runParams2.get("Cause"), getParam("ValidCause").split(","), getHostCard())) {
                 return false;
             }
         }
-
-        if (this.mapParams.containsKey("ValidTarget")) {
-            if (!matchesValid(tgt, this.mapParams.get("ValidTarget").split(","), this.getHostCard())) {
+        if (hasParam("ValidCard")) {
+            if (!matchesValid(runParams2.get("Card"), getParam("ValidCard").split(","), getHostCard())) {
                 return false;
             }
         }
-
         return true;
     }
 
     /** {@inheritDoc} */
     @Override
     public final void setTriggeringObjects(final SpellAbility sa) {
-        sa.setTriggeringObject("Sources", this.getRunParams().get("DamageSources"));
-        sa.setTriggeringObject("Target", this.getRunParams().get("DamageTarget"));
+        sa.setTriggeringObject("Card", this.getRunParams().get("Card"));
+        sa.setTriggeringObject("Cause", this.getRunParams().get("Cause"));
     }
 
     @Override
     public String getImportantStackObjects(SpellAbility sa) {
         StringBuilder sb = new StringBuilder();
-        sb.append("Sources: ").append(sa.getTriggeringObject("Sources")).append(", ");
-        sb.append("Target: ").append(sa.getTriggeringObject("Target"));
+        sb.append("Regenerated: ").append(sa.getTriggeringObject("Card"));
+        //sb.append("Destroyer: ").append(sa.getTriggeringObject("Causer"));
         return sb.toString();
     }
 }

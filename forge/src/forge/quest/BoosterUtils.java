@@ -42,7 +42,7 @@ import static forge.quest.QuestUtilCards.isLegalInQuestFormat;
  * </p>
  *
  * @author Forge
- * @version $Id: BoosterUtils.java 34889 2017-08-02 01:42:01Z KrazyTheFox $
+ * @version $Id$
  */
 public final class BoosterUtils {
 
@@ -225,8 +225,7 @@ public final class BoosterUtils {
                 case RANDOM:
                     populateRandomFilters(colorFilters);
                     break;
-                default:
-                    break;
+
             }
 
         }

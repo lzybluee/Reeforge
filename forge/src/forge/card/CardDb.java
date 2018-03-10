@@ -74,6 +74,7 @@ public final class CardDb implements ICardDatabase, IDeckGenPool {
 
     // NO GETTERS/SETTERS HERE!
     public static class CardRequest {
+        // TODO Move Request to its own class
         public String cardName;
         public String edition;
         public int artIndex;
@@ -245,13 +246,8 @@ public final class CardDb implements ICardDatabase, IDeckGenPool {
         uniqueCardsByName.clear();
         allCards.clear();
         for (Entry<String, Collection<PaperCard>> kv : allCardsByName.asMap().entrySet()) {
-            PaperCard paper = getFirstWithImage(kv.getValue());
-            uniqueCardsByName.put(kv.getKey(), paper);
-            for(PaperCard c : kv.getValue()) {
-                if(!allCards.contains(c)) {
-                    allCards.add(c);
-                }
-            }
+            uniqueCardsByName.put(kv.getKey(), getFirstWithImage(kv.getValue()));
+            allCards.addAll(kv.getValue());
         }
     }
 
@@ -587,6 +583,27 @@ public final class CardDb implements ICardDatabase, IDeckGenPool {
             return false;
         }
     }
+    // This Predicate validates if a card was printed at [rarity], on any of its printings
+    public Predicate<? super PaperCard> wasPrintedAtRarity(CardRarity rarity) {
+        return new PredicatePrintedAtRarity(rarity);
+    }
+
+    private class PredicatePrintedAtRarity implements Predicate<PaperCard> {
+        private final Set<String> matchingCards;
+
+        public PredicatePrintedAtRarity(CardRarity rarity) {
+            this.matchingCards = new HashSet<>();
+            for (PaperCard c : getAllCards()) {
+                if (c.getRarity() == rarity) {
+                    this.matchingCards.add(c.getName());
+                }
+            }
+        }
+        @Override
+        public boolean apply(final PaperCard subject) {
+            return matchingCards.contains(subject.getName());
+        }
+    }
 
     public StringBuilder appendCardToStringBuilder(PaperCard card, StringBuilder sb) {
         final boolean hasBadSetInfo = "???".equals(card.getEdition()) || StringUtils.isBlank(card.getEdition());
@@ -642,9 +659,9 @@ public final class CardDb implements ICardDatabase, IDeckGenPool {
         }
 
         if (cardRarity == CardRarity.Unknown) {
-            System.err.println(String.format("An unknown card found when loading Forge decks: \"%s\" Forge does not know of such a card's existence. Have you mistyped the card name?", cardName));
+            System.err.println("Forge does not know of such a card's existence. Have you mistyped the card name?");
         } else {
-            System.err.println(String.format("An unsupported card was requested: \"%s\" from \"%s\" set. We're sorry, but you cannot use this card yet.", request.cardName, cardEdition.getName()));
+            System.err.println("We're sorry, but you cannot use this card yet.");
         }
 
         return new PaperCard(CardRules.getUnsupportedCardNamed(request.cardName), cardEdition.getCode(), cardRarity, 1);

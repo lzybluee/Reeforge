@@ -28,6 +28,7 @@ import forge.game.trigger.Trigger;
 import forge.game.trigger.TriggerType;
 import forge.game.trigger.WrappedAbility;
 import forge.game.zone.ZoneType;
+import forge.util.TextUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.Maps;
@@ -47,7 +48,7 @@ import java.util.Set;
  * </p>
  *
  * @author Forge
- * @version $Id: SpellAbilityStackInstance.java 35257 2017-08-27 18:17:21Z Agetian $
+ * @version $Id$
  */
 public class SpellAbilityStackInstance implements IIdentifiable, IHasCardView {
     private static int maxId = 0;
@@ -414,7 +415,7 @@ public class SpellAbilityStackInstance implements IIdentifiable, IHasCardView {
 
     @Override
     public String toString() {
-        return String.format("%s->%s", getSourceCard(), getStackDescription());
+        return TextUtil.concatNoSpace(getSourceCard().toString(), "->", getStackDescription());
     }
 
     public StackItemView getView() {

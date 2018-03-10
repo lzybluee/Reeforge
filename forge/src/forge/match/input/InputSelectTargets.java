@@ -14,13 +14,14 @@ import forge.game.ability.ApiType;
 import forge.game.card.Card;
 import forge.game.card.CardView;
 import forge.game.player.Player;
-import forge.game.player.PlayerView;
 import forge.game.spellability.SpellAbility;
 import forge.game.spellability.TargetRestrictions;
 import forge.model.FModel;
 import forge.player.PlayerControllerHuman;
+import forge.properties.ForgeConstants;
 import forge.properties.ForgePreferences;
 import forge.util.ITriggerEvent;
+import forge.util.TextUtil;
 
 public final class InputSelectTargets extends InputSyncronizedBase {
     private final List<Card> choices;
@@ -28,6 +29,7 @@ public final class InputSelectTargets extends InputSyncronizedBase {
     private final Map<GameEntity, Integer> targetDepth = new HashMap<GameEntity, Integer>();
     private final TargetRestrictions tgt;
     private final SpellAbility sa;
+    private Card lastTarget = null;
     private boolean bCancel = false;
     private boolean bOk = false;
     private final boolean mandatory;
@@ -53,18 +55,26 @@ public final class InputSelectTargets extends InputSyncronizedBase {
             // sb.append(sa.getStackDescription().replace("(Targeting ERROR)", "")).append("\n").append(tgt.getVTSelection());
             // Apparently <b>...</b> tags do not work in mobile Forge, so don't include them (for now)
             sb.append(sa.getHostCard().toString()).append(" - ");
-            sb.append(sa.toString()).append("\n\n").append(tgt.getVTSelection());
+            sb.append(sa.toString()).append("\n");
+            if(!ForgeConstants.isGdxPortLandscape)
+                sb.append("\n");
+            sb.append(tgt.getVTSelection());
         } else {
             sb.append(sa.getHostCard()).append(" - ").append(tgt.getVTSelection());
         }
         if (!targetDepth.entrySet().isEmpty()) {
-            sb.append("\nTargeted:");
+                sb.append("\nTargeted: ");
         }
         for (final Entry<GameEntity, Integer> o : targetDepth.entrySet()) {
-            sb.append("\n");
+            //if it's not in gdx port landscape mode, append the linebreak
+            if(!ForgeConstants.isGdxPortLandscape)
+                sb.append("\n");
             sb.append(o.getKey());
+            //if it's in gdx port landscape mode, instead append the comma with space...
+            if(ForgeConstants.isGdxPortLandscape)
+                sb.append(", ");
             if (o.getValue() > 1) {
-                sb.append(String.format(" (%d times)", o.getValue()));
+                sb.append(TextUtil.concatNoSpace(" (", String.valueOf(o.getValue()), " times)"));
             }
         }
         if (!sa.getUniqueTargets().isEmpty()) {
@@ -75,10 +85,12 @@ public final class InputSelectTargets extends InputSyncronizedBase {
         final int maxTargets = tgt.getMaxTargets(sa.getHostCard(), sa);
         final int targeted = sa.getTargets().getNumTargeted();
         if(maxTargets > 1) {
-            sb.append(String.format("\n(%d more can be targeted)", Integer.valueOf(maxTargets - targeted)));
+            sb.append(TextUtil.concatNoSpace("\n(", String.valueOf(maxTargets - targeted), " more can be targeted)"));
         }
 
-        String message = sb.toString().replaceAll("CARDNAME", sa.getHostCard().toString()).replace("(Targeting ERROR)", "");
+        String message = TextUtil.fastReplace(TextUtil.fastReplace(sb.toString(),
+                "CARDNAME", sa.getHostCard().toString()),
+                "(Targeting ERROR)", "");
         showMessage(message, sa.getView());
 
         // If reached Minimum targets, enable OK button
@@ -116,14 +128,7 @@ public final class InputSelectTargets extends InputSyncronizedBase {
 
     @Override
     protected final boolean onCardSelected(final Card card, final List<Card> otherCardsToSelect, final ITriggerEvent triggerEvent) {
-        if (targetDepth.containsKey(card)) {
-            if (tgt.isDividedAsYouChoose()) {
-                int toAdd = tgt.removeDividedAllocation(card);
-                int toDevide = tgt.getStillToDivide();
-                tgt.setStillToDivide(toDevide + toAdd);
-                
-            }
-            removeTarget(card);
+        if (!tgt.isUniqueTargets() && targetDepth.containsKey(card)) {
             return false;
         }
 
@@ -132,42 +137,16 @@ public final class InputSelectTargets extends InputSyncronizedBase {
             showMessage(sa.getHostCard() + " - Cannot target this card (Shroud? Protection? Restrictions).");
             return false;
         }
-
         // If all cards must be from the same zone
-        if (tgt.isSingleZone()) {
-            boolean singleZone = true;
-            for (final GameObject o : targetDepth.keySet()) {
-                if (o instanceof Card) {
-                    final Card c = (Card) o;
-                    if(!c.getController().equals(card.getController())) {
-                        singleZone = false;
-                        break;
-                    }
-                }
-            }
-            if(!singleZone) {
-                showMessage(sa.getHostCard() + " - Cannot target this card (not in the same zone)");
-                return false;
-            }
+        if (tgt.isSingleZone() && lastTarget != null && !card.getController().equals(lastTarget.getController())) {
+            showMessage(sa.getHostCard() + " - Cannot target this card (not in the same zone)");
+            return false;
         }
 
         // If the cards can't share a creature type
-        if (tgt.isWithoutSameCreatureType()) {
-            boolean shareType = false;
-
-            for (final GameObject o : targetDepth.keySet()) {
-                if (o instanceof Card) {
-                    final Card c = (Card) o;
-                    if(card.sharesCreatureTypeWith(c)) {
-                        shareType = true;
-                        break;
-                    }
-                }
-            }
-            if(shareType) {
-                showMessage(sa.getHostCard() + " - Cannot target this card (should not share a creature type)");
-                return false;
-            }
+        if (tgt.isWithoutSameCreatureType() && lastTarget != null && card.sharesCreatureTypeWith(lastTarget)) {
+            showMessage(sa.getHostCard() + " - Cannot target this card (should not share a creature type)");
+            return false;
         }
 
         // If all cards must have different controllers
@@ -247,14 +226,7 @@ public final class InputSelectTargets extends InputSyncronizedBase {
 
     @Override
     protected final void onPlayerSelected(final Player player, final ITriggerEvent triggerEvent) {
-        if (targetDepth.containsKey(player)) {
-            if (tgt.isDividedAsYouChoose()) {
-                int toAdd = tgt.removeDividedAllocation(player);
-                int toDevide = tgt.getStillToDivide();
-                tgt.setStillToDivide(toDevide + toAdd);
-                
-            }
-            removeTarget(player);
+        if (!tgt.isUniqueTargets() && targetDepth.containsKey(player)) {
             return;
         }
 
@@ -299,8 +271,7 @@ public final class InputSelectTargets extends InputSyncronizedBase {
         sa.getTargets().add(ge);
         if (ge instanceof Card) {
             getController().getGui().setUsedToPay(CardView.get((Card) ge), true);
-        } else if(ge instanceof Player) {
-            getController().getGui().setHighlighted(PlayerView.get((Player) ge), true);
+            lastTarget = (Card) ge;
         }
         final Integer val = targetDepth.get(ge);
         targetDepth.put(ge, val == null ? Integer.valueOf(1) : Integer.valueOf(val.intValue() + 1) );
@@ -313,23 +284,10 @@ public final class InputSelectTargets extends InputSyncronizedBase {
         }
     }
 
-    private void removeTarget(final GameEntity ge) {
-        sa.getTargets().remove(ge);
-        if (ge instanceof Card) {
-            getController().getGui().setUsedToPay(CardView.get((Card) ge), false);
-        } else if(ge instanceof Player) {
-            getController().getGui().setHighlighted(PlayerView.get((Player) ge), false);
-        }
-        targetDepth.remove(ge);
-        this.showMessage();
-    }
-
     private void done() {
-        for (final GameEntity ge : targetDepth.keySet()) {
-            if (ge instanceof Card) {
-                getController().getGui().setUsedToPay(CardView.get((Card) ge), false);
-            } else if(ge instanceof Player) {
-                getController().getGui().setHighlighted(PlayerView.get((Player) ge), false);
+        for (final GameEntity c : targetDepth.keySet()) {
+            if (c instanceof Card) {
+                getController().getGui().setUsedToPay(CardView.get((Card) c), false);
             }
         }
 

@@ -36,7 +36,9 @@ public enum GameLossReason {
     
     CommanderDamage,
 
-    OpponentWon
+    OpponentWon,
+
+    IntentionalDraw // Not a real "game loss" as such, but a reason not to continue playing.
 
     /*
      * DoorToNothingness, // Door To Nothingness's ability activated

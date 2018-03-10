@@ -250,7 +250,6 @@ public class QuestDraftUtils {
         rules.setMatchAnteRarity(false);
         rules.setGamesPerMatch(3);
         rules.setManaBurn(FModel.getPreferences().getPrefBoolean(FPref.UI_MANABURN));
-        rules.setPlaneswalkerIsUnique(FModel.getPreferences().getPrefBoolean(FPref.UI_UNIQUE_PLANESWALKER));
         rules.setCanCloneUseTargetsImage(FModel.getPreferences().getPrefBoolean(FPref.UI_CLONE_MODE_SOURCE));
         return rules;
     }

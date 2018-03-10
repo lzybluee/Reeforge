@@ -26,7 +26,7 @@ import forge.quest.data.QuestAssets;
  * </p>
  * 
  * @author Forge
- * @version $Id: QuestItemZeppelin.java 27476 2014-09-17 03:04:52Z friarsol $
+ * @version $Id$
  */
 public class QuestItemZeppelin extends QuestItemBasic {
     /**

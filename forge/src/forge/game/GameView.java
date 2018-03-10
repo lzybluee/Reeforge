@@ -85,6 +85,12 @@ public class GameView extends TrackableObject {
         set(TrackableProperty.PlayerTurn, PlayerView.get(phaseHandler.getPlayerTurn()));
     }
 
+    public void updatePlanarPlayer(PlayerView p) {
+        set(TrackableProperty.PlanarPlayer, p);
+    }
+    public PlayerView getPlanarPlayer() {
+        return get(TrackableProperty.PlanarPlayer);
+    }
     public FCollectionView<StackItemView> getStack() {
         return get(TrackableProperty.Stack);
     }
@@ -195,19 +201,6 @@ public class GameView extends TrackableObject {
         for (final Player p : game.getRegisteredPlayers()) {
             if (p.getLobbyPlayer().getName().equals(lobbyPlayerName)) {
                 return p.getRegisteredPlayer().getDeck();
-            }
-        }
-        return null;
-    }
-
-    public Deck getOpponentDeck(final String lobbyPlayerName, int opponentIndex) {
-        int index = 0;
-        for (final Player p : game.getRegisteredPlayers()) {
-            if (!p.getLobbyPlayer().getName().equals(lobbyPlayerName)) {
-                if(index == opponentIndex) {
-                    return p.getRegisteredPlayer().getDeck();
-                }
-                index++;
             }
         }
         return null;

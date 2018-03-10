@@ -6,23 +6,23 @@ public interface IDevModeCheats {
 
     void setViewAllCards(boolean canViewAll);
 
-    void generateMana(boolean empty);
+    void generateMana();
 
     void dumpGameState();
 
     void setupGameState();
 
-    void tutorForCard(boolean sideboard);
+    void tutorForCard();
 
     void addCountersToPermanent();
 
-    void tapPermanents(boolean all);
+    void tapPermanents();
 
-    void untapPermanents(boolean all);
+    void untapPermanents();
 
-    void setPlayerLife(boolean maxlife);
+    void setPlayerLife();
 
-    void winGame(boolean lose);
+    void winGame();
 
     void addCardToHand();
 
@@ -33,6 +33,8 @@ public interface IDevModeCheats {
     void addCardToGraveyard();
 
     void addCardToExile();
+
+    void castASpell();
 
     void repeatLastAddition();
 
@@ -59,16 +61,16 @@ public interface IDevModeCheats {
      */
     public static final IDevModeCheats NO_CHEAT = new IDevModeCheats() {
         @Override
-        public void winGame(boolean lose) {
+        public void winGame() {
         }
         @Override
-        public void untapPermanents(boolean all) {
+        public void untapPermanents() {
         }
         @Override
-        public void tutorForCard(boolean sideboard) {
+        public void tutorForCard() {
         }
         @Override
-        public void tapPermanents(boolean all) {
+        public void tapPermanents() {
         }
         @Override
         public void setupGameState() {
@@ -77,7 +79,7 @@ public interface IDevModeCheats {
         public void setViewAllCards(final boolean canViewAll) {
         }
         @Override
-        public void setPlayerLife(boolean maxlife) {
+        public void setPlayerLife() {
         }
         @Override
         public void setCanPlayUnlimitedLands(final boolean canPlayUnlimitedLands0) {
@@ -89,7 +91,7 @@ public interface IDevModeCheats {
         public void planeswalkTo() {
         }
         @Override
-        public void generateMana(boolean empty) {
+        public void generateMana() {
         }
         @Override
         public void dumpGameState() {
@@ -117,6 +119,9 @@ public interface IDevModeCheats {
         }
         @Override
         public void addCardToExile() {
+        }
+        @Override
+        public void castASpell() {
         }
         @Override
         public void repeatLastAddition() {

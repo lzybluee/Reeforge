@@ -1,8 +1,6 @@
 package forge.ai.ability;
 
-import java.util.List;
-import java.util.Map;
-
+import com.google.common.base.Predicates;
 import forge.ai.ComputerUtil;
 import forge.ai.ComputerUtilCard;
 import forge.ai.ComputerUtilMana;
@@ -10,18 +8,16 @@ import forge.ai.SpellAbilityAi;
 import forge.game.Game;
 import forge.game.GlobalRuleChange;
 import forge.game.ability.AbilityUtils;
-import forge.game.card.Card;
-import forge.game.card.CardCollection;
-import forge.game.card.CardCollectionView;
-import forge.game.card.CardLists;
-import forge.game.card.CardPredicates;
-import forge.game.card.CounterType;
+import forge.game.card.*;
 import forge.game.phase.PhaseHandler;
 import forge.game.phase.PhaseType;
 import forge.game.player.Player;
 import forge.game.spellability.SpellAbility;
 import forge.game.spellability.TargetRestrictions;
 import forge.game.zone.ZoneType;
+
+import java.util.List;
+import java.util.Map;
 
 public class CountersRemoveAi extends SpellAbilityAi {
 
@@ -102,13 +98,8 @@ public class CountersRemoveAi extends SpellAbilityAi {
             return false;
         }
 
-        if (sa.hasParam("AITgts")) {
-            String aiTgts = sa.getParam("AITgts");
-            CardCollection prefList = CardLists.getValidCards(list, aiTgts.split(","), ai, source, sa);
-            if (!prefList.isEmpty() || sa.hasParam("AITgtsStrict")) {
-                list = prefList;
-            }
-        }
+        // Filter AI-specific targets if provided
+        list = ComputerUtil.filterAITgts(sa, ai, (CardCollection)list, false);
 
         boolean noLegendary = game.getStaticEffects().getGlobalRuleChange(GlobalRuleChange.noLegendRule);
 
@@ -174,10 +165,11 @@ public class CountersRemoveAi extends SpellAbilityAi {
             }
 
             // Get rid of Planeswalkers:
-            list = ai.getOpponents().getCardsIn(ZoneType.Battlefield);
+            list = game.getPlayers().getCardsIn(ZoneType.Battlefield);
             list = CardLists.filter(list, CardPredicates.isTargetableBy(sa));
 
-            CardCollection planeswalkerList = CardLists.filter(list, CardPredicates.Presets.PLANEWALKERS,
+            CardCollection planeswalkerList = CardLists.filter(list,
+                    Predicates.and(CardPredicates.Presets.PLANEWALKERS, CardPredicates.isControlledByAnyOf(ai.getOpponents())),
                     CardPredicates.hasLessCounter(CounterType.LOYALTY, amount));
 
             if (!planeswalkerList.isEmpty()) {

@@ -28,7 +28,7 @@ import forge.game.spellability.SpellAbility;
  * </p>
  * 
  * @author Forge
- * @version $Id: TriggerLifeLost.java 33078 2017-01-09 19:51:02Z Hanmac $
+ * @version $Id$
  */
 public class TriggerLifeLost extends Trigger {
 

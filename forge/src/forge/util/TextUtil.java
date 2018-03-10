@@ -182,5 +182,104 @@ public class TextUtil {
     public static String capitalize(final String s) {
         return s.substring(0, 1).toUpperCase()
                 + s.substring(1);
+
+    }
+
+    //concatenate with spaces
+    public static String concatWithSpace(String ... s) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length; i++) {
+            sb.append(s[i]);
+            if (i < s.length - 1) {
+                sb.append(" ");
+            }
+        }
+        return sb.toString();
+    }
+
+    //concatenate no spaces
+    public static String concatNoSpace(String ... s) {
+        StringBuilder sb = new StringBuilder();
+        for (String str : s) {
+            sb.append(str);
+        }
+        return sb.toString();
+    }
+
+    //enclosed in Parentheses
+    public static String enclosedParen(String s){
+        StringBuilder sb = new StringBuilder();
+        sb.append("(");
+        sb.append(s);
+        sb.append(")");
+        return sb.toString();
+    }
+
+    //enclosed in Brackets
+    public static String enclosedBracket(String s){
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        sb.append(s);
+        sb.append("]");
+        return sb.toString();
+    }
+
+    //enclosed in Single Quote
+    public static String enclosedSingleQuote(String s){
+        StringBuilder sb = new StringBuilder();
+        sb.append("'");
+        sb.append(s);
+        sb.append("'");
+        return sb.toString();
+    }
+
+    //enclosed in Double Quote
+    public static String enclosedDoubleQuote(String s){
+        StringBuilder sb = new StringBuilder();
+        sb.append("\"");
+        sb.append(s);
+        sb.append("\"");
+        return sb.toString();
+    }
+
+    //suffix
+    public static String addSuffix(String s, String suffix){
+        StringBuilder sb = new StringBuilder();
+        sb.append(s);
+        sb.append(suffix);
+        return sb.toString();
+    }
+
+    //prefix
+    public static String addPrefix(String prefix, String s){
+        StringBuilder sb = new StringBuilder();
+        sb.append(prefix);
+        sb.append(s);
+        return sb.toString();
+    }
+
+    //fast Replace
+    public static String fastReplace( String str, String target, String replacement ) {
+        if (str == null) {
+            return null;
+        }
+        int targetLength = target.length();
+        if( targetLength == 0 ) {
+            return str;
+        }
+        int idx2 = str.indexOf( target );
+        if( idx2 < 0 ) {
+            return str;
+        }
+        StringBuilder sb = new StringBuilder( targetLength > replacement.length() ? str.length() : str.length() * 2 );
+        int idx1 = 0;
+        do {
+            sb.append( str, idx1, idx2 );
+            sb.append( replacement );
+            idx1 = idx2 + targetLength;
+            idx2 = str.indexOf( target, idx1 );
+        } while( idx2 > 0 );
+        sb.append( str, idx1, str.length() );
+        return sb.toString();
     }
 }

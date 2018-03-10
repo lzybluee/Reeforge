@@ -26,7 +26,7 @@ import forge.game.spellability.SpellAbility;
  * </p>
  * 
  * @author Forge
- * @version $Id: TriggerUnequip.java 31143 2016-04-20 17:47:28Z friarsol $
+ * @version $Id$
  */
 public class TriggerUnequip extends Trigger {
 

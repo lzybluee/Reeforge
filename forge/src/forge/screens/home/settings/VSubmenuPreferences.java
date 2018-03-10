@@ -55,13 +55,13 @@ public enum VSubmenuPreferences implements IVSubmenu<CSubmenuPreferences> {
     private final FLabel btnPlayerName = new FLabel.Builder().opaque(true).hoverable(true).text("").build();
 
     private final JCheckBox cbRemoveSmall = new OptionsCheckBox("Remove Small Creatures");
+    private final JCheckBox cbCardBased = new OptionsCheckBox("Include Card-based Deck Generation");
     private final JCheckBox cbSingletons = new OptionsCheckBox("Singleton Mode");
     private final JCheckBox cbRemoveArtifacts = new OptionsCheckBox("Remove Artifacts");
     private final JCheckBox cbAnte = new OptionsCheckBox("Play for Ante");
     private final JCheckBox cbAnteMatchRarity = new OptionsCheckBox("Match Ante Rarity");
     private final JCheckBox cbEnableAICheats = new OptionsCheckBox("Allow AI Cheating");
     private final JCheckBox cbManaBurn = new OptionsCheckBox("Mana Burn");
-    private final JCheckBox cbUniquePlaneswalker = new OptionsCheckBox("Unique Planeswalker");
     private final JCheckBox cbManaLostPrompt = new OptionsCheckBox("Prompt Mana Pool Emptying");
     private final JCheckBox cbDevMode = new OptionsCheckBox("Developer Mode");
     private final JCheckBox cbLoadCardsLazily = new OptionsCheckBox("Load Card Scripts Lazily");
@@ -94,6 +94,7 @@ public enum VSubmenuPreferences implements IVSubmenu<CSubmenuPreferences> {
     private final JCheckBox cbStackCreatures = new OptionsCheckBox("Stack Creatures");
     private final JCheckBox cbFilterLandsByColorId = new OptionsCheckBox("Filter Lands by Color in Activated Abilities");
     private final JCheckBox cbShowStormCount = new OptionsCheckBox("Show Storm Count in Prompt Pane");
+    private final JCheckBox cbRemindOnPriority = new OptionsCheckBox("Visually Alert on Receipt of Priority");
 
     private final Map<FPref, KeyboardShortcutField> shortcutFields = new HashMap<>();
 
@@ -105,6 +106,7 @@ public enum VSubmenuPreferences implements IVSubmenu<CSubmenuPreferences> {
     private final FComboBoxPanel<String> cbpAutoYieldMode = new FComboBoxPanel<>("Auto-Yield:");
     private final FComboBoxPanel<String> cbpCounterDisplayType = new FComboBoxPanel<>("Counter Display Type:");
     private final FComboBoxPanel<String> cbpCounterDisplayLocation = new FComboBoxPanel<>("Counter Display Location:");
+    private final FComboBoxPanel<String> cbpGraveyardOrdering = new FComboBoxPanel<>("Allow Ordering Cards Put in Graveyard:");
 
     /**
      * Constructor.
@@ -162,9 +164,6 @@ public enum VSubmenuPreferences implements IVSubmenu<CSubmenuPreferences> {
         pnlPrefs.add(cbManaBurn, titleConstraints);
         pnlPrefs.add(new NoteLabel("Play with mana burn (from pre-Magic 2010 rules)."), descriptionConstraints);
 
-        pnlPrefs.add(cbUniquePlaneswalker, titleConstraints);
-        pnlPrefs.add(new NoteLabel("Play with \"planeswalker uniqueness rule.\""), descriptionConstraints);
-
         pnlPrefs.add(cbManaLostPrompt, titleConstraints);
         pnlPrefs.add(new NoteLabel("When enabled, you get a warning if passing priority would cause you to lose mana in your mana pool."), descriptionConstraints);
 
@@ -189,8 +188,14 @@ public enum VSubmenuPreferences implements IVSubmenu<CSubmenuPreferences> {
         pnlPrefs.add(cbShowStormCount, titleConstraints);
         pnlPrefs.add(new NoteLabel("When enabled, displays the current storm count in the prompt pane."), descriptionConstraints);
 
+        pnlPrefs.add(cbRemindOnPriority, titleConstraints);
+        pnlPrefs.add(new NoteLabel("When enabled, flashes the player choice area upon receiving priority."), descriptionConstraints);
+
         pnlPrefs.add(cbPreselectPrevAbOrder, titleConstraints);
         pnlPrefs.add(new NoteLabel("When enabled, preselects the last defined simultaneous ability order in the ordering dialog."), descriptionConstraints);
+
+        pnlPrefs.add(cbpGraveyardOrdering, comboBoxConstraints);
+        pnlPrefs.add(new NoteLabel("Determines when to let the player choose the order of cards simultaneously put in graveyard (never, always, or only when playing with cards for which it matters, for example, Volrath's Shapeshifter)."), descriptionConstraints);
 
         pnlPrefs.add(cbpAutoYieldMode, comboBoxConstraints);
         pnlPrefs.add(new NoteLabel("Defines the granularity level of auto-yields (per unique ability or per unique card)."), descriptionConstraints);
@@ -206,6 +211,9 @@ public enum VSubmenuPreferences implements IVSubmenu<CSubmenuPreferences> {
 
         pnlPrefs.add(cbRemoveArtifacts, titleConstraints);
         pnlPrefs.add(new NoteLabel("Disables artifact cards in generated decks."), descriptionConstraints);
+
+        pnlPrefs.add(cbCardBased, titleConstraints);
+        pnlPrefs.add(new NoteLabel("Builds more synergistic random decks (requires restart)."), descriptionConstraints);
 
         // Deck building options
         pnlPrefs.add(new SectionLabel("Deck Editor Options"), sectionConstraints);
@@ -489,6 +497,11 @@ public enum VSubmenuPreferences implements IVSubmenu<CSubmenuPreferences> {
     }
 
     /** @return {@link javax.swing.JCheckBox} */
+    public final JCheckBox getCbCardBased() {
+        return cbCardBased;
+    }
+
+    /** @return {@link javax.swing.JCheckBox} */
     public final JCheckBox getCbSingletons() {
         return cbSingletons;
     }
@@ -536,11 +549,6 @@ public enum VSubmenuPreferences implements IVSubmenu<CSubmenuPreferences> {
     /** @return {@link javax.swing.JCheckBox} */
     public JCheckBox getCbManaBurn() {
         return cbManaBurn;
-    }
-
-    /** @return {@link javax.swing.JCheckBox} */
-    public JCheckBox getCbUniquePlaneswalker() {
-        return cbUniquePlaneswalker;
     }
 
     /** @return {@link javax.swing.JCheckBox} */
@@ -689,8 +697,14 @@ public enum VSubmenuPreferences implements IVSubmenu<CSubmenuPreferences> {
         return cbShowStormCount;
     }
 
+    public final JCheckBox getCbRemindOnPriority() { return cbRemindOnPriority; }
+
     public final JCheckBox getCbPreselectPrevAbOrder() {
         return cbPreselectPrevAbOrder;
+    }
+
+    public final FComboBoxPanel<String> getCbpGraveyardOrdering() {
+        return cbpGraveyardOrdering;
     }
 
     /** @return {@link forge.toolbox.FLabel} */

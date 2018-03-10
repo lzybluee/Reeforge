@@ -36,7 +36,7 @@ import forge.util.Aggregates;
  * </p>
  * 
  * @author Forge
- * @version $Id: CountersAi.java 33156 2017-01-12 19:29:32Z Hanmac $
+ * @version $Id$
  */
 public abstract class CountersAi {
     // An AbilityFactory subclass for Putting or Removing Counters on Cards.

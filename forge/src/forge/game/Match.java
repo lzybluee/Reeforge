@@ -15,8 +15,6 @@ import forge.game.trigger.Trigger;
 import forge.game.zone.PlayerZone;
 import forge.game.zone.ZoneType;
 import forge.item.PaperCard;
-import forge.model.FModel;
-import forge.properties.ForgePreferences.FPref;
 import forge.util.MyRandom;
 import forge.util.collect.FCollectionView;
 
@@ -145,10 +143,10 @@ public class Match {
     public Multiset<RegisteredPlayer> getGamesWon() {
         final Multiset<RegisteredPlayer> won = HashMultiset.create(players.size());
         for (final GameOutcome go : gamesPlayedRo) {
-            Player winner = go.getWinningPlayer();
-            if(winner != null) {
-                won.add(go.getWinningPlayer().getRegisteredPlayer());
+            if (go.getWinningPlayer() == null) {
+                return won;
             }
+            won.add(go.getWinningPlayer().getRegisteredPlayer());
         }
         return won;
     }
@@ -218,10 +216,6 @@ public class Match {
             final Player player = players.get(i);
             final RegisteredPlayer psc = playersConditions.get(i);
 
-            if (!FModel.getPreferences().getPrefBoolean(FPref.UI_SKIP_RESTORE_DECK) && isFirstGame && rules.getGameType().isSideboardingAllowed()) {
-                psc.restoreDeck();
-            }
-
             if (canSideBoard) {
                 Deck toChange = psc.getDeck();
                 List<PaperCard> newMain = player.getController().sideboard(toChange, rules.getGameType());
@@ -267,10 +261,6 @@ public class Match {
                 Collection<? extends PaperCard> cardsComplained = player.getController().complainCardsCantPlayWell(myDeck);
                 if (null != cardsComplained) {
                     rAICards.putAll(player, cardsComplained);
-                    System.out.println("AI can't play these cards well");
-                    for(PaperCard card : cardsComplained) {
-                        System.out.println(card.getName());
-                    }
                 }
             }
 
@@ -280,7 +270,7 @@ public class Match {
         }
 
         if (!rAICards.isEmpty() && !rules.getGameType().isCardPoolLimited()) {
-            //game.getAction().revealAnte("AI can't play these cards well", rAICards);
+            game.getAction().revealAnte("AI can't play these cards well", rAICards);
         }
 
         if (!removedAnteCards.isEmpty()) {

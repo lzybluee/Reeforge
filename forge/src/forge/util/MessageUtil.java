@@ -7,13 +7,14 @@ import forge.game.player.Player;
 import forge.game.player.PlayerView;
 import forge.game.spellability.SpellAbility;
 
+
 public class MessageUtil {
     private MessageUtil() { };
 
     public static String formatMessage(String message, Player player, Object related) {
-        if ((related instanceof Player || related instanceof PlayerView) && message.indexOf("{player") >= 0) {
+        if (related instanceof Player && message.indexOf("{player") >= 0) {
             String noun = mayBeYou(player, related);
-            message = message.replace("{player}", noun).replace("{player's}", Lang.getPossesive(noun));
+            message = TextUtil.fastReplace(TextUtil.fastReplace(message, "{player}", noun),"{player's}", Lang.getPossesive(noun));
         }
         return message;
     }
@@ -21,7 +22,7 @@ public class MessageUtil {
     public static String formatMessage(String message, PlayerView player, Object related) {
         if (related instanceof PlayerView && message.indexOf("{player") >= 0) {
             String noun = mayBeYou(player, related);
-            message = message.replace("{player}", noun).replace("{player's}", Lang.getPossesive(noun));
+            message = TextUtil.fastReplace(TextUtil.fastReplace(message, "{player}", noun),"{player's}", Lang.getPossesive(noun));
         }
         return message;
     }
@@ -39,26 +40,27 @@ public class MessageUtil {
                 if (sa.hasParam("SecretlyChoose")) {
                     return value;
                 }
-                final boolean random = sa.hasParam("Random");
-                return String.format(random ? "Randomly chosen number for %s is %s" : "%s chooses number: %s", mayBeYou(player, target), value);
+                return sa.hasParam("Random")
+                        ? TextUtil.concatWithSpace("Randomly chosen number for", mayBeYou(player, target),"is", value)
+                        : TextUtil.concatWithSpace( mayBeYou(player, target),"chooses number:", value);
             case ChooseType:
-                return String.format("%s %s %s for effect of %s", choser, Lang.joinVerb(choser, "choose"), value, sa.getHostCard().getName());
+                return TextUtil.concatWithSpace(choser, Lang.joinVerb(choser, "choose"), value, "for effect of", sa.getHostCard().getName());
             case FlipACoin:
                 String flipper = StringUtils.capitalize(mayBeYou(player, target));
                 return sa.hasParam("NoCall")
-                        ? String.format("%s flip comes up %s", Lang.getPossesive(flipper), value)
-                        : String.format("%s %s the flip", flipper, Lang.joinVerb(flipper, value));
+                        ? TextUtil.concatWithSpace(Lang.getPossesive(flipper),"flip comes up", value)
+                        : TextUtil.concatWithSpace(flipper, Lang.joinVerb(flipper, value), "the flip");
             case Protection:
-                return String.format("%s %s protection from %s", choser, Lang.joinVerb(choser, "choose"), value);
+                return TextUtil.concatWithSpace(choser, Lang.joinVerb(choser, "choose"), value);
             case Vote:
                 String chooser = StringUtils.capitalize(mayBeYou(player, target));
-                return String.format("%s %s %s", chooser, Lang.joinVerb(chooser, "vote"), value);
+                return TextUtil.concatWithSpace(chooser, Lang.joinVerb(chooser,"vote"), value);
             default:
                 String tgt = mayBeYou(player, target);
                 if (tgt.equals("(null)")) {
-                    return String.format("%s effect's value is %s", sa.getHostCard().getName(), value);
+                    return TextUtil.concatWithSpace(sa.getHostCard().getName(),"effect's value is", value);
                 } else {
-                    return String.format("%s effect's value for %s is %s", sa.getHostCard().getName(), tgt, value);
+                    return TextUtil.concatWithSpace(sa.getHostCard().getName(),"effect's value for", tgt,"is", value);
                 }
         }
     }

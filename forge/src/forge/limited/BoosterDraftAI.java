@@ -31,7 +31,7 @@ import forge.properties.ForgePreferences;
  * </p>
  *
  * @author Forge
- * @version $Id: BoosterDraftAI.java 32013 2016-08-18 20:22:10Z friarsol $
+ * @version $Id$
  */
 public class BoosterDraftAI {
 

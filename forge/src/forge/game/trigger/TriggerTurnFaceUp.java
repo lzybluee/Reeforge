@@ -26,7 +26,7 @@ import forge.game.spellability.SpellAbility;
  * </p>
  * 
  * @author Forge
- * @version $Id: TriggerTurnFaceUp.java 30294 2015-10-16 01:53:32Z friarsol $
+ * @version $Id$
  */
 public class TriggerTurnFaceUp extends Trigger {
 

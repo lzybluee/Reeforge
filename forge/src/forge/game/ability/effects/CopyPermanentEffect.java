@@ -31,6 +31,7 @@ import forge.game.trigger.TriggerHandler;
 import forge.game.zone.ZoneType;
 import forge.item.PaperCard;
 import forge.util.Aggregates;
+import forge.util.TextUtil;
 import forge.util.collect.FCollectionView;
 import forge.util.PredicateString.StringOp;
 
@@ -67,6 +68,8 @@ public class CopyPermanentEffect extends SpellAbilityEffect {
         final List<String> svars = Lists.newArrayList();
         final List<String> triggers = Lists.newArrayList();
         final List<String> pumpKeywords = Lists.newArrayList();
+        boolean asNonLegendary = false;
+        boolean resetActivations = false;
 
         final long timestamp = game.getNextTimestamp();
 
@@ -83,6 +86,12 @@ public class CopyPermanentEffect extends SpellAbilityEffect {
         }
         if (sa.hasParam("AddTypes")) {
             types.addAll(Arrays.asList(sa.getParam("AddTypes").split(" & ")));
+        }
+        if (sa.hasParam("NonLegendary")) {
+            asNonLegendary = true;
+        }
+        if (sa.hasParam("ResetAbilityActivations")) {
+            resetActivations = true;
         }
         if (sa.hasParam("AddSVars")) {
             svars.addAll(Arrays.asList(sa.getParam("AddSVars").split(" & ")));
@@ -110,7 +119,8 @@ public class CopyPermanentEffect extends SpellAbilityEffect {
             List<PaperCard> cards = Lists.newArrayList(StaticData.instance().getCommonCards().getUniqueCards());
             String valid = sa.getParam("ValidSupportedCopy");
             if (valid.contains("X")) {
-                valid = valid.replace("X", Integer.toString(AbilityUtils.calculateAmount(hostCard, "X", sa)));
+                valid = TextUtil.fastReplace(valid,
+                        "X", Integer.toString(AbilityUtils.calculateAmount(hostCard, "X", sa)));
             }
             if (StringUtils.containsIgnoreCase(valid, "creature")) {
                 Predicate<PaperCard> cpp = Predicates.compose(CardRulesPredicates.Presets.IS_CREATURE, PaperCard.FN_GET_RULES);
@@ -183,10 +193,26 @@ public class CopyPermanentEffect extends SpellAbilityEffect {
                     final Card copy = CardFactory.copyCopiableCharacteristics(c, sa.getActivatingPlayer());
                     copy.setToken(true);
                     copy.setCopiedPermanent(c);
-                    CardFactory.copyCopiableAbilities(c, copy);
                     // add keywords from sa
                     for (final String kw : keywords) {
                         copy.addIntrinsicKeyword(kw);
+                    }
+                    if (asNonLegendary) {
+                        String typeLine = "";
+                        for (CardType.Supertype st : copy.getType().getSupertypes()) {
+                            if (!st.equals(CardType.Supertype.Legendary)) {
+                                typeLine += st.name() + " ";
+                            }
+                        }
+                        for (CardType.CoreType ct : copy.getType().getCoreTypes()) {
+                            typeLine += ct.name() + " ";
+                        }
+                        for (String subt: copy.getType().getSubtypes()) {
+                            typeLine += subt + " ";
+                        }
+
+                        StringBuilder newType = new StringBuilder(typeLine);
+                        copy.setType(CardType.parse(newType.toString()));
                     }
                     if (sa.hasParam("SetCreatureTypes")) {
                         String typeLine = "";
@@ -260,7 +286,9 @@ public class CopyPermanentEffect extends SpellAbilityEffect {
                         copy.setManaCost(ManaCost.NO_COST);
                         copy.setEmbalmed(true);
 
-                        String name = copy.getName().replace(",", "").replace(" ", "_").toLowerCase();
+                        String name = TextUtil.fastReplace(
+                                TextUtil.fastReplace(copy.getName(), ",", ""),
+                                " ", "_").toLowerCase();
                         copy.setImageKey(ImageKeys.getTokenKey("embalm_" + name));
                     }
                     if (sa.hasParam("Eternalize")) {
@@ -271,7 +299,9 @@ public class CopyPermanentEffect extends SpellAbilityEffect {
                     	copy.setBaseToughness(4);
                         copy.setEternalized(true);
 
-                        String name = copy.getName().replace(",", "").replace(" ", "_").toLowerCase();
+                        String name = TextUtil.fastReplace(
+                            TextUtil.fastReplace(copy.getName(), ",", ""),
+                                " ", "_").toLowerCase();
                         copy.setImageKey(ImageKeys.getTokenKey("eternalize_" + name));
                     }
                     
@@ -308,14 +338,20 @@ public class CopyPermanentEffect extends SpellAbilityEffect {
                         copy.removeIntrinsicKeyword("Devoid");
                     }
 
+                    if (resetActivations) {
+                        for (SpellAbility ab : copy.getSpellAbilities()) {
+                            ab.getRestrictions().resetTurnActivations();
+                        }
+                    }
+                    // set the controller before move to play: Crafty Cutpurse
+                    copy.setController(controller, 0);
                     copy.updateStateForView();
 
                     // Temporarily register triggers of an object created with CopyPermanent
                     //game.getTriggerHandler().registerActiveTrigger(copy, false);
-                    final Card copyInPlay = game.getAction().moveToPlay(copy, sa);
+                    final Card copyInPlay = game.getAction().moveToPlay(copy, sa, Maps.newHashMap());
 
                     // when copying something stolen:
-                    copyInPlay.setController(controller, 0);
                     copyInPlay.setSetCode(c.getSetCode());
 
                     copyInPlay.setCloneOrigin(hostCard);

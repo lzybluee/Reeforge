@@ -28,9 +28,9 @@ import forge.game.player.Player;
  * </p>
  * 
  * @author Forge
- * @version $Id: AbilityStatic.java 24773 2014-02-09 16:03:27Z Hellfish $
+ * @version $Id$
  */
-public abstract class AbilityStatic extends Ability {
+public abstract class AbilityStatic extends Ability implements Cloneable {
     /**
      * <p>
      * Constructor for Ability_Static.
@@ -61,5 +61,15 @@ public abstract class AbilityStatic extends Ability {
         final Card c = this.getHostCard();
 
         return this.getRestrictions().canPlay(c, this);
+    }
+    
+    /** {@inheritDoc} */
+    @Override
+    public final Object clone() {
+        try {
+            return super.clone();
+        } catch (final Exception ex) {
+            throw new RuntimeException("AbilityStatic : clone() error, " + ex);
+        }
     }
 }

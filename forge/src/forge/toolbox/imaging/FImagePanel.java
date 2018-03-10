@@ -21,13 +21,7 @@ package forge.toolbox.imaging;
 import com.mortennobel.imagescaling.DimensionConstrain;
 import com.mortennobel.imagescaling.ResampleOp;
 
-import forge.model.FModel;
-import forge.properties.ForgePreferences.FPref;
-
 import javax.swing.*;
-
-import org.imgscalr.Scalr;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -231,26 +225,9 @@ public class FImagePanel extends JPanel {
         if (this.imageScale != 1) {
             if (isResampleEnabled) {
                 isResampleEnabled = false;
-
-                int destWidth = (int)(this.imageScale * sourceImage.getWidth());
-                int destHeight = (int)(this.imageScale * sourceImage.getHeight());
-
-                String scaleLib = FModel.getPreferences().getPref(FPref.UI_SCALE_LIB);
-                if (scaleLib.startsWith("Scalr")) {
-                    Scalr.Method method = Scalr.Method.QUALITY;
-                    if (scaleLib.endsWith("Auto")) {
-                        if (destWidth * 8 < sourceImage.getWidth()) {
-                            method = Scalr.Method.SPEED;
-                        } else if (destWidth * 3 < sourceImage.getWidth()) {
-                            method = Scalr.Method.BALANCED;
-                        }
-                    }
-                    this.scaledImage = Scalr.resize(sourceImage, method, Scalr.Mode.FIT_EXACT, destWidth, destHeight);
-                } else {
-                    DimensionConstrain constrain = DimensionConstrain.createRelativeDimension((float)this.imageScale);
-                    ResampleOp resampler = new ResampleOp(constrain);
-                    this.scaledImage = resampler.filter(sourceImage, null);
-                }
+                DimensionConstrain constrain = DimensionConstrain.createRelativeDimension((float)this.imageScale);
+                ResampleOp resampler = new ResampleOp(constrain);
+                this.scaledImage = resampler.filter(sourceImage, null);
             }
         } else {
             this.scaledImage = sourceImage;

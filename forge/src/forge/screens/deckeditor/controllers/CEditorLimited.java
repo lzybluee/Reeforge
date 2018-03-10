@@ -18,7 +18,6 @@
 package forge.screens.deckeditor.controllers;
 
 import com.google.common.base.Supplier;
-
 import forge.UiCommand;
 import forge.card.CardEdition;
 import forge.deck.CardPool;
@@ -73,8 +72,8 @@ public final class CEditorLimited extends ACEditorBase<PaperCard, DeckGroup> {
     public CEditorLimited(final IStorage<DeckGroup> deckMap0, final FScreen screen0, final CDetailPicture cDetailPicture) {
         super(screen0, cDetailPicture);
 
-        final CardManager catalogManager = new CardManager(getCDetailPicture(), false);
-        final CardManager deckManager = new CardManager(getCDetailPicture(), false);
+        final CardManager catalogManager = new CardManager(getCDetailPicture(), false, false);
+        final CardManager deckManager = new CardManager(getCDetailPicture(), false, false);
 
         catalogManager.setCaption("Sideboard");
 
@@ -142,22 +141,7 @@ public final class CEditorLimited extends ACEditorBase<PaperCard, DeckGroup> {
         if (toAlternate) { return; }
 
         // update view
-
-        ArrayList<Entry<PaperCard, Integer>> add_items = new ArrayList<Entry<PaperCard,Integer>>();
-        for(Entry<PaperCard, Integer> item : items) {
-            if(item.getKey().getName().equals("Plains") || 
-               item.getKey().getName().equals("Island") || 
-               item.getKey().getName().equals("Mountain") || 
-               item.getKey().getName().equals("Swamp") || 
-               item.getKey().getName().equals("Forest")) {
-                if(item.getValue() == 1) {
-                    continue;
-                }
-            }
-            add_items.add(item);
-        }
-
-        this.getCatalogManager().addItems(add_items);
+        this.getCatalogManager().addItems(items);
         this.getDeckManager().removeItems(items);
         this.getDeckController().notifyModelChanged();
     }

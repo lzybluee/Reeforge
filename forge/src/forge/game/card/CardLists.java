@@ -37,7 +37,7 @@ import forge.util.MyRandom;
  * </p>
  * 
  * @author Forge
- * @version $Id: CardLists.java 34249 2017-06-13 16:03:42Z Agetian $
+ * @version $Id$
  */
 public class CardLists {
     /**
@@ -67,6 +67,15 @@ public class CardLists {
         });
     }
 
+    public static CardCollection filterLEPower(final Iterable<Card> in, final int lessthanPower) {
+        return CardLists.filter(in, new Predicate<Card>() {
+            @Override
+            public boolean apply(Card c) {
+                return c.getNetPower() <= lessthanPower;
+            }
+        });
+    }
+  
     public static final Comparator<Card> ToughnessComparator = new Comparator<Card>() {
         @Override
         public int compare(final Card a, final Card b) {

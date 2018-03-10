@@ -1,5 +1,7 @@
 package forge.game.ability.effects;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
 import forge.game.ability.AbilityUtils;
 import forge.game.ability.ApiType;
 import forge.game.ability.SpellAbilityEffect;
@@ -9,9 +11,6 @@ import forge.game.trigger.Trigger;
 import forge.game.trigger.TriggerHandler;
 
 import java.util.Map;
-
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Maps;
 
 public class DelayedTriggerEffect extends SpellAbilityEffect {
 
@@ -54,12 +53,14 @@ public class DelayedTriggerEffect extends SpellAbilityEffect {
         }
 
         if (triggerRemembered != null) {
-            for (final Object o : AbilityUtils.getDefinedObjects(sa.getHostCard(), triggerRemembered, sa)) {
-                if (o instanceof SpellAbility) {
-                    // "RememberObjects$ Remembered" don't remember spellability 
-                    continue;
+            for (final String rem : triggerRemembered.split(",")) {
+                for (final Object o : AbilityUtils.getDefinedObjects(sa.getHostCard(), rem, sa)) {
+                    if (o instanceof SpellAbility) {
+                        // "RememberObjects$ Remembered" don't remember spellability 
+                        continue;
+                    }
+                    delTrig.addRemembered(o);
                 }
-                delTrig.addRemembered(o);
             }
         }
 
@@ -71,8 +72,8 @@ public class DelayedTriggerEffect extends SpellAbilityEffect {
             }
         }
 
-        if (mapParams.containsKey("Execute")) {
-            SpellAbility overridingSA = sa.getAdditonalAbility("Execute");
+        if (mapParams.containsKey("Execute") || sa.hasAdditionalAbility("Execute")) {
+            SpellAbility overridingSA = sa.getAdditionalAbility("Execute");
             overridingSA.setActivatingPlayer(sa.getActivatingPlayer());
             overridingSA.setDeltrigActivatingPlayer(sa.getActivatingPlayer()); // ensure that the original activator can be restored later
             // Set Transform timestamp when the delayed trigger is created

@@ -5,10 +5,12 @@ import forge.game.GameLogEntryType;
 import forge.game.ability.SpellAbilityEffect;
 import forge.game.card.Card;
 import forge.game.card.CounterType;
-import forge.game.zone.ZoneType;
 import forge.game.event.GameEventCardStatsChanged;
 import forge.game.player.Player;
+import forge.game.player.PlayerActionConfirmMode;
 import forge.game.spellability.SpellAbility;
+import forge.game.zone.ZoneType;
+import forge.util.TextUtil;
 
 import java.util.Iterator;
 import java.util.List;
@@ -51,6 +53,7 @@ public class SetStateEffect extends SpellAbilityEffect {
         final boolean morphUp = sa.hasParam("MorphUp");
         final boolean manifestUp = sa.hasParam("ManifestUp");
         final boolean hiddenAgenda = sa.hasParam("HiddenAgenda");
+        final boolean optional = sa.hasParam("Optional");
 
         for (final Card tgt : tgtCards) {
             if (sa.usesTargeting() && !tgt.canBeTargetedBy(sa)) {
@@ -63,13 +66,20 @@ public class SetStateEffect extends SpellAbilityEffect {
                 continue;
             }
 
-            if ("Transform".equals(mode) && tgt.equals(host)) {
+            if ("Transform".equals(mode) && tgt.equals(host) && sa.hasSVar("StoredTransform")) {
                 // If want to Transform, and host is trying to transform self, skip if not in alignment
                 boolean skip = tgt.getTransformedTimestamp() != Long.parseLong(sa.getSVar("StoredTransform"));
                 // Clear SVar from SA so it doesn't get reused accidentally
                 sa.getSVars().remove("StoredTransform");
                 if (skip) {
                     continue;
+                }
+            }
+
+            if (optional) {
+                String message = TextUtil.concatWithSpace("Transform", host.getName(), "?");
+                if (!p.getController().confirmAction(sa, PlayerActionConfirmMode.Random, message)) {
+                    return;
                 }
             }
 

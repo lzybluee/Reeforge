@@ -2,6 +2,7 @@ package forge.game.ability.effects;
 
 import com.google.common.base.Predicate;
 import forge.game.Game;
+import forge.game.GameActionUtil;
 import forge.game.ability.AbilityUtils;
 import forge.game.ability.SpellAbilityEffect;
 import forge.game.card.Card;
@@ -11,6 +12,7 @@ import forge.game.card.CardUtil;
 import forge.game.player.Player;
 import forge.game.spellability.SpellAbility;
 import forge.game.zone.ZoneType;
+import forge.util.TextUtil;
 
 public class DestroyAllEffect extends SpellAbilityEffect {
 
@@ -54,7 +56,8 @@ public class DestroyAllEffect extends SpellAbilityEffect {
         // to use the X variable
         // We really need a better solution to this
         if (valid.contains("X")) {
-            valid = valid.replace("X", Integer.toString(AbilityUtils.calculateAmount(card, "X", sa)));
+            valid = TextUtil.fastReplace(valid,
+                    "X", Integer.toString(AbilityUtils.calculateAmount(card, "X", sa)));
         }
 
         CardCollectionView list = game.getCardsIn(ZoneType.Battlefield);
@@ -77,6 +80,10 @@ public class DestroyAllEffect extends SpellAbilityEffect {
                 return card.canBeDestroyed();
             }
         });
+
+        if (list.size() > 1) {
+            list = GameActionUtil.orderCardsByTheirOwners(game, list, ZoneType.Graveyard);
+        }
 
         if (noRegen) {
             for (Card c : list) {

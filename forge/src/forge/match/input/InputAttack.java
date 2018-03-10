@@ -66,20 +66,7 @@ public class InputAttack extends InputSyncronizedBase {
     @Override
     public final void showMessage() {
         // TODO still seems to have some issues with multiple planeswalkers
-        GameEntity preferredDefender = defenders.getFirst();
-        int max_loyalty_counters = 0;
-        for(GameEntity entity : defenders) {
-            if(entity instanceof Card) {
-                Card planeswalker = (Card)entity;
-                int loyalty_counters = planeswalker.getCounters(CounterType.LOYALTY);
-                if(loyalty_counters > max_loyalty_counters) {
-                    max_loyalty_counters = loyalty_counters;
-                    preferredDefender = entity;
-                }
-            }
-        }
-        
-        setCurrentDefender(preferredDefender);
+        setCurrentDefender(defenders.getFirst());
 
         if (currentDefender == null) {
             System.err.println("InputAttack has no potential defenders!");
@@ -96,12 +83,12 @@ public class InputAttack extends InputSyncronizedBase {
     }
 
     private void updatePrompt() {
-        if (canCallBackAttackers()) {
-            getController().getGui().updateButtons(getOwner(), "OK", "Call Back", true, true, true);
-        }
-        else {
-            getController().getGui().updateButtons(getOwner(), "OK", "Alpha Strike", true, true, true);
-        }
+        String alphaLabel = canCallBackAttackers() ? "Call Back" : "AlphaStrike";
+        getController().getGui().updateButtons(getOwner(), "OK", alphaLabel, true, true, true);
+    }
+
+    private void disablePrompt() {
+        getController().getGui().updateButtons(getOwner(), "Disabled", "Disabled", false, false, false);
     }
 
     @Override
@@ -167,6 +154,7 @@ public class InputAttack extends InputSyncronizedBase {
 
     @Override
     protected final boolean onCardSelected(final Card card, final List<Card> otherCardsToSelect, final ITriggerEvent triggerEvent) {
+        disablePrompt();
         final List<Card> att = combat.getAttackers();
         if (triggerEvent != null && triggerEvent.getButton() == 3 && att.contains(card)) {
             undeclareAttacker(card);
@@ -222,6 +210,7 @@ public class InputAttack extends InputSyncronizedBase {
         if (card.getController().isOpponentOf(playerAttacks)) {
             if (defenders.contains(card)) { // planeswalker?
                 setCurrentDefender(card);
+                updateMessage();
                 return true;
             }
         }
@@ -246,6 +235,7 @@ public class InputAttack extends InputSyncronizedBase {
             return true;
         }
 
+        updatePrompt();
         return false;
     }
 
@@ -339,6 +329,7 @@ public class InputAttack extends InputSyncronizedBase {
         showMessage(message);
 
         updatePrompt();
+
         getController().getGui().showCombat(); // redraw sword icons
     }
 }

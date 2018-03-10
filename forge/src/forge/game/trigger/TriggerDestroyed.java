@@ -17,6 +17,8 @@
  */
 package forge.game.trigger;
 
+import java.util.Map;
+
 import forge.game.card.Card;
 import forge.game.spellability.SpellAbility;
 
@@ -42,22 +44,20 @@ public class TriggerDestroyed extends Trigger {
      * @param intrinsic
      *            the intrinsic
      */
-    public TriggerDestroyed(final java.util.Map<String, String> params, final Card host, final boolean intrinsic) {
+    public TriggerDestroyed(final Map<String, String> params, final Card host, final boolean intrinsic) {
         super(params, host, intrinsic);
     }
 
     /** {@inheritDoc} */
     @Override
-    public final boolean performTest(final java.util.Map<String, Object> runParams2) {
-        if (this.mapParams.containsKey("ValidCauser")) {
-            if (!matchesValid(runParams2.get("Causer"), this.mapParams.get("ValidCauser").split(","),
-                    this.getHostCard())) {
+    public final boolean performTest(final Map<String, Object> runParams2) {
+        if (hasParam("ValidCauser")) {
+            if (!matchesValid(runParams2.get("Causer"), getParam("ValidCauser").split(","), getHostCard())) {
                 return false;
             }
         }
-        if (this.mapParams.containsKey("ValidCard")) {
-            if (!matchesValid(runParams2.get("Card"), this.mapParams.get("ValidCard").split(","),
-                    this.getHostCard())) {
+        if (hasParam("ValidCard")) {
+            if (!matchesValid(runParams2.get("Card"), getParam("ValidCard").split(","), getHostCard())) {
                 return false;
             }
         }

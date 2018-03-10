@@ -41,7 +41,7 @@ import java.util.List;
  * </p>
  * 
  * @author Forge
- * @version $Id: CustomLimited.java 30780 2016-02-01 07:30:13Z Agetian $
+ * @version $Id$
  */
 public class CustomLimited extends DeckBase {
     private final SealedProduct.Template tpl;
@@ -186,6 +186,11 @@ public class CustomLimited extends DeckBase {
     @Override
     public boolean isEmpty() {
         return cardPool.isEmpty();
+    }
+
+    @Override
+    public void importDeck(Deck deck) {
+        throw new UnsupportedOperationException("CustomDraft does not support deck import");
     }
 
     @Override

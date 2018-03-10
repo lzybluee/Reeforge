@@ -17,6 +17,7 @@
  */
 package forge.quest.io;
 
+import forge.quest.data.QuestPreferences.QPref;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -50,10 +51,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -64,7 +62,7 @@ import java.util.zip.GZIPOutputStream;
  * </p>
  *
  * @author Forge
- * @version $Id: QuestDataIO.java 32835 2016-12-27 19:09:32Z Agetian $
+ * @version $Id$
  */
 public class QuestDataIO {
     static {
@@ -199,6 +197,15 @@ public class QuestDataIO {
         }
 
         if (saveVersion < 11) {
+            // clear player star ratings on cards - no card has been rated yet
+            QuestDataIO.setFinalField(QuestData.class, "Ratings", newData, new HashSet<StarRating>());
+            newData.Ratings.clear();
+        }
+        if (saveVersion < 12) {
+            // Current Deck moved from preferences to quest data - it should not be global for all quests!!!
+            QuestDataIO.setFinalField(QuestData.class, "currentDeck", newData, FModel.getQuestPreferences().getPref(QPref.CURRENT_DECK));
+        }
+        if (saveVersion < 13) {
             // Migrate DraftTournaments to use new Tournament class
         }
 
@@ -378,7 +385,7 @@ public class QuestDataIO {
             //Copy the save file in case the save fails
             FileUtil.copyFile(f + ".dat", f + ".dat.bak");
             QuestDataIO.savePacked(f + ".dat", xStream, qd);
-            // QuestDataIO.saveUnpacked(f + ".xml", xStream, qd);
+            //QuestDataIO.saveUnpacked(f + ".xml", xStream, qd);
         }
         catch (final Exception ex) {
             //BugReporter.reportException(ex, "Error saving Quest Data.");

@@ -9,27 +9,27 @@ import forge.item.BoosterBox;
 import forge.item.FatPack;
 import forge.item.PaperCard;
 import forge.item.SealedProduct;
+import forge.token.TokenDb;
 import forge.util.storage.IStorage;
 import forge.util.storage.StorageBase;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 
- /**
+/**
  * The class holding game invariants, such as cards, editions, game formats. All that data, which is not supposed to be changed by player
  *
  * @author Max
  */
 public class StaticData {
-    private final CardStorageReader reader;
+    private final CardStorageReader cardReader;
+    private final CardStorageReader tokenReader;
+
     private final String blockDataFolder;
     private final CardDb commonCards;
     private final CardDb variantCards;
+    private final TokenDb allTokens;
     private final CardEdition.Collection editions;
 
     // Loaded lazily:
@@ -42,32 +42,50 @@ public class StaticData {
 
     private static StaticData lastInstance = null;
 
-    public StaticData(CardStorageReader reader, String editionFolder, String blockDataFolder) {
-        this.reader = reader;
+    public StaticData(CardStorageReader cardReader, String editionFolder, String blockDataFolder) {
+        this(cardReader, null, editionFolder, blockDataFolder);
+    }
+
+    public StaticData(CardStorageReader cardReader, CardStorageReader tokenReader, String editionFolder, String blockDataFolder) {
+        this.cardReader = cardReader;
+        this.tokenReader = tokenReader;
         this.editions = new CardEdition.Collection(new CardEdition.Reader(new File(editionFolder)));
         this.blockDataFolder = blockDataFolder;
         lastInstance = this;
 
-        final Map<String, CardRules> regularCards = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-        final Map<String, CardRules> variantsCards = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        {
+            final Map<String, CardRules> regularCards = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+            final Map<String, CardRules> variantsCards = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
-        for (CardRules card : reader.loadCards()) {
-            if (null == card) continue;
+            for (CardRules card : cardReader.loadCards()) {
+                if (null == card) continue;
 
-            final String cardName = card.getName();
-            if (card.isVariant()) {
-                variantsCards.put(cardName, card);
-            } else {
-                regularCards.put(cardName, card);
+                final String cardName = card.getName();
+                if (card.isVariant()) {
+                    variantsCards.put(cardName, card);
+                } else {
+                    regularCards.put(cardName, card);
+                }
             }
+
+            commonCards = new CardDb(regularCards, editions);
+            variantCards = new CardDb(variantsCards, editions);
+
+            //must initialize after establish field values for the sake of card image logic
+            commonCards.initialize(false, false);
+            variantCards.initialize(false, false);
         }
 
-        commonCards = new CardDb(regularCards, editions);
-        variantCards = new CardDb(variantsCards, editions);
+        {
+            final Map<String, CardRules> tokens = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
-        //muse initialize after establish field values for the sake of card image logic
-        commonCards.initialize(false, false);
-        variantCards.initialize(false, false);
+            for (CardRules card : tokenReader.loadCards()) {
+                if (null == card) continue;
+
+                tokens.put(card.getNormalizedName(), card);
+            }
+            allTokens = new TokenDb(tokens, editions);
+        }
     }
 
     public static StaticData instance() {
@@ -95,7 +113,7 @@ public class StaticData {
         PaperCard card = commonCards.getCard(cardName, setCode, artIndex);
         if (card == null) {
             attemptToLoadCard(cardName, setCode);
-            commonCards.getCard(cardName, setCode, artIndex);
+            card = commonCards.getCard(cardName, setCode, artIndex);
         }
         if (card == null) {
             card = commonCards.getCard(cardName, setCode, -1);
@@ -109,7 +127,7 @@ public class StaticData {
     public void attemptToLoadCard(String encodedCardName, String setCode) {
         CardDb.CardRequest r = CardRequest.fromString(encodedCardName);
         String cardName = r.cardName;
-        CardRules rules = reader.attemptToLoadCard(cardName, setCode);
+        CardRules rules = cardReader.attemptToLoadCard(cardName, setCode);
         if (rules != null) {
             if (rules.isVariant()) {
                 variantCards.loadCard(cardName, rules);
@@ -164,5 +182,31 @@ public class StaticData {
 
     public CardDb getVariantCards() {
         return variantCards;
+    }
+
+    public TokenDb getAllTokens() { return allTokens; }
+
+    public PaperCard getCardByEditionDate(PaperCard card, Date editionDate) {
+
+        PaperCard c = this.getCommonCards().getCardFromEdition(card.getName(), editionDate, CardDb.SetPreference.LatestCoreExp, card.getArtIndex());
+
+        if (null != c) {
+            return c;
+        }
+
+        c = this.getCommonCards().getCardFromEdition(card.getName(), editionDate, CardDb.SetPreference.LatestCoreExp, -1);
+
+        if (null != c) {
+            return c;
+        }
+
+        c = this.getCommonCards().getCardFromEdition(card.getName(), editionDate, CardDb.SetPreference.Latest, -1);
+
+        if (null != c) {
+            return c;
+        }
+
+        // I give up!
+        return card;
     }
 }

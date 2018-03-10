@@ -28,7 +28,7 @@ import forge.game.spellability.SpellAbility;
  * </p>
  * 
  * @author Forge
- * @version $Id: TriggerDrawn.java 32574 2016-11-18 19:55:05Z Hanmac $
+ * @version $Id$
  */
 public class TriggerDrawn extends Trigger {
 

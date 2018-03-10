@@ -32,7 +32,7 @@ import forge.game.cost.Cost;
  * </p>
  * 
  * @author Forge
- * @version $Id: SpellPermanent.java 32529 2016-11-09 21:06:16Z Hanmac $
+ * @version $Id$
  */
 public class SpellPermanent extends SpellApiBased {
     /** Constant <code>serialVersionUID=2413495058630644447L</code>. */

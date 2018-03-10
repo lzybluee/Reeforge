@@ -33,7 +33,7 @@ import forge.quest.data.QuestAssets;
  * </p>
  * 
  * @author Forge
- * @version $Id: QuestItemBasic.java 27955 2014-10-15 14:52:47Z drdev $
+ * @version $Id$
  */
 public class QuestItemBasic implements IQuestBazaarItem {
 

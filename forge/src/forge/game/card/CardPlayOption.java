@@ -1,9 +1,9 @@
 package forge.game.card;
 
-import org.apache.commons.lang3.StringUtils;
-
 import forge.card.mana.ManaCost;
 import forge.card.mana.ManaCostParser;
+import org.apache.commons.lang3.StringUtils;
+
 import forge.game.player.Player;
 import forge.game.staticability.StaticAbility;
 
@@ -22,12 +22,11 @@ public final class CardPlayOption {
     private final boolean grantsZonePermissions;
     private final String altManaCost;
 
-    public CardPlayOption(final Player player, final StaticAbility sta, final boolean withoutManaCost, final String altManaCost,
-                          final boolean withFlash, final boolean grantZonePermissions) {
+    public CardPlayOption(final Player player, final StaticAbility sta, final boolean withoutManaCost, final String altManaCost, final boolean withFlash, final boolean grantZonePermissions) {
         this(player, sta, withoutManaCost ? PayManaCost.NO : PayManaCost.YES, altManaCost, withFlash, grantZonePermissions);
     }
     private CardPlayOption(final Player player, final StaticAbility sta, final PayManaCost payManaCost, final String altManaCost, final boolean withFlash,
-            final boolean grantZonePermissions) {
+                           final boolean grantZonePermissions) {
         this.player = player;
         this.sta = sta;
         this.payManaCost = payManaCost;
@@ -82,26 +81,26 @@ public final class CardPlayOption {
         StringBuilder sb = new StringBuilder(withPlayer ? this.player.toString() : StringUtils.EMPTY);
 
         switch (getPayManaCost()) {
-        case YES:
-            if (altManaCost != null) {
-                sb.append(" (by paying " + getFormattedAltManaCost() + " instead of paying its mana cost");
+            case YES:
+                if (altManaCost != null) {
+                    sb.append(" (by paying " + getFormattedAltManaCost() + " instead of paying its mana cost");
+                    if (isWithFlash()) {
+                        sb.append(" and as though it has flash");
+                    }
+                    sb.append(")");
+                }
+                if (isIgnoreManaCostColor()) {
+                    sb.append(" (may spend mana as though it were mana of any color to cast it)");
+                } else if (isIgnoreManaCostType()) {
+                    sb.append(" (may spend mana as though it were mana of any type to cast it)");
+                }
+                break;
+            case NO:
+                sb.append(" (without paying its mana cost");
                 if (isWithFlash()) {
                     sb.append(" and as though it has flash");
                 }
                 sb.append(")");
-            }
-            if (isIgnoreManaCostColor()) {
-                sb.append(" (may spend mana as though it were mana of any color to cast it)");
-            } else if (isIgnoreManaCostType()) {
-                sb.append(" (may spend mana as though it were mana of any type to cast it)");
-            }
-            break;
-        case NO:
-            sb.append(" (without paying its mana cost");
-            if (isWithFlash()) {
-                sb.append(" and as though it has flash");
-            }
-            sb.append(")");
         }
 
         return sb.toString();

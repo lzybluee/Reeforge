@@ -22,10 +22,6 @@ import forge.card.ICardFace;
 import forge.game.card.Card;
 import forge.game.card.CardView;
 import forge.game.card.CardView.CardStateView;
-import forge.game.replacement.ReplacementEffect;
-import forge.game.spellability.SpellAbilityView;
-import forge.game.trigger.WrappedAbility;
-import forge.item.IPaperCard;
 import forge.item.InventoryItem;
 import forge.item.PaperCard;
 import forge.model.FModel;
@@ -144,11 +140,10 @@ public class GuiChoose {
     }
     public static <T> List<T> getChoices(final String message, final int min, final int max, final Collection<T> choices, final T selected, final Function<T, String> display, final CMatchUI matchUI) {
         if (choices == null || choices.isEmpty()) {
-            if (min <= 0) {
+            if (min == 0) {
                 return new ArrayList<T>();
             }
-            System.err.println("choice required from empty list");
-            return new ArrayList<T>();
+            throw new RuntimeException("choice required from empty list");
         }
 
         final Callable<List<T>> showChoice = new Callable<List<T>>() {
@@ -181,15 +176,6 @@ public class GuiChoose {
                                 card = (CardView) sel;
                             } else if (sel instanceof Card) {
                                 card = CardView.get((Card) sel);
-                            } else if (sel instanceof SpellAbilityView) {
-                                card = ((SpellAbilityView) sel).getHostCard();
-                            } else if (sel instanceof WrappedAbility) {
-                                Card host = ((WrappedAbility) sel).getHostCard();
-                                card = host != null ? host.getView() : null;
-                            } else if (sel instanceof PaperCard) {
-                                card = Card.getCardForUi((IPaperCard) sel).getView();
-                            } else if (sel instanceof ReplacementEffect) {
-                                card = ((ReplacementEffect) sel).getCardView();
                             } else {
                                 card = null;
                             }

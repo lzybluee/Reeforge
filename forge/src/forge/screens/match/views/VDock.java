@@ -49,7 +49,6 @@ public class VDock implements IVDoc<CDock> {
     private final DockButton btnSettings = new DockButton(FSkin.getIcon(FSkinProp.ICO_SETTINGS), "Game Settings");
     private final DockButton btnEndTurn = new DockButton(FSkin.getIcon(FSkinProp.ICO_ENDTURN), "End Turn");
     private final DockButton btnViewDeckList = new DockButton(FSkin.getIcon(FSkinProp.ICO_DECKLIST), "View Deck List");
-    private final DockButton btnViewOpponentDeckList = new DockButton(FSkin.getIcon(FSkinProp.ICO_DECKLIST), "View Opponent Deck List");
     private final DockButton btnRevertLayout = new DockButton(FSkin.getIcon(FSkinProp.ICO_REVERTLAYOUT), "Revert Layout");
     private final DockButton btnOpenLayout = new DockButton(FSkin.getIcon(FSkinProp.ICO_OPENLAYOUT), "Open Layout");
     private final DockButton btnSaveLayout = new DockButton(FSkin.getIcon(FSkinProp.ICO_SAVELAYOUT), "Save Layout");
@@ -84,7 +83,6 @@ public class VDock implements IVDoc<CDock> {
         //pnl.add(btnSettings);
         pnl.add(btnEndTurn);
         pnl.add(btnViewDeckList);
-        pnl.add(btnViewOpponentDeckList);
         pnl.add(btnRevertLayout);
         pnl.add(btnOpenLayout);
         pnl.add(btnSaveLayout);
@@ -148,10 +146,6 @@ public class VDock implements IVDoc<CDock> {
 
     public DockButton getBtnViewDeckList() {
         return btnViewDeckList;
-    }
-
-    public DockButton getBtnViewOpponentDeckList() {
-        return btnViewOpponentDeckList;
     }
 
     public DockButton getBtnRevertLayout() {

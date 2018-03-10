@@ -13,6 +13,8 @@ public enum TrackableProperty {
     PreventNextDamage(TrackableTypes.IntegerType),
     EnchantedBy(TrackableTypes.CardViewCollectionType),
     Counters(TrackableTypes.CounterMapType),
+    CurrentPlane(TrackableTypes.StringType),
+    PlanarPlayer(TrackableTypes.PlayerViewType),
 
     //Card 
     Owner(TrackableTypes.PlayerViewType),
@@ -58,7 +60,7 @@ public enum TrackableProperty {
     CurrentState(TrackableTypes.CardStateViewType, false), //can't respect freeze, otherwise card constructor can crash
     AlternateState(TrackableTypes.CardStateViewType),
     HiddenId(TrackableTypes.IntegerType),
-    Exerted(TrackableTypes.PlayerViewCollectionType),
+    ExertedThisTurn(TrackableTypes.BooleanType),
 
     //Card State
     Name(TrackableTypes.StringType),
@@ -97,13 +99,10 @@ public enum TrackableProperty {
     PoisonCounters(TrackableTypes.IntegerType),
     MaxHandSize(TrackableTypes.IntegerType),
     HasUnlimitedHandSize(TrackableTypes.BooleanType),
-    LandsPlayedThisTurn(TrackableTypes.IntegerType),
-    SpellsCastThisTurn(TrackableTypes.IntegerType),
     NumDrawnThisTurn(TrackableTypes.IntegerType),
     Keywords(TrackableTypes.KeywordCollectionViewType, false),
     Commander(TrackableTypes.CardViewCollectionType, false),
     CommanderDamage(TrackableTypes.IntegerMapType),
-    CommanderCast(TrackableTypes.IntegerMapType),
     MindSlaveMaster(TrackableTypes.PlayerViewType),
     Ante(TrackableTypes.CardViewCollectionType, false),
     Battlefield(TrackableTypes.CardViewCollectionType, false), //zones can't respect freeze, otherwise cards that die from state based effects won't have that reflected in the UI

@@ -1,6 +1,9 @@
 package forge.ai.ability;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.common.base.Predicates;
+
 import forge.ai.ComputerUtil;
 import forge.ai.ComputerUtilCost;
 import forge.ai.ComputerUtilMana;
@@ -14,13 +17,13 @@ import forge.game.card.CardCollection;
 import forge.game.card.CardLists;
 import forge.game.card.CardPredicates;
 import forge.game.cost.Cost;
+import forge.game.keyword.KeywordInterface;
 import forge.game.mana.ManaCostBeingPaid;
 import forge.game.phase.PhaseHandler;
 import forge.game.phase.PhaseType;
 import forge.game.player.Player;
 import forge.game.spellability.SpellAbility;
 import forge.game.zone.ZoneType;
-import org.apache.commons.lang3.StringUtils;
 
 public class PermanentAi extends SpellAbilityAi {
 
@@ -62,6 +65,8 @@ public class PermanentAi extends SpellAbilityAi {
                 return false;
             }
         }
+
+        /* -- not used anymore after Ixalan (Planeswalkers are now legendary, not unique by subtype) --
         if (card.isPlaneswalker()) {
             CardCollection list = CardLists.filter(ai.getCardsIn(ZoneType.Battlefield),
                     CardPredicates.Presets.PLANEWALKERS);
@@ -75,7 +80,7 @@ public class PermanentAi extends SpellAbilityAi {
                 }
                 break;
             }
-        }
+        }*/
 
         if (card.getType().hasSupertype(Supertype.World)) {
             CardCollection list = CardLists.getType(ai.getCardsIn(ZoneType.Battlefield), "World");
@@ -142,7 +147,8 @@ public class PermanentAi extends SpellAbilityAi {
         }
 
         // don't play cards without being able to pay the upkeep for
-        for (String ability : card.getKeywords()) {
+        for (KeywordInterface inst : card.getKeywords()) {
+            String ability = inst.getOriginal();
             if (ability.startsWith("UpkeepCost")) {
                 final String[] k = ability.split(":");
                 final String costs = k[1];
@@ -175,9 +181,31 @@ public class PermanentAi extends SpellAbilityAi {
                     if (!hasCard) {
                         dontCast = true;
                     }
-                } else if (param.equals("MaxControlled")) {
-                    // Only cast unless there are X or more cards like this on the battlefield under AI control already
-                    int numControlled = CardLists.filter(ai.getCardsIn(ZoneType.Battlefield), CardPredicates.nameEquals(card.getName())).size();
+                } else if (param.startsWith("MaxControlled")) {
+                    // Only cast unless there are X or more cards like this on the battlefield under AI control already,
+                    CardCollection ctrld = CardLists.filter(ai.getCardsIn(ZoneType.Battlefield), CardPredicates.nameEquals(card.getName()));
+
+                    int numControlled = 0;
+                    if (param.endsWith("WithoutOppAuras")) {
+                        // Check that the permanet does not have any auras attached to it by the opponent (this assumes that if
+                        // the opponent cast an aura on the opposing permanent, it's not with good intentions, and thus it might
+                        // be better to have a pristine copy of the card - might not always be a correct assumption, but sounds
+                        // like a reasonable default for some cards).
+                        for (Card c : ctrld) {
+                            if (c.getEnchantedBy(false).isEmpty()) {
+                                numControlled++;
+                            } else {
+                                for (Card att : c.getEnchantedBy(false)) {
+                                    if (!att.getController().isOpponentOf(ai)) {
+                                        numControlled++;
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        numControlled = ctrld.size();
+                    }
+
                     if (numControlled >= Integer.parseInt(value)) {
                         dontCast = true;
                     }

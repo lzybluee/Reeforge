@@ -37,7 +37,7 @@ import java.util.List;
  * </p>
  * 
  * @author Forge
- * @version $Id: DeckGenerator2Color.java 33917 2017-05-03 14:25:26Z austinio7116 $
+ * @version $Id$
  */
 public class DeckGenerator2Color extends DeckGeneratorBase {
     @Override

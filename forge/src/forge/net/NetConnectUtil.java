@@ -1,5 +1,6 @@
 package forge.net;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import forge.GuiBase;
@@ -28,7 +29,7 @@ public class NetConnectUtil {
     private NetConnectUtil() { }
 
     public static String getServerUrl() {
-        final String url = SOptionPane.showInputDialog("Enter URL of server to join. Leave blank to host your own server.", "Connect to Server");
+        final String url = SOptionPane.showInputDialog("This feature is under active development.\nYou are likely to find bugs.\n\n - = * H E R E   B E   E L D R A Z I * = -\n\nEnter the URL of the server to join.\nLeave blank to host your own server.", "Connect to Server");
         if (url == null) { return null; }
 
         //prompt user for player one name if needed
@@ -74,6 +75,10 @@ public class NetConnectUtil {
             @Override
             public final void close() {
                 // NO-OP, server can't receive close message
+            }
+            @Override
+            public ClientGameLobby getLobby() {
+                return null;
             }
         });
         chatInterface.setGameClient(new IRemote() {
@@ -124,8 +129,12 @@ public class NetConnectUtil {
             }
             @Override
             public final void close() {
-                SOptionPane.showMessageDialog("Connection to the host was interrupted.", "Error", FSkinProp.ICO_WARNING);
+                SOptionPane.showMessageDialog("Your connection to the host (" + url + ") was interrupted.", "Error", FSkinProp.ICO_WARNING);
                 onlineLobby.setClient(null);
+            }
+            @Override
+            public ClientGameLobby getLobby() {
+                return lobby;
             }
         });
         view.setPlayerChangeListener(new IPlayerChangeListener() {
@@ -149,7 +158,12 @@ public class NetConnectUtil {
             catch (Exception ex) {}
         }
 
-        client.connect(hostname, port);
+        try {
+            client.connect(hostname, port);
+        }
+        catch (Exception ex) {
+            return null;
+        }
 
         return new ChatMessage(null, String.format("Connected to %s:%d", hostname, port));
     }
