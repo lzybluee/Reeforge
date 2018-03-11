@@ -217,7 +217,13 @@ public final class PaperCard implements Comparable<IPaperCard>, InventoryItemFro
         if (pc == null) {
             pc = StaticData.instance().getVariantCards().getCard(name, edition, artIndex);
             if (pc == null) {
-                throw new IOException(TextUtil.concatWithSpace("Card", name, "not found"));
+                pc = StaticData.instance().getCommonCards().getCard(name, null, 0);
+                if (pc == null) {
+                    pc = StaticData.instance().getVariantCards().getCard(name, null, 0);
+                    if (pc == null) {
+                        throw new IOException(TextUtil.concatWithSpace("Card", name, "not found"));
+                    }
+                }
             }
         }
         rules = pc.getRules();
