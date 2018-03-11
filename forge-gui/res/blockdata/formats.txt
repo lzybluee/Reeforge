@@ -1,6 +1,6 @@
 [Standard]
-Sets:KLD, AER, AKH, W17, HOU, XLN, RIX
-Banned: Attune with Aether; Rogue Refiner; Rampaging Ferocidon; Ramunap Ruins; Smuggler's Copter; Aetherworks Marvel; Felidar Guardian
+Sets:BFZ, OGW, SOI, EMN, W16, KLD, AER, AKH, W17, HOU, XLN, RIX
+Banned: Attune with Aether; Rogue Refiner; Rampaging Ferocidon; Ramunap Ruins; Smuggler's Copter; Aetherworks Marvel; Felidar Guardian; Emrakul, the Promised End; Reflector Mage
 
 [Modern]
 Sets:8ED, MRD, DST, 5DN, CHK, BOK, SOK, 9ED, RAV, GPT, DIS, CSP, TSP, TSB, PLC, FUT, 10E, LRW, EVE, SHM, MOR, ALA, CFX, ARB, M10, ZEN, WWK, ROE, M11, SOM, MBS, NPH, M12, ISD, DKA, AVR, M13, RTR, GTC, DGM, M14, THS, BNG, JOU, M15, KTK, FRF, DTK, MM2, ORI, BFZ, OGW, SOI, EMN, KLD, AER, AKH, W17, HOU, XLN, RIX
