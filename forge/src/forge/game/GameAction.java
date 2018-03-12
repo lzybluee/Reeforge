@@ -1068,6 +1068,11 @@ public class GameAction {
         if (!refreeze) {
             game.getStack().unfreezeStack();
         }
+
+        for(Player p : game.getPlayers()) {
+            p.updateFlashbackForView();
+            p.getGame().fireEvent(new GameEventZone(ZoneType.Flashback, p, EventValueChangeType.ComplexUpdate, null));
+        }
     }
 
     private boolean stateBasedAction704_5n(Card c) {
