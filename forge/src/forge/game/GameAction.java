@@ -65,6 +65,7 @@ public class GameAction {
     private boolean holdCheckingStaticAbilities = false;
 
     private CardCollection  simultaneousEtbCards;
+    private boolean isRollback;
 
     public GameAction(Game game0) {
         game = game0;
@@ -282,33 +283,35 @@ public class GameAction {
                 copied.getOwner().addInboundToken(copied);
             }
 
-            Map<String, Object> repParams = Maps.newHashMap();
-            repParams.put("Event", "Moved");
-            repParams.put("Affected", copied);
-            repParams.put("CardLKI", lastKnownInfo);
-            repParams.put("Cause", cause);
-            repParams.put("Origin", zoneFrom != null ? zoneFrom.getZoneType() : null);
-            repParams.put("Destination", zoneTo.getZoneType());
-            
-            repParams.putAll(params);
-
-            ReplacementResult repres = game.getReplacementHandler().run(repParams);
-            if (repres != ReplacementResult.NotReplaced) {
-                if (zoneChangedEarly) {
-                    c.setZone(originalZone); // TODO: part of a workaround for bounced suspend-cast cards 
+            if (!isRollback) {
+                Map<String, Object> repParams = Maps.newHashMap();
+                repParams.put("Event", "Moved");
+                repParams.put("Affected", copied);
+                repParams.put("CardLKI", lastKnownInfo);
+                repParams.put("Cause", cause);
+                repParams.put("Origin", zoneFrom != null ? zoneFrom.getZoneType() : null);
+                repParams.put("Destination", zoneTo.getZoneType());
+                
+                repParams.putAll(params);
+    
+                ReplacementResult repres = game.getReplacementHandler().run(repParams);
+                if (repres != ReplacementResult.NotReplaced) {
+                    if (zoneChangedEarly) {
+                        c.setZone(originalZone); // TODO: part of a workaround for bounced suspend-cast cards 
+                    }
+    
+                    // reset failed manifested Cards back to original
+                    if (c.isManifested()) {
+                        c.turnFaceUp(false, false);
+                    }
+    
+                    if (game.getStack().isResolving(c) && !zoneTo.is(ZoneType.Graveyard) && repres == ReplacementResult.Prevented) {
+                    	copied.getOwner().removeInboundToken(copied);
+                    	return moveToGraveyard(c, cause, params);
+                    }
+                    copied.getOwner().removeInboundToken(copied);
+                    return c;
                 }
-
-                // reset failed manifested Cards back to original
-                if (c.isManifested()) {
-                    c.turnFaceUp(false, false);
-                }
-
-                if (game.getStack().isResolving(c) && !zoneTo.is(ZoneType.Graveyard) && repres == ReplacementResult.Prevented) {
-                	copied.getOwner().removeInboundToken(copied);
-                	return moveToGraveyard(c, cause, params);
-                }
-                copied.getOwner().removeInboundToken(copied);
-                return c;
             }
         }
 
@@ -1894,5 +1897,9 @@ public class GameAction {
 
     public CardCollection getSimultaneousEtbCards() {
         return simultaneousEtbCards;
+    }
+
+    public void setRollback(boolean rollback) {
+        isRollback = rollback;
     }
 }
