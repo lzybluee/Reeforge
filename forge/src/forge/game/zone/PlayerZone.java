@@ -20,8 +20,10 @@ package forge.game.zone;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import forge.game.card.Card;
+import forge.game.card.CardCollection;
 import forge.game.card.CardCollectionView;
 import forge.game.card.CardLists;
+import forge.game.card.CounterType;
 import forge.game.player.Player;
 import forge.game.spellability.SpellAbility;
 import forge.util.Lang;
@@ -121,5 +123,21 @@ public class PlayerZone extends Zone {
 
         final Predicate<Card> filterPredicate = checkingForOwner ? new OwnCardsActivationFilter() : alienCardsActivationFilter(who);
         return CardLists.filter(cl, filterPredicate);
+    }
+
+    public CardCollectionView getCardsSuspended(Player who) {
+        boolean checkingForOwner = who == player;
+
+        CardCollection cards = new CardCollection();
+        if (checkingForOwner) {
+            CardCollectionView cl = getCards(false);
+            for(Card c : cl) {
+                if(c.hasSuspend() && c.getCounters(CounterType.TIME) >= 1) {
+                    cards.add(c);
+                }
+            }
+        }
+
+        return cards;
     }
 }
