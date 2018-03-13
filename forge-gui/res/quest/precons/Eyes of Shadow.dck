@@ -1,0 +1,31 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Eyes of Shadow
+Description=Rain down despair with Liliana's black deck. Master the forces of malevolence and death, and punish opponents with a suite of discard effects.
+Deck Type=constructed
+Set=ZEN
+Image=eyes_of_shadow.jpg
+[Main]
+2 Abyssal Specter|8ED
+1 Ascendant Evincar|10E
+2 Consume Spirit|M10
+1 Crowd of Cinders|SHM
+2 Demon's Horn|M10
+3 Drudge Skeletons|M10
+2 Dusk Imp|10E
+2 Megrim|M10
+4 Mind Rot|M10
+1 Mind Shatter|M10
+1 Mortivore|10E
+3 Ravenous Rats|10E
+1 Sengir Vampire|10E
+2 Severed Legion|10E
+25 Swamp|ZEN|1
+4 Terror|10E
+1 The Rack|TSB
+1 Underworld Dreams|M10
+2 Unholy Strength|M10

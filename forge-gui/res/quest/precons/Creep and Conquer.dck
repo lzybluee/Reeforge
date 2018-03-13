@@ -1,0 +1,42 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Creep and Conquer
+Description=The Golgari Swarm are the ultimate scavengers, finding the utmost value in every life and in every death. This deck puts that philosophy into action, making the most of every creature on the battlefield and every creature card in your graveyard.
+Deck Type=constructed
+Set=RTR
+Image=creep_and_conquer.jpg
+[Main]
+2 Daggerdrome Imp|RTR
+3 Dawntreader Elk|DKA
+1 Deadbridge Goliath|RTR
+1 Disciple of Bolas|M13
+2 Dreg Mangler|RTR
+4 Drudge Beetle|RTR
+1 Druid's Familiar|AVR
+4 Evolving Wilds|M13
+8 Forest|RTR|1
+2 Golgari Charm|RTR
+3 Golgari Guildgate|RTR
+1 Grim Backwoods|DKA
+3 Korozda Guildmage|RTR
+2 Slitherhead|RTR
+7 Swamp|RTR|1
+4 Tragic Slip|DKA
+2 Trusted Forcemage|AVR
+1 Ultimate Price|RTR
+1 Ulvenwald Tracker|AVR
+4 Vampire Nighthawk|M13
+2 Victim of Night|ISD
+1 Wolfir Silverheart|AVR
+1 Woodland Cemetery|ISD
+[Sideboard]
+3 Bramblecrush|ISD
+2 Duress|M13
+2 Ghost Quarter|ISD
+4 Strangleroot Geist|DKA
+1 Thragtusk|M13
+3 Vile Rebirth|M13

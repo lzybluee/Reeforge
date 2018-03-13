@@ -1,0 +1,50 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Duel Decks: Izzet vs. Golgari - Izzet
+Description=Duel Decks
+Deck Type=constructed
+Set=DDJ
+Image=izzet.jpg
+[Main]
+1 Brainstorm|DDJ
+1 Call to Heel|DDJ
+1 Dissipate|DDJ
+1 Djinn Illuminatus|DDJ
+1 Fire // Ice|DDJ
+1 Force Spike|DDJ
+1 Forgotten Cave|DDJ
+1 Galvanoth|DDJ
+1 Gelectrode|DDJ
+1 Goblin Electromancer|DDJ
+1 Invoke the Firemind|DDJ
+10 Island|DDJ|1
+1 Isochron Scepter|DDJ
+2 Izzet Boilerworks|DDJ
+1 Izzet Charm|DDJ
+1 Izzet Chronarch|DDJ
+1 Izzet Guildmage|DDJ
+1 Izzet Signet|DDJ
+2 Kiln Fiend|DDJ
+1 Lonely Sandbar|DDJ
+1 Magma Spray|DDJ
+9 Mountain|DDJ|1
+1 Niv-Mizzet, the Firemind|DDJ
+1 Nivix, Aerie of the Firemind|DDJ
+1 Ogre Savant|DDJ
+1 Overwhelming Intellect|DDJ
+1 Prophetic Bolt|DDJ
+2 Pyromatics|DDJ
+1 Quicksilver Dagger|DDJ
+1 Reminisce|DDJ
+2 Shrewd Hatchling|DDJ
+1 Sphinx-Bone Wand|DDJ
+1 Steamcore Weird|DDJ
+1 Street Spasm|DDJ
+1 Thunderheads|DDJ
+1 Train of Thought|DDJ
+1 Vacuumelt|DDJ
+2 Wee Dragonauts|DDJ

@@ -1,0 +1,44 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Duel Decks: Blessed vs. Cursed - Cursed
+Description=Duel Decks
+Deck Type=constructed
+Set=DDQ
+Image=cursed.jpg
+[Main]
+1 Abattoir Ghoul|DDQ
+1 Appetite for Brains|DDQ
+1 Barter in Blood|DDQ
+2 Butcher Ghoul|DDQ
+1 Cobbled Wings|DDQ
+1 Compelling Deterrence|DDQ
+2 Diregraf Captain|DDQ
+1 Diregraf Ghoul|DDQ
+4 Dismal Backwater|DDQ
+1 Dread Return|DDQ
+1 Driver of the Dead|DDQ
+1 Falkenrath Noble|DDQ
+1 Forbidden Alchemy|DDQ
+2 Ghoulraiser|DDQ
+1 Gravecrawler|DDQ
+1 Harvester of Souls|DDQ
+1 Havengul Runebinder|DDQ
+1 Human Frailty|DDQ
+8 Island|DDQ
+1 Makeshift Mauler|DDQ
+1 Mindwrack Demon|DDQ
+2 Moan of the Unhallowed|DDQ
+1 Relentless Skaabs|DDQ
+1 Scrapskin Drake|DDQ
+3 Screeching Skaab|DDQ
+1 Sever the Bloodline|DDQ
+2 Stitched Drake|DDQ
+12 Swamp|DDQ
+1 Tooth Collector|DDQ
+1 Tribute to Hunger|DDQ
+1 Unbreathing Horde|DDQ
+1 Victim of Night|DDQ

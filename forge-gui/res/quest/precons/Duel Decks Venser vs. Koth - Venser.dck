@@ -1,0 +1,51 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Duel Decks: Venser vs. Koth - Venser
+Description=Duel Decks
+Deck Type=constructed
+Set=DDI
+Image=venser.jpg
+[Main]
+1 Angelic Shield|DDI
+1 Augury Owl|DDI
+1 Azorius Chancery|DDI
+1 Cache Raiders|DDI
+1 Clone|DDI
+1 Coral Fighters|DDI
+1 Cryptic Annelid|DDI
+1 Flood Plain|DDI
+1 Galepowder Mage|DDI
+11 Island|DDI|1
+1 Jedit's Dragoons|DDI
+1 Kor Cartographer|DDI
+1 Minamo Sightbender|DDI
+1 Mistmeadow Witch|DDI
+1 Neurok Invisimancer|DDI
+1 New Benalia|DDI
+1 Oblivion Ring|DDI
+2 Overrule|DDI
+1 Path to Exile|DDI
+7 Plains|DDI|1
+2 Preordain|DDI
+1 Primal Plasma|DDI
+1 Revoke Existence|DDI
+1 Safe Passage|DDI
+1 Sawtooth Loon|DDI
+2 Scroll Thief|DDI
+2 Sejiri Refuge|DDI
+1 Sigil of Sleep|DDI
+1 Sky Spirit|DDI
+2 Slith Strider|DDI
+1 Soaring Seacliff|DDI
+1 Sphinx of Uthuun|DDI
+1 Steel of the Godhead|DDI
+1 Sunblast Angel|DDI
+1 Vanish into Memory|DDI
+1 Venser, the Sojourner|DDI
+1 Wall of Denial|DDI
+1 Whitemane Lion|DDI
+1 Windreaver|DDI

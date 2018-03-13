@@ -1,0 +1,44 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Duel Decks: Knights vs. Dragons - Dragons
+Description=Duel Decks
+Deck Type=constructed
+Set=DDG
+Image=dragons.jpg
+[Main]
+2 Armillary Sphere|DDG
+1 Bloodmark Mentor|DDG
+1 Bogardan Hellkite|DDG
+1 Bogardan Rager|DDG
+1 Breath of Darigaaz|DDG
+1 Captive Flame|DDG
+1 Cinder Wall|DDG
+1 Claws of Valakut|DDG
+1 Cone of Flame|DDG
+2 Dragon Fodder|DDG
+2 Dragon Whelp|DDG
+1 Dragon's Claw|DDG
+1 Dragonspeaker Shaman|DDG
+2 Fiery Fall|DDG
+1 Fire-Belly Changeling|DDG
+1 Ghostfire|DDG
+1 Henge Guardian|DDG
+1 Jaws of Stone|DDG
+1 Kilnmouth Dragon|DDG
+1 Mordant Dragon|DDG
+24 Mountain|DDG|1
+2 Mudbutton Torchrunner|DDG
+1 Punishing Fire|DDG
+1 Seething Song|DDG
+1 Seismic Strike|DDG
+1 Shiv's Embrace|DDG
+1 Shivan Hellkite|DDG
+1 Skirk Prospector|DDG
+1 Spitting Earth|DDG
+1 Temporary Insanity|DDG
+1 Thunder Dragon|DDG
+1 Voracious Dragon|DDG

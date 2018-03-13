@@ -1,0 +1,38 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Insatiable Hunger
+Description=The "Insatiable Hunger" deck is based around increasing your mana production to summon a horde of giants, beasts, and hydras to crush your opposition.
+Deck Type=constructed
+Set=BNG
+Image=insatiable_hunger.jpg
+[Main]
+2 Cyclops of One-Eyed Pass|BNG
+1 Destructive Revelry|THS
+1 Fall of the Hammer|BNG
+2 Fanatic of Xenagos|BNG
+14 Forest|THS|1
+2 Lightning Strike|THS
+1 Messenger's Speed|THS
+1 Mischief and Mayhem|BNG
+1 Mistcutter Hydra|THS
+2 Mortal's Resolve|BNG
+12 Mountain|THS|1
+1 Nessian Courser|THS
+2 Nessian Demolok|BNG
+1 Nessian Wilds Ravager|BNG
+1 Opaline Unicorn|THS
+2 Ordeal of Nylea|THS
+1 Pharagax Giant|BNG
+1 Pinnacle of Rage|BNG
+2 Reckless Reveler|BNG
+1 Satyr Piper|THS
+1 Searing Blood|BNG
+1 Setessan Starbreaker|BNG
+2 Snake of the Golden Grove|BNG
+2 Swordwise Centaur|BNG
+1 Thunder Brute|BNG
+2 Voyaging Satyr|THS

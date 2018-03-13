@@ -1,0 +1,41 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Thrive and Thrash
+Description=The Simic Combine has no qualms about pushing the limits of life. Take command of its unrestrained ambition to engineer monstrous minions fueled by abundant mana. Let your creations loose at your enemy's microscopic army. It's feeding time.
+Deck Type=constructed
+Set=GTC
+Image=thrive_and_thrash.jpg
+[Main]
+2 Acidic Slime|M13
+4 Arbor Elf|M13
+3 Borderland Ranger|AVR
+1 Bramblecrush|ISD
+1 Deadeye Navigator|AVR
+1 Dungeon Geists|DKA
+2 Evolving Wilds|M13
+4 Farseek|M13
+2 Fog Bank|M13
+10 Forest|RTR|1
+2 Ground Assault|GTC
+1 Gruul Ragebeast|GTC
+6 Island|RTR|1
+2 Mist Raven|AVR
+1 Mountain|RTR|1
+4 Simic Guildgate|GTC
+1 Sphinx of Uthuun|M13
+3 Strangleroot Geist|DKA
+1 Thragtusk|M13
+3 Urban Evolution|GTC
+4 Verdant Haven|GTC
+1 Wolfir Silverheart|AVR
+1 Yeva, Nature's Herald|M13
+[Sideboard]
+4 Dissipate|ISD
+4 Flames of the Firebrand|M13
+2 Naturalize|GTC
+2 Negate|M13
+3 Rancor|M13

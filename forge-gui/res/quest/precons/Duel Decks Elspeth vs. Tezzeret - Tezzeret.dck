@@ -1,0 +1,50 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Duel Decks: Elspeth vs. Tezzeret - Tezzeret
+Description=Duel Decks
+Deck Type=constructed
+Set=DDF
+Image=tezzeret.jpg
+[Main]
+1 AEther Spellbomb|DDF
+1 Arcbound Worker|DDF
+1 Argivian Restoration|DDF
+1 Assembly-Worker|DDF
+1 Clockwork Condor|DDF
+1 Clockwork Hydra|DDF
+1 Contagion Clasp|DDF
+1 Darksteel Citadel|DDF
+1 Echoing Truth|DDF
+1 Elixir of Immortality|DDF
+1 Energy Chamber|DDF
+1 Esperzoa|DDF
+2 Everflowing Chalice|DDF
+1 Faerie Mechanist|DDF
+1 Foil|DDF
+1 Frogmite|DDF
+20 Island|DDF|1
+1 Juggernaut|DDF
+1 Master of Etherium|DDF
+1 Mishra's Factory|DDF
+1 Moonglove Extract|DDF
+1 Pentavus|DDF
+1 Qumulox|DDF
+1 Razormane Masticore|DDF
+2 Runed Servitor|DDF
+1 Seat of the Synod|DDF
+1 Serrated Biskelion|DDF
+1 Silver Myr|DDF
+1 Stalking Stones|DDF
+1 Steel Overseer|DDF
+1 Steel Wall|DDF
+1 Synod Centurion|DDF
+1 Tezzeret the Seeker|DDF
+2 Thirst for Knowledge|DDF
+1 Thoughtcast|DDF
+1 Trinket Mage|DDF
+1 Trip Noose|DDF
+1 Triskelion|DDF

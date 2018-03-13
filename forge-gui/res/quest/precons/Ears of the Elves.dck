@@ -1,0 +1,36 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Ears of the Elves
+Description=Elvish dominance continues with Nissa's black and green deck. Decimate your opponents with a legion of elite elvish fighters.
+Deck Type=constructed
+Set=ZEN
+Image=ears_of_the_elves.jpg
+[Main]
+1 Coat of Arms|M10
+1 Drove of Elves|SHM
+2 Elven Riders|10E
+1 Elvish Champion|10E
+3 Elvish Eulogist|LRW
+1 Elvish Promenade|LRW
+2 Elvish Visionary|M10
+3 Elvish Warrior|MOR
+2 Essence Drain|10E
+3 Eyeblight's Ending|LRW
+16 Forest|ZEN|1
+1 Gaea's Herald|10E
+4 Giant Growth|M10
+1 Greenweaver Druid|ZEN
+1 Immaculate Magistrate|LRW
+1 Imperious Perfect|LRW
+1 Jagged-Scar Archers|LRW
+1 Lys Alana Huntmaster|LRW
+2 Moonglove Winnower|LRW
+1 Naturalize|M10
+1 Nature's Spiral|M10
+8 Swamp|ZEN|1
+1 Talara's Battalion|EVE
+2 Wurm's Tooth|M10

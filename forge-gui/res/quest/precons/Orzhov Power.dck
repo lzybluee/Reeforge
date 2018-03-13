@@ -1,0 +1,37 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Orzhov Power
+Description=Orzhov Power is a white/black intro pack centering around the Orzhov Syndicate.
+Deck Type=constructed
+Set=DGM
+Image=orzhov_power.jpg
+[Main]
+1 Assassin's Strike|RTR
+3 Bane Alley Blackguard|DGM
+1 Basilica Guards|GTC
+2 Basilica Screecher|GTC
+1 Bazaar Krovod|RTR
+1 Crypt Ghast|GTC
+1 Crypt Incursion|DGM
+2 Dark Revenant|RTR
+1 Dying Wish|GTC
+2 Fatal Fumes|DGM
+1 Gift of Orzhova|GTC
+1 Kingpin's Pet|GTC
+2 Maw of the Obzedat|DGM
+2 Orzhov Cluestone|DGM
+4 Orzhov Guildgate|DGM
+11 Plains|RTR|1
+1 Profit // Loss|DGM
+1 Riot Control|DGM
+2 Sin Collector|DGM
+1 Smog Elemental|GTC
+2 Steeple Roc|DGM
+12 Swamp|RTR|1
+1 Teysa, Envoy of Ghosts|DGM
+2 Tithe Drinker|DGM
+2 Ubul Sar Gatekeepers|DGM

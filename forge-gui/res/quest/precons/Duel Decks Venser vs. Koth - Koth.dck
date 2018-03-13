@@ -1,0 +1,43 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Duel Decks: Venser vs. Koth - Koth
+Description=Duel Decks
+Deck Type=constructed
+Set=DDI
+Image=koth.jpg
+[Main]
+1 AEther Membrane|DDI
+1 Anger|DDI
+1 Armillary Sphere|DDI
+1 Bloodfire Colossus|DDI
+1 Bloodfire Kavu|DDI
+1 Chartooth Cougar|DDI
+1 Cosi's Ravager|DDI
+1 Downhill Charge|DDI
+1 Earth Servant|DDI
+2 Fiery Hellhound|DDI
+1 Geyser Glider|DDI
+1 Greater Stone Spirit|DDI
+1 Jaws of Stone|DDI
+1 Journeyer's Kite|DDI
+1 Koth of the Hammer|DDI
+1 Lithophage|DDI
+25 Mountain|DDI|1
+2 Pilgrim's Eye|DDI
+2 Plated Geopede|DDI
+1 Pygmy Pyrosaur|DDI
+1 Searing Blaze|DDI
+2 Seismic Strike|DDI
+1 Spire Barrage|DDI
+1 Stone Giant|DDI
+1 Torchling|DDI
+1 Volley of Boulders|DDI
+1 Vulshok Battlegear|DDI
+1 Vulshok Berserker|DDI
+1 Vulshok Morningstar|DDI
+1 Vulshok Sorcerer|DDI
+2 Wayfarer's Bauble|DDI

@@ -1,0 +1,40 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Duel Decks: Garruk vs. Liliana - Garruk
+Description=Duel Decks
+Deck Type=constructed
+Set=DDD
+Image=garruk.jpg
+[Main]
+2 Albino Troll|DDD
+2 Basking Rootwalla|DDD
+1 Beast Attack|DDD
+2 Blastoderm|DDD
+1 Elephant Guide|DDD
+21 Forest|DDD|1
+1 Garruk Wildspeaker|DDD
+1 Genju of the Cedars|DDD
+1 Giant Growth|DDD
+2 Harmonize|DDD
+2 Indrik Stomphowler|DDD
+1 Invigorate|DDD
+1 Krosan Tusker|DDD
+1 Lignify|DDD
+2 Nature's Lore|DDD
+1 Overrun|DDD
+1 Plated Slagwurm|DDD
+2 Rancor|DDD
+1 Ravenous Baloth|DDD
+1 Rude Awakening|DDD
+2 Serrated Arrows|DDD
+2 Slippery Karst|DDD
+1 Stampeding Wildebeests|DDD
+1 Treetop Village|DDD
+2 Vine Trellis|DDD
+2 Wild Mongrel|DDD
+1 Windstorm|DDD
+2 Wirewood Savage|DDD

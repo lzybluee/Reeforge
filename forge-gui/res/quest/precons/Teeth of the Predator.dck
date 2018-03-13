@@ -1,0 +1,34 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Teeth of the Predator
+Description=Harness the power of Garruk's green deck. Take advantage of its abundant resources and devastate opponents with awesome creatures.
+Deck Type=constructed
+Set=ZEN
+Image=teeth_of_the_predator.jpg
+[Main]
+2 Blanchwood Armor|10E
+4 Civic Wayfinder|10E
+1 Duskdale Wurm|EVE
+24 Forest|ZEN|1
+3 Giant Growth|M10
+2 Giant Spider|M10
+1 Howl of the Night Pack|M10
+1 Loxodon Warhammer|10E
+1 Molimo, Maro-Sorcerer|10E
+1 Natural Spring|10E
+2 Overrun|M10
+2 Rampant Growth|M10
+1 River Boa|ZEN
+1 Roughshod Mentor|SHM
+3 Runeclaw Bear|M10
+2 Spined Wurm|10E
+2 Trained Armodon|9ED
+1 Troll Ascetic|10E
+1 Verdant Force|10E
+1 Vigor|LRW
+2 Wall of Wood|10E
+2 Wurm's Tooth|M10
