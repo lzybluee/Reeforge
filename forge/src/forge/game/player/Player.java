@@ -2164,7 +2164,7 @@ public class Player extends GameEntity implements Comparable<Player> {
 
     public final void resetSpellsCastThisTurn() {
         spellsCastThisTurn = 0;
-        view.updateLandsPlayedThisTurn(this);
+        view.updateSpellsCastThisTurn(this);
     }
     public final void setSpellsCastLastTurn(int num) {
         spellsCastLastTurn = num;
