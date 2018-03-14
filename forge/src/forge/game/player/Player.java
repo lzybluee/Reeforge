@@ -1410,6 +1410,7 @@ public class Player extends GameEntity implements Comparable<Player> {
         final CardCollection cl = new CardCollection();
 
         cl.addAll(getZone(ZoneType.Graveyard).getCardsPlayerCanActivate(this));
+        cl.addAll(getZone(ZoneType.Graveyard).getCardsRetrace(this, getZone(ZoneType.Hand).getCards()));
         cl.addAll(getZone(ZoneType.Exile).getCardsPlayerCanActivate(this));
         cl.addAll(getZone(ZoneType.Exile).getCardsSuspended(this));
         cl.addAll(getZone(ZoneType.Library).getCardsPlayerCanActivate(this));
@@ -2564,9 +2565,12 @@ public class Player extends GameEntity implements Comparable<Player> {
         Integer cast = commanderCast.get(commander);
         return cast == null ? 0 : cast.intValue();
     }
-
+    public Iterable<Entry<Card, Integer>> getCommanderCast() {
+        return commanderCast.entrySet();
+    }
     public void incCommanderCast(Card commander) {
         commanderCast.put(commander, getCommanderCast(commander) + 1);
+        view.updateCommanderCast(this);
     }
 
     public boolean isPlayingExtraTurn() {
