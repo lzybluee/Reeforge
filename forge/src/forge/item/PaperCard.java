@@ -45,8 +45,8 @@ public final class PaperCard implements Comparable<IPaperCard>, InventoryItemFro
 
     // These fields are kinda PK for PrintedCard
     private final String name;
-    private final String edition;
-    private final int artIndex;
+    private String edition;
+    private int artIndex;
     private final boolean foil;
     private Boolean hasImage;
 
@@ -218,7 +218,10 @@ public final class PaperCard implements Comparable<IPaperCard>, InventoryItemFro
             pc = StaticData.instance().getVariantCards().getCard(name, edition, artIndex);
             if (pc == null) {
                 pc = StaticData.instance().getCommonCards().getCard(name, null, 0);
-                if (pc == null) {
+                if (pc != null) {
+                    edition = pc.getEdition();
+                    artIndex = 1;
+                } else {
                     pc = StaticData.instance().getVariantCards().getCard(name, null, 0);
                     if (pc == null) {
                         throw new IOException(TextUtil.concatWithSpace("Card", name, "not found"));
