@@ -11,6 +11,7 @@ import forge.interfaces.ILobbyView;
 import forge.interfaces.IPlayerChangeListener;
 import forge.interfaces.IUpdateable;
 import forge.match.GameLobby.GameLobbyData;
+import forge.match.LobbySlotType;
 import forge.model.FModel;
 import forge.net.client.ClientGameLobby;
 import forge.net.client.FGameClient;
@@ -54,6 +55,8 @@ public class NetConnectUtil {
                 view.update(fullUpdate);
                 server.updateLobbyState();
             }
+            @Override
+            public final void update(final int slot, final LobbySlotType type) {return;}
         });
         view.setPlayerChangeListener(new IPlayerChangeListener() {
             @Override
