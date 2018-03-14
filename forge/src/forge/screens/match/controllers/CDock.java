@@ -151,6 +151,12 @@ public class CDock implements ICDoc {
                 matchUI.viewDeckList();
             }
         });
+        view.getBtnViewOpponentDeckList().setCommand(new UiCommand() {
+            @Override
+            public void run() {
+                matchUI.viewOpponentDeckList();
+            }
+        });
         view.getBtnRevertLayout().setCommand(new UiCommand() {
             @Override
             public void run() {

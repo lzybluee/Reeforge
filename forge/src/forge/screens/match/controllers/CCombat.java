@@ -1,5 +1,9 @@
 package forge.screens.match.controllers;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.Iterables;
@@ -63,9 +67,24 @@ public class CCombat implements ICDoc {
     private static String getCombatDescription(final CombatView localCombat) {
         final StringBuilder display = new StringBuilder();
 
-        for (final GameEntityView defender : localCombat.getDefenders()) {
+        final Iterable<GameEntityView> defenders = localCombat.getDefenders();
+        
+        ArrayList<GameEntityView> defenderList = new ArrayList<>();
+        for (final GameEntityView defender : defenders) {
+            defenderList.add(defender);
+        }
+        
+        Collections.sort(defenderList, new Comparator<GameEntityView>() {
+            @Override
+            public int compare(GameEntityView defender1, GameEntityView defender2) {
+                return defender1.getId() - defender2.getId();
+            }
+        });
+
+        for (final GameEntityView defender : defenderList) {
             display.append(getCombatDescription(localCombat, defender));
         }
+
         return display.toString().trim();
     }
 
@@ -86,9 +105,29 @@ public class CCombat implements ICDoc {
 
         display.append(defender).append(" is attacked by:\n");
 
+        ArrayList<FCollection<CardView>> bandList = new ArrayList<>();
+        for (final FCollection<CardView> band : bands) {
+            bandList.add(band);
+        }
+
+        Collections.sort(bandList, new Comparator<FCollection<CardView>>() {
+            @Override
+            public int compare(FCollection<CardView> band1, FCollection<CardView> band2) {
+                int id1 = 0;
+                int id2 = 0;
+                for(final CardView c : band1) {
+                    id1 += c.getId();
+                }
+                for(final CardView c : band2) {
+                    id2 += c.getId();
+                }
+                return id1 - id2;
+            }
+        });
+
         // Associate Bands, Attackers Blockers
         boolean previousBand = false;
-        for (final FCollection<CardView> band : bands) {
+        for (final FCollection<CardView> band : bandList) {
             final int bandSize = band.size();
             if (bandSize == 0) {
                 continue;

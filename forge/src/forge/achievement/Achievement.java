@@ -245,7 +245,7 @@ public abstract class Achievement {
     protected final String getFormattedTimestamp() {
         if (timestamp == 0) { return null; }
 
-        final DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
+        final DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.ENGLISH);
         return formatter.format(new Date(timestamp));
     }
 

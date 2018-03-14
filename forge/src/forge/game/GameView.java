@@ -206,6 +206,19 @@ public class GameView extends TrackableObject {
         return null;
     }
 
+    public Deck getOpponentDeck(final String lobbyPlayerName, int opponentIndex) {
+        int index = 0;
+        for (final Player p : game.getRegisteredPlayers()) {
+            if (!p.getLobbyPlayer().getName().equals(lobbyPlayerName)) {
+                if(index == opponentIndex) {
+                    return p.getRegisteredPlayer().getDeck();
+                }
+                index++;
+            }
+        }
+        return null;
+    }
+
     public AnteResult getAnteResult(PlayerView player) {
         return game.getOutcome().anteResult.get(game.getPlayer(player));
     }

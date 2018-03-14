@@ -137,6 +137,8 @@ public final class CMatchUI
     private final CPrompt cPrompt = new CPrompt(this);
     private final CStack cStack = new CStack(this);
 
+    private int opponentDeckIndex = 0;
+
     public CMatchUI() {
         this.view = new VMatchUI(this);
         this.screen = FScreen.getMatchScreen(this, view);
@@ -176,6 +178,7 @@ public final class CMatchUI
     @Override
     public void setGameView(GameView gameView0) {
         super.setGameView(gameView0);
+        opponentDeckIndex = 0;
         gameView0 = getGameView(); //ensure updated game view used for below logic
         if (gameView0 == null) { return; }
 
@@ -228,6 +231,20 @@ public final class CMatchUI
             return;
         }
         final Deck deck = getGameView().getDeck(getCurrentPlayer().getLobbyPlayerName());
+        if (deck != null) {
+            FDeckViewer.show(deck);
+        }
+    }
+
+    public void viewOpponentDeckList() {
+        if (!isInGame()) {
+            return;
+        }
+        Deck deck = getGameView().getOpponentDeck(getCurrentPlayer().getLobbyPlayerName(), opponentDeckIndex++);
+        if(deck == null) {
+            opponentDeckIndex = 0;
+            deck = getGameView().getOpponentDeck(getCurrentPlayer().getLobbyPlayerName(), opponentDeckIndex++);
+        }
         if (deck != null) {
             FDeckViewer.show(deck);
         }
@@ -912,9 +929,13 @@ public final class CMatchUI
     }
 
     @Override
-    public GameEntityView chooseSingleEntityForEffect(final String title, final List<? extends GameEntityView> optionList, final DelayedReveal delayedReveal, final boolean isOptional) {
+    public GameEntityView chooseSingleEntityForEffect(final String title, final List<? extends GameEntityView> optionList, 
+            final DelayedReveal delayedReveal, final boolean isOptional, int total) {
         if (delayedReveal != null) {
             reveal(delayedReveal.getMessagePrefix(), delayedReveal.getCards()); //TODO: Merge this into search dialog
+        }
+        if(total == 0) {
+            return null;
         }
         if (isOptional) {
             return oneOrNone(title, optionList);

@@ -159,14 +159,19 @@ public class AnimateAllEffect extends AnimateEffectBase {
                 }
             }
 
+            boolean clearAbilities = sa.hasParam("OverwriteAbilities");
+            boolean removeAll = sa.hasParam("RemoveAllAbilities");
+
             // remove abilities
             final List<SpellAbility> removedAbilities = new ArrayList<SpellAbility>();
-            if (sa.hasParam("OverwriteAbilities") || sa.hasParam("RemoveAllAbilities")) {
+            if (clearAbilities || removeAll) {
                 for (final SpellAbility ab : c.getSpellAbilities()) {
-                    if (ab.isAbility()) {
-                        c.removeSpellAbility(ab);
+                    if (removeAll || (ab.isAbility() && clearAbilities)) {
                         removedAbilities.add(ab);
                     }
+                }
+                for(final SpellAbility ab : removedAbilities) {
+                    c.removeSpellAbility(ab);
                 }
             }
             // give replacement effects

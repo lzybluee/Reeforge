@@ -143,7 +143,7 @@ public class FileSection {
                 return defaultValue;
             }
 
-            NumberFormat format = NumberFormat.getInstance(Locale.US);
+            NumberFormat format = NumberFormat.getInstance(Locale.ENGLISH);
             Number number = format.parse(this.get(fieldName));
 
             return number.doubleValue();

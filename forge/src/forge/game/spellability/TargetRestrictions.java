@@ -763,6 +763,15 @@ public class TargetRestrictions {
         this.dividedMap.put(tgt, portionAllocated);
     }
 
+    public final int removeDividedAllocation(final Object tgt) {
+        int ret = 0;
+        if (this.dividedMap.containsKey(tgt)) {
+            ret = this.dividedMap.get(tgt);
+            this.dividedMap.remove(tgt);
+        }
+        return ret;
+    }
+
     /**
      * Get the divided amount relative to a specific card/player.
      * @param tgt the targeted object
