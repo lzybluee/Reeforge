@@ -1185,7 +1185,7 @@ public class Player extends GameEntity implements Comparable<Player> {
         return drawCards(1);
     }
 
-    public void scry(final int numScry) {
+    public void scry(final int numScry, boolean shouldTrigger) {
         final CardCollection topN = new CardCollection();
         final PlayerZone library = getZone(ZoneType.Library);
         final int actualNumScry = Math.min(numScry, library.size());
@@ -1220,9 +1220,11 @@ public class Player extends GameEntity implements Comparable<Player> {
 
         getGame().fireEvent(new GameEventScry(this, numToTop, numToBottom));
 
-        final Map<String, Object> runParams = Maps.newHashMap();
-        runParams.put("Player", this);
-        getGame().getTriggerHandler().runTrigger(TriggerType.Scry, runParams, false);
+        if (shouldTrigger) {
+            final Map<String, Object> runParams = Maps.newHashMap();
+            runParams.put("Player", this);
+            getGame().getTriggerHandler().runTrigger(TriggerType.Scry, runParams, false);
+        }
     }
 
     public boolean canMulligan() {
@@ -2060,9 +2062,11 @@ public class Player extends GameEntity implements Comparable<Player> {
     public final void addLandPlayedThisTurn() {
         landsPlayedThisTurn++;
         achievementTracker.landsPlayed++;
+        view.updateLandsPlayedThisTurn(this);
     }
     public final void resetLandsPlayedThisTurn() {
         landsPlayedThisTurn = 0;
+        view.updateLandsPlayedThisTurn(this);
     }
     public final void setLandsPlayedLastTurn(int num) {
         landsPlayedLastTurn = num;
@@ -2134,9 +2138,11 @@ public class Player extends GameEntity implements Comparable<Player> {
         if (spellsCastThisTurn > achievementTracker.maxStormCount) {
             achievementTracker.maxStormCount = spellsCastThisTurn;
         }
+        view.updateSpellsCastThisTurn(this);
     }
     public final void resetSpellsCastThisTurn() {
         spellsCastThisTurn = 0;
+        view.updateSpellsCastThisTurn(this);
     }
     public final void setSpellsCastLastTurn(int num) {
         spellsCastLastTurn = num;

@@ -181,6 +181,8 @@ public class PhaseHandler implements java.io.Serializable {
 
             final List<Card> lands = CardLists.filter(playerTurn.getLandsInPlay(), Presets.UNTAPPED);
             playerTurn.setNumPowerSurgeLands(lands.size());
+
+            game.fireEvent(new GameEventZone(ZoneType.Battlefield, playerTurn, EventValueChangeType.ComplexUpdate, null));
         }
 
         game.fireEvent(new GameEventTurnPhase(playerTurn, phase, phaseType));
@@ -349,8 +351,13 @@ public class PhaseHandler implements java.io.Serializable {
                     int numDiscard = playerTurn.isUnlimitedHandSize() || handSize <= max || handSize == 0 ? 0 : handSize - max;
 
                     if (numDiscard > 0) {
+                        CardCollection discarded = new CardCollection();
                         for (Card c : playerTurn.getController().chooseCardsToDiscardToMaximumHandSize(numDiscard)){
                             playerTurn.discard(c, null);
+                            discarded.add(c);
+                        }
+                        if(discarded.size() > 0) {
+                            game.getAction().reveal(discarded, playerTurn, true);
                         }
                     }
 

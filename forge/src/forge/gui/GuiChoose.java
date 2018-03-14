@@ -140,10 +140,11 @@ public class GuiChoose {
     }
     public static <T> List<T> getChoices(final String message, final int min, final int max, final Collection<T> choices, final T selected, final Function<T, String> display, final CMatchUI matchUI) {
         if (choices == null || choices.isEmpty()) {
-            if (min == 0) {
+            if (min <= 0) {
                 return new ArrayList<T>();
             }
-            throw new RuntimeException("choice required from empty list");
+            System.err.println("choice required from empty list");
+            return new ArrayList<T>();
         }
 
         final Callable<List<T>> showChoice = new Callable<List<T>>() {

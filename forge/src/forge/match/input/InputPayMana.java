@@ -203,7 +203,8 @@ public abstract class InputPayMana extends InputSyncronizedBase {
         }
 
         boolean guessAbilityWithRequiredColors = true;
-        int amountOfMana = -1;
+        SpellAbility priorAbility = null;
+
         for (SpellAbility ma : card.getManaAbilities()) {
             ma.setActivatingPlayer(player);
 
@@ -214,13 +215,8 @@ public abstract class InputPayMana extends InputSyncronizedBase {
             if (!m.meetsManaRestrictions(saPaidFor))                        { continue; }
 
             // If Mana Abilities produce differing amounts of mana, let the player choose
-            int maAmount = GameActionUtil.amountOfManaGenerated(ma, true);
-            if (amountOfMana == -1) {
-                amountOfMana = maAmount;
-            } else {
-                if (amountOfMana != maAmount) {
-                    guessAbilityWithRequiredColors = false;
-                }
+            if(m.getManaRestrictions() != null && !m.getManaRestrictions().isEmpty()) {
+                priorAbility = ma;
             }
 
             abilitiesMap.put(ma.getView(), ma);
@@ -288,10 +284,26 @@ public abstract class InputPayMana extends InputSyncronizedBase {
             choice = true;
         }
 
-        final SpellAbility chosen;
+        if (card.getName().equals("Eldrazi Temple") && priorAbility != null) {
+            choice = false;
+        }
+
+        SpellAbility chosen;
         if (chosenAbility == null) {
             ArrayList<SpellAbilityView> choices = new ArrayList<>(abilitiesMap.keySet());
-            chosen = abilitiesMap.size() > 1 && choice ? abilitiesMap.get(getController().getGui().one("Choose mana ability",  choices)) : abilitiesMap.get(choices.get(0));
+            if(abilitiesMap.size() > 1) {
+                if(choice) {
+                    chosen = abilitiesMap.get(getController().getGui().one("Choose mana ability",  choices));
+                } else {
+                    if(abilitiesMap.containsValue(priorAbility)) {
+                        chosen = priorAbility;
+                    } else {
+                        chosen = abilitiesMap.get(choices.get(0));
+                    }
+                }
+            } else {
+                chosen = abilitiesMap.get(choices.get(0));
+            }
         } else {
             chosen = chosenAbility;
         }
@@ -304,12 +316,16 @@ public abstract class InputPayMana extends InputSyncronizedBase {
         game.getAction().invoke(new Runnable() {
             @Override
             public void run() {
-                if (HumanPlay.playSpellAbility(getController(), chosen.getActivatingPlayer(), chosen)) {
+                chosen.setUsedToPayMana(InputPayMana.this.manaCost);
+                boolean b = HumanPlay.playSpellAbility(getController(), chosen.getActivatingPlayer(), chosen);
+                chosen.setUsedToPayMana(null);
+                if (b) {
                     player.getManaPool().payManaFromAbility(saPaidFor, InputPayMana.this.manaCost, chosen);
 
                     onManaAbilityPaid();
                     onStateChanged();
                 }
+                
             }
         });
 

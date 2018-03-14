@@ -258,6 +258,10 @@ public class CostAdjustment {
             untappedCards = CardLists.filter(untappedCards, CardPredicates.Presets.CREATURES);
         }
 
+        if (untappedCards.size() == 0) {
+            return;
+        }
+
         Map<Card, ManaCostShard> convokedCards = sa.getActivatingPlayer().getController().chooseCardsForConvokeOrImprovise(sa, cost.toManaCost(), untappedCards, improvise);
         
         // Convoked creats are tapped here with triggers suppressed,
