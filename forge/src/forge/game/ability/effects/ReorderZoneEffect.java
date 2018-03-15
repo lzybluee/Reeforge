@@ -2,6 +2,7 @@ package forge.game.ability.effects;
 
 import forge.game.ability.SpellAbilityEffect;
 import forge.game.card.CardCollection;
+import forge.game.card.CardLists;
 import forge.game.player.Player;
 import forge.game.spellability.SpellAbility;
 import forge.game.spellability.TargetRestrictions;
@@ -33,8 +34,7 @@ public class ReorderZoneEffect extends SpellAbilityEffect {
             if ((tgt == null) || p.canBeTargetedBy(sa)) {
                 CardCollection list = new CardCollection(p.getCardsIn(zone));
                 if (shuffle) {
-                    final Random ran = MyRandom.getRandom();
-                    Collections.shuffle(list, ran);
+                    CardLists.shuffle(list);
                     p.getZone(zone).setCards(list);
                 }
                 else {

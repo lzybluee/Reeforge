@@ -61,7 +61,7 @@ public class AiAttackController {
     private final List<Card> attackers;
     private final List<Card> blockers;
 
-    private final static Random random = new Random();
+    private final static Random random = MyRandom.getRandom();
     private final static int randomInt = random.nextInt();
 
     private List<Card> oppList; // holds human player creatures

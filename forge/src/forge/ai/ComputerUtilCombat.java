@@ -436,7 +436,7 @@ public class ComputerUtilCombat {
 
         int threshold = (((PlayerControllerAi) ai.getController()).getAi().getIntProperty(AiProps.AI_IN_DANGER_THRESHOLD));
         int maxTreshold = (((PlayerControllerAi) ai.getController()).getAi().getIntProperty(AiProps.AI_IN_DANGER_MAX_THRESHOLD)) - threshold;
-        Random rand = new Random();
+        Random rand = MyRandom.getRandom();
         int chance = rand.nextInt(80) + 5;
         while (maxTreshold > 0) {
             if (rand.nextInt(100) < chance) {

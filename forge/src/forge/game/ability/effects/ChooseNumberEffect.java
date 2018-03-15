@@ -54,7 +54,7 @@ public class ChooseNumberEffect extends SpellAbilityEffect {
             if ((tgt == null) || p.canBeTargetedBy(sa)) {
                 int chosen;
                 if (random) {
-                    final Random randomGen = new Random();
+                    final Random randomGen = MyRandom.getRandom();
                     chosen = randomGen.nextInt(max - min) + min;
                     p.getGame().getAction().nofityOfValue(sa, p, Integer.toString(chosen), null);
                 } else {

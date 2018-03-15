@@ -279,7 +279,7 @@ public class PlayerControllerAi extends PlayerController {
         }
 
         // put the rest on top in random order
-        Collections.shuffle(toTop);
+        CardLists.shuffle(toTop);
         return ImmutablePair.of(toTop, toBottom);
     }
 

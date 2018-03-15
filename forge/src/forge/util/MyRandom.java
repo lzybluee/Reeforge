@@ -17,8 +17,20 @@
  */
 package forge.util;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.security.SecureRandom;
+import java.util.Date;
+import java.util.List;
 import java.util.Random;
+import java.util.Vector;
+
+import forge.game.player.RegisteredPlayer;
 
 /**
  * <p>
@@ -33,6 +45,85 @@ public class MyRandom {
     /** Constant <code>random</code>. */
     private static Random random = new SecureRandom();
 
+    private static byte[] currentSeed;
+    private static String matchDesc = "";
+    private static Vector<String> loadedSeeds = null;
+
+    public static void saveSeed(String startPlayer) {
+        String seed = "";
+        for(byte b : currentSeed) {
+            seed += String.format("%02x", b);
+        }
+        try {
+            FileOutputStream stream = new FileOutputStream("save.txt", true);
+            OutputStreamWriter writer = new OutputStreamWriter(stream);
+            BufferedWriter buf = new BufferedWriter(writer);
+            buf.write(new Date().toString());
+            buf.newLine();
+            buf.write(matchDesc);
+            buf.newLine();
+            buf.write(startPlayer);
+            buf.newLine();
+            buf.write(seed);
+            buf.newLine();
+            buf.newLine();
+            buf.close();
+            writer.close();
+            stream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static byte[] loadSeed() {
+        if(!new File("load.txt").exists()) {
+            return null;
+        }
+        if(loadedSeeds == null) {
+            loadedSeeds = new Vector<>();
+            try {
+                FileInputStream stream = new FileInputStream("load.txt");
+                InputStreamReader reader = new InputStreamReader(stream);
+                BufferedReader buf = new BufferedReader(reader);
+                String line = null;
+                while((line = buf.readLine()) != null) {
+                    if(line.length() == 32) {
+                        loadedSeeds.add(line);
+                    }
+                }
+                buf.close();
+                reader.close();
+                stream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(!loadedSeeds.isEmpty()) {
+            String seed = loadedSeeds.get(0);
+            loadedSeeds.remove(0);
+            byte[] bytes = new byte[16];
+            for(int i = 0; i < 16; i++) {
+                bytes[i] = (byte)Integer.parseInt(seed.substring(i * 2, i * 2 + 2), 16);
+            }
+            return bytes;
+        }
+        return null;
+    }
+
+    public static void updateSeed(List<RegisteredPlayer> players, int match) {
+        byte[] loadSeed = loadSeed();
+        if(loadSeed == null) {
+            currentSeed = SecureRandom.getSeed(16);
+            matchDesc = "";
+        } else {
+            currentSeed = loadSeed;
+            matchDesc = "Loaded seed -> ";
+        }
+        matchDesc += players.get(0).getDeck().getName() + "|" + players.get(1).getDeck().getName() + "|" + match;
+        random = new SecureRandom(currentSeed);
+    }
+
+
     /**
      * <p>
      * percentTrue.<br>
@@ -44,7 +135,7 @@ public class MyRandom {
      * @return a boolean.
      */
     public static boolean percentTrue(final int percent) {
-        return percent > MyRandom.getRandom().nextInt(100);
+        return percent > random.nextInt(100);
     }
 
     /**
@@ -53,7 +144,7 @@ public class MyRandom {
      * @return the random
      */
     public static Random getRandom() {
-        return MyRandom.random;
+        return random;
     }
 
     public static int[] splitIntoRandomGroups(final int value, final int numGroups) {
