@@ -343,6 +343,7 @@ public final class CMatchUI
 
     @Override
     public void setCard(final CardView c) {
+        cDetailPicture.setShowFront(false);
         this.setCard(c, false);
     }
 
@@ -355,7 +356,13 @@ public final class CMatchUI
     }
 
     public void setCard(final InventoryItem item) {
+        cDetailPicture.setShowFront(false);
         cDetailPicture.showItem(item);
+    }
+
+    public void setPaperCard(final CardView c) {
+        cDetailPicture.setShowFront(true);
+        this.setCard(c, false);
     }
 
     private int getPlayerIndex(final PlayerView player) {

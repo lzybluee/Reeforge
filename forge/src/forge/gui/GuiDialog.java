@@ -25,7 +25,7 @@ public class GuiDialog {
         final Callable<Boolean> confirmTask = new Callable<Boolean>() {
             @Override public final Boolean call() {
                 if (matchUI != null && c != null) {
-                    matchUI.setCard(c);
+                    matchUI.setPaperCard(c);
                 }
 
                 final String title = c == null ? "Question" : c + " - Ability";

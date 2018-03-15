@@ -479,7 +479,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         }
 
         // Show the card that asked for this choice
-        getGui().setCard(CardView.get(sa.getHostCard()));
+        getGui().setPaperCard(CardView.get(sa.getHostCard()));
 
         // create a mapping between a spell's view and the spell itself
         HashMap<SpellAbilityView, SpellAbility> spellViewCache = new HashMap<>();

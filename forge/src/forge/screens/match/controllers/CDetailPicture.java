@@ -20,6 +20,8 @@ public class CDetailPicture {
     private CardView currentView = null;
     private boolean isDisplayAlt = false, alwaysDisplayAlt = false;
 
+    private boolean showFront = false;
+
     public CDetailPicture() {
         this(IMayViewCards.ALL);
     }
@@ -37,6 +39,10 @@ public class CDetailPicture {
     }
     public CPicture getCPicture() {
         return cPicture;
+    }
+
+    public void setShowFront(boolean show) {
+        showFront = show;
     }
 
     public void showCard(final CardView c, final boolean showAlt) {
@@ -88,13 +94,18 @@ public class CDetailPicture {
     }
 
     private void update() {
-        final boolean mayView = mayView(), mayFlip = mayFlip();
+        final boolean mayView = showFront ? mayViewFront() : mayView();
+        final boolean mayFlip = mayFlip();
         cDetail.showCard(currentView, isDisplayAlt, mayView, mayFlip);
         cPicture.showCard(currentView, isDisplayAlt || alwaysDisplayAlt, mayView, mayFlip && !alwaysDisplayAlt);
     }
 
     private boolean mayView() {
         return currentView == null || mayView.mayView(currentView);
+    }
+
+    private boolean mayViewFront() {
+        return currentView == null || mayView.mayViewFront(currentView);
     }
 
     private boolean mayFlip() {
