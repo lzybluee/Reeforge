@@ -49,6 +49,7 @@ import forge.game.trigger.Trigger;
 import forge.game.trigger.TriggerHandler;
 import forge.game.trigger.TriggerType;
 import forge.game.zone.ZoneType;
+import forge.util.MyRandom;
 import forge.util.TextUtil;
 import forge.util.collect.FCollection;
 
