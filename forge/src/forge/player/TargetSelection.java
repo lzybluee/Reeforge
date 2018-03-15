@@ -217,8 +217,12 @@ public class TargetSelection {
 
         final String msgDone = "[FINISH TARGETING]";
         if (this.getTgt().isMinTargetsChosen(this.ability.getHostCard(), this.ability)) {
-            // is there a more elegant way of doing this?
-            choicesFiltered.add(msgDone);
+            if(choicesFiltered.isEmpty()) {
+                bTargetingDone = true;
+                return true;
+            } else {
+                choicesFiltered.add(msgDone);
+            }
         }
         
         Object chosen = null;

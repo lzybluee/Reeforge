@@ -60,7 +60,7 @@ public enum TrackableProperty {
     CurrentState(TrackableTypes.CardStateViewType, false), //can't respect freeze, otherwise card constructor can crash
     AlternateState(TrackableTypes.CardStateViewType),
     HiddenId(TrackableTypes.IntegerType),
-    ExertedThisTurn(TrackableTypes.BooleanType),
+    Exerted(TrackableTypes.PlayerViewCollectionType),
 
     //Card State
     Name(TrackableTypes.StringType),

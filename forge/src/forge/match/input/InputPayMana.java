@@ -378,7 +378,7 @@ public abstract class InputPayMana extends InputSyncronizedBase {
         else {
             String colorsProduced = m.isComboMana() ? m.getComboColors() : m.getOrigProduced();
             for (final String color : colorsProduced.split(" ")) {
-                if (0 != (neededColor & ManaAtom.fromName(color))) {
+                if (0 != (neededColor & ManaAtom.fromName(color)) || color.equals("Chosen")) {
                     return true;
                 }
             }

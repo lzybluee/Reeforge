@@ -293,7 +293,7 @@ public class DiscardEffect extends SpellAbilityEffect {
                     int min = sa.hasParam("AnyNumber") || sa.hasParam("Optional") ? 0 : Math.min(validCards.size(), numCards);
                     int max = sa.hasParam("AnyNumber") ? validCards.size() : Math.min(validCards.size(), numCards);
 
-                    CardCollectionView toBeDiscarded = validCards.isEmpty() ? null : chooser.getController().chooseCardsToDiscardFrom(p, sa, validCards, min, max);
+                    CardCollectionView toBeDiscarded = (validCards.isEmpty() || (max == 0 && min == 0)) ? null : chooser.getController().chooseCardsToDiscardFrom(p, sa, validCards, min, max);
 
                     if (toBeDiscarded != null) {
                         if (toBeDiscarded.size() > 1) {
