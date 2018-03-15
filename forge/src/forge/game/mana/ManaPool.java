@@ -350,7 +350,9 @@ public class ManaPool implements Iterable<Mana> {
         }
 
         for (final SpellAbility am : payingAbilities) {
-            am.getManaPart().getLastManaProduced().clear();
+            if(am.getManaPart() != null && am.getManaPart().getLastManaProduced() != null) {
+                am.getManaPart().getLastManaProduced().clear();
+            }
         }
 
         payingAbilities.clear();

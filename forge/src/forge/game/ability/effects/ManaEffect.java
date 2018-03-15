@@ -79,7 +79,9 @@ public class ManaEffect extends SpellAbilityEffect {
                             colorOptions = ColorSet
                                     .fromMask(fullOptions.getColor() & ManaAtom.fromName(colorsNeeded[nMana - 1]));
                         }
-                        if (colorOptions.isColorless() && colorsProduced.length > 0) {
+                        if (colorsProduced.length > 0 && !colorsProduced[0].isEmpty() && sa.getNeedChooseMana()) {
+                            choice = MagicColor.toShortString(activator.getController().chooseColor("Select Mana to Produce", sa, fullOptions));
+                        } else if (colorOptions.isColorless() && colorsProduced.length > 0) {
                             // If we just need generic mana, no reason to ask the controller for a choice,
                             // just use the first possible color.
                             choice = colorsProduced[0];
@@ -108,7 +110,7 @@ public class ManaEffect extends SpellAbilityEffect {
                                 
                                 if(new_colors.size() == 1) {
                                     chosenColor = MagicColor.fromName(new_colors.iterator().next());
-                                } else if(new_colors.size() > 0) {
+                                } else if(new_colors.size() > 1) {
                                     chosenColor = activator.getController().chooseColor("Select Mana to Produce", sa, ColorSet.fromNames(new_colors));
                                 } else {
                                     chosenColor = activator.getController().chooseColor("Select Mana to Produce", sa, colorOptions);

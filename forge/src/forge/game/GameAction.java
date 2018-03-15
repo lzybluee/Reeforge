@@ -281,6 +281,18 @@ public class GameAction {
             }
         }
 
+        if (zoneFrom != null && zoneTo != null && !(zoneFrom.is(ZoneType.Stack) && zoneTo.is(ZoneType.Battlefield))) {
+            List<ReplacementEffect> removeEffects = Lists.newArrayList();
+            for (ReplacementEffect re : c.getReplacementEffects()) {
+                if (re.getParam("ETBCountersOneShot") != null) {
+                    removeEffects.add(re);
+                }
+            }
+            for (ReplacementEffect re : removeEffects) {
+                c.removeReplacementEffect(re);
+            }
+        }
+
         if (!suppress) {
             if (zoneFrom == null) {
                 copied.getOwner().addInboundToken(copied);

@@ -221,6 +221,10 @@ public class CardFactory {
             }
             copySA.setPaidHash(sa.getPaidHash());
         }
+
+        if(!original.getZone().is(ZoneType.Stack)) {
+            copySA.setSVar("CanSelectCharmEffect", "true");
+        }
         return copySA;
     }
 

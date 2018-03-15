@@ -828,7 +828,7 @@ public class PlayerControllerAi extends PlayerController {
     }
 
     @Override
-    public Map<GameEntity, CounterType> chooseProliferation(SpellAbility sa) {
+    public Map<GameEntity, CounterType> chooseProliferation(SpellAbility sa, int max) {
         return brains.chooseProliferation(sa);
     }
 

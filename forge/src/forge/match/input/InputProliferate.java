@@ -24,9 +24,12 @@ public final class InputProliferate extends InputSelectManyBase<GameEntity> {
     private final Map<GameEntity, CounterType> chosenCounters = new HashMap<GameEntity, CounterType>();
     private SpellAbility sa;
 
-    public InputProliferate(final PlayerControllerHuman controller, final SpellAbility sa) {
+    private int maxChosen = 0;
+
+    public InputProliferate(final PlayerControllerHuman controller, final SpellAbility sa, final int max) {
         super(controller, 1, Integer.MAX_VALUE);
-	this.sa = sa;
+        this.sa = sa;
+        this.maxChosen = max;
     }
 
     @Override
@@ -126,8 +129,9 @@ public final class InputProliferate extends InputSelectManyBase<GameEntity> {
     protected boolean hasEnoughTargets() { return true; }
 
     @Override
-    protected boolean hasAllTargets() { return false; }
-
+    protected boolean hasAllTargets() {
+        return this.chosenCounters.size() == maxChosen;
+    }
 
     @Override
     public Collection<GameEntity> getSelected() {
