@@ -91,6 +91,13 @@ public class CardPool extends ItemPool<PaperCard> {
                 StaticData.instance().attemptToLoadCard(cardName, setCode);
                 paperCard = StaticData.instance().getVariantCards().getCard(cardName, setCode);
             }
+            if (paperCard == null) {
+                paperCard = StaticData.instance().getVariantCards().getCard(cardName, null, 0);
+                if(paperCard != null) {
+                    setCode = paperCard.getEdition();
+                    artIndex = 0;
+                }
+            }
         }
 
         int artCount = 1;
