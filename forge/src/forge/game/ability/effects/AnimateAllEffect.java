@@ -230,7 +230,6 @@ public class AnimateAllEffect extends AnimateEffectBase {
                     c.setSVar(s, actualsVar);
                 }
             }
-            game.fireEvent(new GameEventCardStatsChanged(c));
 
             final GameCommand unanimate = new GameCommand() {
                 private static final long serialVersionUID = -5861759814760561373L;
@@ -266,6 +265,9 @@ public class AnimateAllEffect extends AnimateEffectBase {
                     game.getEndOfTurn().addUntil(unanimate);
                 }
             }
+
+            c.updateAbilityText();
+            game.fireEvent(new GameEventCardStatsChanged(c));
         }
     } // animateAllResolve
 

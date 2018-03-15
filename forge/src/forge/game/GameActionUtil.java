@@ -37,8 +37,10 @@ import forge.game.zone.ZoneType;
 import forge.util.TextUtil;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 
 /**
@@ -77,6 +79,14 @@ public final class GameActionUtil {
      * @return the stLandManaAbilities
      */
     public static void grantBasicLandsManaAbilities(List<Card> lands) {
+        HashMap<Card, Vector<String>> removedAbility = new HashMap<Card, Vector<String>>();
+        HashMap<Card, Vector<String>> addedAbility = new HashMap<Card, Vector<String>>();
+        
+        for (final Card land : lands) {
+            removedAbility.put(land, new Vector<String>());
+            addedAbility.put(land, new Vector<String>());
+        }
+
         // remove all abilities granted by this Command
         for (final Card land : lands) {
             List<SpellAbility> origManaAbs = Lists.newArrayList(land.getManaAbilities());
@@ -84,6 +94,7 @@ public final class GameActionUtil {
             for (final SpellAbility sa : origManaAbs) {
                 if (sa.isBasicLandAbility()) {
                     land.getCurrentState().removeManaAbility(sa);
+                    removedAbility.get(land).add(sa.getDescription());
                 }
             }
         }
@@ -98,7 +109,27 @@ public final class GameActionUtil {
                     final SpellAbility sa = AbilityFactory.getAbility(mapParams, type, land, null);
                     sa.setBasicLandAbility(true);
                     land.getCurrentState().addManaAbility(sa);
+                    addedAbility.get(land).add(sa.getDescription());
                 }
+            }
+        }
+
+        for (final Card land : lands) {
+            Vector<String> removed = removedAbility.get(land);
+            Vector<String> added = addedAbility.get(land);
+            if(removed.size() != added.size()) {
+                land.updateAbilityText();
+                continue;
+            }
+            boolean changed = false;
+            for(String s : removed) {
+                if(!added.contains(s)) {
+                    changed = true;
+                    break;
+                }
+            }
+            if(changed) {
+                land.updateAbilityText();
             }
         }
     } // stLandManaAbilities

@@ -1382,7 +1382,7 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
 
     public SpellAbility getParentTargetingCard() {
         SpellAbility parent = getParent();
-        if (parent instanceof WrappedAbility) {
+        if (parent != null && parent instanceof WrappedAbility) {
             parent = ((WrappedAbility) parent).getWrappedAbility();
         }
         while (parent != null) {
@@ -1390,6 +1390,9 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
                 return parent;
             }
             parent = parent.getParent();
+            if (parent != null && parent instanceof WrappedAbility) {
+                parent = ((WrappedAbility) parent).getWrappedAbility();
+            }
         }
         return null;
     }

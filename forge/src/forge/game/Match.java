@@ -15,6 +15,8 @@ import forge.game.trigger.Trigger;
 import forge.game.zone.PlayerZone;
 import forge.game.zone.ZoneType;
 import forge.item.PaperCard;
+import forge.model.FModel;
+import forge.properties.ForgePreferences.FPref;
 import forge.util.MyRandom;
 import forge.util.collect.FCollectionView;
 
@@ -215,6 +217,10 @@ public class Match {
         for (int i = 0; i < playersConditions.size(); i++) {
             final Player player = players.get(i);
             final RegisteredPlayer psc = playersConditions.get(i);
+
+            if (!FModel.getPreferences().getPrefBoolean(FPref.UI_SKIP_RESTORE_DECK) && isFirstGame && rules.getGameType().isSideboardingAllowed()) {
+                psc.restoreDeck();
+            }
 
             if (canSideBoard) {
                 Deck toChange = psc.getDeck();

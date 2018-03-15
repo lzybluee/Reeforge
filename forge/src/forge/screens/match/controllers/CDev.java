@@ -91,11 +91,11 @@ public final class CDev implements ICDoc {
     private final MouseListener madMana = new MouseAdapter() {
         @Override
         public void mousePressed(final MouseEvent e) {
-            generateMana();
+            generateMana(e.getButton() == MouseEvent.BUTTON3);
         }
     };
-    public void generateMana() {
-        getController().cheat().generateMana();
+    public void generateMana(boolean empty) {
+        getController().cheat().generateMana(empty);
     }
 
     private final MouseListener madSetup = new MouseAdapter() {
@@ -121,11 +121,11 @@ public final class CDev implements ICDoc {
     private final MouseListener madTutor = new MouseAdapter() {
         @Override
         public void mousePressed(final MouseEvent e) {
-            tutorForCard();
+            tutorForCard(e.getButton() == MouseEvent.BUTTON3);
         }
     };
-    public void tutorForCard() {
-        getController().cheat().tutorForCard();
+    public void tutorForCard(boolean sideboard) {
+        getController().cheat().tutorForCard(sideboard);
     }
 
     private final MouseListener madCardToHand = new MouseAdapter() {
@@ -211,41 +211,41 @@ public final class CDev implements ICDoc {
     private final MouseListener madTap = new MouseAdapter() {
         @Override
         public void mousePressed(final MouseEvent e) {
-            tapPermanent();
+            tapPermanent(e.getButton() == MouseEvent.BUTTON3);
         }
     };
-    public void tapPermanent() {
-        getController().cheat().tapPermanents();
+    public void tapPermanent(boolean all) {
+        getController().cheat().tapPermanents(all);
     }
 
     private final MouseListener madUntap = new MouseAdapter() {
         @Override
         public void mousePressed(final MouseEvent e) {
-            untapPermanent();
+            untapPermanent(e.getButton() == MouseEvent.BUTTON3);
         }
     };
-    public void untapPermanent() {
-        getController().cheat().untapPermanents();
+    public void untapPermanent(boolean all) {
+        getController().cheat().untapPermanents(all);
     }
 
     private final MouseListener madLife = new MouseAdapter() {
         @Override
         public void mousePressed(final MouseEvent e) {
-            setPlayerLife();
+            setPlayerLife(e.getButton() == MouseEvent.BUTTON3);
         }
     };
-    public void setPlayerLife() {
-        getController().cheat().setPlayerLife();
+    public void setPlayerLife(boolean maxlife) {
+        getController().cheat().setPlayerLife(maxlife);
     }
 
     private final MouseListener madWinGame = new MouseAdapter() {
         @Override
         public void mousePressed(final MouseEvent e) {
-            winGame();
+            winGame(e.getButton() == MouseEvent.BUTTON3);
         }
     };
-    public void winGame() {
-        getController().cheat().winGame();
+    public void winGame(boolean lose) {
+        getController().cheat().winGame(lose);
     }
 
     private final MouseListener madCardToBattlefield = new MouseAdapter() {

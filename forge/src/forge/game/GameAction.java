@@ -44,6 +44,9 @@ import forge.game.zone.PlayerZoneBattlefield;
 import forge.game.zone.Zone;
 import forge.game.zone.ZoneType;
 import forge.item.PaperCard;
+import forge.model.FModel;
+import forge.player.LobbyPlayerHuman;
+import forge.properties.ForgePreferences.FPref;
 import forge.util.*;
 import forge.util.collect.FCollection;
 import forge.util.collect.FCollectionView;
@@ -837,7 +840,8 @@ public class GameAction {
             }
         }
 
-        final CardCollection lands = CardLists.filter(game.getCardsIn(ZoneType.Battlefield), CardPredicates.Presets.LANDS);
+        final List<ZoneType> zones = ZoneType.listValueOf("Hand,Library,Graveyard,Battlefield,Exile");
+        final CardCollection lands = CardLists.filter(game.getCardsIn(zones), CardPredicates.Presets.LANDS);
         GameActionUtil.grantBasicLandsManaAbilities(lands);
 
         for (final Card c : staticList) {
@@ -1673,7 +1677,23 @@ public class GameAction {
         boolean isFirstGame = lastGameOutcome == null;
         if (isFirstGame) {
             game.fireEvent(new GameEventFlipCoin()); // Play the Flip Coin sound
-            goesFirst = Aggregates.random(game.getPlayers());
+
+            FCollection<Player> humanPlayers = new FCollection<Player>();
+            FCollection<Player> aiPlayers = new FCollection<Player>();
+            for(Player p : game.getPlayers()) {
+                if(p.getLobbyPlayer() instanceof LobbyPlayerHuman) {
+                    humanPlayers.add(p);
+                } else {
+                    aiPlayers.add(p);
+                }
+            }
+            if(FModel.getPreferences().getPref(FPref.UI_START_PLAYER).equals("Human")) {
+                goesFirst = Aggregates.random(humanPlayers);
+            } else if(FModel.getPreferences().getPref(FPref.UI_START_PLAYER).equals("AI")) {
+                goesFirst = Aggregates.random(aiPlayers);
+            } else {
+                goesFirst = Aggregates.random(game.getPlayers());
+            }
         } else {
             for (Player p : game.getPlayers()) {
                 if (!lastGameOutcome.isWinner(p.getLobbyPlayer())) {
