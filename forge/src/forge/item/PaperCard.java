@@ -220,7 +220,7 @@ public final class PaperCard implements Comparable<IPaperCard>, InventoryItemFro
                 pc = StaticData.instance().getCommonCards().getCard(name, null, 0);
                 if (pc != null) {
                     edition = pc.getEdition();
-                    artIndex = 1;
+                    artIndex = pc.getArtIndex();
                 } else {
                     pc = StaticData.instance().getVariantCards().getCard(name, null, 0);
                     if (pc == null) {
