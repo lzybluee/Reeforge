@@ -396,12 +396,12 @@ public abstract class GameState {
 
         boolean isHuman = categoryName.startsWith("human");
 
+        turn = 1;
         if (categoryName.equals("turn")) {
             turn = Integer.parseInt(categoryValue);
-        } else {
-            turn = 1;
         }
-        if (categoryName.endsWith("life")) {
+
+        else if (categoryName.endsWith("life")) {
             if (isHuman)
                 humanLife = Integer.parseInt(categoryValue);
             else
