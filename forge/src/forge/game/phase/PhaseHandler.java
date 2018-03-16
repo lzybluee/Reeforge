@@ -1022,6 +1022,7 @@ public class PhaseHandler implements java.io.Serializable {
             // If ever the karn's ultimate resolved
             if (game.getAge() == GameStage.RestartedByKarn) {
                 setPhase(null);
+                turn = 0;
                 game.updatePhaseForView();
                 game.fireEvent(new GameEventGameRestarted(playerTurn));
                 return;

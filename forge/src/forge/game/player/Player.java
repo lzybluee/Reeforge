@@ -2332,6 +2332,9 @@ public class Player extends GameEntity implements Comparable<Player> {
 
     public boolean canCastSorcery() {
         PhaseHandler now = game.getPhaseHandler();
+        if(now.getPhase() == null || game.getStack() == null) {
+            return false;
+        }
         return now.isPlayerTurn(this) && now.getPhase().isMain() && game.getStack().isEmpty();
     }
 
