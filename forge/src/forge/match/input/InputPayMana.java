@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Vector;
 
 import forge.game.GameActionUtil;
 import forge.game.spellability.SpellAbilityView;
@@ -195,6 +196,7 @@ public abstract class InputPayMana extends InputSyncronizedBase {
         }
 
         HashMap<SpellAbilityView, SpellAbility> abilitiesMap = new HashMap<>();
+        Vector<SpellAbilityView> abilitiesVec = new Vector<>();
         // you can't remove unneeded abilities inside a for (am:abilities) loop :(
 
         final String typeRes = manaCost.getSourceRestriction();
@@ -220,6 +222,7 @@ public abstract class InputPayMana extends InputSyncronizedBase {
             }
 
             abilitiesMap.put(ma.getView(), ma);
+            abilitiesVec.add(ma.getView());
 
             // skip express mana if the ability is not undoable or reusable
             if (!ma.isUndoable() || !ma.getPayCosts().isRenewableResource() || ma.getSubAbility() != null) {
@@ -290,7 +293,12 @@ public abstract class InputPayMana extends InputSyncronizedBase {
 
         SpellAbility chosen;
         if (chosenAbility == null) {
-            ArrayList<SpellAbilityView> choices = new ArrayList<>(abilitiesMap.keySet());
+            for(SpellAbilityView view : abilitiesVec) {
+                if (!abilitiesMap.containsKey(view)) {
+                    abilitiesVec.remove(view);
+                }
+            }
+            ArrayList<SpellAbilityView> choices = new ArrayList<>(abilitiesVec);
             if(abilitiesMap.size() > 1) {
                 if(choice) {
                     chosen = abilitiesMap.get(getController().getGui().one("Choose mana ability",  choices));
