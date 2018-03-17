@@ -196,7 +196,7 @@ public abstract class InputPayMana extends InputSyncronizedBase {
         }
 
         HashMap<SpellAbilityView, SpellAbility> abilitiesMap = new HashMap<>();
-        Vector<SpellAbilityView> abilitiesVec = new Vector<>();
+        ArrayList<SpellAbilityView> abilitiesVec = new ArrayList<>();
         // you can't remove unneeded abilities inside a for (am:abilities) loop :(
 
         final String typeRes = manaCost.getSourceRestriction();
@@ -293,10 +293,14 @@ public abstract class InputPayMana extends InputSyncronizedBase {
 
         SpellAbility chosen;
         if (chosenAbility == null) {
+            ArrayList<SpellAbilityView> toRemove = new ArrayList<>();
             for(SpellAbilityView view : abilitiesVec) {
                 if (!abilitiesMap.containsKey(view)) {
-                    abilitiesVec.remove(view);
+                    toRemove.add(view);
                 }
+            }
+            for(SpellAbilityView view : toRemove) {
+                abilitiesVec.remove(view);
             }
             ArrayList<SpellAbilityView> choices = new ArrayList<>(abilitiesVec);
             if(abilitiesMap.size() > 1) {
