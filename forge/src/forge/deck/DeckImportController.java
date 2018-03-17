@@ -50,7 +50,7 @@ public class DeckImportController {
     public List<DeckRecognizer.Token> parseInput(String input) {
         tokens.clear();
 
-        DeckRecognizer recognizer = new DeckRecognizer(newEditionCheck.isSelected(),  onlyCoreExpCheck.isSelected(), FModel.getMagicDb().getCommonCards());
+        DeckRecognizer recognizer = new DeckRecognizer(newEditionCheck.isSelected(), onlyCoreExpCheck.isSelected(), FModel.getMagicDb().getCommonCards());
         if (dateTimeCheck.isSelected()) {
             recognizer.setDateConstraint(monthDropdown.getSelectedIndex(), yearDropdown.getSelectedItem());
         }
