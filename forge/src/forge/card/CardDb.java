@@ -172,7 +172,7 @@ public final class CardDb implements ICardDatabase, IDeckGenPool {
         Date today = new Date();
 
         for (CardEdition e : editions.getOrderedEditions()) {
-            boolean isCoreExpSet = e.getType() == CardEdition.Type.CORE || e.getType() == CardEdition.Type.EXPANSION || e.getType() == CardEdition.Type.REPRINT;
+            boolean isCoreExpSet = e.getType() == CardEdition.Type.CORE || e.getType() == CardEdition.Type.EXPANSION;
             if (logMissingPerEdition && isCoreExpSet) {
                 System.out.print(e.getName() + " (" + e.getCards().length + " cards)");
             }
