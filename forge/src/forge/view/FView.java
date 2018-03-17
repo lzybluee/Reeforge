@@ -67,7 +67,7 @@ public enum FView {
 
 	private FView() {
 		frmSplash = new SplashFrame();
-		frmDocument.setTitle("Forge: " + BuildInfo.getVersionString());
+		frmDocument.setTitle("Forge 1.6.7");
 		JOptionPane.setRootFrame(frmDocument);
 	}
 
