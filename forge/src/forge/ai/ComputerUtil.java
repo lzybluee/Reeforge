@@ -1532,7 +1532,7 @@ public class ComputerUtil {
                     
                     if (saviourApi == ApiType.PutCounter || saviourApi == ApiType.PutCounterAll) {
                         boolean canSave = ComputerUtilCombat.predictDamageTo(c, dmg - toughness, source, false) < ComputerUtilCombat.getDamageToKill(c);
-                        if (!canSave) {
+                        if (!canSave && !grantShroud) {
                             continue;
                         }
                     }
