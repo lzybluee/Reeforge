@@ -1,0 +1,43 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Selesnya Pride
+Description=MTGA Starting Deck
+Deck Type=constructed
+Set=RIX
+[Main]
+1 Adorned Pouncer|HOU
+1 Ahn-Crop Champion|AKH
+1 Ambuscade|HOU
+1 Anointed Procession|AKH
+1 Anointer Priest|AKH
+1 Appeal // Authority|HOU
+1 Baffling End|RIX
+1 Cartouche of Strength|AKH
+1 Cast Out|AKH
+1 Crested Sunmare|HOU
+1 Desert of the Indomitable|HOU
+1 Desert of the True|HOU
+1 Desert's Hold|HOU
+3 Feral Prowler|HOU
+7 Forest|RIX
+2 Hashep Oasis|HOU
+1 Imperial Aerosaur|XLN
+3 Initiate's Companion|AKH
+1 Ixalan's Binding|XLN
+8 Plains|RIX
+1 Pounce|XLN
+3 Pouncing Cheetah|AKH
+2 Pride Sovereign|HOU
+1 Radiant Destiny|RIX
+2 Regal Caracal|AKH
+3 Sacred Cat|AKH
+2 Shefet Dunes|HOU
+1 Strength of the Pack|RIX
+1 Sunscourge Champion|HOU
+1 Thrashing Brontodon|RIX
+4 Tranquil Expanse|AKH
+1 Watchers of the Dead|AKH

@@ -1,0 +1,47 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=The Legion of Dusk
+Description=MTGA Starting Deck
+Deck Type=constructed
+Set=RIX
+[Main]
+1 Adanto Vanguard|XLN
+1 Anointed Deacon|XLN
+1 Baffling End|RIX
+1 Bishop of Binding|RIX
+1 Bishop's Soldier|XLN
+1 Call to the Feast|XLN
+1 Cast Out|AKH
+1 Champion of Dusk|RIX
+1 Desert of the Glorified|HOU
+1 Desert of the True|HOU
+1 Desert's Hold|HOU
+2 Dusk Legion Zealot|RIX
+1 Duskborne Skymarcher|XLN
+1 Famished Paladin|RIX
+2 Forerunner of the Legion|RIX
+1 Forsake the Worldly|AKH
+2 Forsaken Sanctuary|RIX
+1 Ixalan's Binding|XLN
+1 Legion Lieutenant|RIX
+2 Martyr of Dusk|RIX
+1 Mavren Fein, Dusk Apostle|XLN
+1 Oathsworn Vampire|RIX
+9 Plains|RIX
+1 Pride of Conquerors|RIX
+2 Queen's Commission|XLN
+1 Reaver Ambush|RIX
+1 Sadistic Skymarcher|RIX
+1 Sanctum Seeker|XLN
+2 Shefet Dunes|HOU
+1 Skymarch Bloodletter|XLN
+2 Skymarcher Aspirant|RIX
+1 Squire's Devotion|RIX
+10 Swamp|RIX
+1 Vanquisher's Banner|XLN
+1 Vicious Conquistador|XLN
+1 Vona, Butcher of Magan|XLN
