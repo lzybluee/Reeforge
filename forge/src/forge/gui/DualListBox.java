@@ -202,6 +202,9 @@ public class DualListBox<T> extends FDialog {
                 @Override
                 public void run() {
                     sourceList.setSelectedIndex(0);
+                    if(sourceElements.size() == 1) {
+                        showSelectedCard(sourceElements.get(0));
+                    }
                 }
             });
         }
