@@ -130,20 +130,29 @@ public class CostPayment {
         final List<CostPart> costParts = adjustedCost.getCostPartsWithZeroMana();
 
         final Game game = decisionMaker.getPlayer().getGame();
+        CostPart lastPart = null;
 
         for (final CostPart part : costParts) {
             // Wrap the cost and push onto the cost stack
             game.costPaymentStack.push(part, this);
 
+            if(lastPart != null && lastPart instanceof CostDiscard && part instanceof CostSacrifice) {
+                part.setMustPay(true);
+            }
+
             PaymentDecision pd = part.accept(decisionMaker);
 
             if (pd == null || !part.payAsDecided(decisionMaker.getPlayer(), pd, ability)) {
+                part.setMustPay(false);
                 game.costPaymentStack.pop(); // cost is resolved
                 return false;
             }
             this.paidCostParts.add(part);
 
+            part.setMustPay(false);
             game.costPaymentStack.pop(); // cost is resolved
+
+            lastPart = part;
         }
 
         // this clears lists used for undo. 
