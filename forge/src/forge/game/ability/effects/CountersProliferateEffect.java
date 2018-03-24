@@ -1,5 +1,6 @@
 package forge.game.ability.effects;
 
+import forge.game.Game;
 import forge.game.GameEntity;
 import forge.game.ability.SpellAbilityEffect;
 import forge.game.card.Card;
@@ -25,6 +26,7 @@ public class CountersProliferateEffect extends SpellAbilityEffect {
     @Override
     public void resolve(SpellAbility sa) {
         final Card host = sa.getHostCard();
+        final Game game = host.getGame();
         Player controller = host.getController();
         int max = 0;
 
@@ -60,8 +62,11 @@ public class CountersProliferateEffect extends SpellAbilityEffect {
         for(Entry<GameEntity, CounterType> ge: proliferateChoice.entrySet()) {
             if( ge.getKey() instanceof Player )
                 ((Player) ge.getKey()).addCounter(ge.getValue(), 1, host, true);
-            else if( ge.getKey() instanceof Card)
-                ((Card) ge.getKey()).addCounter(ge.getValue(), 1, host, true);
+            else if( ge.getKey() instanceof Card) {
+                Card c = (Card) ge.getKey(); 
+                c.addCounter(ge.getValue(), 1, host, true);
+                game.updateLastStateForCard(c);
+            }
         }
     }
 }
