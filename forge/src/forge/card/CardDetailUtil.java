@@ -562,7 +562,7 @@ public class CardDetailUtil {
 
         //show current card colors if enabled
         String curCardColors = formatCurrentCardColors(state);
-        if (!curCardColors.isEmpty()) {
+        if (!curCardColors.isEmpty() && !card.isFaceDown()) {
             if (area.length() != 0) {
                 area.append("\n\n");
             }
