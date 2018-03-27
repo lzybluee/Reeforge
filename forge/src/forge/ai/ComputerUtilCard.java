@@ -1576,7 +1576,7 @@ public class ComputerUtilCard {
                 if (k.getHidden()) {
                     pumped.addHiddenExtrinsicKeyword(k);
                 } else {
-                    toCopy.add(k);
+                    toCopy.add(k.copy(c, false));
                 }
             }
         }
