@@ -1443,6 +1443,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
 
     // stores saved order for different sets of SpellAbilities
     private final Map<String, List<Integer>> orderedSALookup = Maps.newHashMap();
+    private final Map<String, Long> orderedSALookupTimestamp = Maps.newHashMap();
 
     @Override
     public void orderAndPlaySimultaneousSa(final List<SpellAbility> activePlayerSAs) {
@@ -1488,7 +1489,14 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
                             preselect ? orderedSAs : Lists.<SpellAbility>newArrayList(), null, false);
                 } else {
                     String refereceKey = null;
-                    for (String key : orderedSALookup.keySet()) {
+                    List<String> toSort = Lists.newArrayList(orderedSALookup.keySet());
+                    Collections.sort(toSort, new Comparator<String>() {
+                        @Override
+                        public int compare(String s1, String s2) {
+                            return (int) (orderedSALookupTimestamp.get(s2) - orderedSALookupTimestamp.get(s1));
+                        }
+                    });
+                    for (String key : toSort) {
                         boolean found = true;
                         for (String s : key.split(delim + "")) {
                             if (!saLookupKey.contains(s)) {
@@ -1533,6 +1541,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
                     savedOrder.add(activePlayerSAs.indexOf(sa));
                 }
                 orderedSALookup.put(saLookupKey, savedOrder);
+                orderedSALookupTimestamp.put(saLookupKey, game.getTimestamp());
             }
         }
         for (int i = orderedSAs.size() - 1; i >= 0; i--) {
