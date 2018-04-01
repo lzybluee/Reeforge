@@ -205,6 +205,7 @@ public abstract class InputPayMana extends InputSyncronizedBase {
         }
 
         boolean guessAbilityWithRequiredColors = true;
+        int amountOfMana = -1;
         SpellAbility priorAbility = null;
 
         for (SpellAbility ma : card.getManaAbilities()) {
@@ -217,6 +218,15 @@ public abstract class InputPayMana extends InputSyncronizedBase {
             if (!m.meetsManaRestrictions(saPaidFor))                        { continue; }
 
             // If Mana Abilities produce differing amounts of mana, let the player choose
+            int maAmount = GameActionUtil.amountOfManaGenerated(ma, true);
+            if (amountOfMana == -1) {
+                amountOfMana = maAmount;
+            } else {
+                if (amountOfMana != maAmount) {
+                    guessAbilityWithRequiredColors = false;
+                }
+            }
+
             if(m.getManaRestrictions() != null && !m.getManaRestrictions().isEmpty()) {
                 priorAbility = ma;
             }
