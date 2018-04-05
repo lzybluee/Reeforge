@@ -773,7 +773,7 @@ public final class StaticAbilityContinuous {
             @Override
             public boolean canPlay() {
                 return validActivator.contains(this.getActivatingPlayer())
-                        && sourceCard.isInPlay();
+                        && hostCard.isInPlay();
             }
 
         };
