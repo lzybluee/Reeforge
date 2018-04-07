@@ -195,17 +195,17 @@ public final class CDev implements ICDoc {
         }
     };
     public void exileCardsFromHand() {
-        getController().cheat().exileCardsFromHand();;
+        getController().cheat().exileCardsFromHand();
     }
 
     private final MouseListener madCounter = new MouseAdapter() {
         @Override
         public void mousePressed(final MouseEvent e) {
-            addCounterToPermanent();
+            addCounterToPermanent(e.getButton() == MouseEvent.BUTTON3);
         }
     };
-    public void addCounterToPermanent() {
-        getController().cheat().addCountersToPermanent();
+    public void addCounterToPermanent(boolean player) {
+        getController().cheat().addCountersToPermanent(player);
     }
 
     private final MouseListener madTap = new MouseAdapter() {

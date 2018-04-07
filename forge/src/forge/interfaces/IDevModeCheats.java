@@ -14,7 +14,7 @@ public interface IDevModeCheats {
 
     void tutorForCard(boolean sideboard);
 
-    void addCountersToPermanent();
+    void addCountersToPermanent(boolean player);
 
     void tapPermanents(boolean all);
 
@@ -97,7 +97,7 @@ public interface IDevModeCheats {
         public void dumpGameState() {
         }
         @Override
-        public void addCountersToPermanent() {
+        public void addCountersToPermanent(boolean player) {
         }
         @Override
         public void addCardToHand() {

@@ -2080,25 +2080,42 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
          * @see forge.player.IDevModeCheats#addCountersToPermanent()
          */
         @Override
-        public void addCountersToPermanent() {
-            final CardCollectionView cards = game.getCardsIn(ZoneType.Battlefield);
-            final Card card = game
-                    .getCard(getGui().oneOrNone("Add counters to which card?", CardView.getCollection(cards)));
-            if (card == null) {
-                return;
-            }
+        public void addCountersToPermanent(boolean player) {
+            if(player) {
+                final Player p = game.getPlayer(getGui().oneOrNone("Add counters to which player?",
+                        PlayerView.getCollection(game.getPlayers())));
+                final CounterType counter = getGui().oneOrNone("Which type of counter?",
+                        Lists.newArrayList(CounterType.ENERGY, CounterType.EXPERIENCE, CounterType.POISON));
+                if (counter == null) {
+                    return;
+                }
 
-            final CounterType counter = getGui().oneOrNone("Which type of counter?", CounterType.values);
-            if (counter == null) {
-                return;
-            }
+                final Integer count = getGui().getInteger("How many counters?", 1, Integer.MAX_VALUE, 21);
+                if (count == null) {
+                    return;
+                }
 
-            final Integer count = getGui().getInteger("How many counters?", 1, Integer.MAX_VALUE, 21);
-            if (count == null) {
-                return;
-            }
+                p.addCounter(counter, count, null, false);
+            } else {
+                final CardCollectionView cards = game.getCardsIn(ZoneType.Battlefield);
+                final Card card = game
+                        .getCard(getGui().oneOrNone("Add counters to which card?", CardView.getCollection(cards)));
+                if (card == null) {
+                    return;
+                }
 
-            card.addCounter(counter, count, card, false);
+                final CounterType counter = getGui().oneOrNone("Which type of counter?", CounterType.values);
+                if (counter == null) {
+                    return;
+                }
+
+                final Integer count = getGui().getInteger("How many counters?", 1, Integer.MAX_VALUE, 21);
+                if (count == null) {
+                    return;
+                }
+
+                card.addCounter(counter, count, card, false);
+            }
         }
 
         /*
