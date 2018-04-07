@@ -303,6 +303,20 @@ public final class CardUtil {
         return res;
     }
 
+    public static CardState getExiledFaceDownCharacteristic(Card c) {
+        final CardType type = new CardType(c.getPaperCard().getRules().getType());
+
+        final CardState ret = new CardState(c.getView().createAlternateState(CardStateName.FaceDown), c);
+        ret.setBasePower(0);
+        ret.setBaseToughness(0);
+
+        ret.setName("");
+        ret.setType(type);
+
+        ret.setImageKey(ImageKeys.getTokenKey(ImageKeys.MORPH_IMAGE));
+        return ret;
+    }
+
     public static CardState getFaceDownCharacteristic(Card c) {
         final CardType type = new CardType();
         type.add("Creature");

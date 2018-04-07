@@ -379,10 +379,17 @@ public class Card extends GameEntity implements Comparable<Card> {
         return states.get(state);
     }
     public boolean setState(final CardStateName state, boolean updateView) {
+        return setState(state, updateView, false);
+    }
+    public boolean setState(final CardStateName state, boolean updateView, boolean facedownExile) {
         if (!states.containsKey(state)) {
             if (state == CardStateName.FaceDown) {
-                // The face-down state is created lazily only when needed.
-                states.put(CardStateName.FaceDown, CardUtil.getFaceDownCharacteristic(this));
+                if(facedownExile) {
+                    states.put(CardStateName.FaceDown, CardUtil.getExiledFaceDownCharacteristic(this));
+                } else {
+                    // The face-down state is created lazily only when needed.
+                    states.put(CardStateName.FaceDown, CardUtil.getFaceDownCharacteristic(this));
+                }
             } else {
                 System.out.println(getName() + " tried to switch to non-existant state \"" + state + "\"!");
                 return false; // Nonexistant state.

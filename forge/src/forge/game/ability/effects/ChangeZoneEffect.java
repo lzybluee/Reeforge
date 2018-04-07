@@ -610,7 +610,7 @@ public class ChangeZoneEffect extends SpellAbilityEffect {
                     }
 
                     if (sa.hasParam("ExileFaceDown")) {
-                        movedCard.setState(CardStateName.FaceDown, true);
+                        movedCard.setState(CardStateName.FaceDown, true, true);
                     }
 
                     if (sa.hasParam("TrackDiscarded")) {
@@ -1116,7 +1116,7 @@ public class ChangeZoneEffect extends SpellAbilityEffect {
                     movedCard.setExiledWith(host);
                 }
                 if (sa.hasParam("ExileFaceDown")) {
-                    movedCard.setState(CardStateName.FaceDown, true);
+                    movedCard.setState(CardStateName.FaceDown, true, true);
                 }
             }
             else {
