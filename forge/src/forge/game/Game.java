@@ -157,7 +157,7 @@ public class Game {
     }
 
     public void updateLastStateForCard(Card c) {
-        if (c == null) {
+        if (c == null || c.getZone() == null) {
             return;
         }
 
