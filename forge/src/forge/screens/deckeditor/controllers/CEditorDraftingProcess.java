@@ -282,6 +282,7 @@ public class CEditorDraftingProcess extends ACEditorBase<PaperCard, DeckGroup> {
         // set catalog table to single-selection only mode
         getCatalogManager().setAllowMultipleSelections(false);
         getCatalogManager().setViewIndex(0);
+        getCatalogManager().setViewIndex(1);
     }
 
     /* (non-Javadoc)
