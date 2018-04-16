@@ -3312,7 +3312,7 @@ public class CardFactoryUtil {
         } else if (keyword.equals("Totem armor")) {
             String repeffstr = "Event$ Destroy | ActiveZones$ Battlefield | ValidCard$ Card.EnchantedBy"
                     + " | Secondary$ True | TotemArmor$ True"
-                    + " | Description$ Totem armor (" + inst.getReminderText() + ")";
+                    + " | Description$ " + card + ": Totem armor (" + inst.getReminderText() + ")";
 
             String abprevDamage = "DB$ DealDamage | Defined$ ReplacedCard | Remove$ All ";
             String abdestory = "DB$ Destroy | Defined$ Self";
