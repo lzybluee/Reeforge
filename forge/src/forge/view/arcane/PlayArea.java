@@ -925,6 +925,7 @@ public class PlayArea extends CardPanelContainer implements CardPanelMouseListen
                     final CardStateView thisState = thisCard.getCurrentState();
                     if (otherState.getName().equals(thisState.getName()) && s.size() < othersStackMax) {
                         if (panel.getAttachedPanels().isEmpty()
+                            && thisCard.isToken() == otherCard.isToken()
                             && thisCard.hasSameCounters(otherCard)
                             && (thisCard.isSick() == otherCard.isSick())
                             && (thisCard.isCloned() == otherCard.isCloned())) {
