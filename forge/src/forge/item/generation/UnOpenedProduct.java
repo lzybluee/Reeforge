@@ -74,7 +74,7 @@ public class UnOpenedProduct implements IUnOpenedProduct {
         List<PaperCard> result = new ArrayList<>();
         for(Pair<String, Integer> slot : tpl.getSlots()) {
             PrintSheet ps = sheets.get(slot.getLeft());
-            if(ps.isEmpty() &&  poolLimited ) {
+            if(ps.isEmpty() && poolLimited) {
                 throw new IllegalStateException("The cardpool has been depleted and has no more cards for slot " + slot.getKey());
             }
 
