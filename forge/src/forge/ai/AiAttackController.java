@@ -62,7 +62,6 @@ public class AiAttackController {
     private final List<Card> blockers;
 
     private final static Random random = MyRandom.getRandom();
-    private final static int randomInt = random.nextInt();
 
     private List<Card> oppList; // holds human player creatures
     private List<Card> myList; // holds computer creatures
@@ -591,7 +590,7 @@ public class AiAttackController {
         // do the same thing on turn 3 if he had the same creatures in play
         // I know this is a little confusing
         
-        random.setSeed(ai.getGame().getPhaseHandler().getTurn() + AiAttackController.randomInt);
+        //random.setSeed(ai.getGame().getPhaseHandler().getTurn() + AiAttackController.randomInt);
 
         if (this.attackers.isEmpty()) {
             return;
