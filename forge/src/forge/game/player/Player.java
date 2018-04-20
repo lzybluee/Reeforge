@@ -2681,6 +2681,8 @@ public class Player extends GameEntity implements Comparable<Player> {
             mayBePlayedAbility += " | MayPlayIgnoreColor$ True";
         }
         eff.addStaticAbility(mayBePlayedAbility);
+
+        eff.getCurrentState().setImageKey(commander.getImageKey());
         return eff;
     }
 
