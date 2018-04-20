@@ -97,6 +97,25 @@ public class TriggerHandler {
         return !delayedTriggers.isEmpty();
     }
 
+    public final boolean hasDelayedTriggersDuringCombat() {
+        if(delayedTriggers.isEmpty()) {
+            return false;
+        }
+        for(Trigger t : delayedTriggers) {
+            if(t.getTriggerPhases() == null) {
+                continue;
+            }
+            for(PhaseType p : t.getTriggerPhases()) {
+                if(p == PhaseType.COMBAT_DECLARE_ATTACKERS || p == PhaseType.COMBAT_DECLARE_BLOCKERS ||
+                   p == PhaseType.COMBAT_FIRST_STRIKE_DAMAGE || p == PhaseType.COMBAT_DAMAGE ||
+                   p == PhaseType.COMBAT_END) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public final void registerDelayedTrigger(final Trigger trig) {
         delayedTriggers.add(trig);
     }
