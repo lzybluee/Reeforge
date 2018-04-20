@@ -282,7 +282,7 @@ public final class DeckManager extends ItemManager<DeckProxy> implements IHasGam
             editorCtrl = new CEditorCommander(getCDetailPicture(), false);
             break;
         case TinyLeaders:
-            screen = FScreen.DECK_EDITOR_COMMANDER;
+            screen = FScreen.DECK_EDITOR_TINY_LEADERS;
             DeckPreferences.setCurrentDeck(deck.toString());
             editorCtrl = new CEditorCommander(getCDetailPicture(), true);
             break;

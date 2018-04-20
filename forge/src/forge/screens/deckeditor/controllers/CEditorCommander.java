@@ -17,9 +17,11 @@
  */
 package forge.screens.deckeditor.controllers;
 
+import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.base.Supplier;
 import forge.UiCommand;
+import forge.card.CardRules;
 import forge.card.CardRulesPredicates;
 import forge.deck.Deck;
 import forge.deck.DeckSection;
@@ -33,6 +35,7 @@ import forge.screens.deckeditor.SEditorIO;
 import forge.screens.deckeditor.views.VAllDecks;
 import forge.screens.deckeditor.views.VDeckgen;
 import forge.screens.match.controllers.CDetailPicture;
+import forge.util.ComparableOp;
 import forge.util.ItemPool;
 
 import java.util.ArrayList;
@@ -71,8 +74,14 @@ public final class CEditorCommander extends ACEditorBase<PaperCard, Deck> {
         allSections.add(DeckSection.Commander);
         allSections.add(DeckSection.Sideboard);
 
-        commanderPool = ItemPool.createFrom(FModel.getMagicDb().getCommonCards().getAllCards(Predicates.compose(CardRulesPredicates.Presets.IS_LEGENDARY, PaperCard.FN_GET_RULES)),PaperCard.class);
-        normalPool = ItemPool.createFrom(FModel.getMagicDb().getCommonCards().getAllCards(), PaperCard.class);
+        if(tinyLeaders) {
+            Predicate<CardRules> cmcPrep = new CardRulesPredicates.LeafNumber(CardRulesPredicates.LeafNumber.CardField.CMC, ComparableOp.LT_OR_EQUAL, 3);
+            commanderPool = ItemPool.createFrom(FModel.getMagicDb().getCommonCards().getAllCards(Predicates.compose(Predicates.and(cmcPrep, CardRulesPredicates.Presets.CAN_BE_COMMANDER), PaperCard.FN_GET_RULES)),PaperCard.class);
+            normalPool = ItemPool.createFrom(FModel.getMagicDb().getCommonCards().getAllCards(Predicates.compose(cmcPrep, PaperCard.FN_GET_RULES)), PaperCard.class);
+        } else {
+            commanderPool = ItemPool.createFrom(FModel.getMagicDb().getCommonCards().getAllCards(Predicates.compose(CardRulesPredicates.Presets.IS_LEGENDARY, PaperCard.FN_GET_RULES)),PaperCard.class);
+            normalPool = ItemPool.createFrom(FModel.getMagicDb().getCommonCards().getAllCards(), PaperCard.class);
+        }
 
         CardManager catalogManager = new CardManager(getCDetailPicture(), true, false);
         CardManager deckManager = new CardManager(getCDetailPicture(), true, false);
