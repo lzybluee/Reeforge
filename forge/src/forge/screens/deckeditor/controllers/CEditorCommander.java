@@ -23,6 +23,7 @@ import com.google.common.base.Supplier;
 import forge.UiCommand;
 import forge.card.CardRules;
 import forge.card.CardRulesPredicates;
+import forge.card.CardRulesPredicates.Presets;
 import forge.deck.Deck;
 import forge.deck.DeckSection;
 import forge.gui.framework.DragCell;
@@ -76,10 +77,10 @@ public final class CEditorCommander extends ACEditorBase<PaperCard, Deck> {
 
         if(tinyLeaders) {
             Predicate<CardRules> cmcPrep = new CardRulesPredicates.LeafNumber(CardRulesPredicates.LeafNumber.CardField.CMC, ComparableOp.LT_OR_EQUAL, 3);
-            commanderPool = ItemPool.createFrom(FModel.getMagicDb().getCommonCards().getAllCards(Predicates.compose(Predicates.and(cmcPrep, CardRulesPredicates.Presets.CAN_BE_COMMANDER), PaperCard.FN_GET_RULES)),PaperCard.class);
+            commanderPool = ItemPool.createFrom(FModel.getMagicDb().getCommonCards().getAllCards(Predicates.compose(Predicates.and(cmcPrep, Presets.CAN_BE_COMMANDER), PaperCard.FN_GET_RULES)),PaperCard.class);
             normalPool = ItemPool.createFrom(FModel.getMagicDb().getCommonCards().getAllCards(Predicates.compose(cmcPrep, PaperCard.FN_GET_RULES)), PaperCard.class);
         } else {
-            commanderPool = ItemPool.createFrom(FModel.getMagicDb().getCommonCards().getAllCards(Predicates.compose(CardRulesPredicates.Presets.IS_LEGENDARY, PaperCard.FN_GET_RULES)),PaperCard.class);
+            commanderPool = ItemPool.createFrom(FModel.getMagicDb().getCommonCards().getAllCards(Predicates.compose(Predicates.and(Presets.IS_NON_LAND, Presets.IS_LEGENDARY), PaperCard.FN_GET_RULES)),PaperCard.class);
             normalPool = ItemPool.createFrom(FModel.getMagicDb().getCommonCards().getAllCards(), PaperCard.class);
         }
 
