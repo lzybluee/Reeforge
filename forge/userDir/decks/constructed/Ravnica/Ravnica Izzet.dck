@@ -1,18 +1,18 @@
 [metadata]
 Name=Ravnica Izzet
+[Avatar]
+
 [Main]
 2 Counterflux|RTR
-1 Cyclonic Rift|RTR
-1 Fluxcharger|DGM
-3 Goblin Electromancer|RTR
+4 Goblin Electromancer|RTR
 6 Island|RTR|1
-4 Izzet Charm|RTR
-2 Mercurial Chemister|RTR
+3 Izzet Charm|RTR
+3 Mercurial Chemister|RTR
 4 Mizzium Mortars|RTR
 6 Mountain|RTR|1
 1 Niv-Mizzet, Dracogenius|RTR
-2 Nivix Cyclops|DGM
 4 Steam Vents|RTR
+3 Street Spasm|RTR
 4 Turn // Burn|DGM
 [Sideboard]
 4 Blast of Genius|DGM
@@ -45,7 +45,7 @@ Name=Ravnica Izzet
 4 Mizzium Mortars|RTR
 4 Mizzium Skin|RTR
 4 Niv-Mizzet, Dracogenius|RTR
-8 Nivix Cyclops|DGM
+4 Nivix Cyclops|DGM
 4 Nivix Guildmage|RTR
 4 Nivmagus Elemental|RTR
 4 Pursuit of Flight|RTR

@@ -1,7 +1,6 @@
 [metadata]
 Name=Ravnica Azorius
 [Main]
-1 Ascended Lawmage|DGM
 2 Azorius Charm|RTR
 2 Council of the Absolute|DGM
 2 Deputy of Acquittals|DGM
@@ -13,7 +12,7 @@ Name=Ravnica Azorius
 2 New Prahv Guildmage|RTR
 6 Plains|RTR|1
 1 Righteous Authority|RTR
-2 Skymark Roc|RTR
+3 Skymark Roc|RTR
 3 Sphinx's Revelation|RTR
 2 Supreme Verdict|RTR
 [Sideboard]
