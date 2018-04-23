@@ -1,9 +1,8 @@
 [metadata]
 Name=Ravnica Orzhov
 [Main]
-3 Alms Beast|GTC
-1 Blood Baron of Vizkopa|DGM
-1 Gift of Orzhova|GTC
+4 Alms Beast|GTC
+2 Gift of Orzhova|GTC
 4 Godless Shrine|GTC
 4 High Priest of Penance|GTC
 2 Immortal Servitude|GTC
@@ -12,7 +11,6 @@ Name=Ravnica Orzhov
 6 Plains|RTR|1
 2 Profit // Loss|DGM
 6 Swamp|RTR|1
-1 Thrull Parasite|GTC
 2 Tithe Drinker|DGM
 1 Treasury Thrull|GTC
 2 Vizkopa Guildmage|GTC
