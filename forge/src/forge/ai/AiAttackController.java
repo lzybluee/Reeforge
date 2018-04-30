@@ -420,7 +420,7 @@ public class AiAttackController {
             CardCollectionView oppBattlefield = c.getController().getCardsIn(ZoneType.Battlefield);
 
             if (c.getName().equals("Heart of Kiran")) {
-                if (!CardLists.filter(oppBattlefield, CardPredicates.Presets.PLANEWALKERS).isEmpty()) {
+                if (!CardLists.filter(oppBattlefield, CardPredicates.Presets.PLANESWALKERS).isEmpty()) {
                     // can be activated by removing a loyalty counter instead of tapping a creature
                     continue;
                 }
@@ -525,13 +525,15 @@ public class AiAttackController {
             }
         }
 
-        if (ComputerUtilCombat.sumDamageIfUnblocked(unblockedAttackers, opp) + ComputerUtil.possibleNonCombatDamage(ai) 
-                + trampleDamage >= opp.getLife()
+        int totalCombatDamage = ComputerUtilCombat.sumDamageIfUnblocked(unblockedAttackers, opp) + trampleDamage;
+        int totalPoisonDamage = ComputerUtilCombat.sumPoisonIfUnblocked(unblockedAttackers, opp);
+
+        if (totalCombatDamage + ComputerUtil.possibleNonCombatDamage(ai) >= opp.getLife()
                 && !((opp.cantLoseForZeroOrLessLife() || ai.cantWin()) && opp.getLife() < 1)) {
             return true;
         }
 
-        if (ComputerUtilCombat.sumPoisonIfUnblocked(unblockedAttackers, opp) >= 10 - opp.getPoisonCounters()) {
+        if (totalPoisonDamage >= 10 - opp.getPoisonCounters()) {
             return true;
         }
 
@@ -584,13 +586,6 @@ public class AiAttackController {
      * @return a {@link forge.game.combat.Combat} object.
      */
     public final void declareAttackers(final Combat combat) {
-        // if this method is called multiple times during a turn,
-        // it will always return the same value
-        // randomInt is used so that the computer doesn't always
-        // do the same thing on turn 3 if he had the same creatures in play
-        // I know this is a little confusing
-        
-        //random.setSeed(ai.getGame().getPhaseHandler().getTurn() + AiAttackController.randomInt);
 
         if (this.attackers.isEmpty()) {
             return;
@@ -1112,6 +1107,9 @@ public class AiAttackController {
         // is there a gain in attacking even when the blocker is not killed (Lifelink, Wither,...)
         boolean hasCombatEffect = attacker.getSVar("HasCombatEffect").equals("TRUE") 
         		|| "Blocked".equals(attacker.getSVar("HasAttackEffect"));
+        // total power of the defending creatures, used in predicting whether a gang block can kill the attacker
+        int defPower = CardLists.getTotalPower(defenders, true);
+
         if (!hasCombatEffect) {
             for (KeywordInterface inst : attacker.getKeywords()) {
                 String keyword = inst.getOriginal();
@@ -1159,21 +1157,22 @@ public class AiAttackController {
                             }
                         }
 
-                        if (canKillAllDangerous
-                                && !hasAttackEffect && !hasCombatEffect
-                                && (this.attackers.size() <= defenders.size() || attacker.getNetPower() <= 0)) {
-                            if (ai.getController().isAI()) {
-                                if (((PlayerControllerAi)ai.getController()).getAi().getBooleanProperty(AiProps.TRY_TO_AVOID_ATTACKING_INTO_CERTAIN_BLOCK)) {
-                                    // We can't kill a blocker, there is no reason to attack unless we can cripple a
-                                    // blocker or gain life from attacking or we have some kind of another attack/combat effect,
-                                    // or if we can deal damage to the opponent via the sheer number of potential attackers
-                                    // (note that the AI will sometimes still miscount here, and thus attack into a block,
-                                    // because there is no way to check which attackers are actually guaranteed to attack at this point)
-                                    canKillAllDangerous = false;
-                                }
+                        // Check if maybe we are too reckless in adding this attacker
+                        if (canKillAllDangerous) {
+                            boolean avoidAttackingIntoBlock = ai.getController().isAI()
+                                    && ((PlayerControllerAi) ai.getController()).getAi().getBooleanProperty(AiProps.TRY_TO_AVOID_ATTACKING_INTO_CERTAIN_BLOCK);
+                            boolean attackerWillDie = defPower >= attacker.getNetToughness();
+                            boolean uselessAttack = !hasCombatEffect && !hasAttackEffect;
+                            boolean noContributionToAttack = this.attackers.size() <= defenders.size() || attacker.getNetPower() <= 0;
+
+                            // We are attacking too recklessly if we can't kill a single blocker and:
+                            // - our creature will die for sure (chump attack)
+                            // - our attack will not do anything special (no attack/combat effect to proc)
+                            // - we can't deal damage to our opponent with sheer number of attackers and/or our attacker's power is 0 or less
+                            if (attackerWillDie || (avoidAttackingIntoBlock && (uselessAttack || noContributionToAttack))) {
+                                canKillAllDangerous = false;
                             }
                         }
-
                     }
                 }
             }

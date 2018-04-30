@@ -262,6 +262,13 @@ public abstract class PumpAiBase extends SpellAbilityAi {
                 return false;
             }
         } else if (keyword.endsWith("Indestructible")) {
+            // Predicting threatened objects in relevant non-combat situations happens elsewhere,
+            // so we are only worrying about combat relevance of Indestructible at this point.
+            if (combat == null
+                    || !((combat.isBlocked(card) || combat.isBlocking(card))
+                    && ComputerUtilCombat.combatantWouldBeDestroyed(ai, card, combat))) {
+                return false;
+            }
             return true;
         } else if (keyword.endsWith("Deathtouch")) {
             if (ph.isPlayerTurn(opp) && ph.getPhase().equals(PhaseType.COMBAT_DECLARE_ATTACKERS)) {
@@ -441,6 +448,10 @@ public abstract class PumpAiBase extends SpellAbilityAi {
             if (!ph.isPlayerTurn(ai) || !card.hasKeyword("Defender")
                     || ph.getPhase().isAfter(PhaseType.COMBAT_BEGIN)
                     || card.isTapped() || newPower <= 0) {
+                return false;
+            }
+        } else if (keyword.equals("Prevent all combat damage that would be dealt to CARDNAME.")) {
+            if (combat == null || !(combat.isBlocking(card) || combat.isBlocked(card))) {
                 return false;
             }
         }

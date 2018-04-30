@@ -951,7 +951,8 @@ public class ComputerUtil {
         	return true;
         }
 
-        if (card.isCreature() && !card.hasKeyword("Defender") && (card.hasKeyword("Haste") || ComputerUtil.hasACardGivingHaste(ai) || sa.isDash())) {
+        if (card.isCreature() && !card.hasKeyword("Defender")
+                && (card.hasKeyword("Haste") || ComputerUtil.hasACardGivingHaste(ai, true) || sa.isDash())) {
             return true;
         }
         
@@ -1237,9 +1238,9 @@ public class ComputerUtil {
         return false;
     }
 
-    public static boolean hasACardGivingHaste(final Player ai) {
-        final CardCollection all = new CardCollection(ai.getCardsIn(ZoneType.Battlefield));
-        
+    public static boolean hasACardGivingHaste(final Player ai, final boolean checkOpponentCards) {
+        final CardCollection all = new CardCollection(ai.getCardsIn(Lists.newArrayList(ZoneType.Battlefield, ZoneType.Command)));
+
         // Special for Anger
         if (!ai.getGame().isCardInPlay("Yixlid Jailer")
                 && !ai.getCardsIn(ZoneType.Graveyard, "Anger").isEmpty()
@@ -1305,6 +1306,28 @@ public class ComputerUtil {
                 }
             }
         }
+
+        if (checkOpponentCards) {
+            // Check if the opponents have any cards giving Haste to all creatures on the battlefield
+            CardCollection opp = new CardCollection();
+            opp.addAll(ai.getOpponents().getCardsIn(ZoneType.Battlefield));
+            opp.addAll(ai.getOpponents().getCardsIn(ZoneType.Command));
+
+            for (final Card c : opp) {
+                for (StaticAbility stAb : c.getStaticAbilities()) {
+                    Map<String, String> params = stAb.getMapParams();
+                    if ("Continuous".equals(params.get("Mode")) && params.containsKey("AddKeyword")
+                            && params.get("AddKeyword").contains("Haste")) {
+
+                        final ArrayList affected = Lists.newArrayList(params.get("Affected").split(","));
+                        if (affected.contains("Creature")) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
         return false;
     }
 
@@ -1332,7 +1355,7 @@ public class ComputerUtil {
         int damage = 0;
         final CardCollection all = new CardCollection(ai.getCardsIn(ZoneType.Battlefield));
         all.addAll(ai.getCardsActivableInExternalZones(true));
-        all.addAll(ai.getCardsIn(ZoneType.Hand));
+        all.addAll(CardLists.filter(ai.getCardsIn(ZoneType.Hand), Predicates.not(Presets.PERMANENTS)));
     
         for (final Card c : all) {
             for (final SpellAbility sa : c.getSpellAbilities()) {
@@ -1357,7 +1380,26 @@ public class ComputerUtil {
                 }
                 damage = dmg;
             }
+
+            // Triggered abilities
+            if (c.isCreature() && c.isInZone(ZoneType.Battlefield) && CombatUtil.canAttack(c)) {
+                for (final Trigger t : c.getTriggers()) {
+                    if ("Attacks".equals(t.getParam("Mode")) && t.hasParam("Execute")) {
+                        String exec = c.getSVar(t.getParam("Execute"));
+                        if (!exec.isEmpty()) {
+                            SpellAbility trigSa = AbilityFactory.getAbility(exec, c);
+                            if (trigSa != null && trigSa.getApi() == ApiType.LoseLife
+                                    && trigSa.getParamOrDefault("Defined", "").contains("Opponent")) {
+                                trigSa.setHostCard(c);
+                                damage += AbilityUtils.calculateAmount(trigSa.getHostCard(), trigSa.getParam("LifeAmount"), trigSa);
+                            }
+                        }
+                    }
+                }
+            }
+
         }
+
         return damage;
     }
 

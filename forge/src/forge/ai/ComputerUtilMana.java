@@ -1090,7 +1090,7 @@ public class ComputerUtilMana {
         ZoneType castFromBackup = null;
         if (test && sa.isSpell()) {
             castFromBackup = card.getCastFrom();
-            sa.getHostCard().setCastFrom(card.getZone().getZoneType());
+            sa.getHostCard().setCastFrom(card.getZone() != null ? card.getZone().getZoneType() : null);
         }
 
         Cost payCosts = CostAdjustment.adjust(sa.getPayCosts(), sa);
@@ -1115,7 +1115,9 @@ public class ComputerUtilMana {
                 final String xSvar = card.getSVar("X").startsWith("Count$xPaid") ? "PayX" : "X";
                 if (!sa.getSVar(xSvar).isEmpty() || card.hasSVar(xSvar)) {
                     if (xSvar.equals("PayX") && card.hasSVar(xSvar)) {
-                        manaToAdd = Integer.parseInt(card.getSVar(xSvar)) * cost.getXcounter(); // X
+                         // X SVar may end up being an empty string when copying a spell with no cost (e.g. Jhoira Avatar)
+                        String xValue = card.getSVar(xSvar);
+                        manaToAdd = xValue.isEmpty() ? 0 : Integer.parseInt(card.getSVar(xSvar)) * cost.getXcounter(); // X
                     } else {
                         manaToAdd = AbilityUtils.calculateAmount(card, xSvar, sa) * cost.getXcounter();
                     }

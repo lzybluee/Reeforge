@@ -96,8 +96,8 @@ public class ComputerUtilCard {
      * @return best Planeswalker
      */
     public static Card getBestPlaneswalkerAI(final List<Card> list) {
-        List<Card> all = CardLists.filter(list, CardPredicates.Presets.PLANEWALKERS);
-        if (all.size() == 0) {
+        List<Card> all = CardLists.filter(list, CardPredicates.Presets.PLANESWALKERS);
+        if (all.isEmpty()) {
             return null;
         }
         // no AI logic, just return most expensive
