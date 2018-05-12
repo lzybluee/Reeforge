@@ -261,10 +261,6 @@ public class GameFormat implements Comparable<GameFormat> {
             return this.map.get("Standard");
         }
 
-        public GameFormat getExtended() {
-            return this.map.get("Extended");
-        }
-
         public GameFormat getModern() {
             return this.map.get("Modern");
         }
