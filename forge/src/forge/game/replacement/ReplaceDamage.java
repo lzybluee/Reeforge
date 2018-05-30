@@ -53,23 +53,47 @@ public class ReplaceDamage extends ReplacementEffect {
         if (!(runParams.containsKey("Prevention") == (hasParam("PreventionEffect") || hasParam("Prevent")))) {
             return false;
         }
+        if (((Integer) runParams.get("DamageAmount")) == 0) {
+            // If no actual damage is dealt, there is nothing to replace
+            return false;
+        }
         if (hasParam("ValidSource")) {
-        	String validSource = getParam("ValidSource");
-        	validSource = AbilityUtils.applyAbilityTextChangeEffects(validSource, this);        	
+            String validSource = getParam("ValidSource");
+            validSource = AbilityUtils.applyAbilityTextChangeEffects(validSource, this);	
             if (!matchesValid(runParams.get("DamageSource"), validSource.split(","), getHostCard())) {
                 return false;
             }
         }
         if (hasParam("ValidTarget")) {
-        	String validTarget = getParam("ValidTarget");
-        	validTarget = AbilityUtils.applyAbilityTextChangeEffects(validTarget, this);
+            String validTarget = getParam("ValidTarget");
+            validTarget = AbilityUtils.applyAbilityTextChangeEffects(validTarget, this);
             if (!matchesValid(runParams.get("Affected"), validTarget.split(","), getHostCard())) {
                 return false;
             }
         }
-        if (((Integer) runParams.get("DamageAmount")) == 0) {
-            // If no actual damage is dealt, there is nothing to replace
-            return false;
+        if (hasParam("ValidCause")) {
+            if (!runParams.containsKey("Cause")) {
+                return false;
+            }
+            SpellAbility cause = (SpellAbility) runParams.get("Cause");
+            String validCause = getParam("ValidCause");
+            validCause = AbilityUtils.applyAbilityTextChangeEffects(validCause, this);
+            if (!matchesValid(cause, validCause.split(","), getHostCard())) {
+                return false;
+            }
+            if (hasParam("CauseIsSource")) {
+                if (!cause.getHostCard().equals(runParams.get("DamageSource"))) {
+                    return false;
+                }
+            }
+        }
+        if (hasParam("RelativeToSource")) {
+            Card source = (Card) runParams.get("DamageSource");
+            String validRelative = getParam("RelativeToSource");
+            validRelative = AbilityUtils.applyAbilityTextChangeEffects(validRelative, this);
+            if (!matchesValid(runParams.get("DamageTarget"), validRelative.split(","), source)) {
+                return false;
+            }
         }
         if (hasParam("DamageAmount")) {
             String full = getParam("DamageAmount");

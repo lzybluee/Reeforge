@@ -264,7 +264,6 @@ public class AbilityManaPart implements java.io.Serializable {
             ReplacementEffect re = ReplacementHandler.parseReplacement(repeffstr, c, false);
             re.setLayer(ReplacementLayer.Other);
             re.setOverridingAbility(sa);
-            re.getMapParams().put("ETBCountersOneShot", "true");
 
             c.addReplacementEffect(re);
         }
@@ -330,7 +329,7 @@ public class AbilityManaPart implements java.io.Serializable {
                 continue;
             }
             if (restriction.equals("MorphOrManifest")) {
-                if ((sa.isSpell() && sa.getHostCard().isCreature() && ((Spell) sa).isCastFaceDown())
+                if ((sa.isSpell() && sa.getHostCard().isCreature() && sa.isCastFaceDown())
                         || sa.isManifestUp() || sa.isMorphUp()) {
                     return true;
                 } else {
@@ -338,11 +337,12 @@ public class AbilityManaPart implements java.io.Serializable {
                 }
             }
 
+            if (sa.isValid(restriction, this.getSourceCard().getController(), this.getSourceCard(), null)) {
+                return true;
+            }
+
             if (sa.isAbility()) {
                 if (restriction.startsWith("Activated")) {
-                    if(sa.isTrigger()) {
-                        continue;
-                    }
                     restriction = TextUtil.fastReplace(restriction, "Activated", "Card");
                 }
                 else {

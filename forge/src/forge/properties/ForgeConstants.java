@@ -61,6 +61,7 @@ public final class ForgeConstants {
     public static final String TOKEN_DATA_DIR      = RES_DIR + "tokenscripts" + PATH_SEPARATOR;
     public static final String EDITIONS_DIR        = RES_DIR + "editions" + PATH_SEPARATOR;
     public static final String BLOCK_DATA_DIR      = RES_DIR + "blockdata" + PATH_SEPARATOR;
+    public static final String FORMATS_DATA_DIR    = RES_DIR + "formats" + PATH_SEPARATOR;
     public static final String DECK_CUBE_DIR       = RES_DIR + "cube" + PATH_SEPARATOR;
     public static final String AI_PROFILE_DIR      = RES_DIR + "ai" + PATH_SEPARATOR;
     public static final String SOUND_DIR           = RES_DIR + "sound" + PATH_SEPARATOR;
@@ -207,6 +208,7 @@ public final class ForgeConstants {
     public static final String USER_CONQUEST_DIR    = USER_DIR + "conquest" + PATH_SEPARATOR;
     public static final String USER_PREFS_DIR       = USER_DIR + "preferences" + PATH_SEPARATOR;
     public static final String USER_GAMES_DIR       = USER_DIR + "games" + PATH_SEPARATOR;
+    public static final String USER_FORMATS_DIR     = USER_DIR + "customformats" + PATH_SEPARATOR;
     public static final String LOG_FILE             = USER_DIR + "forge.log";
     public static final String ACHIEVEMENTS_DIR     = USER_DIR + "achievements" + PATH_SEPARATOR;
     public static final String DECK_DRAFT_DIR       = DECK_BASE_DIR + "draft" + PATH_SEPARATOR;
@@ -219,6 +221,7 @@ public final class ForgeConstants {
     public static final String QUEST_SAVE_DIR       = USER_QUEST_DIR + "saves" + PATH_SEPARATOR;
     public static final String CONQUEST_SAVE_DIR    = USER_CONQUEST_DIR + "saves" + PATH_SEPARATOR;
     public static final String DECK_TINY_LEADERS_DIR= DECK_BASE_DIR + "tiny_leaders" + PATH_SEPARATOR;
+    public static final String DECK_BRAWL_DIR       = DECK_BASE_DIR + "brawl" + PATH_SEPARATOR;
     public static final String MAIN_PREFS_FILE      = USER_PREFS_DIR + "forge.preferences";
     public static final String CARD_PREFS_FILE      = USER_PREFS_DIR + "card.preferences";
     public static final String DECK_PREFS_FILE      = USER_PREFS_DIR + "deck.preferences";

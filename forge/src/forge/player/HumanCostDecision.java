@@ -1095,11 +1095,7 @@ public class HumanCostDecision extends CostDecisionMakerBase {
 
         if (cost.payCostFromSource()) {
             if (source.getController() == ability.getActivatingPlayer() && source.isInPlay()) {
-                if (cost.mustPay()) {
-                    return PaymentDecision.card(source);
-                } else {
-                    return player.getController().confirmPayment(cost, "Sacrifice " + source.getName() + "?",ability) ? PaymentDecision.card(source) : null;
-                }
+                return player.getController().confirmPayment(cost, "Sacrifice " + source.getName() + "?",ability) ? PaymentDecision.card(source) : null;
             }
             else {
                 return null;
@@ -1127,10 +1123,8 @@ public class HumanCostDecision extends CostDecisionMakerBase {
         }
         final InputSelectCardsFromList inp = new InputSelectCardsFromList(controller, c, c, list, ability);
         inp.setMessage("Select a " + cost.getDescriptiveType() + " to sacrifice (%d left)");
-        inp.setCancelAllowed(!cost.mustPay());
-        if(c > 0) {
-            inp.showAndWait();
-        }
+        inp.setCancelAllowed(true);
+        inp.showAndWait();
         if (inp.hasCancelled()) {
             return null;
         }
@@ -1245,9 +1239,7 @@ public class HumanCostDecision extends CostDecisionMakerBase {
         final InputSelectCardsFromList inp = new InputSelectCardsFromList(controller, c, c, typeList, ability);
         inp.setCancelAllowed(true);
         inp.setMessage("Select a " + cost.getDescriptiveType() + " to tap (%d left)");
-        if(c > 0) {
-            inp.showAndWait();
-        }
+        inp.showAndWait();
         if (inp.hasCancelled()) {
             return null;
         }
@@ -1276,9 +1268,7 @@ public class HumanCostDecision extends CostDecisionMakerBase {
         final InputSelectCardsFromList inp = new InputSelectCardsFromList(controller, c, c, typeList, ability);
         inp.setCancelAllowed(true);
         inp.setMessage("Select a " + cost.getDescriptiveType() + " to untap (%d left)");
-        if(c > 0) {
-            inp.showAndWait();
-        }
+        inp.showAndWait();
         if (inp.hasCancelled() || inp.getSelected().size() != c) {
             return null;
         }

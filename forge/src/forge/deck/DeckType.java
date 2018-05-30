@@ -1,7 +1,6 @@
 package forge.deck;
 
 import forge.model.FModel;
-import forge.properties.ForgePreferences;
 
 public enum DeckType {
     CUSTOM_DECK ("Custom User Decks"),
@@ -10,6 +9,7 @@ public enum DeckType {
     RANDOM_COMMANDER_DECK ("Random Commander Decks"),
     RANDOM_CARDGEN_COMMANDER_DECK ("Random Commander Card-based Decks"),
     TINY_LEADERS_DECKS ("Tiny Leaders Decks"),
+    BRAWL_DECKS ("Brawl Decks"),
     SCHEME_DECKS ("Scheme Decks"),
     PLANAR_DECKS ("Planar Decks"),
     DRAFT_DECKS ("Draft Decks"),

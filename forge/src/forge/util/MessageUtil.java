@@ -12,7 +12,7 @@ public class MessageUtil {
     private MessageUtil() { };
 
     public static String formatMessage(String message, Player player, Object related) {
-        if ((related instanceof Player || related instanceof PlayerView) && message.indexOf("{player") >= 0) {
+        if (related instanceof Player && message.indexOf("{player") >= 0) {
             String noun = mayBeYou(player, related);
             message = TextUtil.fastReplace(TextUtil.fastReplace(message, "{player}", noun),"{player's}", Lang.getPossesive(noun));
         }

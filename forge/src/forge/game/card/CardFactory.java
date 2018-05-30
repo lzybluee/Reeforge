@@ -182,6 +182,8 @@ public class CardFactory {
         c.clearControllers();
         c.setOwner(controller);
         c.setCopiedSpell(true);
+        // set counters (e.g. Yisan, the Wanderer Bard)
+        c.setCounters(original.getCounters());
 
         final SpellAbility copySA;
         if (sa.isTrigger()) {
@@ -220,10 +222,6 @@ public class CardFactory {
                 c.addOptionalCostPaid(cost);
             }
             copySA.setPaidHash(sa.getPaidHash());
-        }
-
-        if(!original.getZone().is(ZoneType.Stack)) {
-            copySA.setSVar("CanSelectCharmEffect", "true");
         }
         return copySA;
     }
@@ -578,7 +576,7 @@ public class CardFactory {
         toCharacteristics.copyFrom(fromCharacteristics, false);
     }
 
-    public static void copySpellAbility(SpellAbility from, SpellAbility to, final Card host, final boolean lki) {
+    public static void copySpellAbility(SpellAbility from, SpellAbility to, final Card host, final Player p, final boolean lki) {
 
         if (from.getTargetRestrictions() != null) {
             to.setTargetRestrictions(from.getTargetRestrictions());
@@ -587,16 +585,16 @@ public class CardFactory {
         to.setStackDescription(from.getOriginalStackDescription());
     
         if (from.getSubAbility() != null) {
-            to.setSubAbility((AbilitySub) from.getSubAbility().copy(host, lki));
+            to.setSubAbility((AbilitySub) from.getSubAbility().copy(host, p, lki));
         }
         for (Map.Entry<String, AbilitySub> e : from.getAdditionalAbilities().entrySet()) {
-            to.setAdditionalAbility(e.getKey(), (AbilitySub) e.getValue().copy(host, lki));
+            to.setAdditionalAbility(e.getKey(), (AbilitySub) e.getValue().copy(host, p, lki));
         }
         for (Map.Entry<String, List<AbilitySub>> e : from.getAdditionalAbilityLists().entrySet()) {
             to.setAdditionalAbilityList(e.getKey(), Lists.transform(e.getValue(), new Function<AbilitySub, AbilitySub>() {
                 @Override
                 public AbilitySub apply(AbilitySub input) {
-                    return (AbilitySub) input.copy(host, lki);
+                    return (AbilitySub) input.copy(host, p, lki);
                 }
             }));
         }
@@ -608,14 +606,14 @@ public class CardFactory {
         }
 
         // do this after other abilties are copied
-        if (from.getActivatingPlayer() != null) {
-            to.setActivatingPlayer(from.getActivatingPlayer(), lki);
+        if (p != null) {
+            to.setActivatingPlayer(p, lki);
         }
 
         for (String sVar : from.getSVars()) {
             to.setSVar(sVar, from.getSVar(sVar));
         }
-        to.changeText();
+        //to.changeText();
     }
 
     /**

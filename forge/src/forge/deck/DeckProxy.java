@@ -53,6 +53,7 @@ public class DeckProxy implements InventoryItem {
     protected ColorSet color;
     protected ColorSet colorIdentity;
     protected Set<GameFormat> formats;
+    protected Set<GameFormat> exhaustiveFormats;
     private Integer mainSize = null;
     private Integer sbSize = null;
     private Integer avgCMC = null;
@@ -145,6 +146,7 @@ public class DeckProxy implements InventoryItem {
         colorIdentity = null;
         highestRarity = null;
         formats = null;
+        exhaustiveFormats = null;
         edition = null;
         mainSize = null;
         sbSize = null;
@@ -265,6 +267,13 @@ public class DeckProxy implements InventoryItem {
         return formats;
     }
 
+    public Set<GameFormat> getExhaustiveFormats() {
+        if (exhaustiveFormats == null) {
+            exhaustiveFormats = FModel.getFormats().getAllFormatsOfDeck(getDeck(), true);
+        }
+        return exhaustiveFormats;
+    }
+
     public String getFormatsString() {
         return StringUtils.join(Iterables.transform(getFormats(), GameFormat.FN_GET_NAME), ", ");
     }
@@ -367,6 +376,21 @@ public class DeckProxy implements InventoryItem {
             filter = Predicates.and(DeckFormat.TinyLeaders.hasLegalCardsPredicate(), filter);
         }
         addDecksRecursivelly("Tiny Leaders", GameType.TinyLeaders, result, "", FModel.getDecks().getTinyLeaders(), filter);
+        return result;
+    }
+
+    public static Iterable<DeckProxy> getAllBrawlDecks() {
+        return getAllBrawlDecks(null);
+    }
+    public static Iterable<DeckProxy> getAllBrawlDecks(Predicate<Deck> filter) {
+        final List<DeckProxy> result = new ArrayList<DeckProxy>();
+        if (filter == null) {
+            filter = DeckFormat.Brawl.hasLegalCardsPredicate();
+        }
+        else {
+            filter = Predicates.and(DeckFormat.Brawl.hasLegalCardsPredicate(), filter);
+        }
+        addDecksRecursivelly("Brawl", GameType.Brawl, result, "", FModel.getDecks().getBrawl(), filter);
         return result;
     }
 

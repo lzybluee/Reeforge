@@ -137,8 +137,6 @@ public final class CMatchUI
     private final CPrompt cPrompt = new CPrompt(this);
     private final CStack cStack = new CStack(this);
 
-    private int opponentDeckIndex = 0;
-
     public CMatchUI() {
         this.view = new VMatchUI(this);
         this.screen = FScreen.getMatchScreen(this, view);
@@ -178,7 +176,6 @@ public final class CMatchUI
     @Override
     public void setGameView(GameView gameView0) {
         super.setGameView(gameView0);
-        opponentDeckIndex = 0;
         gameView0 = getGameView(); //ensure updated game view used for below logic
         if (gameView0 == null) { return; }
 
@@ -231,20 +228,6 @@ public final class CMatchUI
             return;
         }
         final Deck deck = getGameView().getDeck(getCurrentPlayer().getLobbyPlayerName());
-        if (deck != null) {
-            FDeckViewer.show(deck);
-        }
-    }
-
-    public void viewOpponentDeckList() {
-        if (!isInGame()) {
-            return;
-        }
-        Deck deck = getGameView().getOpponentDeck(getCurrentPlayer().getLobbyPlayerName(), opponentDeckIndex++);
-        if(deck == null) {
-            opponentDeckIndex = 0;
-            deck = getGameView().getOpponentDeck(getCurrentPlayer().getLobbyPlayerName(), opponentDeckIndex++);
-        }
         if (deck != null) {
             FDeckViewer.show(deck);
         }
@@ -343,7 +326,6 @@ public final class CMatchUI
 
     @Override
     public void setCard(final CardView c) {
-        cDetailPicture.setShowFront(false);
         this.setCard(c, false);
     }
 
@@ -356,13 +338,7 @@ public final class CMatchUI
     }
 
     public void setCard(final InventoryItem item) {
-        cDetailPicture.setShowFront(false);
         cDetailPicture.showItem(item);
-    }
-
-    public void setPaperCard(final CardView c) {
-        cDetailPicture.setShowFront(true);
-        this.setCard(c, false);
     }
 
     private int getPlayerIndex(final PlayerView player) {
@@ -434,7 +410,6 @@ public final class CMatchUI
             if (updateZones) {
                 vField.updateZones();
             }
-            getFieldViewFor(owner).updateDetails();
         }
     }
 
@@ -635,7 +610,14 @@ public final class CMatchUI
     public void updatePhase() {
         final PlayerView p = getGameView().getPlayerTurn();
         final PhaseType ph = getGameView().getPhase();
-        final PhaseLabel lbl = p == null ? null : getFieldViewFor(p).getPhaseIndicator().getLabelFor(ph);
+        // this should never happen, but I've seen it periodically... so, need to get to the bottom of it
+        PhaseLabel lbl = null;
+        if (ph != null ) {
+            lbl = p == null ? null : getFieldViewFor(p).getPhaseIndicator().getLabelFor(ph);
+        } else {
+            // not sure what debugging information would help here, log for now
+            System.err.println("getGameView().getPhase() returned 'null'");
+        }
 
         resetAllPhaseButtons();
         if (lbl != null) {
@@ -789,11 +771,10 @@ public final class CMatchUI
                 y = 0;
                 SDisplayUtil.showTab(getCPrompt().getView());
             } else {
-                final ZoneType zone = panel.getFlashbackPlayer() != null ? ZoneType.Flashback : hostCard.getZone();
-                if (ImmutableList.of(ZoneType.Command, ZoneType.Exile, ZoneType.Graveyard, ZoneType.Library, ZoneType.Flashback).contains(zone)) {
-                    FloatingCardArea.show(this, panel.getFlashbackPlayer() != null ? panel.getFlashbackPlayer() : hostCard.getController(), zone);
+                final ZoneType zone = hostCard.getZone();
+                if (ImmutableList.of(ZoneType.Command, ZoneType.Exile, ZoneType.Graveyard, ZoneType.Library).contains(zone)) {
+                    FloatingCardArea.show(this, hostCard.getController(), zone);
                 }
-                panel.setFlashbackPlayer(null);
                 menuParent = panel.getParent();
                 x = triggerEvent.getX();
                 y = triggerEvent.getY();
@@ -936,18 +917,22 @@ public final class CMatchUI
     }
 
     @Override
-    public GameEntityView chooseSingleEntityForEffect(final String title, final List<? extends GameEntityView> optionList, 
-            final DelayedReveal delayedReveal, final boolean isOptional, int total) {
+    public GameEntityView chooseSingleEntityForEffect(final String title, final List<? extends GameEntityView> optionList, final DelayedReveal delayedReveal, final boolean isOptional) {
         if (delayedReveal != null) {
             reveal(delayedReveal.getMessagePrefix(), delayedReveal.getCards()); //TODO: Merge this into search dialog
-        }
-        if(total == 0) {
-            return null;
         }
         if (isOptional) {
             return oneOrNone(title, optionList);
         }
         return one(title, optionList);
+    }
+
+    @Override
+    public List<GameEntityView> chooseEntitiesForEffect(final String title, final List<? extends GameEntityView> optionList, final DelayedReveal delayedReveal) {
+        if (delayedReveal != null) {
+            reveal(delayedReveal.getMessagePrefix(), delayedReveal.getCards()); //TODO: Merge this into search dialog
+        }
+        return (List<GameEntityView>) order(title,"Selected", 0, optionList.size(), optionList, null, null, false);
     }
 
     @Override

@@ -8,8 +8,8 @@ import forge.card.mana.ManaCost;
 import forge.game.Direction;
 import forge.game.GameEntityView;
 import forge.game.combat.Combat;
+import forge.game.keyword.Keyword;
 import forge.game.player.Player;
-import forge.game.player.PlayerCollection;
 import forge.game.player.PlayerView;
 import forge.game.zone.ZoneType;
 import forge.item.IPaperCard;
@@ -140,11 +140,11 @@ public class CardView extends GameEntityView {
         set(TrackableProperty.Attacking, combat != null && combat.isAttacking(c));
     }
 
-    public FCollectionView<PlayerView> getExerted() {
-        return get(TrackableProperty.Exerted);
+    public boolean isExertedThisTurn() {
+        return get(TrackableProperty.ExertedThisTurn);
     }
-    void updateExerted(Card c, PlayerCollection players) {
-        set(TrackableProperty.Exerted, players.size() == 0 ? null : PlayerView.getCollection(players));
+    void updateExertedThisTurn(Card c, boolean exerted) {
+        set(TrackableProperty.ExertedThisTurn, exerted);
     }
 
     public boolean isBlocking() {
@@ -623,7 +623,7 @@ public class CardView extends GameEntityView {
             sb.append("\r\nCloned by: ").append(cloner);
         }
 
-        return sb.toString().trim().replaceAll("\\r\\n\\s*\\r\\n\\s*\\r\\n", "\r\n\r\n");
+        return sb.toString().trim();
     }
 
     public CardStateView getCurrentState() {
@@ -979,11 +979,11 @@ public class CardView extends GameEntityView {
         }
         void updateKeywords(Card c, CardState state) {
             c.updateKeywordsCache(state);
-            set(TrackableProperty.HasDeathtouch, c.hasKeyword("Deathtouch", state));
-            set(TrackableProperty.HasHaste, c.hasKeyword("Haste", state));
-            set(TrackableProperty.HasInfect, c.hasKeyword("Infect", state));
-            set(TrackableProperty.HasStorm, c.hasKeyword("Storm", state));
-            set(TrackableProperty.HasTrample, c.hasKeyword("Trample", state));
+            set(TrackableProperty.HasDeathtouch, c.hasKeyword(Keyword.DEATHTOUCH, state));
+            set(TrackableProperty.HasHaste, c.hasKeyword(Keyword.HASTE, state));
+            set(TrackableProperty.HasInfect, c.hasKeyword(Keyword.INFECT, state));
+            set(TrackableProperty.HasStorm, c.hasKeyword(Keyword.STORM, state));
+            set(TrackableProperty.HasTrample, c.hasKeyword(Keyword.TRAMPLE, state));
             set(TrackableProperty.BlockAdditional, c.getAmountOfKeyword("CARDNAME can block an additional creature each combat.", state));
             updateAbilityText(c, state);
         }

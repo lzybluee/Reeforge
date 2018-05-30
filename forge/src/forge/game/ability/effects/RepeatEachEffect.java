@@ -27,9 +27,9 @@ public class RepeatEachEffect extends SpellAbilityEffect {
     @SuppressWarnings("serial")
     @Override
     public void resolve(SpellAbility sa) {
-        Card source = sa.getHostCard();
+        final Card source = sa.getHostCard();
 
-        AbilitySub repeat = sa.getAdditionalAbility("RepeatSubAbility");
+        final AbilitySub repeat = sa.getAdditionalAbility("RepeatSubAbility");
 
         if (repeat != null && !repeat.getHostCard().equalsWithTimestamp(source)) {
             // TODO: for some reason, the host card of the original additional SA is set to the cloned card when
@@ -79,6 +79,11 @@ public class RepeatEachEffect extends SpellAbilityEffect {
         if (sa.hasParam("ClearRemembered")) {
             source.clearRemembered();
         }
+        
+        if (sa.hasParam("DamageMap")) {
+            sa.setDamageMap(new CardDamageMap());
+            sa.setPreventMap(new CardDamageMap());
+        }
 
         if (loopOverCards) {
             // TODO (ArsenalNut 22 Dec 2012) Add logic to order cards for AI
@@ -116,7 +121,7 @@ public class RepeatEachEffect extends SpellAbilityEffect {
                     repeatPlayers.add(size - 1, repeatPlayers.remove(0));
                 }
             }
-            for (Player p : repeatPlayers) {
+            for (final Player p : repeatPlayers) {
                 if (optional && !p.getController().confirmAction(repeat, null, sa.getParam("RepeatOptionalMessage"))) {
                     continue;
                 }
@@ -202,6 +207,14 @@ public class RepeatEachEffect extends SpellAbilityEffect {
                 source.removeRemembered(entry.getKey());
                 source.removeImprintedCards(entry.getValue());
             }
+        }
+        
+        if(sa.hasParam("DamageMap")) {
+            sa.getPreventMap().triggerPreventDamage(false);
+            sa.setPreventMap(null);
+            // non combat damage cause lifegain there
+            sa.getDamageMap().triggerDamageDoneOnce(false, sa);
+            sa.setDamageMap(null);
         }
     }
 }

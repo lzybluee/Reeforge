@@ -121,7 +121,7 @@ public abstract class Trigger extends TriggerReplacementBase {
         this.id = nextId();
         this.intrinsic = intrinsic;
 
-        this.setRunParams(Maps.newHashMap());
+        this.setRunParams(new HashMap<String, Object>()); // TODO: Consider whether this can be null instead, for performance reasons.
         this.originalMapParams.putAll(params);
         this.mapParams.putAll(params);
         this.setHostCard(host);
@@ -551,10 +551,6 @@ public abstract class Trigger extends TriggerReplacementBase {
 
     public void setTriggerPhases(List<PhaseType> phases) {
         validPhases = phases;
-    }
-
-    public List<PhaseType> getTriggerPhases() {
-        return validPhases;
     }
 
     //public String getImportantStackObjects(SpellAbility sa) { return ""; };

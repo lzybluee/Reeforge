@@ -68,6 +68,7 @@ public enum SpellApiToAi {
             .put(ApiType.Encode, EncodeAi.class)
             .put(ApiType.EndTurn, EndTurnAi.class)
             .put(ApiType.ExchangeLife, LifeExchangeAi.class)
+            .put(ApiType.ExchangeLifeVariant, LifeExchangeVariantAi.class)
             .put(ApiType.ExchangeControl, ControlExchangeAi.class)
             .put(ApiType.ExchangeControlVariant, CannotPlayAi.class)
             .put(ApiType.ExchangePower, PowerExchangeAi.class)
@@ -125,6 +126,7 @@ public enum SpellApiToAi {
             .put(ApiType.Repeat, RepeatAi.class)
             .put(ApiType.RepeatEach, RepeatEachAi.class)
             .put(ApiType.ReplaceEffect, AlwaysPlayAi.class)
+            .put(ApiType.ReplaceDamage, AlwaysPlayAi.class)
             .put(ApiType.ReplaceSplitDamage, AlwaysPlayAi.class)
             .put(ApiType.RestartGame, RestartGameAi.class)
             .put(ApiType.Reveal, RevealAi.class)
@@ -155,6 +157,7 @@ public enum SpellApiToAi {
             .put(ApiType.Vote, VoteAi.class)
             .put(ApiType.WinsGame, GameWinAi.class)
 
+            .put(ApiType.DamageResolve, AlwaysPlayAi.class)
             .put(ApiType.InternalEtbReplacement, CanPlayAsDrawbackAi.class)
             .put(ApiType.InternalLegendaryRule, LegendaryRuleAi.class)
             .put(ApiType.InternalIgnoreEffect, CannotPlayAi.class)

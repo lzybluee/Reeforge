@@ -8,14 +8,13 @@ import forge.game.card.CardCollection;
 import forge.game.card.CardLists;
 import forge.game.card.CounterType;
 import forge.game.cost.Cost;
+import forge.game.keyword.Keyword;
 import forge.game.phase.PhaseType;
 import forge.game.player.Player;
 import forge.game.spellability.SpellAbility;
 import forge.game.spellability.TargetRestrictions;
 import forge.game.zone.ZoneType;
 import forge.util.MyRandom;
-
-import java.util.Random;
 
 public class  DamageAllAi extends SpellAbilityAi {
     @Override
@@ -25,8 +24,7 @@ public class  DamageAllAi extends SpellAbilityAi {
         final Card source = sa.getHostCard();
 
         // prevent run-away activations - first time will always return true
-        final Random r = MyRandom.getRandom();
-        if (r.nextFloat() > Math.pow(.9, sa.getActivationsThisTurn())) {
+        if (MyRandom.getRandom().nextFloat() > Math.pow(.9, sa.getActivationsThisTurn())) {
             return false;
         }
         // abCost stuff that should probably be centralized...
@@ -271,7 +269,7 @@ public class  DamageAllAi extends SpellAbilityAi {
             }
         };
 
-        list = CardLists.getNotKeyword(list, "Indestructible");
+        list = CardLists.getNotKeyword(list, Keyword.INDESTRUCTIBLE);
         list = CardLists.filter(list, filterKillable);
 
         return list;

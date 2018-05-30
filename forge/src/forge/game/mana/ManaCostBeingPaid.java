@@ -20,8 +20,6 @@ package forge.game.mana;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
 import forge.card.ColorSet;
 import forge.card.MagicColor;
 import forge.card.mana.IParserManaCost;
@@ -111,7 +109,7 @@ public class ManaCostBeingPaid {
 
     // holds Mana_Part objects
     // ManaPartColor is stored before ManaPartGeneric
-    private final Map<ManaCostShard, ShardCount> unpaidShards = Maps.newHashMap();
+    private final Map<ManaCostShard, ShardCount> unpaidShards = new HashMap<ManaCostShard, ShardCount>();
     private Map<String, Integer> xManaCostPaidByColor;
     private final String sourceRestriction;
     private byte sunburstMap = 0;

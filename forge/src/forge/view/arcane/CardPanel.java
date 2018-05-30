@@ -25,8 +25,8 @@ import forge.card.mana.ManaCost;
 import forge.game.card.Card;
 import forge.game.card.CardView;
 import forge.game.card.CardView.CardStateView;
+import forge.game.keyword.Keyword;
 import forge.game.card.CounterType;
-import forge.game.player.PlayerView;
 import forge.gui.CardContainer;
 import forge.item.PaperCard;
 import forge.model.FModel;
@@ -97,8 +97,6 @@ public class CardPanel extends SkinnedPanel implements CardContainer, IDisposabl
 
     private static Font smallCounterFont;
     private static Font largeCounterFont;
-    
-    private PlayerView flashbackPlayer = null;
 
     static {
 
@@ -437,7 +435,7 @@ public class CardPanel extends SkinnedPanel implements CardContainer, IDisposabl
             } else {
                 if (!card.isFaceDown()) { // no need to draw mana symbols on face down split cards (e.g. manifested)
                     PaperCard pc = StaticData.instance().getCommonCards().getCard(card.getName());
-                    int ofs = pc != null && Card.getCardForUi(pc).hasKeyword("Aftermath") ? -12 : 12;
+                    int ofs = pc != null && Card.getCardForUi(pc).hasKeyword(Keyword.AFTERMATH) ? -12 : 12;
 
                     drawManaCost(g, card.getCurrentState().getManaCost(), ofs);
                     drawManaCost(g, card.getAlternateState().getManaCost(), -ofs);
@@ -464,7 +462,7 @@ public class CardPanel extends SkinnedPanel implements CardContainer, IDisposabl
 
         }
 
-        final int combatXSymbols = cardXOffset;
+        final int combatXSymbols = (cardXOffset + (cardWidth / 4)) - 16;
         final int stateXSymbols = (cardXOffset + (cardWidth / 2)) - 16;
         final int ySymbols = (cardYOffset + cardHeight) - (cardHeight / 8) - 16;
 
@@ -805,13 +803,5 @@ public class CardPanel extends SkinnedPanel implements CardContainer, IDisposabl
     public void repaintOverlays() {
         repaint();
         doLayout();
-    }
-
-    public PlayerView getFlashbackPlayer() {
-        return flashbackPlayer;
-    }
-
-    public void setFlashbackPlayer(PlayerView player) {
-        flashbackPlayer = player;
     }
 }

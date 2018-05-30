@@ -23,12 +23,12 @@ import forge.game.Game;
 import forge.game.card.Card;
 import forge.game.card.CardCollection;
 import forge.game.card.CardCollectionView;
-import forge.game.card.CardLists;
 import forge.game.card.CardUtil;
 import forge.game.event.EventValueChangeType;
 import forge.game.event.GameEventZone;
 import forge.game.player.Player;
 import forge.util.CollectionSuppliers;
+import forge.util.MyRandom;
 import forge.util.maps.EnumMapOfLists;
 import forge.util.maps.MapOfLists;
 
@@ -77,7 +77,7 @@ public class Zone implements java.io.Serializable, Iterable<Card> {
     }
 
     public final void add(final Card c, final Integer index) {
-        add(c, index, null);
+        add(c, null, null);
     }
 
     public void add(final Card c, final Integer index, final Card latestState) {
@@ -248,7 +248,7 @@ public class Zone implements java.io.Serializable, Iterable<Card> {
     }
 
     public void shuffle() {
-        CardLists.shuffle(cardList);
+        Collections.shuffle(cardList, MyRandom.getRandom());
         onChanged();
     }
 

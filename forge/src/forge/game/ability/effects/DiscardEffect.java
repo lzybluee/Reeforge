@@ -17,7 +17,6 @@ import forge.util.TextUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class DiscardEffect extends SpellAbilityEffect {
@@ -36,9 +35,9 @@ public class DiscardEffect extends SpellAbilityEffect {
             }
 
             if (mode.equals("RevealYouChoose")) {
-                sb.append("reveals his or her hand.").append("  You choose (");
+                sb.append("reveals their hand.").append("  You choose (");
             } else if (mode.equals("RevealDiscardAll")) {
-                sb.append("reveals his or her hand. Discard (");
+                sb.append("reveals their hand. Discard (");
             } else {
                 sb.append("discards (");
             }
@@ -49,7 +48,7 @@ public class DiscardEffect extends SpellAbilityEffect {
             }
 
             if (mode.equals("Hand")) {
-                sb.append("his or her hand");
+                sb.append("their hand");
             } else if (mode.equals("RevealDiscardAll")) {
                 sb.append("All");
             } else if (sa.hasParam("AnyNumber")) {
@@ -235,7 +234,6 @@ public class DiscardEffect extends SpellAbilityEffect {
 
                         for (Card c : toDiscard) {
                             c.getController().discard(c, sa);
-                            discarded.add(c);
                         }
                     }
                 }
@@ -293,7 +291,7 @@ public class DiscardEffect extends SpellAbilityEffect {
                     int min = sa.hasParam("AnyNumber") || sa.hasParam("Optional") ? 0 : Math.min(validCards.size(), numCards);
                     int max = sa.hasParam("AnyNumber") ? validCards.size() : Math.min(validCards.size(), numCards);
 
-                    CardCollectionView toBeDiscarded = (validCards.isEmpty() || (max == 0 && min == 0)) ? null : chooser.getController().chooseCardsToDiscardFrom(p, sa, validCards, min, max);
+                    CardCollectionView toBeDiscarded = validCards.isEmpty() ? null : chooser.getController().chooseCardsToDiscardFrom(p, sa, validCards, min, max);
 
                     if (toBeDiscarded != null) {
                         if (toBeDiscarded.size() > 1) {
@@ -317,21 +315,6 @@ public class DiscardEffect extends SpellAbilityEffect {
         if (sa.hasParam("RememberDiscarded")) {
             for (final Card c : discarded) {
                 source.addRemembered(c);
-            }
-        }
-
-        HashMap<Player, CardCollection> revealCards = new HashMap<Player, CardCollection>();
-        for(Card c : discarded) {
-            Player p = c.getOwner();
-            if(!revealCards.containsKey(p)) {
-                revealCards.put(p, new CardCollection());
-            }
-            revealCards.get(c.getOwner()).add(c);
-        }
-
-        for(Player p : discarders) {
-            if(revealCards.containsKey(p)) {
-                p.getGame().getAction().reveal(revealCards.get(p), p, true);
             }
         }
     } // discardResolve()

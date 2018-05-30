@@ -128,26 +128,8 @@ public class ChangeZoneAllEffect extends SpellAbilityEffect {
 
         if ((destination == ZoneType.Library || destination == ZoneType.PlanarDeck)
         		&& !sa.hasParam("Shuffle") && cards.size() >= 2 && !random) {
-            CardCollection orderedCards = new CardCollection();
-            for(Player p : game.getPlayers()) {
-                CardCollection ordered = new CardCollection();
-                CardCollection token = new CardCollection();
-                for(Card c : cards) {
-                    if(c.getOwner() == p) {
-                        if(c.isToken()) {
-                            token.add(c);
-                        } else {
-                            ordered.add(c);
-                        }
-                    }
-                }
-                if(ordered.size() > 1) {
-                    ordered = (CardCollection) p.getController().orderMoveToZoneList(ordered, destination);
-                }
-                orderedCards.addAll(ordered);
-                orderedCards.addAll(token);
-            }
-            cards = new CardCollection(orderedCards);
+            Player p = AbilityUtils.getDefinedPlayers(source, sa.getParamOrDefault("DefinedPlayer", "You"), sa).get(0);
+            cards = (CardCollection) p.getController().orderMoveToZoneList(cards, destination);
         }
 
         if (destination == ZoneType.Graveyard) {
@@ -196,7 +178,7 @@ public class ChangeZoneAllEffect extends SpellAbilityEffect {
                     movedCard.setExiledWith(host);
                 }
                 if (sa.hasParam("ExileFaceDown")) {
-                    movedCard.setState(CardStateName.FaceDown, true, true);
+                    movedCard.setState(CardStateName.FaceDown, true);
                 }
                 if (sa.hasParam("Tapped")) {
                     movedCard.setTapped(true);

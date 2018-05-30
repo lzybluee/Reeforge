@@ -47,7 +47,9 @@ public class MillEffect extends SpellAbilityEffect {
                 // Reveal the milled cards, so players don't have to manually inspect the
                 // graveyard to figure out which ones were milled.
                 if (!facedown && reveal) { // do not reveal when exiling face down
-                    p.getGame().getAction().reveal(milled, p, false);
+                    if (showRevealDialog) {
+                        p.getGame().getAction().reveal(milled, p, false);
+                    }
                     StringBuilder sb = new StringBuilder();
                     sb.append(p).append(" milled ").append(milled).append(" to ").append(destination);
                     p.getGame().getGameLog().add(GameLogEntryType.ZONE_CHANGE, sb.toString());
@@ -60,7 +62,7 @@ public class MillEffect extends SpellAbilityEffect {
                     for (final Card c : milled) {
                         c.setExiledWith(host);
                     	if (facedown) {
-                            c.setState(CardStateName.FaceDown, true, true);
+                            c.setState(CardStateName.FaceDown, true);
                         }
                     }
                 }
@@ -102,7 +104,7 @@ public class MillEffect extends SpellAbilityEffect {
             sb.append("s");
         }
         final String millPosition = sa.hasParam("FromBottom") ? "bottom" : "top";
-        sb.append(" from the " + millPosition + " of his or her library.");
+        sb.append(" from the " + millPosition + " of their library.");
 
 
         return sb.toString();

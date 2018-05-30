@@ -220,7 +220,7 @@ public abstract class ReplacementEffect extends TriggerReplacementBase {
         if (hasParam("Description") && !this.isSuppressed()) {
             String desc = AbilityUtils.applyDescriptionTextChangeEffects(getParam("Description"), this);
             if (desc.contains("CARDNAME")) {
-                desc = TextUtil.fastReplace(desc, "CARDNAME", getHostCard().getName());
+                desc = TextUtil.fastReplace(desc, "CARDNAME", getHostCard().toString());
             }
             return desc;
         } else {

@@ -2,8 +2,6 @@ package forge.game.player;
 
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import forge.card.CardType;
 import forge.card.mana.ManaAtom;
@@ -12,6 +10,7 @@ import forge.game.card.CounterType;
 import forge.util.TextUtil;
 import org.apache.commons.lang3.StringUtils;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableMultiset;
 import com.google.common.collect.Iterables;
@@ -93,7 +92,7 @@ public class PlayerView extends GameEntityView {
     }
 
     public FCollectionView<PlayerView> getOpponents() {
-        return Objects.firstNonNull(this.<FCollectionView<PlayerView>>get(TrackableProperty.Opponents), new FCollection<PlayerView>());
+        return MoreObjects.firstNonNull(this.<FCollectionView<PlayerView>>get(TrackableProperty.Opponents), new FCollection<PlayerView>());
     }
     void updateOpponents(Player p) {
         set(TrackableProperty.Opponents, PlayerView.getCollection(p.getOpponents()));
@@ -115,10 +114,6 @@ public class PlayerView extends GameEntityView {
             opponents = Collections.emptyList();
         }
         for (final PlayerView p : Iterables.concat(Collections.singleton(this), opponents)) {
-            final int cast = p.getCommanderCast(v);
-            if (cast > 0) {
-                sb.append(String.format("Commander cast from commander zone: %d\r\n", cast));
-            }
             final int damage = p.getCommanderDamage(v);
             if (damage > 0) {
                 final String text = TextUtil.concatWithSpace("Commander damage to", p.toString(),"from", TextUtil.addSuffix(v.getName(),":"));
@@ -144,9 +139,6 @@ public class PlayerView extends GameEntityView {
         final List<String> info = Lists.newArrayListWithExpectedSize(opponents.size());
         info.add(TextUtil.concatWithSpace("Commanders:", Lang.joinHomogenous(commanders)));
         for (final PlayerView p : Iterables.concat(Collections.singleton(this), opponents)) {
-            if (p.getCommanders() == null) {
-                continue;
-            }
             for (final CardView v : p.getCommanders()) {
                 final int damage = this.getCommanderDamage(v);
                 if (damage > 0) {
@@ -157,10 +149,6 @@ public class PlayerView extends GameEntityView {
                         text = TextUtil.concatWithSpace("Commander damage from", TextUtil.addSuffix(p.toString(),"'s"), TextUtil.addSuffix(v.toString(),":"));
                     }
                     info.add(TextUtil.concatWithSpace(text,TextUtil.addSuffix(String.valueOf(damage),"\r\n")));
-                }
-                final int cast = this.getCommanderCast(v);
-                if (cast > 0) {
-                    info.add(String.format("Cast %s from commander zone: %d\r\n", v, cast));
                 }
             }
         }
@@ -214,22 +202,6 @@ public class PlayerView extends GameEntityView {
         return hasUnlimitedHandSize() ? "unlimited" : String.valueOf(getMaxHandSize());
     }
 
-    public int getLandsPlayedThisTurn() {
-        return get(TrackableProperty.LandsPlayedThisTurn);
-    }
-
-    public void updateLandsPlayedThisTurn(Player p) {
-        set(TrackableProperty.LandsPlayedThisTurn, p.getLandsPlayedThisTurn());
-    }
-
-    public int getSpellsCastThisTurn() {
-        return get(TrackableProperty.SpellsCastThisTurn);
-    }
-
-    public void updateSpellsCastThisTurn(Player p) {
-        set(TrackableProperty.SpellsCastThisTurn, p.getSpellsCastThisTurn());
-    }
-
     public int getNumDrawnThisTurn() {
         return get(TrackableProperty.NumDrawnThisTurn);
     }
@@ -245,22 +217,6 @@ public class PlayerView extends GameEntityView {
         final ImmutableMultiset<String> kws = getKeywords();
         synchronized (kws) {
             allKws = Lists.newArrayList(kws.elementSet());
-
-            int adjustLand = 0;
-            Pattern pattern = Pattern.compile("AdjustLandPlays:(\\d+)");
-            for(String s : kws) {
-                Matcher matcher = pattern.matcher(s);
-                if(matcher.find()) {
-                    String num = matcher.group(1);
-                    int i = Integer.parseInt(num);
-                    adjustLand += i;
-                    allKws.remove(s);
-                }
-            }
-
-            if(adjustLand > 0) {
-                allKws.add("AdjustLandPlays:" + adjustLand);
-            }
         }
         return allKws;
     }
@@ -290,20 +246,6 @@ public class PlayerView extends GameEntityView {
             map.put(entry.getKey().getId(), entry.getValue());
         }
         set(TrackableProperty.CommanderDamage, map);
-    }
-
-    public int getCommanderCast(CardView commander) {
-        Map<Integer, Integer> map = get(TrackableProperty.CommanderCast);
-        if (map == null) { return 0; }
-        Integer cast = map.get(commander.getId());
-        return cast == null ? 0 : cast.intValue();
-    }
-    void updateCommanderCast(Player p) {
-        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
-        for (Entry<Card, Integer> entry : p.getCommanderCast()) {
-            map.put(entry.getKey().getId(), entry.getValue());
-        }
-        set(TrackableProperty.CommanderCast, map);
     }
 
     public PlayerView getMindSlaveMaster() {
@@ -473,8 +415,6 @@ public class PlayerView extends GameEntityView {
         }
 
         details.add(TextUtil.concatNoSpace("Cards in hand: ", TextUtil.addSuffix(String.valueOf(getHandSize()),"/"), getMaxHandString()));
-        details.add(TextUtil.concatWithSpace("Lands played this turn:", String.valueOf(getLandsPlayedThisTurn())));
-        details.add(TextUtil.concatWithSpace("Spells cast this turn:", String.valueOf(getSpellsCastThisTurn())));
         details.add(TextUtil.concatWithSpace("Cards drawn this turn:", String.valueOf(getNumDrawnThisTurn())));
         details.add(TextUtil.concatWithSpace("Damage prevention:", String.valueOf(getPreventNextDamage())));
         final String keywords = Lang.joinHomogenous(getDisplayableKeywords());

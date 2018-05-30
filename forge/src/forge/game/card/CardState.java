@@ -17,15 +17,17 @@
  */
 package forge.game.card;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import forge.card.*;
 import forge.card.mana.ManaCost;
 import forge.card.mana.ManaCostParser;
+import forge.game.CardTraitBase;
 import forge.game.ForgeScript;
 import forge.game.GameObject;
 import forge.game.card.CardView.CardStateView;
+import forge.game.keyword.Keyword;
 import forge.game.keyword.KeywordCollection;
 import forge.game.keyword.KeywordInterface;
 import forge.game.player.Player;
@@ -58,7 +60,7 @@ public class CardState extends GameObject {
     private String imageKey = "";
     private Map<String, String> sVars = Maps.newTreeMap();
 
-    private List<KeywordInterface> cachedKeywords = Lists.newArrayList();
+    private KeywordCollection cachedKeywords = new KeywordCollection();
     
     private CardRarity rarity = CardRarity.Unknown;
     private String setCode = CardEdition.UNKNOWN.getCode();
@@ -113,6 +115,18 @@ public class CardState extends GameObject {
         view.updateType(this);
     }
 
+    public final void removeType(final CardType.Supertype st) {
+        if (type.remove(st)) {
+            view.updateType(this);
+        }
+    }
+    
+    public final void setCreatureTypes(Collection<String> ctypes) {
+        if (type.setCreatureTypes(ctypes)) {
+            view.updateType(this);
+        }
+    }
+
     public final ManaCost getManaCost() {
         return manaCost;
     }
@@ -153,12 +167,19 @@ public class CardState extends GameObject {
     }
 
     public final Collection<KeywordInterface> getCachedKeywords() {
-        return cachedKeywords;
+        return cachedKeywords.getValues();
     }
 
-    public final void setCachedKeywords(final Collection<KeywordInterface> col) {
-        cachedKeywords.clear();
-        cachedKeywords.addAll(col);
+    public final Collection<KeywordInterface> getCachedKeyword(final Keyword keyword) {
+        return cachedKeywords.getValues(keyword);
+    }
+
+    public final void setCachedKeywords(final KeywordCollection col) {
+        cachedKeywords = col;
+    }
+
+    public final boolean hasKeyword(Keyword key) {
+        return cachedKeywords.contains(key);
     }
 
     public final Collection<KeywordInterface> getIntrinsicKeywords() {
@@ -509,5 +530,18 @@ public class CardState extends GameObject {
         }
     }
     
-    
+    public void updateChangedText() {
+        final List<CardTraitBase> allAbs = ImmutableList.<CardTraitBase>builder()
+            .addAll(manaAbilities)
+            .addAll(nonManaAbilities)
+            .addAll(triggers)
+            .addAll(replacementEffects)
+            .addAll(staticAbilities)
+            .build();
+        for (final CardTraitBase ctb : allAbs) {
+            if (ctb.isIntrinsic()) {
+                ctb.changeText();
+            }
+        }
+    }
 }

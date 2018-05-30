@@ -127,8 +127,7 @@ public class GameView extends TrackableObject {
     void updateGameOver(final Game game) {
         set(TrackableProperty.GameOver, game.isGameOver());
         set(TrackableProperty.MatchOver, game.getMatch().isMatchOver());
-        final Player winner = game.getOutcome().getWinningPlayer();
-        set(TrackableProperty.WinningPlayerName, winner == null ? null : winner.getName());
+        set(TrackableProperty.WinningPlayerName, game.getOutcome().getWinningLobbyPlayer().getName());
         set(TrackableProperty.WinningTeam, game.getOutcome() == null ? -1 : game.getOutcome().getWinningTeam());
     }
 
@@ -206,20 +205,7 @@ public class GameView extends TrackableObject {
         return null;
     }
 
-    public Deck getOpponentDeck(final String lobbyPlayerName, int opponentIndex) {
-        int index = 0;
-        for (final Player p : game.getRegisteredPlayers()) {
-            if (!p.getLobbyPlayer().getName().equals(lobbyPlayerName)) {
-                if(index == opponentIndex) {
-                    return p.getRegisteredPlayer().getDeck();
-                }
-                index++;
-            }
-        }
-        return null;
-    }
-
     public AnteResult getAnteResult(PlayerView player) {
-        return game.getOutcome().anteResult.get(game.getPlayer(player));
+        return game.getOutcome().anteResult.get(game.getPlayer(player).getRegisteredPlayer());
     }
 }

@@ -68,6 +68,26 @@ public enum DeckFormat {
             return true;
         }
     }),
+    Pauper      ( Range.is(60),                         Range.between(0, 10), 1),
+    Brawl      ( Range.is(59), Range.between(0, 15), 1, null, new Predicate<PaperCard>() {
+        private final Set<String> bannedCards = new HashSet<String>(Arrays.asList(
+                "Baral, Chief of Compliance","Smuggler's Copter","Sorcerous Spyglass"));
+        @Override
+        public boolean apply(PaperCard card) {
+            //why do we need to hard code the bannings here - they are defined in the GameFormat predicate used below
+            if (bannedCards.contains(card.getName())) {
+                return false;
+            }
+            return StaticData.instance() == null ? false : StaticData.instance().getBrawlPredicate().apply(card);
+        }
+    }) {
+        private final ImmutableSet<String> bannedCommanders = ImmutableSet.of("Baral, Chief of Compliance");
+
+        @Override
+        public boolean isLegalCommander(CardRules rules) {
+            return super.isLegalCommander(rules) && !bannedCommanders.contains(rules.getName());
+        }
+        },
     TinyLeaders    ( Range.is(49),                         Range.between(0, 10), 1, new Predicate<CardRules>() {
         private final Set<String> bannedCards = new HashSet<String>(Arrays.asList(
                 "Ancestral Recall", "Balance", "Black Lotus", "Black Vise", "Channel", "Chaos Orb", "Contract From Below", "Counterbalance", "Darkpact", "Demonic Attorney", "Demonic Tutor", "Earthcraft", "Edric, Spymaster of Trest", "Falling Star",
@@ -117,21 +137,43 @@ public enum DeckFormat {
     private final Range<Integer> sideRange; // null => no check
     private final int maxCardCopies;
     private final Predicate<CardRules> cardPoolFilter;
+    private final Predicate<PaperCard> paperCardPoolFilter;
     private final static String ADVPROCLAMATION = "Advantageous Proclamation";
     private final static String SOVREALM = "Sovereign's Realm";
 
-    private DeckFormat(Range<Integer> mainRange0, Range<Integer> sideRange0, int maxCardCopies0) {
-        this(mainRange0, sideRange0, maxCardCopies0, null);
+    private static final List<String> limitExceptions = Arrays.asList(
+            new String[]{"Relentless Rats", "Shadowborn Apostle", "Rat Colony"});
+
+    public static List<String> getLimitExceptions(){
+        return limitExceptions;
     }
-    private DeckFormat(Range<Integer> mainRange0, Range<Integer> sideRange0, int maxCardCopies0, Predicate<CardRules> cardPoolFilter0) {
+
+    private DeckFormat(Range<Integer> mainRange0, Range<Integer> sideRange0, int maxCardCopies0, Predicate<CardRules> cardPoolFilter0, Predicate<PaperCard> paperCardPoolFilter0) {
         mainRange = mainRange0;
         sideRange = sideRange0;
         maxCardCopies = maxCardCopies0;
         cardPoolFilter = cardPoolFilter0;
+        paperCardPoolFilter = paperCardPoolFilter0;
+    }
+
+    private DeckFormat(Range<Integer> mainRange0, Range<Integer> sideRange0, int maxCardCopies0, Predicate<CardRules> cardPoolFilter0) {
+        mainRange = mainRange0;
+        sideRange = sideRange0;
+        maxCardCopies = maxCardCopies0;
+        paperCardPoolFilter = null;
+        cardPoolFilter = cardPoolFilter0;
+    }
+
+    private DeckFormat(Range<Integer> mainRange0, Range<Integer> sideRange0, int maxCardCopies0) {
+        mainRange = mainRange0;
+        sideRange = sideRange0;
+        maxCardCopies = maxCardCopies0;
+        paperCardPoolFilter = null;
+        cardPoolFilter = null;
     }
 
     private boolean hasCommander() {
-        return this == Commander || this == TinyLeaders;
+        return this == Commander || this == TinyLeaders || this == Brawl;
     }
 
     /**
@@ -206,44 +248,44 @@ public enum DeckFormat {
                 return "too many commanders";
             }
 
-            // Bring values up to 100
-            min++;
-            max++;
-
             byte cmdCI = 0;
-            Boolean hasPartner = null;
             for (PaperCard pc : commanders) {
-                // For each commander decrement size by 1 (99 for 1, 98 for 2)
-                min--;
-                max--;
-
                 if (!isLegalCommander(pc.getRules())) {
                     return "has an illegal commander";
                 }
-
-                if (hasPartner != null && !hasPartner) {
-                    return "has an illegal commander partnership";
-                }
-
-                boolean isPartner = false;
-                for(String s : pc.getRules().getMainPart().getKeywords()) {
-                    if (s.equals("Partner")) {
-                        isPartner = true;
-                        break;
-                    }
-                }
-                if (hasPartner == null) {
-                    hasPartner = isPartner;
-                } else if (!isPartner) {
-                    return "has an illegal commander partnership";
-                }
-
                 cmdCI |= pc.getRules().getColorIdentity().getColor();
+            }
+
+            // special check for Partner
+            if (commanders.size() == 2) {
+                // two commander = 98 cards
+                min--;
+                max--;
+
+                PaperCard a = commanders.get(0);
+                PaperCard b = commanders.get(1);
+
+                if (a.getRules().hasKeyword("Partner") && b.getRules().hasKeyword("Partner")) {
+                    // normal partner commander
+                } else if (a.getName().equals(b.getRules().getParterWith())
+                        && b.getName().equals(a.getRules().getParterWith())) {
+                    // paired partner commander
+                } else {
+                    return "has an illegal commander partnership";
+                }
             }
 
             final List<PaperCard> erroneousCI = new ArrayList<PaperCard>();
 
+            Set<String> basicLandNames = new HashSet<>();
             for (final Entry<PaperCard, Integer> cp : deck.get(DeckSection.Main)) {
+                //If colourless commander allow one type of basic land
+                if (cmdCI == 0 && cp.getKey().getRules().getType().isBasicLand()){
+                    basicLandNames.add(cp.getKey().getName());
+                    if(basicLandNames.size() < 2){
+                        continue;
+                    }
+                }
                 if (!cp.getKey().getRules().getColorIdentity().hasNoColorsExcept(cmdCI)) {
                     erroneousCI.add(cp.getKey());
                 }
@@ -297,10 +339,10 @@ public enum DeckFormat {
         if (maxCopies < Integer.MAX_VALUE) {
             //Must contain no more than 4 of the same card
             //shared among the main deck and sideboard, except
-            //basic lands, Shadowborn Apostle and Relentless Rats
+            //basic lands, Shadowborn Apostle, Relentless Rats and Rat Colony
 
             final CardPool allCards = deck.getAllCardsInASinglePool(hasCommander());
-            final ImmutableSet<String> limitExceptions = ImmutableSet.of("Relentless Rats", "Shadowborn Apostle");
+            final ImmutableSet<String> limitExceptions = ImmutableSet.of("Relentless Rats", "Shadowborn Apostle", "Rat Colony");
 
             // should group all cards by name, so that different editions of same card are really counted as the same card
             for (final Entry<String, Integer> cp : Aggregates.groupSumBy(allCards, PaperCard.FN_GET_NAME)) {
@@ -364,7 +406,16 @@ public enum DeckFormat {
 
     public IDeckGenPool getCardPool(IDeckGenPool basePool) {
         if (cardPoolFilter == null) {
-            return basePool;
+            if (paperCardPoolFilter == null) {
+                return basePool;
+            }
+            DeckGenPool filteredPool = new DeckGenPool();
+            for (PaperCard pc : basePool.getAllCards()) {
+                if (paperCardPoolFilter.apply(pc)) {
+                    filteredPool.add(pc);
+                }
+            }
+            return filteredPool;
         }
         DeckGenPool filteredPool = new DeckGenPool();
         for (PaperCard pc : basePool.getAllCards()) {
@@ -381,7 +432,10 @@ public enum DeckFormat {
 
     public boolean isLegalCard(PaperCard pc) {
         if (cardPoolFilter == null) {
-            return true;
+            if (paperCardPoolFilter == null) {
+                return true;
+            }
+            return paperCardPoolFilter.apply(pc);
         }
         return cardPoolFilter.apply(pc.getRules());
     }
@@ -389,6 +443,9 @@ public enum DeckFormat {
     public boolean isLegalCommander(CardRules rules) {
         if (cardPoolFilter != null && !cardPoolFilter.apply(rules)) {
             return false;
+        }
+        if(this.equals(DeckFormat.Brawl)) {
+            return rules.canBeBrawlCommander();
         }
         return rules.canBeCommander();
     }
@@ -409,6 +466,13 @@ public enum DeckFormat {
                 if (cardPoolFilter != null) {
                     for (final Entry<PaperCard, Integer> cp : deck.getAllCardsInASinglePool()) {
                         if (!cardPoolFilter.apply(cp.getKey().getRules())) {
+                            return false;
+                        }
+                    }
+                }
+                if (paperCardPoolFilter != null) {
+                    for (final Entry<PaperCard, Integer> cp : deck.getAllCardsInASinglePool()) {
+                        if (!paperCardPoolFilter.apply(cp.getKey())) {
                             return false;
                         }
                     }
@@ -449,6 +513,8 @@ public enum DeckFormat {
         for (final PaperCard p : commanders) {
             cmdCI |= p.getRules().getColorIdentity().getColor();
         }
-        return Predicates.compose(Predicates.or(CardRulesPredicates.hasColorIdentity(cmdCI), CardRulesPredicates.hasKeyword("Partner")), PaperCard.FN_GET_RULES);
+        // TODO : check commander what kind of Partner it needs
+        return Predicates.compose(Predicates.or(CardRulesPredicates.hasColorIdentity(cmdCI),
+                CardRulesPredicates.Presets.CAN_BE_PARTNER_COMMANDER), PaperCard.FN_GET_RULES);
     }
 }

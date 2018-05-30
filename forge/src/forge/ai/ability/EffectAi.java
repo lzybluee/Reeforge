@@ -1,7 +1,6 @@
 package forge.ai.ability;
 
 import java.util.List;
-import java.util.Random;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
@@ -18,6 +17,7 @@ import forge.game.GlobalRuleChange;
 import forge.game.ability.ApiType;
 import forge.game.card.*;
 import forge.game.combat.CombatUtil;
+import forge.game.keyword.Keyword;
 import forge.game.phase.PhaseHandler;
 import forge.game.phase.PhaseType;
 import forge.game.player.Player;
@@ -31,8 +31,7 @@ public class EffectAi extends SpellAbilityAi {
     @Override
     protected boolean canPlayAI(final Player ai,final SpellAbility sa) {
         final Game game = ai.getGame();
-        final Random r = MyRandom.getRandom();
-        boolean randomReturn = r.nextFloat() <= .6667;
+        boolean randomReturn = MyRandom.getRandom().nextFloat() <= .6667;
         String logic = "";
 
         if (sa.hasParam("AILogic")) {
@@ -140,7 +139,8 @@ public class EffectAi extends SpellAbilityAi {
             	final int count = CardLists.count(ai.getCardsIn(ZoneType.Hand), new Predicate<Card>() {
                     @Override
                     public boolean apply(final Card c) {
-                        return (c.isInstant() || c.isSorcery()) && !c.hasKeyword("Rebound") && ComputerUtil.hasReasonToPlayCardThisTurn(ai, c);
+                        return (c.isInstant() || c.isSorcery()) && !c.hasKeyword(Keyword.REBOUND)
+                                && ComputerUtil.hasReasonToPlayCardThisTurn(ai, c);
                     }
                 });
 
@@ -150,6 +150,11 @@ public class EffectAi extends SpellAbilityAi {
 
                 randomReturn = true;
             } else if (logic.equals("Always")) {
+                randomReturn = true;
+            } else if (logic.equals("Main1")) {
+                if (phase.getPhase().isBefore(PhaseType.MAIN1)) {
+                    return false;
+                }
                 randomReturn = true;
             } else if (logic.equals("Main2")) {
                 if (phase.getPhase().isBefore(PhaseType.MAIN2)) {

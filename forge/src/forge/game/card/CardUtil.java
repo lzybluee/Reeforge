@@ -61,7 +61,7 @@ public final class CardUtil {
             "Transmute", "Replicate", "Recover", "Suspend", "Aura swap",
             "Fortify", "Transfigure", "Champion", "Evoke", "Prowl", "IfReach",
             "Reinforce", "Unearth", "Level up", "Miracle", "Overload",
-            "Scavenge", "Bestow", "Outlast", "Dash", "Renown", "Surge", "Emerge").build();
+            "Scavenge", "Bestow", "Outlast", "Dash", "Renown", "Surge", "Emerge", "Hexproof:").build();
     /** List of keyword endings of keywords that could be modified by text changes. */
     public static final ImmutableList<String> modifiableKeywordEndings = ImmutableList.<String>builder().add(
             "walk", "cycling", "offering").build();
@@ -301,20 +301,6 @@ public final class CardUtil {
             }
         }
         return res;
-    }
-
-    public static CardState getExiledFaceDownCharacteristic(Card c) {
-        final CardType type = new CardType(c.getPaperCard().getRules().getType());
-
-        final CardState ret = new CardState(c.getView().createAlternateState(CardStateName.FaceDown), c);
-        ret.setBasePower(0);
-        ret.setBaseToughness(0);
-
-        ret.setName("");
-        ret.setType(type);
-
-        ret.setImageKey(ImageKeys.getTokenKey(ImageKeys.MORPH_IMAGE));
-        return ret;
     }
 
     public static CardState getFaceDownCharacteristic(Card c) {

@@ -58,14 +58,11 @@ public class FloatingCardArea extends CardArea {
     private static final ForgePreferences prefs = FModel.getPreferences();
     private static final Map<Integer, FloatingCardArea> floatingAreas = new HashMap<Integer, FloatingCardArea>();
 
-    private boolean autoClose = true;
-
     private static int getKey(final PlayerView player, final ZoneType zone) {
         return 40 * player.getId() + zone.hashCode();
     }
-    public static void showOrHide(final CMatchUI matchUI, final PlayerView player, final ZoneType zone, final boolean auto) {
+    public static void showOrHide(final CMatchUI matchUI, final PlayerView player, final ZoneType zone) {
         final FloatingCardArea cardArea = _init(matchUI, player, zone);
-        cardArea.autoClose = auto;
         cardArea.showOrHideWindow();
     }
     public static void show(final CMatchUI matchUI, final PlayerView player, final ZoneType zone) {
@@ -84,24 +81,7 @@ public class FloatingCardArea extends CardArea {
         return cardArea;
     }
     public static CardPanel getCardPanel(final CMatchUI matchUI, final CardView card) {
-        FloatingCardArea window = _init(matchUI, card.getController(), ZoneType.Flashback);
-        CardPanel cardPanel = window.getCardPanel(card.getId());
-        if(cardPanel == null) {
-            for(PlayerView player : card.getController().getOpponents()) {
-                window = _init(matchUI, player, ZoneType.Flashback);
-                cardPanel = window.getCardPanel(card.getId());
-                if(cardPanel != null) {
-                    cardPanel.setFlashbackPlayer(player);
-                    break;
-                }
-            }
-        } else {
-            cardPanel.setFlashbackPlayer(card.getController());
-        }
-        if(cardPanel == null) {
-            window = _init(matchUI, card.getController(), card.getZone());
-            cardPanel = window.getCardPanel(card.getId());
-        }
+        final FloatingCardArea window = _init(matchUI, card.getController(), card.getZone());
         return window.getCardPanel(card.getId());
     }
     public static void refresh(final PlayerView player, final ZoneType zone) {
@@ -317,7 +297,7 @@ public class FloatingCardArea extends CardArea {
 
         //if window had cards and now doesn't, hide window
         //(e.g. cast final card from Flashback zone)
-        if (hadCardPanels && cardPanels.size() == 0 && autoClose) {
+        if (hadCardPanels && cardPanels.size() == 0) {
             window.setVisible(false);
         }
     }

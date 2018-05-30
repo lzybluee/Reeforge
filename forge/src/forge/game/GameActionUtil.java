@@ -20,27 +20,23 @@ package forge.game;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import forge.card.MagicColor;
+import com.google.common.collect.Sets;
+
 import forge.card.mana.ManaCostParser;
-import forge.game.ability.AbilityFactory;
-import forge.game.ability.AbilityFactory.AbilityRecordType;
 import forge.game.ability.AbilityUtils;
 import forge.game.ability.ApiType;
 import forge.game.card.*;
 import forge.game.card.CardPlayOption.PayManaCost;
 import forge.game.cost.Cost;
+import forge.game.keyword.Keyword;
 import forge.game.keyword.KeywordInterface;
-import forge.game.mana.ManaCostBeingPaid;
 import forge.game.player.Player;
 import forge.game.spellability.*;
 import forge.game.zone.ZoneType;
 import forge.util.TextUtil;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Vector;
 
 
 /**
@@ -52,87 +48,10 @@ import java.util.Vector;
  * @version $Id$
  */
 public final class GameActionUtil {
-    // Cache these instead of generating them on the fly, to avoid excessive allocations every time
-    // static abilities are checked.
-    @SuppressWarnings("unchecked")
-    private static final Map<String, String>[] BASIC_LAND_ABILITIES_PARAMS = new Map[MagicColor.WUBRG.length];
-    private static final AbilityRecordType[] BASIC_LAND_ABILITIES_TYPES = new AbilityRecordType[MagicColor.WUBRG.length];
-    static {
-        for (int i = 0; i < MagicColor.WUBRG.length; i++ ) {
-            String color = MagicColor.toShortString(MagicColor.WUBRG[i]);
-            String abString  = "AB$ Mana | Cost$ T | Produced$ " + color +
-                    " | SpellDescription$ Add {" + color + "} to your mana pool.";
-            Map<String, String> mapParams = AbilityFactory.getMapParams(abString);
-            BASIC_LAND_ABILITIES_PARAMS[i] = mapParams;
-            BASIC_LAND_ABILITIES_TYPES[i] = AbilityRecordType.getRecordType(mapParams);
-        }
-    }
 
     private GameActionUtil() {
         throw new AssertionError();
     }
-
-    /**
-     * Gets the st land mana abilities.
-     * @param game
-     * 
-     * @return the stLandManaAbilities
-     */
-    public static void grantBasicLandsManaAbilities(List<Card> lands) {
-        HashMap<Card, Vector<String>> removedAbility = new HashMap<Card, Vector<String>>();
-        HashMap<Card, Vector<String>> addedAbility = new HashMap<Card, Vector<String>>();
-        
-        for (final Card land : lands) {
-            removedAbility.put(land, new Vector<String>());
-            addedAbility.put(land, new Vector<String>());
-        }
-
-        // remove all abilities granted by this Command
-        for (final Card land : lands) {
-            List<SpellAbility> origManaAbs = Lists.newArrayList(land.getManaAbilities());
-            // will get comodification exception without a different list
-            for (final SpellAbility sa : origManaAbs) {
-                if (sa.isBasicLandAbility()) {
-                    land.getCurrentState().removeManaAbility(sa);
-                    removedAbility.get(land).add(sa.getDescription());
-                }
-            }
-        }
-
-        // add all appropriate mana abilities based on current types
-        for (int i = 0; i < MagicColor.WUBRG.length; i++ ) {
-            String landType = MagicColor.Constant.BASIC_LANDS.get(i);
-            Map<String, String> mapParams = BASIC_LAND_ABILITIES_PARAMS[i];
-            AbilityRecordType type = BASIC_LAND_ABILITIES_TYPES[i];
-            for (final Card land : lands) {
-                if (land.getType().hasSubtype(landType)) {
-                    final SpellAbility sa = AbilityFactory.getAbility(mapParams, type, land, null);
-                    sa.setBasicLandAbility(true);
-                    land.getCurrentState().addManaAbility(sa);
-                    addedAbility.get(land).add(sa.getDescription());
-                }
-            }
-        }
-
-        for (final Card land : lands) {
-            Vector<String> removed = removedAbility.get(land);
-            Vector<String> added = addedAbility.get(land);
-            if(removed.size() != added.size()) {
-                land.updateAbilityText();
-                continue;
-            }
-            boolean changed = false;
-            for(String s : removed) {
-                if(!added.contains(s)) {
-                    changed = true;
-                    break;
-                }
-            }
-            if(changed) {
-                land.updateAbilityText();
-            }
-        }
-    } // stLandManaAbilities
 
     /**
      * <p>
@@ -150,17 +69,44 @@ public final class GameActionUtil {
     public static final List<SpellAbility> getAlternativeCosts(final SpellAbility sa, final Player activator) {
         final List<SpellAbility> alternatives = Lists.newArrayList();
 
-        final Card source = sa.getHostCard();
+        Card source = sa.getHostCard();
+        final Game game = source.getGame();
 
         if (sa.isSpell()) {
+            boolean lkicheck = false;
+            if (sa.hasParam("Bestow") && !source.isBestowed() && !source.isInZone(ZoneType.Battlefield)) {
+                if (!source.isLKI()) {
+                    source = CardUtil.getLKICopy(source);
+                }
+
+                source.animateBestow(false);
+                lkicheck = true;
+            } else if (sa.isCastFaceDown()) {
+                // need a copy of the card to turn facedown without trigger anything
+                if (!source.isLKI()) {
+                    source = CardUtil.getLKICopy(source);
+                }
+                source.turnFaceDownNoUpdate();
+                lkicheck = true;
+            }
+
+            if (lkicheck) {
+                CardCollection preList = new CardCollection(source);
+                game.getAction().checkStaticAbilities(false, Sets.newHashSet(source), preList);
+            }
+
             for (CardPlayOption o : source.mayPlay(activator)) {
+                // do not appear if it can be cast with SorcerySpeed
+                if (o.getAbility().hasParam("MayPlayNotSorcerySpeed") && activator.couldCastSorcery(sa)) {
+                    continue;
+                }
                 // non basic are only allowed if PayManaCost is yes
                 if (!sa.isBasicSpell() && o.getPayManaCost() == PayManaCost.NO) {
                     continue;
                 }
                 final Card host = o.getHost();
 
-                final SpellAbility newSA = sa.copy();
+                final SpellAbility newSA = sa.copy(activator);
                 final SpellAbilityRestriction sar = newSA.getRestrictions();
                 if (o.isWithFlash()) {
                 	sar.setInstantSpeed(true);
@@ -209,9 +155,17 @@ public final class GameActionUtil {
                         sb.append(host);
                     }
                 }
+                if (o.getAbility().hasParam("MayPlayText")) {
+                    sb.append(" (").append(o.getAbility().getParam("MayPlayText")).append(")");
+                }
                 sb.append(o.toString(false));
                 newSA.setDescription(sb.toString());
                 alternatives.add(newSA);
+            }
+
+            // reset static abilities
+            if (lkicheck) {
+                game.getAction().checkStaticAbilities(false);
             }
         }
 
@@ -241,7 +195,7 @@ public final class GameActionUtil {
                     continue;
                 }
 
-                final SpellAbility flashback = sa.copy();
+                final SpellAbility flashback = sa.copy(activator);
                 flashback.setFlashBackAbility(true);
 
                 flashback.getRestrictions().setZone(ZoneType.Graveyard);
@@ -252,19 +206,9 @@ public final class GameActionUtil {
                 }
                 alternatives.add(flashback);
             }
-            if (sa.isSpell() && keyword.equals("You may cast CARDNAME as though it had flash if you pay {2} more to cast it.")) {
-                final SpellAbility newSA = sa.copy();
-                newSA.setBasicSpell(false);
-                ManaCostBeingPaid newCost = new ManaCostBeingPaid(source.getManaCost());
-                newCost.increaseGenericMana(2);
-                final Cost actualcost = new Cost(newCost.toManaCost(), false);
-                newSA.setPayCosts(actualcost);
-                newSA.getRestrictions().setInstantSpeed(true);
-                newSA.setDescription(sa.getDescription() + " (by paying " + actualcost.toSimpleString() + " instead of its mana cost)");
-                alternatives.add(newSA);
-            }
+
             if (sa.hasParam("Equip") && sa instanceof AbilityActivated && keyword.equals("EquipInstantSpeed")) {
-                final SpellAbility newSA = sa.copy();
+                final SpellAbility newSA = sa.copy(activator);
                 SpellAbilityRestriction sar = newSA.getRestrictions();
                 sar.setSorcerySpeed(false);
                 sar.setInstantSpeed(true);
@@ -315,6 +259,10 @@ public final class GameActionUtil {
                     final Cost cost = new Cost("Discard<1/Land>", false);
                     costs.add(new OptionalCostValue(OptionalCost.Retrace, cost));
                 }
+            } else if (keyword.startsWith("MayFlashCost")) {
+                String[] k = keyword.split(":");
+                final Cost cost = new Cost(k[1], false);
+                costs.add(new OptionalCostValue(OptionalCost.Flash, cost));
             }
             
             // Surge while having OptionalCost is none of them
@@ -340,6 +288,8 @@ public final class GameActionUtil {
             case Retrace:
                 result.getRestrictions().setZone(ZoneType.Graveyard);
                 break;
+            case Flash:
+                result.getRestrictions().setInstantSpeed(true);
             default:
                 break;
             }
@@ -394,8 +344,10 @@ public final class GameActionUtil {
      * @param original
      *            the original sa
      * @return an ArrayList<SpellAbility>.
+     * 
+     * @deprecated only used by AI, replace it with new functions in AI
      */
-    public static List<SpellAbility> getOptionalCosts(final SpellAbility original) {
+    @Deprecated public static List<SpellAbility> getOptionalCosts(final SpellAbility original) {
         final List<SpellAbility> abilities = getAdditionalCostSpell(original);
 
         final Card source = original.getHostCard();
@@ -414,6 +366,23 @@ public final class GameActionUtil {
                     newSA.setPayCosts(new Cost(keyword.substring(8), false).add(newSA.getPayCosts()));
                     newSA.setDescription(newSA.getDescription() + " (with Buyback)");
                     newSA.addOptionalCost(OptionalCost.Buyback);
+                    if (newSA.canPlay()) {
+                        abilities.add(i, newSA);
+                        i++;
+                    }
+                }
+            } else if (keyword.startsWith("MayFlashCost")) {
+                // this is there for the AI
+                if ( source.getGame().getPhaseHandler().isPlayerTurn(source.getController())) {
+                    continue; // don't cast it with additional flash cost during AI's own turn, commonly a waste of mana
+                }
+                final String[] k = keyword.split(":");
+                for (int i = 0; i < abilities.size(); i++) {
+                    final SpellAbility newSA = abilities.get(i).copy();
+                    newSA.setBasicSpell(false);
+                    newSA.setPayCosts(new Cost(k[1], false).add(newSA.getPayCosts()));
+                    newSA.setDescription(newSA.getDescription() + " (as though it had flash)");
+                    newSA.getRestrictions().setInstantSpeed(true);
                     if (newSA.canPlay()) {
                         abilities.add(i, newSA);
                         i++;
@@ -462,8 +431,8 @@ public final class GameActionUtil {
             }
         }
 
-        if (source.hasKeyword("Conspire")) {
-            int amount = source.getAmountOfKeyword("Conspire");
+        if (source.hasKeyword(Keyword.CONSPIRE)) {
+            int amount = source.getAmountOfKeyword(Keyword.CONSPIRE);
             for (int kwInstance = 1; kwInstance <= amount; kwInstance++) {
                 for (int i = 0; i < abilities.size(); i++) {
                     final SpellAbility newSA = abilities.get(i).copy();

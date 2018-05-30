@@ -7,8 +7,6 @@ import com.google.common.collect.Iterables;
 import forge.game.GameEntity;
 import forge.game.card.Card;
 import forge.game.card.CardView;
-import forge.game.player.Player;
-import forge.game.player.PlayerView;
 import forge.game.spellability.SpellAbility;
 import forge.model.FModel;
 import forge.player.PlayerControllerHuman;
@@ -109,20 +107,16 @@ public abstract class InputSelectManyBase<T extends GameEntity> extends InputSyn
         this.message = message0;
     }
 
-    protected void onSelectStateChanged(final GameEntity ge, final boolean newState) {
-        if (ge instanceof Card) {
-            getController().getGui().setUsedToPay(CardView.get((Card) ge), newState); // UI supports card highlighting though this abstraction-breaking mechanism
-        } else if(ge instanceof Player) {
-            getController().getGui().setHighlighted(PlayerView.get((Player) ge), newState);
+    protected void onSelectStateChanged(final GameEntity c, final boolean newState) {
+        if (c instanceof Card) {
+            getController().getGui().setUsedToPay(CardView.get((Card) c), newState); // UI supports card highlighting though this abstraction-breaking mechanism
         }
     }
 
     private void resetUsedToPay() {
-        for (final GameEntity ge : getSelected()) {
-            if (ge instanceof Card) {
-                getController().getGui().setUsedToPay(CardView.get((Card) ge), false);
-            } else if(ge instanceof Player) {
-                getController().getGui().setHighlighted(PlayerView.get((Player) ge), false);
+        for (final GameEntity c : getSelected()) {
+            if (c instanceof Card) {
+                getController().getGui().setUsedToPay(CardView.get((Card) c), false);
             }
         }
     }

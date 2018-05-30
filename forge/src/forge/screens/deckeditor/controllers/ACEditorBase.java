@@ -178,9 +178,6 @@ public abstract class ACEditorBase<TItem extends InventoryItem, TModel extends D
         None
     }
 
-    private static final List<String> limitExceptions = Arrays.asList(
-            new String[]{"Relentless Rats", "Shadowborn Apostle"});
-
     /**
      * @return pool of additions allowed to deck
      */
@@ -212,7 +209,7 @@ public abstract class ACEditorBase<TItem extends InventoryItem, TModel extends D
 
             int max;
             if (deck == null || card == null || card.getRules().getType().isBasic() ||
-                    limit == CardLimit.None || limitExceptions.contains(card.getName())) {
+                    limit == CardLimit.None || DeckFormat.getLimitExceptions().contains(card.getName())) {
                 max = Integer.MAX_VALUE;
             }
             else {
@@ -500,7 +497,6 @@ public abstract class ACEditorBase<TItem extends InventoryItem, TModel extends D
          * @param qty           a negative quantity will prompt the user for a number
          */
         private void addMakeFoil(final int qty) {
-            final int shortcutModifiers = 0;
             String label = "Foil " + SItemManagerUtil.getItemDisplayString(getItemManager().getSelectedItems(), qty, false);
 
             GuiUtils.addMenuItem(menu, label, null, new Runnable() {
@@ -526,7 +522,7 @@ public abstract class ACEditorBase<TItem extends InventoryItem, TModel extends D
                             cardManager.addItem(foiledCard, quantity);
                             cardManager.setSelectedItem(foiledCard);
                         }
-                    }, true, shortcutModifiers == 0);
+                    }, true, true);
         }
 
         private void addItem(final String verb, final String dest, final boolean toAlternate, final int qty, final int shortcutModifiers) {

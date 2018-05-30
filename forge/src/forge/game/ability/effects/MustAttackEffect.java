@@ -36,7 +36,7 @@ public class MustAttackEffect extends SpellAbilityEffect {
 
         for (final Player player : tgtPlayers) {
             sb.append("Creatures ").append(player).append(" controls attack ");
-            sb.append(defender).append(" during his or her next turn.");
+            sb.append(defender).append(" during their next turn.");
         }
         for (final Card c : getTargetCards(sa)) {
             sb.append(c).append(" must attack ");
@@ -70,7 +70,7 @@ public class MustAttackEffect extends SpellAbilityEffect {
         //System.out.println("Setting mustAttackEntity to: "+entity);
 
         for (final Player p : tgtPlayers) {
-            if (((tgt == null) || p.canBeTargetedBy(sa)) && p != entity) {
+            if ((tgt == null) || p.canBeTargetedBy(sa)) {
                 if (thisTurn) {
                     p.setMustAttackEntityThisTurn(entity);
                 } else {
@@ -80,7 +80,7 @@ public class MustAttackEffect extends SpellAbilityEffect {
             }
         }
         for (final Card c : getTargetCards(sa)) {
-            if (((tgt == null) || c.canBeTargetedBy(sa)) && c.getController() != entity) {
+            if ((tgt == null) || c.canBeTargetedBy(sa)) {
                 if (thisTurn) {
                     c.setMustAttackEntityThisTurn(entity);
                 } else {

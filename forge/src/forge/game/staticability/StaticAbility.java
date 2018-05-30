@@ -53,6 +53,7 @@ public class StaticAbility extends CardTraitBase implements Comparable<StaticAbi
     private final Set<StaticAbilityLayer> layers;
     private CardCollectionView ignoreEffectCards = new CardCollection();
     private final List<Player> ignoreEffectPlayers = Lists.newArrayList();
+    private int mayPlayTurn = 0;
 
     /**
      * <p>
@@ -125,7 +126,9 @@ public class StaticAbility extends CardTraitBase implements Comparable<StaticAbi
 
         if (hasParam("AddType") || hasParam("RemoveType")
                 || hasParam("RemoveCardTypes") || hasParam("RemoveSubTypes")
-                || hasParam("RemoveSuperTypes") || hasParam("RemoveCreatureTypes")) {
+                || hasParam("RemoveSuperTypes") || hasParam("RemoveLandTypes")
+                || hasParam("RemoveCreatureTypes") || hasParam("RemoveArtifactTypes")
+                || hasParam("RemoveEnchantmentTypes")) {
             layers.add(StaticAbilityLayer.TYPE);
         }
 
@@ -528,6 +531,7 @@ public class StaticAbility extends CardTraitBase implements Comparable<StaticAbi
             if (condition.equals("Hellbent") && !controller.hasHellbent()) return false;
             if (condition.equals("Metalcraft") && !controller.hasMetalcraft()) return false;
             if (condition.equals("Delirium") && !controller.hasDelirium()) return false;
+            if (condition.equals("Ferocious") && !controller.hasFerocious()) return false;
             if (condition.equals("Desert") && !controller.hasDesert()) return false;
             if (condition.equals("Blessing") && !controller.hasBlessing()) return false;
 
@@ -722,6 +726,19 @@ public class StaticAbility extends CardTraitBase implements Comparable<StaticAbi
      */
     public Set<StaticAbilityLayer> getLayers() {
         return layers;
+    }
+
+
+    public int getMayPlayTurn() {
+        return mayPlayTurn;
+    }
+
+    public void incMayPlayTurn() {
+        this.mayPlayTurn++;
+    }
+
+    public void resetMayPlayTurn() {
+        this.mayPlayTurn = 0;
     }
 
     @Override

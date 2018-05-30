@@ -237,10 +237,10 @@ public class ChooseGenericEffectAi extends SpellAbilityAi {
         } else if (logic.startsWith("Fabricate")) {
             final int n = Integer.valueOf(logic.substring("Fabricate".length()));
             if(spells.size() < 2) {
-                // If the creature is no longer on the battlefield, the option
-                // to add counters is already removed at this point. Return the
-                // only available option: create servo tokens.
-                return spells.get(0);
+				// If the creature is no longer on the battlefield, the option
+				// to add counters is already removed at this point. Return the
+				// only available option: create servo tokens.
+            	return spells.get(0);
             }
             SpellAbility counterSA = spells.get(0), tokenSA = spells.get(1);
 

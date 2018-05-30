@@ -10,6 +10,7 @@ import forge.game.Game;
 import forge.game.GameObject;
 import forge.game.ability.AbilityUtils;
 import forge.game.card.*;
+import forge.game.keyword.Keyword;
 import forge.game.keyword.KeywordInterface;
 import forge.game.mana.ManaCostBeingPaid;
 import forge.game.player.Player;
@@ -210,7 +211,7 @@ public class CostAdjustment {
         }
 
         if (sa.isSpell()) {
-            if (sa.getHostCard().hasKeyword("Delve")) {
+            if (sa.getHostCard().hasKeyword(Keyword.DELVE)) {
                 sa.getHostCard().clearDelved();
 
                 final CardCollection delved = new CardCollection();
@@ -223,7 +224,7 @@ public class CostAdjustment {
                         cardsToDelveOut.add(c);
                     } else if (!test) {
                         sa.getHostCard().addDelved(c);
-                        delved.add(game.getAction().exile(c, null, Maps.newHashMap()));
+                        delved.add(game.getAction().exile(c, null, null));
                     }
                 }
                 if (!delved.isEmpty()) {
@@ -235,10 +236,10 @@ public class CostAdjustment {
                     game.getTriggerHandler().runTrigger(TriggerType.ChangesZoneAll, runParams, false);
                 }
             }
-            if (sa.getHostCard().hasKeyword("Convoke")) {
+            if (sa.getHostCard().hasKeyword(Keyword.CONVOKE)) {
                 adjustCostByConvokeOrImprovise(cost, sa, false, test);
             }
-            if (sa.getHostCard().hasKeyword("Improvise")) {
+            if (sa.getHostCard().hasKeyword(Keyword.IMPROVISE)) {
                 adjustCostByConvokeOrImprovise(cost, sa, true, test);
             }
         } // isSpell
@@ -256,10 +257,6 @@ public class CostAdjustment {
             untappedCards = CardLists.filter(untappedCards, CardPredicates.Presets.ARTIFACTS);
         } else {
             untappedCards = CardLists.filter(untappedCards, CardPredicates.Presets.CREATURES);
-        }
-
-        if (untappedCards.size() == 0) {
-            return;
         }
 
         Map<Card, ManaCostShard> convokedCards = sa.getActivatingPlayer().getController().chooseCardsForConvokeOrImprovise(sa, cost.toManaCost(), untappedCards, improvise);
@@ -441,6 +438,10 @@ public class CostAdjustment {
         }
         if (params.containsKey("Activator") && ((activator == null)
                 || !activator.isValid(params.get("Activator"), controller, hostCard, sa))) {
+            return false;
+        }
+        if (params.containsKey("NonActivatorTurn") && ((activator == null)
+                || hostCard.getGame().getPhaseHandler().isPlayerTurn(activator))) {
             return false;
         }
 

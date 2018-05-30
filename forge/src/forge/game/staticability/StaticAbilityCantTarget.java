@@ -77,13 +77,22 @@ public class StaticAbilityCantTarget {
             return false;
         }
 
-        if (params.containsKey("SourceCanOnlyTarget")
+        if (spellAbility.getParam("ValidTgts")!=null &&
+                (params.containsKey("SourceCanOnlyTarget")
                 && (!spellAbility.getParam("ValidTgts").contains(params.get("SourceCanOnlyTarget"))
                     || spellAbility.getParam("ValidTgts").contains(","))
-                    || spellAbility.getParam("ValidTgts").contains("non" + params.get("SourceCanOnlyTarget"))) {
+                    || spellAbility.getParam("ValidTgts").contains("non" + params.get("SourceCanOnlyTarget")
+                    )
+                )
+           ){
             return false;
         }
 
+        if (params.containsKey("Hexproof") && (activator != null)) {
+            if (activator.hasKeyword("Spells and abilities you control can target hexproof creatures")) {
+                return false;
+            }
+        }
 
         return true;
     }

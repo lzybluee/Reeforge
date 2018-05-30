@@ -67,7 +67,7 @@ public enum FView {
 
 	private FView() {
 		frmSplash = new SplashFrame();
-		frmDocument.setTitle("Forge 1.6.7");
+		frmDocument.setTitle("Forge: " + BuildInfo.getVersionString());
 		JOptionPane.setRootFrame(frmDocument);
 	}
 
@@ -287,6 +287,11 @@ public enum FView {
 			updateWarningOverlay.add(updateWarningContentPanel, constraints);
 
 			btnRemindMeLater.setCommand(new UiCommand() {
+				/**
+			     * 
+			     */
+			    private static final long serialVersionUID = 1L;
+
 				@Override
 				public void run() {
 					SOverlayUtils.hideOverlay();
@@ -294,6 +299,11 @@ public enum FView {
 			});
 
 			btnDoNotRemindMe.setCommand(new UiCommand() {
+				/**
+			     * 
+			     */
+			    private static final long serialVersionUID = 1L;
+
 				@Override
 				public void run() {
 					if (FOptionPane.showConfirmDialog("Are you sure? You can re-enable this warning in Forge's general preferences.")) {
@@ -305,6 +315,11 @@ public enum FView {
 			});
 
 			btnDownloadLatestJava.setCommand(new UiCommand() {
+				/**
+			     * 
+			     */
+			    private static final long serialVersionUID = 1L;
+
 				@Override
 				public void run() {
 					try {

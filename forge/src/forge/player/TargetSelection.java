@@ -217,12 +217,8 @@ public class TargetSelection {
 
         final String msgDone = "[FINISH TARGETING]";
         if (this.getTgt().isMinTargetsChosen(this.ability.getHostCard(), this.ability)) {
-            if(choicesFiltered.isEmpty()) {
-                bTargetingDone = true;
-                return true;
-            } else {
-                choicesFiltered.add(msgDone);
-            }
+            // is there a more elegant way of doing this?
+            choicesFiltered.add(msgDone);
         }
         
         Object chosen = null;
@@ -284,14 +280,9 @@ public class TargetSelection {
                 Object madeChoice = mandatory ? controller.getGui().one(message, selectOptions) : controller.getGui().oneOrNone(message, selectOptions);
                 if (madeChoice == null) {
                     return false;
-                } else {
-                    selectOptions.remove(madeChoice);
                 }
                 if (madeChoice instanceof StackItemView) {
                     ability.getTargets().add(stackItemViewCache.get(madeChoice).getSpellAbility(true));
-                    if(selectOptions.isEmpty()) {
-                        bTargetingDone = true;
-                    }
                 }
                 else {// 'FINISH TARGETING' chosen 
                     bTargetingDone = true;

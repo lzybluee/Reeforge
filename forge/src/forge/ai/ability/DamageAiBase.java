@@ -8,6 +8,7 @@ import forge.game.Game;
 import forge.game.card.Card;
 import forge.game.card.CardCollectionView;
 import forge.game.card.CardPredicates;
+import forge.game.keyword.Keyword;
 import forge.game.phase.PhaseHandler;
 import forge.game.phase.PhaseType;
 import forge.game.player.Player;
@@ -24,12 +25,14 @@ public abstract class DamageAiBase extends SpellAbilityAi {
         // Do not target a player if they aren't below 75% of our health.
         // Unless Lifelink will cancel the damage to us
         Card hostcard = sa.getHostCard();
-        boolean lifelink = hostcard.hasKeyword("Lifelink");
-        for (Card ench : hostcard.getEnchantedBy(false)) {
-            // Treat cards enchanted by older cards with "when enchanted creature deals damage, gain life" as if they had lifelink.
-            if (ench.hasSVar("LikeLifeLink")) {
-                if ("True".equals(ench.getSVar("LikeLifeLink"))) {
-                    lifelink = true;
+        boolean lifelink = hostcard.hasKeyword(Keyword.LIFELINK);
+        if (!lifelink) {
+            for (Card ench : hostcard.getEnchantedBy(false)) {
+                // Treat cards enchanted by older cards with "when enchanted creature deals damage, gain life" as if they had lifelink.
+                if (ench.hasSVar("LikeLifeLink")) {
+                    if ("True".equals(ench.getSVar("LikeLifeLink"))) {
+                        lifelink = true;
+                    }
                 }
             }
         }
@@ -44,6 +47,11 @@ public abstract class DamageAiBase extends SpellAbilityAi {
     }
 
     protected boolean shouldTgtP(final Player comp, final SpellAbility sa, final int d, final boolean noPrevention) {
+        // TODO: once the "planeswalker redirection" rule is removed completely, just remove this code and
+        // remove the "burn Planeswalkers" code in the called method.
+        return shouldTgtP(comp, sa, d, noPrevention, false);
+    }
+    protected boolean shouldTgtP(final Player comp, final SpellAbility sa, final int d, final boolean noPrevention, final boolean noPlaneswalkerRedirection) {
         int restDamage = d;
         final Game game = comp.getGame();
         Player enemy = ComputerUtil.getOpponentFor(comp);
@@ -78,7 +86,9 @@ public abstract class DamageAiBase extends SpellAbilityAi {
         }
 
         // burn Planeswalkers
-        if (Iterables.any(enemy.getCardsIn(ZoneType.Battlefield), CardPredicates.Presets.PLANESWALKERS)) {
+        // TODO: Must be removed completely when the "planeswalker redirection" rule is removed.
+        if (!noPlaneswalkerRedirection
+                && Iterables.any(enemy.getCardsIn(ZoneType.Battlefield), CardPredicates.Presets.PLANESWALKERS)) {
             return true;
         }
 

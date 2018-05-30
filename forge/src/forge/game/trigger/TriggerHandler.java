@@ -61,7 +61,7 @@ public class TriggerHandler {
     public final void cleanUpTemporaryTriggers() {
         game.forEachCardInGame(new Visitor<Card>() {
             @Override
-            public void visit(Card c) {
+            public boolean visit(Card c) {
                 boolean changed = false;
                 for (int i = 0; i < c.getTriggers().size(); i++) {
                     Trigger trigger = c.getTriggers().get(i);
@@ -74,11 +74,12 @@ public class TriggerHandler {
                 if (changed) {
                     c.updateStateForView();
                 }
+                return true;
             }
         });
         game.forEachCardInGame(new Visitor<Card>() {
             @Override
-            public void visit(Card c) {
+            public boolean visit(Card c) {
                 boolean changed = false;
                 for (int i = 0; i < c.getTriggers().size(); i++) {
                     if (c.getTriggers().get(i).isSuppressed()) {
@@ -89,31 +90,13 @@ public class TriggerHandler {
                 if (changed) {
                     c.updateStateForView();
                 }
+                return true;
             }
         });
     }
 
     public final boolean hasDelayedTriggers() {
         return !delayedTriggers.isEmpty();
-    }
-
-    public final boolean hasDelayedTriggersDuringCombat() {
-        if(delayedTriggers.isEmpty()) {
-            return false;
-        }
-        for(Trigger t : delayedTriggers) {
-            if(t.getTriggerPhases() == null) {
-                continue;
-            }
-            for(PhaseType p : t.getTriggerPhases()) {
-                if(p == PhaseType.COMBAT_DECLARE_ATTACKERS || p == PhaseType.COMBAT_DECLARE_BLOCKERS ||
-                   p == PhaseType.COMBAT_FIRST_STRIKE_DAMAGE || p == PhaseType.COMBAT_DAMAGE ||
-                   p == PhaseType.COMBAT_END) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     public final void registerDelayedTrigger(final Trigger trig) {
@@ -245,12 +228,13 @@ public class TriggerHandler {
         activeTriggers.clear();
         game.forEachCardInGame(new Visitor<Card>() {
             @Override
-            public void visit(Card c) {
+            public boolean visit(Card c) {
                 for (final Trigger t : c.getTriggers()) {
                     if (isTriggerActive(t)) {
                         activeTriggers.add(t);
                     }
                 }
+                return true;
             }
         });
     }
@@ -367,12 +351,7 @@ public class TriggerHandler {
         // Static triggers
         for (final Trigger t : Lists.newArrayList(activeTriggers)) {
             if (t.isStatic() && canRunTrigger(t, mode, runParams)) {
-                int x = 1;
-                int p = t.getHostCard().getController().getAmountOfKeyword("Panharmonicon");
-
-                if (p > 0 && handlePanharmonicon(t, runParams)) {
-                    x += p;
-                }
+                int x = 1 + handlePanharmonicon(t, runParams);
 
                 for (int i = 0; i < x; ++i) {
                     runSingleTrigger(t, runParams);
@@ -420,7 +399,7 @@ public class TriggerHandler {
 
         final TriggerType mode = wt.getMode(); 
         final Map<String, Object> runParams = wt.getParams();
-        final List<Trigger> triggers = (wt.getTriggers() != null && wt.getTriggers().size() > 0) ? wt.getTriggers() : activeTriggers; 
+        final List<Trigger> triggers = wt.getTriggers() != null ? wt.getTriggers() : activeTriggers;
 
         Card card = null;
         boolean checkStatics = false;
@@ -444,12 +423,7 @@ public class TriggerHandler {
                     }
                 }
 
-                int x = 1;
-                int p = t.getHostCard().getController().getAmountOfKeyword("Panharmonicon");
-
-                if (p > 0 && handlePanharmonicon(t, runParams)) {
-                    x += p;
-                }
+                int x = 1 + handlePanharmonicon(t, runParams);;
 
                 for (int i = 0; i < x; ++i) {
                     runSingleTrigger(t, runParams);
@@ -630,7 +604,7 @@ public class TriggerHandler {
             host.addRemembered(sa.getActivatingPlayer());
         }
 
-        if (regtrig.isIntrinsic()) {
+        if (regtrig.isIntrinsic() && regtrig.getOverridingAbility() == null) {
             sa.setIntrinsic(true);
             sa.changeText();
         }
@@ -693,28 +667,36 @@ public class TriggerHandler {
         }
     }
 
-    private boolean handlePanharmonicon(final Trigger t, final Map<String, Object> runParams) {
+    private int handlePanharmonicon(final Trigger t, final Map<String, Object> runParams) {
+        final Card host = t.getHostCard();
+        final Player p = host.getController();
+
         // not a changesZone trigger
         if (t.getMode() != TriggerType.ChangesZone) {
-            return false;
+            return 0;
         }
 
         // not a Permanent you control
-        if (!t.getHostCard().isPermanent() || !t.getHostCard().isInZone(ZoneType.Battlefield)) {
-            return false;
+        if (!host.isPermanent() || !host.isInZone(ZoneType.Battlefield)) {
+            return 0;
         }
 
-        // its not an ETB trigger or the card is not a Artifact or Creature
-        if (runParams.get("Destination") instanceof String) {
-            final String dest = (String) runParams.get("Destination");
-            if (dest.equals("Battlefield") && runParams.get("Card") instanceof Card) {
-                final Card card = (Card) runParams.get("Card");
-                if (card.isCreature() || card.isArtifact()) {
-                    return true;
+        int n = 0;
+        for (final String kw : p.getKeywords()) {
+            if (kw.startsWith("Panharmonicon")) {
+                if (runParams.get("Destination") instanceof String) {
+                    final String dest = (String) runParams.get("Destination");
+                    if (dest.equals("Battlefield") && runParams.get("Card") instanceof Card) {
+                        final Card card = (Card) runParams.get("Card");
+                        final String valid = kw.split(":")[1];
+                        if (card.isValid(valid.split(","), p, host, null)) {
+                            n++;
+                        }
+                    }
                 }
             }
         }
 
-        return false;
+        return n;
     }
 }

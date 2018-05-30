@@ -47,14 +47,29 @@ import forge.util.TextUtil;
  * @version $Id$
  */
 public class Cost implements Serializable {
+    /**
+     * Serializables need a version ID.
+     */
+    private static final long serialVersionUID = 1L;
     private boolean isAbility = true;
     private final List<CostPart> costParts = Lists.newArrayList();
     private boolean isMandatory = false;
 
+    // Primarily used for Summoning Sickness awareness
     private boolean tapCost = false;
 
     public final boolean hasTapCost() {
         return this.tapCost;
+    }
+
+    private void cacheTapCost() {
+        tapCost = false;
+        for (CostPart p : getCostParts()) {
+            if (p instanceof CostTap || p instanceof CostUntap) {
+                tapCost = true;
+                return;
+            }
+        }
     }
 
     public final boolean hasNoManaCost() {
@@ -81,6 +96,15 @@ public class Cost implements Serializable {
             }
         }
         return true;
+    }
+
+    public <T extends CostPart> T getCostPartByType(Class<T> costType) {
+        for (CostPart p : getCostParts()) {
+            if (costType.isInstance(p)) {
+                return (T)p;
+            }
+        }
+        return null;
     }
 
     /**
@@ -505,11 +529,10 @@ public class Cost implements Serializable {
     public final Cost copy() {
         Cost toRet = new Cost();
         toRet.isAbility = this.isAbility;
-        toRet.isMandatory = this.isMandatory;
-        toRet.tapCost = this.tapCost;
         for (CostPart cp : this.costParts) {
             toRet.costParts.add(cp.copy());
         }
+        toRet.cacheTapCost();
         return toRet;
     }
     
@@ -520,12 +543,14 @@ public class Cost implements Serializable {
             if (!(cp instanceof CostPartMana))
                 toRet.costParts.add(cp.copy());
         }
+        toRet.cacheTapCost();
         return toRet;
     }
 
     public final Cost copyWithDefinedMana(String manaCost) {
         Cost toRet = copyWithNoMana();
         toRet.costParts.add(new CostPartMana(new ManaCost(new ManaCostParser(manaCost)), null));
+        toRet.cacheTapCost();
         return toRet;
     }
 

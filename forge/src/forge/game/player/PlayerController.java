@@ -109,6 +109,8 @@ public abstract class PlayerController {
     public abstract <T extends GameEntity> T chooseSingleEntityForEffect(FCollectionView<T> optionList, DelayedReveal delayedReveal, SpellAbility sa, String title, boolean isOptional, Player relatedPlayer);
     public abstract SpellAbility chooseSingleSpellForEffect(List<SpellAbility> spells, SpellAbility sa, String title);
 
+    public abstract <T extends GameEntity> List<T> chooseEntitiesForEffect(FCollectionView<T> optionList, DelayedReveal delayedReveal, SpellAbility sa, String title, Player relatedPlayer);
+
     public abstract boolean confirmAction(SpellAbility sa, PlayerActionConfirmMode mode, String message);
     public abstract boolean confirmBidAction(SpellAbility sa, PlayerActionConfirmMode bidlife, String string, int bid, Player winner);
     public abstract boolean confirmStaticApplication(Card hostCard, GameEntity affected, String logic, String message);
@@ -203,7 +205,7 @@ public abstract class PlayerController {
     public abstract void playTrigger(Card host, WrappedAbility wrapperAbility, boolean isMandatory);
 
     public abstract boolean playSaFromPlayEffect(SpellAbility tgtSA);
-    public abstract Map<GameEntity, CounterType> chooseProliferation(SpellAbility sa, int max);
+    public abstract Map<GameEntity, CounterType> chooseProliferation(SpellAbility sa);
     public abstract boolean chooseCardsPile(SpellAbility sa, CardCollectionView pile1, CardCollectionView pile2, String faceUp);
 
     public abstract void revealAnte(String message, Multimap<Player, PaperCard> removedAnteCards);
@@ -228,7 +230,8 @@ public abstract class PlayerController {
     public abstract String chooseCardName(SpellAbility sa, List<ICardFace> faces, String message);
     // better to have this odd method than those if playerType comparison in ChangeZone  
     public abstract Card chooseSingleCardForZoneChange(ZoneType destination, List<ZoneType> origin, SpellAbility sa, CardCollection fetchList, DelayedReveal delayedReveal, String selectPrompt, boolean isOptional, Player decider);
-    public abstract CardCollection chooseCardsForZoneChange(ZoneType destination, List<ZoneType> origin, SpellAbility sa, CardCollection fetchList, DelayedReveal delayedReveal, String selectPrompt, boolean isOptional, Player decider, int changeNum);
+
+    public abstract List<Card> chooseCardsForZoneChange(ZoneType destination, List<ZoneType> origin, SpellAbility sa, CardCollection fetchList, DelayedReveal delayedReveal, String selectPrompt, Player decider);
 
     public abstract void autoPassCancel();
 
@@ -245,7 +248,7 @@ public abstract class PlayerController {
     }
 
     public AnteResult getAnteResult() {
-        return game.getOutcome().anteResult.get(player);
+        return game.getOutcome().anteResult.get(player.getRegisteredPlayer());
     }
 
     public abstract List<OptionalCostValue> chooseOptionalCosts(SpellAbility choosen, List<OptionalCostValue> optionalCostValues);

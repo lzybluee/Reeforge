@@ -152,7 +152,9 @@ public class ChangeZoneAi extends SpellAbilityAi {
             return doReturnCommanderLogic(sa, aiPlayer);
         }
 
-        if ("IfNotBuffed".equals(sa.getParam("AILogic"))) {
+        if ("Always".equals(sa.getParam("AILogic"))) {
+            return true;
+        } else if ("IfNotBuffed".equals(sa.getParam("AILogic"))) {
             if (ComputerUtilCard.isUselessCreature(aiPlayer, sa.getHostCard())) {
                 return true; // debuffed by opponent's auras to the level that it becomes useless
             }
@@ -287,12 +289,6 @@ public class ChangeZoneAi extends SpellAbilityAi {
                 sa.getTargets().add(opponent);
             } else if (!isCurse && sa.canTarget(ai)) {
                 sa.getTargets().add(ai);
-            } else if (sa.getParam("ValidTgts").equals("Opponent")) {
-                if (sa.canTarget(opponent)) {
-                    sa.getTargets().add(opponent);
-                } else {
-                    return false;
-                }
             }
             pDefined = sa.getTargets().getTargetPlayers();
         } else {

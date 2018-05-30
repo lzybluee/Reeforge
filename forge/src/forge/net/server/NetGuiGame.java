@@ -227,18 +227,17 @@ public class NetGuiGame extends AbstractGuiGame {
     }
 
     @Override
-    public GameEntityView chooseSingleEntityForEffect(final String title, final List<? extends GameEntityView> optionList, final DelayedReveal delayedReveal, final boolean isOptional, int total) {
+    public GameEntityView chooseSingleEntityForEffect(final String title, final List<? extends GameEntityView> optionList, final DelayedReveal delayedReveal, final boolean isOptional) {
         return sendAndWait(ProtocolMethod.chooseSingleEntityForEffect, title, optionList, delayedReveal, isOptional);
     }
 
     @Override
-    public void setCard(final CardView card) {
-        updateGameView();
-        send(ProtocolMethod.setCard, card);
+    public List<GameEntityView> chooseEntitiesForEffect(final String title, final List<? extends GameEntityView> optionList, final DelayedReveal delayedReveal) {
+        return sendAndWait(ProtocolMethod.chooseEntitiesForEffect, title, optionList, delayedReveal);
     }
 
     @Override
-    public void setPaperCard(final CardView card) {
+    public void setCard(final CardView card) {
         updateGameView();
         send(ProtocolMethod.setCard, card);
     }

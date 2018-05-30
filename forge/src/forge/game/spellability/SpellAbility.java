@@ -29,17 +29,16 @@ import forge.game.ability.ApiType;
 import forge.game.card.Card;
 import forge.game.card.CardCollection;
 import forge.game.card.CardCollectionView;
+import forge.game.card.CardDamageMap;
 import forge.game.card.CardFactory;
 import forge.game.cost.Cost;
 import forge.game.cost.CostPart;
 import forge.game.cost.CostPartMana;
 import forge.game.cost.CostRemoveCounter;
-import forge.game.cost.CostTap;
+import forge.game.keyword.Keyword;
 import forge.game.mana.Mana;
-import forge.game.mana.ManaCostBeingPaid;
 import forge.game.player.Player;
 import forge.game.staticability.StaticAbility;
-import forge.game.trigger.Trigger;
 import forge.game.trigger.TriggerType;
 import forge.game.trigger.WrappedAbility;
 import forge.util.Expressions;
@@ -81,8 +80,6 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
     private Player deltrigActivatingPlayer = null; // used by delayed triggers to ensure the original activator can be restored
     private Player targetingPlayer = null;
 
-    private boolean basicLandAbility; // granted by basic land type
-
     private Card grantorCard = null; // card which grants the ability (equipment or owner of static ability that gave this one)
     private SpellAbility mayPlayOriginal = null;
 
@@ -107,6 +104,10 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
     private boolean cumulativeupkeep = false;
     private boolean outlast = false;
     private boolean blessing = false;
+    private Integer chapter = null;
+
+    private boolean basicLandAbility = false;
+
     private SplitSide splitSide = null;
     enum SplitSide { LEFT, RIGHT };
     private int totalManaSpent = 0;
@@ -153,9 +154,9 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
 
     private CardCollection lastStateBattlefield = null;
     private CardCollection lastStateGraveyard = null;
-
-    private ManaCostBeingPaid usedToPayMana = null;
-    private boolean needChooseMana = false;
+    
+    private CardDamageMap damageMap = null;
+    private CardDamageMap preventMap = null;
 
     public CardCollection getLastStateBattlefield() {
         return lastStateBattlefield;
@@ -321,23 +322,28 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
     public void setActivatingPlayer(final Player player) {
         setActivatingPlayer(player, false);
     }
-    public void setActivatingPlayer(final Player player, final boolean lki) {
+    public boolean setActivatingPlayer(final Player player, final boolean lki) {
         // trickle down activating player
-        activatingPlayer = player;
+        boolean updated = false;
+        if (player == null || !player.equals(activatingPlayer)) {
+            activatingPlayer = player;
+            updated = true;
+        }
         if (subAbility != null) {
-            subAbility.setActivatingPlayer(player, lki);
+            updated |= subAbility.setActivatingPlayer(player, lki);
         }
         for (AbilitySub sa : additionalAbilities.values()) {
-            sa.setActivatingPlayer(player, lki);
+            updated |= sa.setActivatingPlayer(player, lki);
         }
         for (List<AbilitySub> list : additionalAbilityLists.values()) {
             for (AbilitySub sa : list) {
-                sa.setActivatingPlayer(player, lki);
+                updated |= sa.setActivatingPlayer(player, lki);
             }
         }
-        if (!lki) {
+        if (!lki && updated) {
             view.updateCanPlay(this, false);
         }
+        return updated;
     }
 
     public Player getDeltrigActivatingPlayer() {
@@ -360,6 +366,11 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
     public boolean isMorphUp() {
         return morphup;
     }
+
+    public boolean isCastFaceDown() {
+        return false;
+    }
+
     public final void setIsMorphUp(final boolean b) {
         morphup = b;
     }
@@ -495,7 +506,8 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
     }
 
     public boolean isKicked() {
-        return isOptionalCostPaid(OptionalCost.Kicker1) || isOptionalCostPaid(OptionalCost.Kicker2);
+        return isOptionalCostPaid(OptionalCost.Kicker1) || isOptionalCostPaid(OptionalCost.Kicker2) ||
+            getMultiKickerManaCost() != null;
     }
 
     public boolean isSurged() {
@@ -589,7 +601,7 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
 
     public String getStackDescription() {
         String text = getHostCard().getView().getText();
-        if (stackDescription.equals(text) && !text.isEmpty()) {
+        if (stackDescription.equals(text)) {
             return getHostCard().getName() + " - " + text;
         }
         return TextUtil.fastReplace(stackDescription, "CARDNAME", getHostCard().getName());
@@ -744,6 +756,13 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
         return flashBackAbility;
     }
 
+    public void setBasicLandAbility(final boolean basicLandAbility0) {
+        basicLandAbility = basicLandAbility0;
+    }
+    public boolean isBasicLandAbility() {
+        return basicLandAbility && isIntrinsic();
+    }
+
     /**
      * @return the aftermath
      */
@@ -771,7 +790,19 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
     public void setBlessing(boolean blessing0) {
         blessing = blessing0;
     }
-    
+
+    public boolean isChapter() {
+        return chapter != null;
+    }
+
+    public Integer getChapter() {
+        return chapter;
+    }
+
+    public void setChapter(int val) {
+        chapter = val;
+    }
+
     public StaticAbility getMayPlay() {
         return mayPlay;
     }
@@ -798,7 +829,13 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
     public SpellAbility copy() {
         return copy(hostCard, false);
     }
+    public SpellAbility copy(Player activ) {
+        return copy(hostCard, activ, false);
+    }
     public SpellAbility copy(Card host, final boolean lki) {
+        return copy(host, this.getActivatingPlayer(), lki);
+    }
+    public SpellAbility copy(Card host, Player activ, final boolean lki) {
         SpellAbility clone = null;
         try {
             clone = (SpellAbility) clone();
@@ -826,8 +863,9 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
             // clear maps for copy, the values will be added later
             clone.additionalAbilities = Maps.newHashMap();
             clone.additionalAbilityLists = Maps.newHashMap();
+            clone.sVars = Maps.newHashMap();
             // run special copy Ability to make a deep copy
-            CardFactory.copySpellAbility(this, clone, host, lki);
+            CardFactory.copySpellAbility(this, clone, host, activ, lki);
         } catch (final CloneNotSupportedException e) {
             System.err.println(e);
         }
@@ -835,7 +873,11 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
     }
 
     public SpellAbility copyWithNoManaCost() {
-        final SpellAbility newSA = copy();
+        return copyWithNoManaCost(getActivatingPlayer());
+    }
+
+    public SpellAbility copyWithNoManaCost(Player active) {
+        final SpellAbility newSA = copy(active);
         if (newSA == null) {
             return null; // the ability was not copyable, e.g. a Suspend SA may get here
         }
@@ -1108,18 +1150,6 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
     }
 
     public boolean isUndoable() {
-        if (hostCard != null && isManaAbility()) {
-            for (CostPart part : payCosts.getCostParts()) {
-                if (part instanceof CostTap) {
-                    for (Trigger t : hostCard.getTriggers()) {
-                        if (t.getMode() ==  TriggerType.Taps) {
-                            return false;
-                        }
-                    }
-                }
-            }
-            
-        }
         return undoable && payCosts.isUndoable() && getHostCard().isInPlay();
     }
 
@@ -1178,14 +1208,6 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
     public boolean isXCost() {
         CostPartMana cm = payCosts != null ? getPayCosts().getCostMana() : null;
         return cm != null && cm.getAmountOfX() > 0;
-    }
-
-    public boolean isBasicLandAbility() {
-        return basicLandAbility;
-    }
-
-    public void setBasicLandAbility(boolean basicLandAbility0) {
-        basicLandAbility = basicLandAbility0;
     }
 
     @Override
@@ -1383,7 +1405,7 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
 
     public SpellAbility getParentTargetingCard() {
         SpellAbility parent = getParent();
-        if (parent != null && parent instanceof WrappedAbility) {
+        if (parent instanceof WrappedAbility) {
             parent = ((WrappedAbility) parent).getWrappedAbility();
         }
         while (parent != null) {
@@ -1391,9 +1413,6 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
                 return parent;
             }
             parent = parent.getParent();
-            if (parent != null && parent instanceof WrappedAbility) {
-                parent = ((WrappedAbility) parent).getWrappedAbility();
-            }
         }
         return null;
     }
@@ -1588,11 +1607,11 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
     public boolean tracksManaSpent() {
         if (hostCard == null || hostCard.getRules() == null) { return false; }
 
-        if (hostCard.hasKeyword("Sunburst")) {
+        if (hostCard.hasKeyword(Keyword.SUNBURST)) {
             return true;
         }
         String text = hostCard.getRules().getOracleText();
-        if (isSpell() && (text.contains("was spent to cast") || text.contains("Converge — "))) {
+        if (isSpell() && text.contains("was spent to cast")) {
             return true;
         }
         if (isAbility() && text.contains("mana spent to pay")) {
@@ -1740,20 +1759,29 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
 
         return score;
     }
-
-    public void setUsedToPayMana(ManaCostBeingPaid mana) {
-        usedToPayMana = mana;
+    
+    public CardDamageMap getDamageMap() {
+        if (damageMap != null) {
+            return damageMap;
+        } else if (getParent() != null) {
+            return getParent().getDamageMap();            
+        }
+        return null;
     }
 
-    public ManaCostBeingPaid getUsedToPayMana() {
-        return usedToPayMana;
+    public CardDamageMap getPreventMap() {
+        if (preventMap != null) {
+            return preventMap;
+        } else if (getParent() != null) {
+            return getParent().getPreventMap();            
+        }
+        return null;
     }
 
-    public void setNeedChooseMana(boolean b) {
-        needChooseMana = b;
+    public void setDamageMap(final CardDamageMap map) {
+        damageMap = map;
     }
-
-    public boolean getNeedChooseMana() {
-        return needChooseMana;
+    public void setPreventMap(final CardDamageMap map) {
+        preventMap = map;
     }
 }

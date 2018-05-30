@@ -27,6 +27,7 @@ import java.util.Stack;
 import java.util.concurrent.LinkedBlockingDeque;
 
 import com.esotericsoftware.minlog.Log;
+import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -50,6 +51,7 @@ import forge.game.event.GameEventSpellAbilityCast;
 import forge.game.event.GameEventSpellRemovedFromStack;
 import forge.game.event.GameEventSpellResolved;
 import forge.game.event.GameEventZone;
+import forge.game.keyword.Keyword;
 import forge.game.player.Player;
 import forge.game.player.PlayerController.ManaPaymentPurpose;
 import forge.game.replacement.ReplacementEffect;
@@ -118,7 +120,7 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
 
     public final boolean isSplitSecondOnStack() {
         for(SpellAbilityStackInstance si : stack) {
-            if (si.isSpell() && si.getSourceCard().hasKeyword("Split second")) {
+            if (si.isSpell() && si.getSourceCard().hasKeyword(Keyword.SPLIT_SECOND)) {
                 return true;
             }
         }
@@ -141,7 +143,7 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
         if (ability.isSpell()) {
             final Card source = ability.getHostCard();
             if (!source.isCopiedSpell() && !source.isInZone(ZoneType.Stack)) {
-                ability.setHostCard(game.getAction().moveToStack(source, ability, Maps.newHashMap()));
+                ability.setHostCard(game.getAction().moveToStack(source, ability, null));
             }
         }
 
@@ -364,7 +366,7 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
 
             // Run SpellCast triggers
             if (sp.isSpell()) {
-                if (source.isCommander() && sp.getHostCard().getCastFrom() == ZoneType.Command) {
+                if (source.isCommander()) {
                     activator.incCommanderCast(source);
                 }
                 game.getTriggerHandler().runTrigger(TriggerType.SpellCast, runParams, true);
@@ -457,7 +459,7 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
         }
 
         if (sp.isSpell() && sp.getMayPlay() != null) {
-            sp.getMayPlay().getHostCard().incMayPlayTurn();
+            sp.getMayPlay().incMayPlayTurn();
         }
         final SpellAbilityStackInstance si = new SpellAbilityStackInstance(sp);
 
@@ -532,7 +534,7 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
         if (isEmpty()) {
             game.copyLastState();
             // FIXME: assuming that if the stack is empty, no reason to hold on to old LKI data (everything is a new object). Is this correct?
-            // game.clearChangeZoneLKIInfo();
+            game.clearChangeZoneLKIInfo();
         }
     }
 
@@ -633,7 +635,9 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
                     if (o instanceof Card) {
                         final Card card = (Card) o;
                         Card current = game.getCardState(card);
-                        invalidTarget = current.getTimestamp() != card.getTimestamp();
+                        if (current != null) {
+                            invalidTarget = current.getTimestamp() != card.getTimestamp();
+                        }
                         invalidTarget |= !(CardFactoryUtil.isTargetStillValid(sa, card));
                     } else {
                         invalidTarget = !o.canBeTargetedBy(sa);
@@ -689,7 +693,8 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
         stack.remove(si);
         frozenStack.remove(si);
         game.updateStackForView();
-        game.fireEvent(new GameEventSpellRemovedFromStack(si.getSpellAbility(true)));
+        SpellAbility sa = si.getSpellAbility(true);
+        game.fireEvent(new GameEventSpellRemovedFromStack(sa));
     }
 
     public final void remove(final Card c) {
@@ -872,6 +877,24 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
             return false;
         }
         return c.equals(curResolvingCard);
+    }
+
+    public final boolean hasSourceOnStack(final Card source, final Predicate<SpellAbility> pred) {
+        if (source == null) {
+            return false;
+        }
+        for (SpellAbilityStackInstance si : stack) {
+            if (si.isTrigger() && si.getSourceCard().equals(source)) {
+                if (pred == null) {
+                    return true;
+                }
+                SpellAbility sa = si.getSpellAbility(false);
+                if (pred.apply(sa)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override

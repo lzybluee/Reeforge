@@ -14,7 +14,6 @@ import forge.util.MyRandom;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Random;
 
 public class ChooseNumberEffect extends SpellAbilityEffect {
 
@@ -55,8 +54,7 @@ public class ChooseNumberEffect extends SpellAbilityEffect {
             if ((tgt == null) || p.canBeTargetedBy(sa)) {
                 int chosen;
                 if (random) {
-                    final Random randomGen = MyRandom.getRandom();
-                    chosen = randomGen.nextInt(max - min) + min;
+                    chosen = MyRandom.getRandom().nextInt(max - min) + min;
                     p.getGame().getAction().nofityOfValue(sa, p, Integer.toString(chosen), null);
                 } else {
                     String title = sa.hasParam("ListTitle") ? sa.getParam("ListTitle") : "Choose a number";

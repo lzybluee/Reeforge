@@ -121,6 +121,7 @@ public final class CardEdition implements Comparable<CardEdition> { // immutable
     private String additionalSheetForFoils = "";
     private String additionalUnlockSet = "";
     private boolean smallSetOverride = false;
+    private String boosterMustContain = "";
     private final CardInSet[] cards;
 
     private int boosterArts = 1;
@@ -180,6 +181,7 @@ public final class CardEdition implements Comparable<CardEdition> { // immutable
     public String getAdditionalSheetForFoils() { return additionalSheetForFoils; }
     public String getAdditionalUnlockSet() { return additionalUnlockSet; }
     public boolean getSmallSetOverride() { return smallSetOverride; }
+    public String getBoosterMustContain() { return boosterMustContain; }
     public CardInSet[] getCards() { return cards; }
 
     public static final Function<CardEdition, String> FN_GET_CODE = new Function<CardEdition, String>() {
@@ -337,6 +339,7 @@ public final class CardEdition implements Comparable<CardEdition> { // immutable
 
             res.smallSetOverride = section.getBoolean("TreatAsSmallSet", false); // for "small" sets with over 200 cards (e.g. Eldritch Moon)
 
+            res.boosterMustContain = section.get("BoosterMustContain", ""); // e.g. Dominaria guaranteed legendary creature
             return res;
         }
 
@@ -521,8 +524,12 @@ public final class CardEdition implements Comparable<CardEdition> { // immutable
         public static final Predicate<CardEdition> hasBasicLands = new Predicate<CardEdition>() {
             @Override
             public boolean apply(CardEdition ed) {
+                if (ed == null) {
+                    // Happens for new sets with "???" code
+                    return false;
+                }
                 for(String landName : MagicColor.Constant.BASIC_LANDS) {
-                    if (null == StaticData.instance().getCommonCards().getCard(landName, ed == null ? null : ed.getCode(), 0))
+                    if (null == StaticData.instance().getCommonCards().getCard(landName, ed.getCode(), 0))
                         return false;
                 }
                 return true;

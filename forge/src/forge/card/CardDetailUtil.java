@@ -4,11 +4,9 @@ import com.google.common.collect.Sets;
 import forge.card.mana.ManaCostShard;
 import forge.game.GameView;
 import forge.game.card.Card;
-import forge.game.card.CardUtil;
 import forge.game.card.CardView;
 import forge.game.card.CardView.CardStateView;
 import forge.game.card.CounterType;
-import forge.game.zone.ZoneType;
 import forge.item.InventoryItemFromSet;
 import forge.item.PaperCard;
 import forge.item.PreconDeck;
@@ -203,8 +201,7 @@ public class CardDetailUtil {
 
     public static String formatCardId(final CardStateView card) {
         final String id = card.getDisplayId();
-        return id.isEmpty() ? id : "[" + id + "]" + 
-            ((card.getCard().getZone() == ZoneType.Battlefield && card.getCard().isFirstTurnControlled()) ? "*" : "");
+        return id.isEmpty() ? id : "[" + id + "]";
     }
 
     public static String formatCurrentCardColors(final CardStateView state) {
@@ -529,8 +526,7 @@ public class CardDetailUtil {
             if (area.length() != 0) {
                 area.append("\n");
             }
-            area.append("Haunting: ");
-            area.append(StringUtils.join(card.getHaunting(), ", "));
+            area.append("Haunting " + card.getHaunting());
         }
 
         // Cipher
@@ -538,8 +534,7 @@ public class CardDetailUtil {
             if (area.length() != 0) {
                 area.append("\n");
             }
-            area.append("Encoded: ");
-            area.append(StringUtils.join(card.getEncodedCards(), ", "));
+            area.append("Encoded: " + card.getEncodedCards());
         }
 
         // must block
@@ -552,17 +547,16 @@ public class CardDetailUtil {
         }
 
         // exerted
-        if (card.getExerted() != null) {
+        if (card.isExertedThisTurn()) {
             if (area.length() != 0) {
                 area.append("\n\n");
             }
-            area.append("Exerted by: ");
-            area.append(StringUtils.join(card.getExerted(), ", "));
+            area.append("^Exerted^");
         }
 
         //show current card colors if enabled
         String curCardColors = formatCurrentCardColors(state);
-        if (!curCardColors.isEmpty() && !card.isFaceDown()) {
+        if (!curCardColors.isEmpty()) {
             if (area.length() != 0) {
                 area.append("\n\n");
             }

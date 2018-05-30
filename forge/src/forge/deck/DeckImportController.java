@@ -4,7 +4,6 @@ import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -33,7 +32,7 @@ public class DeckImportController {
     }
 
     private void fillDateDropdowns() {
-        DateFormatSymbols dfs = new DateFormatSymbols(Locale.ENGLISH);
+        DateFormatSymbols dfs = new DateFormatSymbols();
         monthDropdown.removeAllItems();
         String[] months = dfs.getMonths();
         for (String monthName : months) {
@@ -50,44 +49,13 @@ public class DeckImportController {
     public List<DeckRecognizer.Token> parseInput(String input) {
         tokens.clear();
 
-        DeckRecognizer recognizer = new DeckRecognizer(newEditionCheck.isSelected(), onlyCoreExpCheck.isSelected(), FModel.getMagicDb().getCommonCards());
+        DeckRecognizer recognizer = new DeckRecognizer(newEditionCheck.isSelected(),  onlyCoreExpCheck.isSelected(), FModel.getMagicDb().getCommonCards());
         if (dateTimeCheck.isSelected()) {
             recognizer.setDateConstraint(monthDropdown.getSelectedIndex(), yearDropdown.getSelectedItem());
         }
         String[] lines = input.split("\n");
         for (String line : lines) {
             tokens.add(recognizer.recognizeLine(line));
-        }
-        
-        boolean autoSideboard = true;
-        int cardNum = 0;
-        for (final DeckRecognizer.Token t : tokens) {
-            final DeckRecognizer.TokenType type = t.getType();
-            if ((type == DeckRecognizer.TokenType.SectionName) && t.getText().toLowerCase().contains("side")) {
-                autoSideboard = false;
-                break;
-            }
-            if (type == DeckRecognizer.TokenType.KnownCard) {
-                cardNum += t.getNumber();
-            }
-        }
-        autoSideboard &= (cardNum == 75);
-
-        if(autoSideboard) {
-            cardNum = 0;
-            List<DeckRecognizer.Token> newTokens = new ArrayList<DeckRecognizer.Token>();
-            for (final DeckRecognizer.Token t : tokens) {
-                final DeckRecognizer.TokenType type = t.getType();
-                newTokens.add(t);
-                if (type == DeckRecognizer.TokenType.KnownCard) {
-                    cardNum += t.getNumber();
-                    if(cardNum == 60) {
-                        newTokens.add(new DeckRecognizer.Token(DeckRecognizer.TokenType.SectionName, 0, "side"));
-                    }
-                }
-            }
-            tokens.clear();
-            tokens.addAll(newTokens);
         }
         return tokens;
     }

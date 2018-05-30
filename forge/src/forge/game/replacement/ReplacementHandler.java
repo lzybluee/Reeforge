@@ -86,7 +86,7 @@ public class ReplacementHandler {
         // Round up Static replacement effects
         game.forEachCardInGame(new Visitor<Card>() {
             @Override
-            public void visit(Card crd) {
+            public boolean visit(Card crd) {
                 for (final ReplacementEffect replacementEffect : crd.getReplacementEffects()) {
 
                     // Use "CheckLKIZone" parameter to test for effects that care abut where the card was last (e.g. Kalitas, Traitor of Ghet
@@ -111,6 +111,7 @@ public class ReplacementHandler {
                         possibleReplacers.add(replacementEffect);
                     }
                 }
+                return true;
             }
             
         });
@@ -132,23 +133,12 @@ public class ReplacementHandler {
             return ReplacementResult.NotReplaced;
         }
 
-        int redirectToPlaneswalkerNum = 0;
-        List<ReplacementEffect> replacers = new ArrayList<ReplacementEffect>(possibleReplacers);
-        for(ReplacementEffect re : replacers) {
-            if(re.toString().startsWith("Redirect damage to ") && re.getHostCard().isPlaneswalker()) {
-                if(redirectToPlaneswalkerNum > 0) {
-                    possibleReplacers.remove(re);
-                }
-                redirectToPlaneswalkerNum++;
-            }
-        }
-
         ReplacementEffect chosenRE = decider.getController().chooseSingleReplacementEffect("Choose a replacement effect to apply first.", possibleReplacers, runParams);
 
         possibleReplacers.remove(chosenRE);
 
         chosenRE.setHasRun(true);
-        ReplacementResult res = this.executeReplacement(runParams, chosenRE, decider, game, redirectToPlaneswalkerNum > 1);
+        ReplacementResult res = this.executeReplacement(runParams, chosenRE, decider, game);
         if (res == ReplacementResult.NotReplaced) {
             if (!possibleReplacers.isEmpty()) {
                 res = run(runParams);
@@ -174,7 +164,7 @@ public class ReplacementHandler {
      *            the replacement effect to run
      */
     private ReplacementResult executeReplacement(final Map<String, Object> runParams,
-        final ReplacementEffect replacementEffect, final Player decider, final Game game, boolean redirectToPlaneswalkers) {
+        final ReplacementEffect replacementEffect, final Player decider, final Game game) {
         final Map<String, String> mapParams = replacementEffect.getMapParams();
 
         SpellAbility effectSA = null;
@@ -234,12 +224,9 @@ public class ReplacementHandler {
 
             Card cardForUi = host.getCardForUi();
             String effectDesc = TextUtil.fastReplace(replacementEffect.toString(), "CARDNAME", cardForUi.getName());
-            String question = replacementEffect instanceof ReplaceDiscard
+            final String question = replacementEffect instanceof ReplaceDiscard
                 ? TextUtil.concatWithSpace("Apply replacement effect of", cardForUi.toString(), "to", TextUtil.addSuffix(runParams.get("Card").toString(),"?\r\n"), TextUtil.enclosedParen(effectDesc))
                 : TextUtil.concatWithSpace("Apply replacement effect of", TextUtil.addSuffix(cardForUi.toString(),"?\r\n"), TextUtil.enclosedParen(effectDesc));
-            if(redirectToPlaneswalkers) {
-                question = "Apply replacement effect?\r\n(Redirect damage to one of the planeswalkers.)";
-            }
             boolean confirmed = optDecider.getController().confirmReplacementEffect(replacementEffect, effectSA, question);
             if (!confirmed) {
                 return ReplacementResult.NotReplaced;
@@ -321,7 +308,7 @@ public class ReplacementHandler {
     public void cleanUpTemporaryReplacements() {
         game.forEachCardInGame(new Visitor<Card>() {
             @Override
-            public void visit(Card c) {
+            public boolean visit(Card c) {
                 for (int i = 0; i < c.getReplacementEffects().size(); i++) {
                     ReplacementEffect rep = c.getReplacementEffects().get(i);
                     if (rep.isTemporary()) {
@@ -329,14 +316,16 @@ public class ReplacementHandler {
                         i--;
                     }
                 }
+                return true;
             }
         });
         game.forEachCardInGame(new Visitor<Card>() {
             @Override
-            public void visit(Card c) {
+            public boolean visit(Card c) {
                 for (int i = 0; i < c.getReplacementEffects().size(); i++) {
                     c.getReplacementEffects().get(i).setTemporarilySuppressed(false);
                 }
+                return true;
             }
         });
     }

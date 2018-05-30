@@ -7,6 +7,7 @@ import forge.game.card.Card;
 import forge.game.card.CardCollection;
 import forge.game.card.CardCollectionView;
 import forge.game.card.CardLists;
+import forge.game.keyword.Keyword;
 import forge.game.player.Player;
 import forge.game.spellability.AbilitySub;
 import forge.game.spellability.SpellAbility;
@@ -16,7 +17,6 @@ import forge.util.MyRandom;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 public class FightAi extends SpellAbilityAi {
     @Override
@@ -163,15 +163,15 @@ public class FightAi extends SpellAbilityAi {
         // Get sorted creature lists
         CardCollection aiCreatures = ai.getCreaturesInPlay();
         CardCollection humCreatures = ai.getOpponents().getCreaturesInPlay();
-		if ("Time to Feed".equals(sourceName)) {	// flip sa
-			aiCreatures = CardLists.getTargetableCards(aiCreatures, tgtFight);
-			aiCreatures = ComputerUtil.getSafeTargets(ai, tgtFight, aiCreatures);
-			humCreatures = CardLists.getTargetableCards(humCreatures, sa);
-		} else {
-			aiCreatures = CardLists.getTargetableCards(aiCreatures, sa);
-			aiCreatures = ComputerUtil.getSafeTargets(ai, sa, aiCreatures);
-			humCreatures = CardLists.getTargetableCards(humCreatures, tgtFight);
-		}
+        if ("Time to Feed".equals(sourceName)) { // flip sa
+            aiCreatures = CardLists.getTargetableCards(aiCreatures, tgtFight);
+            aiCreatures = ComputerUtil.getSafeTargets(ai, tgtFight, aiCreatures);
+            humCreatures = CardLists.getTargetableCards(humCreatures, sa);
+        } else {
+            aiCreatures = CardLists.getTargetableCards(aiCreatures, sa);
+            aiCreatures = ComputerUtil.getSafeTargets(ai, sa, aiCreatures);
+            humCreatures = CardLists.getTargetableCards(humCreatures, tgtFight);
+        }
         ComputerUtilCard.sortByEvaluateCreature(aiCreatures);
         ComputerUtilCard.sortByEvaluateCreature(humCreatures);
         if (humCreatures.isEmpty() || aiCreatures.isEmpty()) {
@@ -240,25 +240,26 @@ public class FightAi extends SpellAbilityAi {
     		if (!canKill(opponent, fighter, -pumpDefense)) {	// can survive
     			return true;
     		} else {
-    			final Random r = MyRandom.getRandom();
-    			if (r.nextInt(20)<(opponent.getCMC() - fighter.getCMC())) {	// trade
+    			if (MyRandom.getRandom().nextInt(20)<(opponent.getCMC() - fighter.getCMC())) {	// trade
     				return true;
     			}
     		}
     	}
     	return false;
     }
+
     public static boolean canKill(Card fighter, Card opponent, int pumpAttack) {
-    	if (opponent.getSVar("Targeting").equals("Dies")) {
-    		return true;
-    	}
-    	if (opponent.hasProtectionFrom(fighter) || !opponent.canBeDestroyed() 
-    	        || opponent.getShieldCount() > 0 || ComputerUtil.canRegenerate(opponent.getController(), opponent)) {
-    		return false;
-    	}
-    	if (fighter.hasKeyword("Deathtouch") || ComputerUtilCombat.getDamageToKill(opponent) <= fighter.getNetPower() + pumpAttack) {
-    		return true;
-    	}
-    	return false;
+        if (opponent.getSVar("Targeting").equals("Dies")) {
+            return true;
+        }
+        if (opponent.hasProtectionFrom(fighter) || !opponent.canBeDestroyed() || opponent.getShieldCount() > 0
+                || ComputerUtil.canRegenerate(opponent.getController(), opponent)) {
+            return false;
+        }
+        if (fighter.hasKeyword(Keyword.DEATHTOUCH)
+                || ComputerUtilCombat.getDamageToKill(opponent) <= fighter.getNetPower() + pumpAttack) {
+            return true;
+        }
+        return false;
     }
 }

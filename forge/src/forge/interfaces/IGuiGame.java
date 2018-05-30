@@ -143,10 +143,9 @@ public interface IGuiGame {
     <T> List<T> insertInList(String title, T newItem, List<T> oldItems);
 
     List<PaperCard> sideboard(CardPool sideboard, CardPool main);
-    GameEntityView chooseSingleEntityForEffect(String title, List<? extends GameEntityView> optionList,
-            DelayedReveal delayedReveal, boolean isOptional, int total);
+    GameEntityView chooseSingleEntityForEffect(String title, List<? extends GameEntityView> optionList, DelayedReveal delayedReveal, boolean isOptional);
+    List<GameEntityView> chooseEntitiesForEffect(String title, List<? extends GameEntityView> optionList, DelayedReveal delayedReveal);
     void setCard(CardView card);
-    void setPaperCard(CardView card);
     void setPlayerAvatar(LobbyPlayer player, IHasIcon ihi);
     boolean openZones(Collection<ZoneType> zones, Map<PlayerView, Object> players);
     void restoreOldZones(Map<PlayerView, Object> playersToRestoreZonesFor);

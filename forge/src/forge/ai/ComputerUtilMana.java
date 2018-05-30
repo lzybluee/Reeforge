@@ -460,15 +460,15 @@ public class ComputerUtilMana {
             setExpressColorChoice(sa, ai, cost, toPay, saPayment);
 
             if (test) {
-                // Check energy when testing
-                CostPayEnergy energyCost = saPayment.getPayCosts().getCostEnergy();
-                if (energyCost != null) {
-                    testEnergyPool -= Integer.parseInt(energyCost.getAmount());
-                    if (testEnergyPool < 0) {
-                        // Can't pay energy cost
-                        break;
-                    }
-                }
+				// Check energy when testing
+				CostPayEnergy energyCost = saPayment.getPayCosts().getCostEnergy();
+				if (energyCost != null) {
+					testEnergyPool -= Integer.parseInt(energyCost.getAmount());
+					if (testEnergyPool < 0) {
+						// Can't pay energy cost
+						break;
+					}
+				}
 
                 String manaProduced = toPay.isSnow() ? "S" : GameActionUtil.generatedMana(saPayment);
                 manaProduced = AbilityManaPart.applyManaReplacement(saPayment, manaProduced);
@@ -865,9 +865,12 @@ public class ComputerUtilMana {
         // For combat tricks, always obey mana reservation
         if (curPhase == PhaseType.COMBAT_DECLARE_BLOCKERS || curPhase == PhaseType.CLEANUP) {
             AiCardMemory.clearMemorySet(ai, AiCardMemory.MemorySet.HELD_MANA_SOURCES_FOR_DECLBLK);
-        }
-        else {
-            if (AiCardMemory.isRememberedCard(ai, sourceCard, AiCardMemory.MemorySet.HELD_MANA_SOURCES_FOR_DECLBLK)) {
+        } else if (!(ai.getGame().getPhaseHandler().isPlayerTurn(ai)) && (curPhase == PhaseType.COMBAT_DECLARE_BLOCKERS || curPhase == PhaseType.CLEANUP)) {
+            AiCardMemory.clearMemorySet(ai, AiCardMemory.MemorySet.HELD_MANA_SOURCES_FOR_ENEMY_DECLBLK);
+            AiCardMemory.clearMemorySet(ai, AiCardMemory.MemorySet.CHOSEN_FOG_EFFECT);
+        } else {
+            if ((AiCardMemory.isRememberedCard(ai, sourceCard, AiCardMemory.MemorySet.HELD_MANA_SOURCES_FOR_DECLBLK)) ||
+                    (AiCardMemory.isRememberedCard(ai, sourceCard, AiCardMemory.MemorySet.HELD_MANA_SOURCES_FOR_ENEMY_DECLBLK))) {
                 // This mana source is held elsewhere for a combat trick.
                 return true;
             }

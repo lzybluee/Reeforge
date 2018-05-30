@@ -76,16 +76,6 @@ public abstract class AbstractGuiGame implements IGuiGame, IMayViewCards {
         if (gameView == null || gameView0 == null) {
             if (gameView0 != null) {
                 gameView0.updateObjLookup();
-            } else {
-                autoPassUntilEndOfTurn.clear();
-                autoYields.clear();
-                triggersAlwaysAccept.clear();
-                currentPlayer = null;
-                gameControllers.clear();
-                originalGameControllers.clear();
-                highlightedCards.clear();
-                highlightedPlayers.clear();
-                spectator = null;
             }
             gameView = gameView0;
             return;
@@ -180,17 +170,6 @@ public abstract class AbstractGuiGame implements IGuiGame, IMayViewCards {
     }
 
     @Override
-    public boolean mayViewFront(final CardView c) {
-        if (!hasLocalPlayers()) {
-            return true; //if not in game, card can be shown
-        }
-        if (getGameController().mayLookAtAllCards()) {
-            return true;
-        }
-        return c.canBeShownToAny(null);
-    }
-
-    @Override
     public boolean mayFlip(final CardView cv) {
         if (cv == null) { return false; }
 
@@ -221,9 +200,6 @@ public abstract class AbstractGuiGame implements IGuiGame, IMayViewCards {
         } else {
             highlightedPlayers.remove(pv);
         }
-        Set<PlayerView> p = Sets.newHashSet();
-        p.add(pv);
-        updateLives(p);
     }
 
     public boolean isHighlighted(final PlayerView player) {
@@ -262,7 +238,12 @@ public abstract class AbstractGuiGame implements IGuiGame, IMayViewCards {
                 // Don't immediately close, wait for win/lose screen
                 return false;
             } else {
-                return true;
+                for (PlayerView player : getLocalPlayers()){
+                    if (!player.isAI()){
+                        getGameController(player).nextGameDecision(NextGameDecision.QUIT);
+                    }
+                }
+                return false;
             }
         }
         else if (spectator == null) {
@@ -445,7 +426,7 @@ public abstract class AbstractGuiGame implements IGuiGame, IMayViewCards {
      * @return null if choices is missing, empty, or if the users' choices are
      *         empty; otherwise, returns the first item in the List returned by
      *         getChoices.
-     * @see #getChoices(String, int, int, Object...)
+     * @see #getChoices(String, int, int, List)
      */
     @Override
     public <T> T oneOrNone(final String message, final List<T> choices) {

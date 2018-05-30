@@ -9,6 +9,7 @@ import forge.game.card.Card;
 import forge.game.card.CardCollection;
 import forge.game.card.CardCollectionView;
 import forge.game.card.CardLists;
+import forge.game.card.CounterType;
 import forge.game.player.DelayedReveal;
 import forge.game.player.Player;
 import forge.game.player.PlayerView;
@@ -17,7 +18,6 @@ import forge.game.spellability.TargetRestrictions;
 import forge.game.zone.PlayerZone;
 import forge.game.zone.ZoneType;
 import forge.util.Lang;
-import forge.util.MessageUtil;
 import forge.util.TextUtil;
 
 import java.util.*;
@@ -35,7 +35,7 @@ public class DigEffect extends SpellAbilityEffect {
         sb.append(Lang.nounWithAmount(numToDig, "card")).append(" of ");
 
         if (tgtPlayers.contains(host.getController())) {
-            sb.append("his or her ");
+            sb.append("their ");
         }
         else {
             for (final Player p : tgtPlayers) {
@@ -231,9 +231,6 @@ public class DigEffect extends SpellAbilityEffect {
                             prompt = "Choose a card to leave in {player's} " + destZone2.name();
                         }
 
-                        if(prompt != null)
-                            prompt = MessageUtil.formatMessage(prompt, chooser.getController().getPlayer(), p);
-
                         Card chosen = chooser.getController().chooseSingleEntityForEffect(valid, delayedReveal, sa, prompt, false, p);
                         movedCards.remove(chosen);
                         if (sa.hasParam("RandomOrder")) {
@@ -256,9 +253,6 @@ public class DigEffect extends SpellAbilityEffect {
                                 }
                             }
                         }
-
-                        if(prompt != null)
-                            prompt = MessageUtil.formatMessage(prompt, chooser.getController().getPlayer(), p);
 
                         movedCards = new CardCollection();
                         for (int i = 0; i < destZone1ChangeNum || (anyNumber && i < numToDig); i++) {
@@ -330,7 +324,7 @@ public class DigEffect extends SpellAbilityEffect {
                         }
 
                         if (sa.hasParam("ExileFaceDown")) {
-                            c.setState(CardStateName.FaceDown, true, true);
+                            c.setState(CardStateName.FaceDown, true);
                         }
                         if (sa.hasParam("Imprint")) {
                             host.addImprintedCard(c);
@@ -377,11 +371,14 @@ public class DigEffect extends SpellAbilityEffect {
                             Card c = rest.get(i);
                             final PlayerZone toZone = c.getOwner().getZone(destZone2);
                             c = game.getAction().moveTo(toZone, c, sa);
-                            if (destZone2.equals(ZoneType.Battlefield) && !keywords.isEmpty()) {
+                            if (destZone2 == ZoneType.Battlefield && !keywords.isEmpty()) {
                                 for (final String kw : keywords) {
                                     c.addExtrinsicKeyword(kw);
                                 }
-                            } else if (destZone2.equals(ZoneType.Exile)) {
+                            } else if (destZone2 == ZoneType.Exile) {
+                                if (sa.hasParam("ExileWithCounter")) {
+                                    c.addCounter(CounterType.getType(sa.getParam("ExileWithCounter")), 1, effectHost, true);
+                                }
                                 c.setExiledWith(effectHost);
                             }
                         }

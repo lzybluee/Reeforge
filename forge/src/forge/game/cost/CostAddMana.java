@@ -33,6 +33,11 @@ import forge.game.spellability.SpellAbility;
  */
 public class CostAddMana extends CostPart {
     /**
+     * Serializables need a version ID.
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * CostCostAddMana.
      * @param amount
      */
@@ -51,7 +56,7 @@ public class CostAddMana extends CostPart {
     public final String toString() {
         final StringBuilder sb = new StringBuilder();
         final Integer i = this.convertAmount();
-        sb.append("Add ").append(StringUtils.repeat("{" + this.getType() + "}", i)).append(" to your mana pool");
+        sb.append("Add ").append(StringUtils.repeat("{" + this.getType() + "}", i));
         return sb.toString();
     }
 

@@ -15,8 +15,6 @@ import forge.game.trigger.Trigger;
 import forge.game.zone.PlayerZone;
 import forge.game.zone.ZoneType;
 import forge.item.PaperCard;
-import forge.model.FModel;
-import forge.properties.ForgePreferences.FPref;
 import forge.util.MyRandom;
 import forge.util.collect.FCollectionView;
 
@@ -146,9 +144,10 @@ public class Match {
         final Multiset<RegisteredPlayer> won = HashMultiset.create(players.size());
         for (final GameOutcome go : gamesPlayedRo) {
             if (go.getWinningPlayer() == null) {
+                // Game hasn't finished yet. Exit early.
                 return won;
             }
-            won.add(go.getWinningPlayer().getRegisteredPlayer());
+            won.add(go.getWinningPlayer());
         }
         return won;
     }
@@ -159,7 +158,7 @@ public class Match {
 
     public RegisteredPlayer getWinner() {
         if (this.isMatchOver()) {
-            return gamesPlayedRo.get(gamesPlayedRo.size()-1).getWinningPlayer().getRegisteredPlayer();
+            return gamesPlayedRo.get(gamesPlayedRo.size()-1).getWinningPlayer();
         }
         return null;
     }
@@ -181,7 +180,7 @@ public class Match {
         return myRemovedAnteCards;
     }
 
-    private static void preparePlayerLibrary(Player player, final ZoneType zoneType, CardPool section, boolean canRandomFoil, Random generator) {
+    private static void preparePlayerLibrary(Player player, final ZoneType zoneType, CardPool section, boolean canRandomFoil) {
         PlayerZone library = player.getZone(zoneType);
         List<Card> newLibrary = new ArrayList<Card>();
         for (final Entry<PaperCard, Integer> stackOfCards : section) {
@@ -218,10 +217,6 @@ public class Match {
             final Player player = players.get(i);
             final RegisteredPlayer psc = playersConditions.get(i);
 
-            if (!FModel.getPreferences().getPrefBoolean(FPref.UI_SKIP_RESTORE_DECK) && isFirstGame && rules.getGameType().isSideboardingAllowed()) {
-                psc.restoreDeck();
-            }
-
             if (canSideBoard) {
                 Deck toChange = psc.getDeck();
                 List<PaperCard> newMain = player.getController().sideboard(toChange, rules.getGameType());
@@ -251,11 +246,9 @@ public class Match {
                 }
             }
 
-            Random generator = MyRandom.getRandom();
-
-            preparePlayerLibrary(player, ZoneType.Library, myDeck.getMain(), psc.useRandomFoil(), generator);
+            preparePlayerLibrary(player, ZoneType.Library, myDeck.getMain(), psc.useRandomFoil());
             if (myDeck.has(DeckSection.Sideboard)) {
-                preparePlayerLibrary(player, ZoneType.Sideboard, myDeck.get(DeckSection.Sideboard), psc.useRandomFoil(), generator);
+                preparePlayerLibrary(player, ZoneType.Sideboard, myDeck.get(DeckSection.Sideboard), psc.useRandomFoil());
             }
 
             player.initVariantsZones(psc);
@@ -265,12 +258,8 @@ public class Match {
 
             if (isFirstGame) {
                 Collection<? extends PaperCard> cardsComplained = player.getController().complainCardsCantPlayWell(myDeck);
-                if (null != cardsComplained && cardsComplained.size() > 0) {
+                if (null != cardsComplained) {
                     rAICards.putAll(player, cardsComplained);
-                    System.out.println("AI can't play these cards well");
-                    for(PaperCard card : cardsComplained) {
-                        System.out.println(card.getName());
-                    }
                 }
             }
 
@@ -280,7 +269,7 @@ public class Match {
         }
 
         if (!rAICards.isEmpty() && !rules.getGameType().isCardPoolLimited()) {
-          //game.getAction().revealAnte("AI can't play these cards well", rAICards);
+            game.getAction().revealAnte("AI can't play these cards well", rAICards);
         }
 
         if (!removedAnteCards.isEmpty()) {
@@ -297,6 +286,8 @@ public class Match {
         int iWinner = -1;
         for (int i = 0; i < cntPlayers; i++) {
             Player fromGame = lastGame.getRegisteredPlayers().get(i);
+            RegisteredPlayer registered = fromGame.getRegisteredPlayer();
+
             // Add/Remove Cards lost via ChangeOwnership cards like Darkpact
             CardCollectionView lostOwnership = fromGame.getLostOwnership();
             CardCollectionView gainedOwnership = fromGame.getGainedOwnership();
@@ -306,10 +297,10 @@ public class Match {
                 for(Card c : lostOwnership) {
                     lostPaperOwnership.add((PaperCard)c.getPaperCard());
                 }
-                if (outcome.anteResult.containsKey(fromGame)) {
-                    outcome.anteResult.get(fromGame).addLost(lostPaperOwnership);
+                if (outcome.anteResult.containsKey(registered)) {
+                    outcome.anteResult.get(registered).addLost(lostPaperOwnership);
                 } else {
-                    outcome.anteResult.put(fromGame, GameOutcome.AnteResult.lost(lostPaperOwnership));
+                    outcome.anteResult.put(registered, GameOutcome.AnteResult.lost(lostPaperOwnership));
                 }
             }
 
@@ -318,11 +309,11 @@ public class Match {
                 for(Card c : gainedOwnership) {
                     gainedPaperOwnership.add((PaperCard)c.getPaperCard());
                 }
-                if (outcome.anteResult.containsKey(fromGame)) {
-                    outcome.anteResult.get(fromGame).addWon(gainedPaperOwnership);
+                if (outcome.anteResult.containsKey(registered)) {
+                    outcome.anteResult.get(registered).addWon(gainedPaperOwnership);
                 }
                 else {
-                    outcome.anteResult.put(fromGame, GameOutcome.AnteResult.won(gainedPaperOwnership));
+                    outcome.anteResult.put(registered, GameOutcome.AnteResult.won(gainedPaperOwnership));
                 }
             }
 
@@ -346,22 +337,23 @@ public class Match {
                 losses.add(toRemove);
             }
 
-            if (outcome.anteResult.containsKey(fromGame)) {
-                outcome.anteResult.get(fromGame).addLost(personalLosses);
+            if (outcome.anteResult.containsKey(registered)) {
+                outcome.anteResult.get(registered).addLost(personalLosses);
             }
             else {
-                outcome.anteResult.put(fromGame, GameOutcome.AnteResult.lost(personalLosses));
+                outcome.anteResult.put(registered, GameOutcome.AnteResult.lost(personalLosses));
             }
         }
 
         if (iWinner >= 0) {
             // Winner gains these cards always
             Player fromGame = lastGame.getRegisteredPlayers().get(iWinner);
-            if (outcome.anteResult.containsKey(fromGame)) {
-                outcome.anteResult.get(fromGame).addWon(losses);
+            RegisteredPlayer registered = fromGame.getRegisteredPlayer();
+            if (outcome.anteResult.containsKey(registered)) {
+                outcome.anteResult.get(registered).addWon(losses);
             }
             else {
-                outcome.anteResult.put(fromGame, GameOutcome.AnteResult.won(losses));
+                outcome.anteResult.put(registered, GameOutcome.AnteResult.won(losses));
             }
 
             if (rules.getGameType().canAddWonCardsMidGame()) {

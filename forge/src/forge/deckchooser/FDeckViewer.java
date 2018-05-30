@@ -57,15 +57,6 @@ public class FDeckViewer extends FDialog {
     private FDeckViewer(final Deck deck0) {
         this.deck = deck0;
         this.setTitle(deck.getName());
-
-        boolean hasCommander = false;
-        for (Entry<DeckSection, CardPool> entry : deck) {
-            if(entry.getKey() == DeckSection.Commander) {
-                hasCommander = true;
-                break;
-            }
-        }
-
         this.cardManager = new CardManager(null, false, false) {
             @Override //show hovered card in Image View in dialog instead of main Detail/Picture panes
             protected ImageView<PaperCard> createImageView(final ItemManagerModel<PaperCard> model0) {
@@ -81,13 +72,7 @@ public class FDeckViewer extends FDialog {
                 };
             }
         };
-
-        if(hasCommander) {
-            this.cardManager.setPool(deck.getCommanders());
-        } else {
-            this.cardManager.setPool(deck.getMain());
-        }
-
+        this.cardManager.setPool(deck.getMain());
         this.cardManager.addSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -102,20 +87,10 @@ public class FDeckViewer extends FDialog {
             }
         });
 
-        if(hasCommander) {
-            this.sections.add(DeckSection.Commander);
-            for (Entry<DeckSection, CardPool> entry : deck) {
-                if(entry.getKey() != DeckSection.Commander) {
-                    this.sections.add(entry.getKey());
-                }
-            }
-            this.currentSection = DeckSection.Commander;
-        } else {
-            for (Entry<DeckSection, CardPool> entry : deck) {
-                this.sections.add(entry.getKey());
-            }
-            this.currentSection = DeckSection.Main;
+        for (Entry<DeckSection, CardPool> entry : deck) {
+            this.sections.add(entry.getKey());
         }
+        this.currentSection = DeckSection.Main;
         updateCaption();
 
         this.btnCopyToClipboard.setFocusable(false);

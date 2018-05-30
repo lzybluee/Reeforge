@@ -7,7 +7,6 @@ import forge.game.card.Card;
 import forge.game.card.CounterType;
 import forge.game.player.Player;
 import forge.game.spellability.SpellAbility;
-import forge.game.zone.ZoneType;
 
 import java.util.Map;
 import java.util.Map.Entry;
@@ -28,37 +27,9 @@ public class CountersProliferateEffect extends SpellAbilityEffect {
         final Card host = sa.getHostCard();
         final Game game = host.getGame();
         Player controller = host.getController();
-        int max = 0;
-
-        for (Player player : controller.getGame().getPlayers()) {
-            if (player.hasCounters()) {
-                max++;
-            }
-            for (final Card c : player.getCardsIn(ZoneType.Battlefield)) {
-                if (c.hasCounters()) {
-                    max++;
-                }
-            }
-        }
-        if (max == 0)
+        Map<GameEntity, CounterType> proliferateChoice = controller.getController().chooseProliferation(sa);
+        if (proliferateChoice == null )
             return;
-
-        Map<GameEntity, CounterType> proliferateChoice = null;
-        do {
-            proliferateChoice = controller.getController().chooseProliferation(sa, max);
-            if (proliferateChoice != null && proliferateChoice.size() == 0) {
-                if (controller.getController().confirmAction(sa, null, "Cancal Proliferation?")) {
-                    break;
-                } else {
-                    continue;
-                }
-            }
-        }
-        while (proliferateChoice != null && proliferateChoice.size() == 0);
-
-        if (proliferateChoice == null)
-            return;
-
         for(Entry<GameEntity, CounterType> ge: proliferateChoice.entrySet()) {
             if( ge.getKey() instanceof Player )
                 ((Player) ge.getKey()).addCounter(ge.getValue(), 1, host, true);

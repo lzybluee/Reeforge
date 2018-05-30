@@ -439,6 +439,10 @@ public class AbilityUtils {
                 players.addAll(game.getPlayers());
                 val = CardFactoryUtil.playerXCount(players, calcX[1], card);
             }
+            else if (hType.equals("YourTeam")) {
+                players.addAll(player.getYourTeam());
+                val = CardFactoryUtil.playerXCount(players, calcX[1], card);
+            }
             else if (hType.equals("Opponents")) {
                 players.addAll(player.getOpponents());
                 val = CardFactoryUtil.playerXCount(players, calcX[1], card);
@@ -891,7 +895,11 @@ public class AbilityUtils {
 
         final Player player = sa == null ? card.getController() : sa.getActivatingPlayer();
 
-        if (defined.equals("Targeted") || defined.equals("TargetedPlayer")) {
+        if (defined.equals("TargetedOrController")) {
+            players.addAll(getDefinedPlayers(card, "Targeted", sa));
+            players.addAll(getDefinedPlayers(card, "TargetedController", sa));
+        }
+        else if (defined.equals("Targeted") || defined.equals("TargetedPlayer")) {
             final SpellAbility saTargeting = sa.getSATargetingPlayer();
             if (saTargeting != null) {
                 players.addAll(saTargeting.getTargets().getTargetPlayers());
@@ -1631,12 +1639,6 @@ public class AbilityUtils {
                 }
             }
         }
-        if(ctb instanceof SpellAbility) {
-            Player activator = ((SpellAbility)ctb).getActivatingPlayer();
-            if(activator != null) {
-                return CardFactoryUtil.xCount(c, s2, activator);
-            }
-        }
         return CardFactoryUtil.xCount(c, s2);
     }
 
@@ -1665,23 +1667,10 @@ public class AbilityUtils {
         }
     }
 
-    private static boolean checkZone(final Spell spell, final Card card, final Player player) {
-        if (spell.toString().startsWith("Fuse (") && !player.getGame().getZoneOf(card).is(ZoneType.Hand, player)) {
-            return false;
-        }
-        if (spell.isAftermath() && !player.getGame().getZoneOf(card).is(ZoneType.Graveyard, player)) {
-            return false;
-        }
-        return true;
-    }
-
     public static final List<SpellAbility> getBasicSpellsFromPlayEffect(final Card tgtCard, final Player controller) {
         List<SpellAbility> sas = new ArrayList<SpellAbility>();
         for (SpellAbility s : tgtCard.getBasicSpells()) {
             final Spell newSA = (Spell) s.copy();
-            if (!checkZone(newSA, tgtCard, controller)) {
-                continue;
-            }
             newSA.setActivatingPlayer(controller);
             SpellAbilityRestriction res = new SpellAbilityRestriction();
             // timing restrictions still apply

@@ -32,6 +32,10 @@ import forge.game.zone.ZoneType;
 public class CostExileFromStack extends CostPart {
     // ExileFromStack<Num/Type{/TypeDescription}>
 
+    /**
+     * Serializables need a version ID.
+     */
+    private static final long serialVersionUID = 1L;
 
     /**
      * Instantiates a new cost exile.

@@ -29,6 +29,7 @@ import forge.game.GameEntity;
 import forge.game.GlobalRuleChange;
 import forge.game.card.*;
 import forge.game.cost.Cost;
+import forge.game.keyword.Keyword;
 import forge.game.keyword.KeywordInterface;
 import forge.game.phase.PhaseType;
 import forge.game.player.Player;
@@ -658,7 +659,7 @@ public class CombatUtil {
             return 0;
         }
         // TODO: remove CantBeBlockedByAmount LT2
-        if (attacker.hasKeyword("CantBeBlockedByAmount LT2") || attacker.hasKeyword("Menace")) {
+        if (attacker.hasKeyword("CantBeBlockedByAmount LT2") || attacker.hasKeyword(Keyword.MENACE)) {
             return 2;
         } else if (attacker.hasKeyword("CantBeBlockedByAmount LT3")) {
             return 3;
@@ -702,7 +703,7 @@ public class CombatUtil {
                 for (final Card attacker : attackers) {
                     if (CombatUtil.canBlock(attacker, blocker, combat)) {
                         boolean must = true;
-                        if (attacker.hasStartOfKeyword("CantBeBlockedByAmount LT") || attacker.hasKeyword("Menace")) {
+                        if (attacker.hasStartOfKeyword("CantBeBlockedByAmount LT") || attacker.hasKeyword(Keyword.MENACE)) {
                             final List<Card> possibleBlockers = Lists.newArrayList(defendersArmy);
                             possibleBlockers.remove(blocker);
                             if (!CombatUtil.canBeBlocked(attacker, possibleBlockers, combat)) {
@@ -775,8 +776,6 @@ public class CombatUtil {
         final CardCollection attackersWithLure = new CardCollection();
         for (final Card attacker : attackers) {
             if (attacker.hasStartOfKeyword("All creatures able to block CARDNAME do so.")
-                    || (attacker.hasStartOfKeyword("All Walls able to block CARDNAME do so.") && blocker.getType().hasSubtype("Wall"))
-                    || (attacker.hasStartOfKeyword("All creatures with flying able to block CARDNAME do so.") && blocker.hasKeyword("Flying"))
                     || (attacker.hasStartOfKeyword("CARDNAME must be blocked if able.")
                             && combat.getBlockers(attacker).isEmpty())) {
                 attackersWithLure.add(attacker);
@@ -792,6 +791,14 @@ public class CombatUtil {
                             break;
                         }
                     }
+                    // MustBeBlockedByAll:<valid>
+                    if (keyword.startsWith("MustBeBlockedByAll")) {
+                        final String valid = keyword.split(":")[1];
+                        if (blocker.isValid(valid, null, null, null)) {
+                            attackersWithLure.add(attacker);
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -800,7 +807,7 @@ public class CombatUtil {
         for (final Card attacker : attackersWithLure) {
             if (CombatUtil.canBeBlocked(attacker, combat, defender) && CombatUtil.canBlock(attacker, blocker)) {
                 boolean canBe = true;
-                if (attacker.hasStartOfKeyword("CantBeBlockedByAmount LT") || attacker.hasKeyword("Menace")) {
+                if (attacker.hasStartOfKeyword("CantBeBlockedByAmount LT") || attacker.hasKeyword(Keyword.MENACE)) {
                     final List<Card> blockers = combat.getDefenderPlayerByAttacker(attacker).getCreaturesInPlay();
                     blockers.remove(blocker);
                     if (!CombatUtil.canBeBlocked(attacker, blockers, combat)) {
@@ -818,7 +825,7 @@ public class CombatUtil {
                 if (CombatUtil.canBeBlocked(attacker, combat, defender) && CombatUtil.canBlock(attacker, blocker)
                         && combat.isAttacking(attacker)) {
                     boolean canBe = true;
-                    if (attacker.hasStartOfKeyword("CantBeBlockedByAmount LT") || attacker.hasKeyword("Menace")) {
+                    if (attacker.hasStartOfKeyword("CantBeBlockedByAmount LT") || attacker.hasKeyword(Keyword.MENACE)) {
                         final List<Card> blockers = combat.getDefenderPlayerByAttacker(attacker).getCreaturesInPlay();
                         blockers.remove(blocker);
                         if (!CombatUtil.canBeBlocked(attacker, blockers, combat)) {
@@ -905,13 +912,19 @@ public class CombatUtil {
                     break;
                 }
             }
+            // MustBeBlockedByAll:<valid>
+            if (keyword.startsWith("MustBeBlockedByAll")) {
+                final String valid = keyword.split(":")[1];
+                if (blocker.isValid(valid, null, null, null)) {
+                    mustBeBlockedBy = true;
+                    break;
+                }
+            }
         }
 
         // if the attacker has no lure effect, but the blocker can block another
         // attacker with lure, the blocker can't block the former
         if (!attacker.hasKeyword("All creatures able to block CARDNAME do so.")
-                && !(attacker.hasStartOfKeyword("All Walls able to block CARDNAME do so.") && blocker.getType().hasSubtype("Wall"))
-                && !(attacker.hasStartOfKeyword("All creatures with flying able to block CARDNAME do so.") && blocker.hasKeyword("Flying"))
                 && !(attacker.hasKeyword("CARDNAME must be blocked if able.") && combat.getBlockers(attacker).isEmpty())
                 && !(blocker.getMustBlockCards() != null && blocker.getMustBlockCards().contains(attacker))
                 && !mustBeBlockedBy
@@ -973,17 +986,17 @@ public class CombatUtil {
         }
 
         // rare case:
-        if (blocker.hasKeyword("Shadow")
+        if (blocker.hasKeyword(Keyword.SHADOW)
                 && blocker.hasKeyword("CARDNAME can block creatures with shadow as though they didn't have shadow.")) {
             return false;
         }
 
-        if (attacker.hasKeyword("Shadow") && !blocker.hasKeyword("Shadow")
+        if (attacker.hasKeyword(Keyword.SHADOW) && !blocker.hasKeyword(Keyword.SHADOW)
                 && !blocker.hasKeyword("CARDNAME can block creatures with shadow as though they didn't have shadow.")) {
             return false;
         }
 
-        if (!attacker.hasKeyword("Shadow") && blocker.hasKeyword("Shadow")) {
+        if (!attacker.hasKeyword(Keyword.SHADOW) && blocker.hasKeyword(Keyword.SHADOW)) {
             return false;
         }
 
@@ -991,7 +1004,7 @@ public class CombatUtil {
             return false;
         }
 
-        if ((attacker.hasKeyword("Creatures with power greater than CARDNAME's power can't block it.") || attacker.hasKeyword("Skulk"))
+        if ((attacker.hasKeyword("Creatures with power greater than CARDNAME's power can't block it.") || attacker.hasKeyword(Keyword.SKULK))
             && attacker.getNetPower() < blocker.getNetPower()) {
             return false;
         }
@@ -1022,11 +1035,11 @@ public class CombatUtil {
             }
         }
 
-        if (blocker.hasKeyword("CARDNAME can block only creatures with flying.") && !attacker.hasKeyword("Flying")) {
+        if (blocker.hasKeyword("CARDNAME can block only creatures with flying.") && !attacker.hasKeyword(Keyword.FLYING)) {
             return false;
         }
 
-        if (attacker.hasKeyword("Flying") && !blocker.hasKeyword("Flying") && !blocker.hasKeyword("Reach")) {
+        if (attacker.hasKeyword(Keyword.FLYING) && !blocker.hasKeyword(Keyword.FLYING) && !blocker.hasKeyword(Keyword.REACH)) {
             boolean stillblock = false;
             for (KeywordInterface inst : blocker.getKeywords()) {
                 String k = inst.getOriginal();
@@ -1043,15 +1056,16 @@ public class CombatUtil {
             }
         }
 
-        if (attacker.hasKeyword("Horsemanship") && !blocker.hasKeyword("Horsemanship")) {
+        if (attacker.hasKeyword(Keyword.HORSEMANSHIP) && !blocker.hasKeyword(Keyword.HORSEMANSHIP)) {
             return false;
         }
 
-        if (attacker.hasKeyword("Fear") && !blocker.isArtifact() && !blocker.isBlack()) {
+        // color is hardcoded there
+        if (attacker.hasKeyword(Keyword.FEAR) && !blocker.isArtifact() && !blocker.isBlack()) {
             return false;
         }
 
-        if (attacker.hasKeyword("Intimidate") && !blocker.isArtifact() && !blocker.sharesColorWith(attacker)) {
+        if (attacker.hasKeyword(Keyword.INTIMIDATE) && !blocker.isArtifact() && !blocker.sharesColorWith(attacker)) {
             return false;
         }
 

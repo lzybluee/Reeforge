@@ -141,21 +141,7 @@ public final class CEditorLimited extends ACEditorBase<PaperCard, DeckGroup> {
         if (toAlternate) { return; }
 
         // update view
-        ArrayList<Entry<PaperCard, Integer>> add_items = new ArrayList<Entry<PaperCard,Integer>>();
-        for(Entry<PaperCard, Integer> item : items) {
-            if(item.getKey().getName().equals("Plains") || 
-               item.getKey().getName().equals("Island") || 
-               item.getKey().getName().equals("Mountain") || 
-               item.getKey().getName().equals("Swamp") || 
-               item.getKey().getName().equals("Forest")) {
-                if(item.getValue() == 1) {
-                    continue;
-                }
-            }
-            add_items.add(item);
-        }
-
-        this.getCatalogManager().addItems(add_items);
+        this.getCatalogManager().addItems(items);
         this.getDeckManager().removeItems(items);
         this.getDeckController().notifyModelChanged();
     }

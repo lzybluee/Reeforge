@@ -9,6 +9,8 @@ import forge.game.GameObject;
 import forge.game.ability.AbilityUtils;
 import forge.game.card.*;
 import forge.game.cost.Cost;
+import forge.game.cost.CostRemoveCounter;
+import forge.game.keyword.Keyword;
 import forge.game.phase.PhaseHandler;
 import forge.game.phase.PhaseType;
 import forge.game.player.Player;
@@ -271,25 +273,7 @@ public class DamageDealAi extends DamageAiBase {
         final Player activator = sa.getActivatingPlayer();
         final Card source = sa.getHostCard();
         final Game game = source.getGame();
-        List<Card> hPlay = CardLists.getValidCards(game.getCardsIn(ZoneType.Battlefield), tgt.getValidTgts(), activator, source, sa);
-
-        if (activator.equals(ai)) {
-            hPlay = CardLists.filterControlledBy(hPlay, pl);
-        }
-
-        final List<GameObject> objects = Lists.newArrayList(sa.getTargets().getTargets());
-        if (sa.hasParam("TargetUnique")) {
-            objects.addAll(sa.getUniqueTargets());
-        }
-        for (final Object o : objects) {
-            if (o instanceof Card) {
-                final Card c = (Card) o;
-                if (hPlay.contains(c)) {
-                    hPlay.remove(c);
-                }
-            }
-        }
-        hPlay = CardLists.getTargetableCards(hPlay, sa);
+        List<Card> hPlay = getTargetableCards(ai, sa, pl, tgt, activator, source, game);
 
         List<Card> killables = CardLists.filter(hPlay, new Predicate<Card>() {
             @Override
@@ -336,6 +320,114 @@ public class DamageDealAi extends DamageAiBase {
         }
 
         return null;
+    }
+
+    /**
+     * <p>
+     * dealDamageChooseTgtPW.
+     * </p>
+     *
+     * @param d
+     *            a int.
+     * @param noPrevention
+     *            a boolean.
+     * @param pl
+     *            a {@link forge.game.player.Player} object.
+     * @param mandatory
+     *            a boolean.
+     * @return a {@link forge.game.card.Card} object.
+     */
+    private Card dealDamageChooseTgtPW(final Player ai, final SpellAbility sa, final int d, final boolean noPrevention,
+                                       final Player pl, final boolean mandatory) {
+
+        final TargetRestrictions tgt = sa.getTargetRestrictions();
+        final Player activator = sa.getActivatingPlayer();
+        final Card source = sa.getHostCard();
+        final Game game = source.getGame();
+        List<Card> hPlay = CardLists.filter(getTargetableCards(ai, sa, pl, tgt, activator, source, game), CardPredicates.Presets.PLANESWALKERS);
+
+        List<Card> killables = CardLists.filter(hPlay, new Predicate<Card>() {
+            @Override
+            public boolean apply(final Card c) {
+                return c.getSVar("Targeting").equals("Dies")
+                        || (ComputerUtilCombat.getEnoughDamageToKill(c, d, source, false, noPrevention) <= d)
+                        && !ComputerUtil.canRegenerate(ai, c)
+                        && !(c.getSVar("SacMe").length() > 0);
+            }
+        });
+
+        // Filter AI-specific targets if provided
+        killables = ComputerUtil.filterAITgts(sa, ai, new CardCollection(killables), true);
+
+        // We can kill a planeswalker, so go for it
+        if (pl.isOpponentOf(ai) && activator.equals(ai) && !killables.isEmpty()) {
+            return ComputerUtilCard.getBestPlaneswalkerAI(killables);
+        }
+
+        // We can hurt a planeswalker, so rank the one which is the best target
+        if (!hPlay.isEmpty() && pl.isOpponentOf(ai) && activator.equals(ai)) {
+            return getBestPlaneswalkerToDamage(hPlay);
+        }
+
+        return null;
+    }
+
+    private Card getBestPlaneswalkerToDamage(final List<Card> pws) {
+        Card bestTgt = null;
+
+        // As of right now, ranks planeswalkers by their Current Loyalty * 10 + Big buff if close to "Ultimate"
+        int bestScore = 0;
+        for (Card pw : pws) {
+            int curLoyalty = pw.getCounters(CounterType.LOYALTY);
+            int pwScore = curLoyalty * 10;
+
+            for (SpellAbility sa : pw.getSpellAbilities()) {
+                if (sa.hasParam("Ultimate") && sa.getPayCosts() != null) {
+                    int loyaltyCost = 0;
+                    CostRemoveCounter remLoyalty = sa.getPayCosts().getCostPartByType(CostRemoveCounter.class);
+                    if (remLoyalty != null) {
+                        // if remLoyalty is null, generally there's an AddCounter<0/LOYALTY> cost, like for Gideon Jura.
+                        loyaltyCost = remLoyalty.convertAmount();
+                    }
+
+                    if (loyaltyCost != 0 && loyaltyCost - curLoyalty <= 1) {
+                        // Will ultimate soon
+                        pwScore += 10000;
+                    }
+
+                    if (pwScore > bestScore) {
+                        bestScore = pwScore;
+                        bestTgt = pw;
+                    }
+                }
+            }
+        }
+
+        return bestTgt;
+    }
+
+
+    private List<Card> getTargetableCards(Player ai, SpellAbility sa, Player pl, TargetRestrictions tgt, Player activator, Card source, Game game) {
+        List<Card> hPlay = CardLists.getValidCards(game.getCardsIn(ZoneType.Battlefield), tgt.getValidTgts(), activator, source, sa);
+
+        if (activator.equals(ai)) {
+            hPlay = CardLists.filterControlledBy(hPlay, pl);
+        }
+
+        final List<GameObject> objects = Lists.newArrayList(sa.getTargets().getTargets());
+        if (sa.hasParam("TargetUnique")) {
+            objects.addAll(sa.getUniqueTargets());
+        }
+        for (final Object o : objects) {
+            if (o instanceof Card) {
+                final Card c = (Card) o;
+                if (hPlay.contains(c)) {
+                    hPlay.remove(c);
+                }
+            }
+        }
+        hPlay = CardLists.getTargetableCards(hPlay, sa);
+        return hPlay;
     }
 
     /**
@@ -475,7 +567,27 @@ public class DamageDealAi extends DamageAiBase {
                 return targetingPlayer.getController().chooseTargetsFor(sa);
             }
 
+            if (tgt.canTgtPlaneswalker()) {
+                // We can damage planeswalkers with this, consider targeting.
+                Card c = this.dealDamageChooseTgtPW(ai, sa, dmg, noPrevention, enemy, false);
+                if (c != null && !this.shouldTgtP(ai, sa, dmg, noPrevention, true)) {
+                    tcs.add(c);
+                    if (divided) {
+                        final int assignedDamage = ComputerUtilCombat.getEnoughDamageToKill(c, dmg, source, false, noPrevention);
+                        if (assignedDamage <= dmg) {
+                            tgt.addDividedAllocation(c, assignedDamage);
+                        }
+                        dmg = dmg - assignedDamage;
+                        if (dmg <= 0) {
+                            break;
+                        }
+                    }
+                    continue;
+                }
+            }
+
             if (tgt.canTgtCreatureAndPlayer()) {
+                Card c = null;
 
                 if (this.shouldTgtP(ai, sa, dmg, noPrevention)) {
                     tcs.add(enemy);
@@ -489,7 +601,8 @@ public class DamageDealAi extends DamageAiBase {
                     dmg = dmg * sa.getTargets().getNumTargeted() / (sa.getTargets().getNumTargeted() +1);
                 }
 
-                final Card c = this.dealDamageChooseTgtC(ai, sa, dmg, noPrevention, enemy, false);
+                // look for creature targets; currently also catches planeswalkers that can be killed immediately
+                c = this.dealDamageChooseTgtC(ai, sa, dmg, noPrevention, enemy, false);
                 if (c != null) {
                     //option to hold removal instead only applies for single targeted removal
                     if (sa.isSpell() && !divided && !immediately && tgt.getMaxTargets(sa.getHostCard(), sa) == 1) {
@@ -630,7 +743,7 @@ public class DamageDealAi extends DamageAiBase {
             if (o instanceof Card) {
                 Card c = (Card) o;
                 final int restDamage = ComputerUtilCombat.predictDamageTo(c, dmg, saMe.getHostCard(), false);
-                if (!c.hasKeyword("Indestructible") && ComputerUtilCombat.getDamageToKill(c) <= restDamage) {
+                if (!c.hasKeyword(Keyword.INDESTRUCTIBLE) && ComputerUtilCombat.getDamageToKill(c) <= restDamage) {
                     if (c.getController().equals(ai)) {
                         return false;
                     } else {
@@ -685,10 +798,21 @@ public class DamageDealAi extends DamageAiBase {
         final boolean noPrevention = sa.hasParam("NoPrevention");
         final boolean divided = sa.hasParam("DividedAsYouChoose");
         final Player opp = ComputerUtil.getOpponentFor(ai);
-        System.out.println("damageChooseRequiredTargets " + ai + " " + sa);
 
         while (sa.getTargets().getNumTargeted() < tgt.getMinTargets(sa.getHostCard(), sa)) {
-            // TODO: Consider targeting the planeswalker
+            if (tgt.canTgtPlaneswalker()) {
+                final Card c = this.dealDamageChooseTgtPW(ai, sa, dmg, noPrevention, ai, mandatory);
+                if (c != null) {
+                    sa.getTargets().add(c);
+                    if (divided) {
+                        tgt.addDividedAllocation(c, dmg);
+                        break;
+                    }
+                    continue;
+                }
+            }
+
+            // TODO: This currently also catches planeswalkers that can be killed (still necessary? Or can be removed?)
             if (tgt.canTgtCreature()) {
                 final Card c = this.dealDamageChooseTgtC(ai, sa, dmg, noPrevention, ai, mandatory);
                 if (c != null) {
@@ -819,7 +943,7 @@ public class DamageDealAi extends DamageAiBase {
         for (Card c : creatures) {
             int power = c.getNetPower();
             int toughness = c.getNetToughness();
-            boolean canDie = !(c.hasKeyword("Indestructible") || ComputerUtil.canRegenerate(c.getController(), c));
+            boolean canDie = !(c.hasKeyword(Keyword.INDESTRUCTIBLE) || ComputerUtil.canRegenerate(c.getController(), c));
 
             // Currently will target creatures with toughness 3+ (or power 5+) 
             // and only if the creature can actually die, do not "underdrain"

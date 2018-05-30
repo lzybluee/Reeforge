@@ -26,6 +26,7 @@ import forge.game.card.CardPredicates.Presets;
 import forge.game.combat.AttackingBand;
 import forge.game.combat.Combat;
 import forge.game.combat.CombatUtil;
+import forge.game.keyword.Keyword;
 import forge.game.player.Player;
 import forge.game.player.PlayerView;
 import forge.game.zone.ZoneType;
@@ -66,20 +67,7 @@ public class InputAttack extends InputSyncronizedBase {
     @Override
     public final void showMessage() {
         // TODO still seems to have some issues with multiple planeswalkers
-        GameEntity preferredDefender = defenders.getFirst();
-        int max_loyalty_counters = 0;
-        for(GameEntity entity : defenders) {
-            if(entity instanceof Card) {
-                Card planeswalker = (Card)entity;
-                int loyalty_counters = planeswalker.getCounters(CounterType.LOYALTY);
-                if(loyalty_counters > max_loyalty_counters) {
-                    max_loyalty_counters = loyalty_counters;
-                    preferredDefender = entity;
-                }
-            }
-        }
-
-        setCurrentDefender(preferredDefender);
+        setCurrentDefender(defenders.getFirst());
 
         if (currentDefender == null) {
             System.err.println("InputAttack has no potential defenders!");
@@ -326,7 +314,7 @@ public class InputAttack extends InputSyncronizedBase {
     private boolean isBandingPossible() {
         final CardCollectionView possibleAttackers = playerAttacks.getCardsIn(ZoneType.Battlefield);
         for (final Card c : possibleAttackers) {
-            if ((c.hasKeyword("Banding") || c.hasStartOfKeyword("Bands with Other")) &&
+            if ((c.hasKeyword(Keyword.BANDING) || c.hasStartOfKeyword("Bands with Other")) &&
                     CombatUtil.canAttack(c, currentDefender)) {
                 return true;
             }

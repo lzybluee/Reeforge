@@ -167,7 +167,9 @@ public final class CEditorConstructed extends ACEditorBase<PaperCard, Deck> {
                 break; //no other sections should support toAlternate
             }
         }
-
+        else {
+            editor.getCatalogManager().addItems(items);
+        }
         editor.getDeckManager().removeItems(items);
 
         controller.notifyModelChanged();

@@ -45,8 +45,8 @@ public final class PaperCard implements Comparable<IPaperCard>, InventoryItemFro
 
     // These fields are kinda PK for PrintedCard
     private final String name;
-    private String edition;
-    private int artIndex;
+    private final String edition;
+    private final int artIndex;
     private final boolean foil;
     private Boolean hasImage;
 
@@ -120,6 +120,7 @@ public final class PaperCard implements Comparable<IPaperCard>, InventoryItemFro
             return from.getName();
         }
     };
+
 
     public PaperCard(final CardRules rules0, final String edition0, final CardRarity rarity0, final int artIndex0) {
         this(rules0, edition0, rarity0, artIndex0, false);
@@ -215,17 +216,11 @@ public final class PaperCard implements Comparable<IPaperCard>, InventoryItemFro
         IPaperCard pc = null;
         pc = StaticData.instance().getCommonCards().getCard(name, edition, artIndex);
         if (pc == null) {
-            pc = StaticData.instance().getVariantCards().getCard(name, edition, artIndex);
+            pc = StaticData.instance().getCommonCards().getCard(name, null, 0);
             if (pc == null) {
-                pc = StaticData.instance().getCommonCards().getCard(name, null, 0);
-                if (pc != null) {
-                    edition = pc.getEdition();
-                    artIndex = pc.getArtIndex();
-                } else {
-                    pc = StaticData.instance().getVariantCards().getCard(name, null, 0);
-                    if (pc == null) {
-                        throw new IOException(TextUtil.concatWithSpace("Card", name, "not found"));
-                    }
+                pc = StaticData.instance().getVariantCards().getCard(name, null, 0);
+                if (pc == null) {
+                    throw new IOException(TextUtil.concatWithSpace("Card", name, "not found"));
                 }
             }
         }
@@ -241,4 +236,16 @@ public final class PaperCard implements Comparable<IPaperCard>, InventoryItemFro
         }
         return imageKey;
     }
+
+    // Return true if card is one of the five basic lands that can be added for free
+    public boolean isVeryBasicLand() {
+        if ((this.getName().equals("Swamp"))
+                || (this.getName().equals("Plains"))
+                || (this.getName().equals("Island"))
+                || (this.getName().equals("Forest"))
+                || (this.getName().equals("Mountain"))) {
+            return true;
+        } else return false;
+    }
 }
+

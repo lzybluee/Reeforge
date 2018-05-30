@@ -28,9 +28,8 @@ import com.google.common.collect.ImmutableList;
  */
 public enum CounterType {
 
-    P1P1("+1/+1", "+1/+1", 96, 226, 23),
-
     M1M1("-1/-1", "-1/-1", 255, 110, 106),
+    P1P1("+1/+1", "+1/+1", 96, 226, 23),
 
     LOYALTY("LOYAL", 198, 198, 198),
 
@@ -87,6 +86,8 @@ public enum CounterType {
     DREAM("DREAM", 190, 189, 255),
 
     ECHO("ECHO", 225, 180, 255),
+
+    EGG("EGG", 255, 245, 195),
 
     ELIXIR("ELIXR", 81, 221, 175),
 
@@ -239,6 +240,8 @@ public enum CounterType {
     SHIELD("SHLD", 202, 198, 186),
 
     SHRED("SHRED", 255, 165, 152),
+
+    SILVER("SILVER", 192, 192, 192),
 
     SLEEP("SLEEP", 178, 192, 255),
 

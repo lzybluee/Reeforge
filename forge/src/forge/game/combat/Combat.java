@@ -27,6 +27,7 @@ import forge.game.card.Card;
 import forge.game.card.CardCollection;
 import forge.game.card.CardCollectionView;
 import forge.game.card.CardDamageMap;
+import forge.game.keyword.Keyword;
 import forge.game.player.Player;
 import forge.game.spellability.SpellAbilityStackInstance;
 import forge.game.trigger.TriggerType;
@@ -397,22 +398,7 @@ public class Combat {
     }
 
     public final CardCollection getBlockers(final AttackingBand band) {
-        Collection<Card> blockers = null;
-        if(blockersOrderedForDamageAssignment.isEmpty()) {
-            blockers = blockedBands.get(band);
-        } else {
-            blockers = new CardCollection();
-            for(Card attacker : band.getAttackers()) {
-                Collection<Card> bandBlockers = blockersOrderedForDamageAssignment.get(attacker);
-                if(bandBlockers == null)
-                    continue;
-                for(Card c : bandBlockers) {
-                    if(!blockers.contains(c)) {
-                        blockers.add(c);
-                    }
-                }
-            }
-        }
+        Collection<Card> blockers = blockedBands.get(band);
         return blockers == null ? new CardCollection() : new CardCollection(blockers);
     }
 
@@ -707,7 +693,7 @@ public class Combat {
                 continue;
             }
 
-            boolean trampler = attacker.hasKeyword("Trample");
+            boolean trampler = attacker.hasKeyword(Keyword.TRAMPLE);
             orderedBlockers = blockersOrderedForDamageAssignment.get(attacker);
             assignedDamage = true;
             // If the Attacker is unblocked, or it's a trampler and has 0 blockers, deal damage to defender
@@ -824,7 +810,7 @@ public class Combat {
 
         // Run the trigger to deal combat damage once
         // LifeLink for Combat Damage at this place
-        dealtDamageTo.triggerDamageDoneOnce(true);
+        dealtDamageTo.triggerDamageDoneOnce(true, null);
         dealtDamageTo.clear();
     }
 

@@ -22,6 +22,7 @@ import forge.StaticData;
 import forge.assets.FSkinProp;
 import forge.game.card.Card;
 import forge.game.card.CardView.CardStateView;
+import forge.game.keyword.Keyword;
 import forge.gui.SOverlayUtils;
 import forge.item.PaperCard;
 import forge.toolbox.FOverlay;
@@ -230,12 +231,12 @@ public enum CardZoomer {
             if (cardName.isEmpty()) { cardName = thisCard.getCard().getAlternateState().getName(); }
             
             PaperCard pc = StaticData.instance().getCommonCards().getCard(cardName);
-            boolean isAftermath = pc != null && Card.getCardForUi(pc).hasKeyword("Aftermath");
+            boolean isAftermath = pc != null && Card.getCardForUi(pc).hasKeyword(Keyword.AFTERMATH);
 
             return thisCard.getCard().isFaceDown() || isSplitRotated ? 0 : isAftermath ? 270 : 90; // rotate Aftermath splits the other way to correctly show the right split (graveyard) half
         }
 
-        return 0;
+        return thisCard.getType().isPlane() || thisCard.getType().isPhenomenon() ? 90 : 0;
     }
 
     private void setLayout() {

@@ -31,11 +31,14 @@ import java.io.Serializable;
  * The Class CostPart.
  */
 public abstract class CostPart implements Comparable<CostPart>, Cloneable, Serializable {
+    /**
+     * Serializables need a version ID.
+     */
+    private static final long serialVersionUID = 1L;
     private String originalAmount;
     private String amount;
     private final String originalType, originalTypeDescription;
     private String typeDescription, type;
-    private boolean mustPay;
 
     /**
      * Instantiates a new cost part.
@@ -202,13 +205,5 @@ public abstract class CostPart implements Comparable<CostPart>, Cloneable, Seria
     @Override
     public int compareTo(CostPart o) {
         return this.paymentOrder() - o.paymentOrder();
-    }
-
-    public boolean mustPay() {
-        return mustPay;
-    }
-
-    public void setMustPay(boolean pay) {
-        mustPay = pay;
     }
 }

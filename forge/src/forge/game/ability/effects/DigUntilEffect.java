@@ -5,7 +5,6 @@ import forge.game.ability.AbilityUtils;
 import forge.game.ability.SpellAbilityEffect;
 import forge.game.card.Card;
 import forge.game.card.CardCollection;
-import forge.game.card.CardLists;
 import forge.game.player.Player;
 import forge.game.spellability.SpellAbility;
 import forge.game.spellability.TargetRestrictions;
@@ -38,7 +37,7 @@ public class DigUntilEffect extends SpellAbilityEffect {
             sb.append(pl).append(" ");
         }
 
-        sb.append("reveals cards from his or her library until revealing ");
+        sb.append("reveals cards from their library until revealing ");
         sb.append(untilAmount).append(" ").append(desc).append(" card");
         if (untilAmount != 1) {
             sb.append("s");
@@ -57,18 +56,18 @@ public class DigUntilEffect extends SpellAbilityEffect {
             sb.append(" ");
 
             if (found.equals(ZoneType.Hand)) {
-                sb.append("into his or her hand ");
+                sb.append("into their hand ");
             }
 
             if (revealed.equals(ZoneType.Graveyard)) {
-                sb.append("and all other cards into his or her graveyard.");
+                sb.append("and all other cards into their graveyard.");
             }
             if (revealed.equals(ZoneType.Exile)) {
                 sb.append("and exile all other cards revealed this way.");
             }
         } else {
             if (revealed.equals(ZoneType.Hand)) {
-                sb.append("all cards revealed this way into his or her hand");
+                sb.append("all cards revealed this way into their hand");
             }
         }
         return sb.toString();
@@ -180,7 +179,7 @@ public class DigUntilEffect extends SpellAbilityEffect {
                     }
                 }
                 if (sa.hasParam("RevealRandomOrder")) {
-                    CardLists.shuffle(revealed);
+                    Collections.shuffle(revealed, MyRandom.getRandom());
                 }
 
                 if (sa.hasParam("NoneFoundDestination") && found.size() < untilAmount) {

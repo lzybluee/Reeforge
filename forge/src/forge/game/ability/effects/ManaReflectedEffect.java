@@ -9,7 +9,6 @@ import forge.game.player.Player;
 import forge.game.spellability.AbilityManaPart;
 import forge.game.spellability.SpellAbility;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -58,51 +57,40 @@ public class ManaReflectedEffect extends SpellAbilityEffect {
 
         String baseMana;
 
-        if (colors.size() == 0) {
-            return "0";
-        } else if (sa.getNeedChooseMana()) {
-            baseMana = MagicColor.toShortString(player.getController().chooseColor("Select Mana to Produce", sa, ColorSet.fromNames(colors)));
-        } else if (colors.size() == 1) {
-            baseMana = MagicColor.toShortString(colors.iterator().next());
+        // TODO: This effect explicitly obeys express color choice as set by auto payment and AI routines in order
+        // to avoid misplays and auto mana payment selection errors. Perhaps a better solution is possible?
+        String expressChoiceColors = sa.getManaPart().getExpressChoice();
+        ColorSet colorMenu = null;
+        byte mask = 0;
+        // loop through colors to make menu
+        for (int nChar = 0; nChar < expressChoiceColors.length(); nChar++) {
+            mask |= MagicColor.fromName(expressChoiceColors.charAt(nChar));
+        }
+
+        if (mask == 0 && !expressChoiceColors.isEmpty() && colors.contains("colorless")) {
+            baseMana = MagicColor.toShortString(player.getController().chooseColorAllowColorless("Select Mana to Produce", sa.getHostCard(), ColorSet.fromMask(mask)));
         } else {
-            if (colors.contains("colorless")) {
-                baseMana = MagicColor.toShortString(player.getController().chooseColorAllowColorless("Select Mana to Produce", sa.getHostCard(), ColorSet.fromNames(colors)));
-            } else {
-                if(sa.getUsedToPayMana() != null) {
-                    String usedToPayMana = sa.getUsedToPayMana().toString();
-                    ArrayList<String> new_colors = new ArrayList<>();
-                    
-                    for(String color : colors) {
-                        if(color.equals("white") && (usedToPayMana.contains("{W") || usedToPayMana.contains("W}"))) {
-                            new_colors.add("white");
-                        }
-                        if(color.equals("blue") && (usedToPayMana.contains("{U") || usedToPayMana.contains("U}"))) {
-                            new_colors.add("blue");
-                        }
-                        if(color.equals("black") && (usedToPayMana.contains("{B") || usedToPayMana.contains("B}"))) {
-                            new_colors.add("black");
-                        }
-                        if(color.equals("red") && (usedToPayMana.contains("{R") || usedToPayMana.contains("R}"))) {
-                            new_colors.add("red");
-                        }
-                        if(color.equals("green") && (usedToPayMana.contains("{G") || usedToPayMana.contains("G}"))) {
-                            new_colors.add("green");
-                        }
-                    }
-                    
-                    if(new_colors.size() == 1) {
-                        baseMana = MagicColor.toShortString(new_colors.iterator().next());
-                    } else if(new_colors.size() > 1) {
-                        baseMana = MagicColor.toShortString(player.getController().chooseColor("Select Mana to Produce", sa, ColorSet.fromNames(new_colors)));
-                    } else {
-                        baseMana = MagicColor.toShortString(colors.iterator().next());
-                    }
+            // Nothing set previously so ask player if needed
+            if (mask == 0) {
+                if (colors.isEmpty()) {
+                    return "0";
+                } else if (colors.size() == 1) {
+                    baseMana = MagicColor.toShortString(colors.iterator().next());
                 } else {
-                    baseMana = MagicColor.toShortString(player.getController().chooseColor("Select Mana to Produce", sa, ColorSet.fromNames(colors)));
+                    if (colors.contains("colorless")) {
+                        baseMana = MagicColor.toShortString(player.getController().chooseColorAllowColorless("Select Mana to Produce", sa.getHostCard(), ColorSet.fromNames(colors)));
+                    } else {
+                        baseMana = MagicColor.toShortString(player.getController().chooseColor("Select Mana to Produce", sa, ColorSet.fromNames(colors)));
+                    }
                 }
+            } else {
+                colorMenu = ColorSet.fromMask(mask);
+                byte color = sa.getActivatingPlayer().getController().chooseColor("Select Mana to Produce", sa, colorMenu);
+                if (color == 0) {
+                    System.err.println("Unexpected behavior in ManaReflectedEffect: " + sa.getActivatingPlayer() + " - color mana choice is empty for " + sa.getHostCard().getName());
+                }
+                baseMana = MagicColor.toShortString(color);
             }
-
-
         }
 
         final StringBuilder sb = new StringBuilder();

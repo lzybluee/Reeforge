@@ -58,10 +58,7 @@ public class VPrompt implements IVDoc<CPrompt> {
     private CardView card = null ; 
 
     public void setCardView(final CardView card) {
-        this.card = card;
-        if (this.controller.getMatchUI() != null && card != null) {
-            this.controller.getMatchUI().setPaperCard(card);
-        }
+	this.card = card ;
     }
 
     private KeyAdapter buttonKeyAdapter = new KeyAdapter() {
@@ -100,7 +97,7 @@ public class VPrompt implements IVDoc<CPrompt> {
         	@Override 
         	public void mouseEntered(final MouseEvent e) {
         		if ( card != null ) {
-			    controller.getMatchUI().setPaperCard(card);
+			    controller.getMatchUI().setCard(card);
         		}
         	}
         });

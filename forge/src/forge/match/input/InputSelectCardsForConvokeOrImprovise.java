@@ -128,9 +128,7 @@ public final class InputSelectCardsForConvokeOrImprovise extends InputSelectMany
     protected boolean hasEnoughTargets() { return true; }
 
     @Override
-    protected boolean hasAllTargets() {
-        return chosenCards.size() == availableCards.size();
-    }
+    protected boolean hasAllTargets() { return false; }
 
     @Override
     public Collection<Card> getSelected() {

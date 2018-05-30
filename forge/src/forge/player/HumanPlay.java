@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import forge.game.cost.*;
+import forge.game.spellability.LandAbility;
 import forge.game.spellability.OptionalCostValue;
 import forge.game.spellability.Spell;
 import forge.util.TextUtil;
@@ -66,12 +67,15 @@ public class HumanPlay {
     public final static boolean playSpellAbility(final PlayerControllerHuman controller, final Player p, SpellAbility sa) {
         FThreads.assertExecutedByEdt(false);
 
-        if (sa == controller.getGame().PLAY_LAND_SURROGATE) {
-            p.playLand(sa.getHostCard(), false);
+        if (sa instanceof LandAbility) {
+            sa.setActivatingPlayer(p);
+            if (sa.canPlay()) {
+                sa.resolve();
+            }
             return false;
         }
 
-        boolean castFaceDown = sa instanceof Spell && ((Spell)sa).isCastFaceDown();
+        boolean castFaceDown = sa.isCastFaceDown();
 
         sa.setActivatingPlayer(p);
         Card source = sa.getHostCard();
@@ -85,16 +89,7 @@ public class HumanPlay {
 
         // extra play check
         if (sa.isSpell() && !sa.canPlay()) {
-            // Exceptional cases where canPlay should not run
-            boolean exemptFromCheck = false;
-            if (source.hasSuspend() && p.getGame().isCardExiled(source) && source.getCounters(CounterType.TIME) == 0) {
-                // A card is about to ETB from Suspend
-                exemptFromCheck = true;
-            }
-
-            if (!exemptFromCheck) {
-                return false;
-            }
+            return false;
         }
 
         if (flippedToCast && !castFaceDown) {
@@ -221,10 +216,6 @@ public class HumanPlay {
                 }
                 if (sa.isSpell() && source.getType().hasStringType("Arcane")) {
                     sa = AbilityUtils.addSpliceEffects(sa);
-                }
-            } else if (sa.isCopied() && !sa.getSVar("CanSelectCharmEffect").isEmpty()) {
-                if (sa.getApi() == ApiType.Charm && !sa.isWrapper()) {
-                    CharmEffect.makeChoices(sa);
                 }
             }
             final CostPayment payment = new CostPayment(sa.getPayCosts(), sa);
@@ -428,10 +419,10 @@ public class HumanPlay {
                 CardDamageMap damageMap = new CardDamageMap();
                 CardDamageMap preventMap = new CardDamageMap();
 
-                p.addDamage(amount, source, damageMap, preventMap);
+                p.addDamage(amount, source, damageMap, preventMap, sourceAbility);
 
                 preventMap.triggerPreventDamage(false);
-                damageMap.triggerDamageDoneOnce(false);
+                damageMap.triggerDamageDoneOnce(false, sourceAbility);
             }
             else if (part instanceof CostPutCounter) {
                 CounterType counterType = ((CostPutCounter) part).getCounter();

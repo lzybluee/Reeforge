@@ -7,22 +7,21 @@ import forge.card.CardEdition;
 import forge.card.CardRules;
 import forge.card.CardRulesPredicates;
 import forge.deck.generation.DeckGeneratorBase;
-import forge.deck.generation.IDeckGenPool;
-import forge.game.GameFormat;
-import forge.game.GameType;
 import forge.item.PaperCard;
 import forge.model.FModel;
 import forge.util.ItemPool;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by maustin on 09/05/2017.
  */
 public class CommanderDeckGenerator extends DeckProxy implements Comparable<CommanderDeckGenerator> {
     public static List<DeckProxy> getCommanderDecks(final DeckFormat format, boolean isForAi, boolean isCardGen){
+        if(format.equals(DeckFormat.Brawl)){
+            return getBrawlDecks(format, isForAi, isCardGen);
+        }
         ItemPool uniqueCards;
         if(isCardGen){
             uniqueCards = new ItemPool<PaperCard>(PaperCard.class);
@@ -43,6 +42,31 @@ public class CommanderDeckGenerator extends DeckProxy implements Comparable<Comm
                         }
                     },
                     canPlay), PaperCard.FN_GET_RULES));
+        final List<DeckProxy> decks = new ArrayList<DeckProxy>();
+        for(PaperCard legend: legends) {
+            decks.add(new CommanderDeckGenerator(legend, format, isForAi, isCardGen));
+        }
+        return decks;
+    }
+
+    public static List<DeckProxy> getBrawlDecks(final DeckFormat format, boolean isForAi, boolean isCardGen){
+        ItemPool uniqueCards;
+        if(isCardGen){
+            uniqueCards = new ItemPool<PaperCard>(PaperCard.class);
+            //TODO: upate to actual Brawl model from real Brawl decks
+            Iterable<String> legendNames=CardArchetypeLDAGenerator.ldaPools.get(FModel.getFormats().getStandard().getName()).keySet();
+            for(String legendName:legendNames) {
+                uniqueCards.add(FModel.getMagicDb().getCommonCards().getUniqueByName(legendName));
+            }
+        }else {
+            uniqueCards = ItemPool.createFrom(FModel.getMagicDb().getCommonCards().getUniqueCards(), PaperCard.class);
+        }
+        Predicate<CardRules> canPlay = isForAi ? DeckGeneratorBase.AI_CAN_PLAY : DeckGeneratorBase.HUMAN_CAN_PLAY;
+        @SuppressWarnings("unchecked")
+        Iterable<PaperCard> legends = Iterables.filter(uniqueCards.toFlatList(), Predicates.and(format.isLegalCardPredicate(),
+                Predicates.compose(Predicates.and(
+                CardRulesPredicates.Presets.CAN_BE_BRAWL_COMMANDER,
+                canPlay), PaperCard.FN_GET_RULES)));
         final List<DeckProxy> decks = new ArrayList<DeckProxy>();
         for(PaperCard legend: legends) {
             decks.add(new CommanderDeckGenerator(legend, format, isForAi, isCardGen));

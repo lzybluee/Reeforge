@@ -6,23 +6,25 @@ public interface IDevModeCheats {
 
     void setViewAllCards(boolean canViewAll);
 
-    void generateMana(boolean empty);
+    void generateMana();
 
     void dumpGameState();
 
     void setupGameState();
 
-    void tutorForCard(boolean sideboard);
+    void tutorForCard();
 
-    void addCountersToPermanent(boolean player);
+    void addCountersToPermanent();
 
-    void tapPermanents(boolean all);
+    void removeCountersFromPermanent();
 
-    void untapPermanents(boolean all);
+    void tapPermanents();
 
-    void setPlayerLife(boolean maxlife);
+    void untapPermanents();
 
-    void winGame(boolean lose);
+    void setPlayerLife();
+
+    void winGame();
 
     void addCardToHand();
 
@@ -61,16 +63,16 @@ public interface IDevModeCheats {
      */
     public static final IDevModeCheats NO_CHEAT = new IDevModeCheats() {
         @Override
-        public void winGame(boolean lose) {
+        public void winGame() {
         }
         @Override
-        public void untapPermanents(boolean all) {
+        public void untapPermanents() {
         }
         @Override
-        public void tutorForCard(boolean sideboard) {
+        public void tutorForCard() {
         }
         @Override
-        public void tapPermanents(boolean all) {
+        public void tapPermanents() {
         }
         @Override
         public void setupGameState() {
@@ -79,7 +81,7 @@ public interface IDevModeCheats {
         public void setViewAllCards(final boolean canViewAll) {
         }
         @Override
-        public void setPlayerLife(boolean maxlife) {
+        public void setPlayerLife() {
         }
         @Override
         public void setCanPlayUnlimitedLands(final boolean canPlayUnlimitedLands0) {
@@ -91,13 +93,16 @@ public interface IDevModeCheats {
         public void planeswalkTo() {
         }
         @Override
-        public void generateMana(boolean empty) {
+        public void generateMana() {
         }
         @Override
         public void dumpGameState() {
         }
         @Override
-        public void addCountersToPermanent(boolean player) {
+        public void addCountersToPermanent() {
+        }
+        @Override
+        public void removeCountersFromPermanent() {
         }
         @Override
         public void addCardToHand() {

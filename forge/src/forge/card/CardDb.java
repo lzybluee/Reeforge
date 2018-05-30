@@ -68,7 +68,7 @@ public final class CardDb implements ICardDatabase, IDeckGenPool {
 
         public boolean accept(CardEdition ed) {
             if (ed == null)  return false;
-            return !filterSets || ed.getType() == Type.CORE || ed.getType() == Type.EXPANSION;
+            return !filterSets || ed.getType() == Type.CORE || ed.getType() == Type.EXPANSION || ed.getType() == Type.REPRINT;
         }
     }
 
@@ -130,7 +130,7 @@ public final class CardDb implements ICardDatabase, IDeckGenPool {
             if (main.getAltName() != null) {
                 alternateName.put(main.getAltName(), main.getName());
             }
-            final ICardFace other = rule.getMainPart();
+            final ICardFace other = rule.getOtherPart();
             if (other != null) {
                 facesByName.put(other.getName(), other);
                 if (other.getAltName() != null) {
@@ -172,11 +172,12 @@ public final class CardDb implements ICardDatabase, IDeckGenPool {
         Date today = new Date();
 
         for (CardEdition e : editions.getOrderedEditions()) {
-            boolean isCoreExpSet = e.getType() == CardEdition.Type.CORE || e.getType() == CardEdition.Type.EXPANSION;
+            boolean coreOrExpSet = e.getType() == CardEdition.Type.CORE || e.getType() == CardEdition.Type.EXPANSION;
+            boolean isCoreExpSet = coreOrExpSet || e.getType() == CardEdition.Type.REPRINT;
             if (logMissingPerEdition && isCoreExpSet) {
                 System.out.print(e.getName() + " (" + e.getCards().length + " cards)");
             }
-            if (e.getDate().after(today)) {
+            if (coreOrExpSet && e.getDate().after(today)) {
                 upcomingSet = e;
             }
 
@@ -246,13 +247,8 @@ public final class CardDb implements ICardDatabase, IDeckGenPool {
         uniqueCardsByName.clear();
         allCards.clear();
         for (Entry<String, Collection<PaperCard>> kv : allCardsByName.asMap().entrySet()) {
-            PaperCard paper = getFirstWithImage(kv.getValue());
-            uniqueCardsByName.put(kv.getKey(), paper);
-            for(PaperCard c : kv.getValue()) {
-                if(!allCards.contains(c)) {
-                    allCards.add(c);
-                }
-            }
+            uniqueCardsByName.put(kv.getKey(), getFirstWithImage(kv.getValue()));
+            allCards.addAll(kv.getValue());
         }
     }
 

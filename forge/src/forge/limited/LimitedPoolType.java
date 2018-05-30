@@ -1,11 +1,10 @@
 package forge.limited;
 
 public enum LimitedPoolType { 
-    Block("Block / Set"),
     Full("Full Cardpool"),
-    Format("Constructed Format"),
-    Custom("Custom Cube"),
-    FantasyBlock("Fantasy Block");
+    Block("Block / Set"),
+    FantasyBlock("Fantasy Block"),
+    Custom("Custom Cube");
     
     private final String displayName;
     private LimitedPoolType(String name) {

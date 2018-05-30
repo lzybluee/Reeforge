@@ -160,6 +160,14 @@ public class PlayerControllerAi extends PlayerController {
     }
 
     @Override
+    public <T extends GameEntity> List<T> chooseEntitiesForEffect(
+            FCollectionView<T> optionList, DelayedReveal delayedReveal, SpellAbility sa, String title,
+            Player targetedPlayer) {
+        // this isn't used
+        return null;
+    }
+
+    @Override
     public SpellAbility chooseSingleSpellForEffect(java.util.List<SpellAbility> spells, SpellAbility sa, String title) {
         ApiType api = sa.getApi();
         if (null == api) {
@@ -279,7 +287,7 @@ public class PlayerControllerAi extends PlayerController {
         }
 
         // put the rest on top in random order
-        CardLists.shuffle(toTop);
+        Collections.shuffle(toTop, MyRandom.getRandom());
         return ImmutablePair.of(toTop, toBottom);
     }
 
@@ -440,8 +448,10 @@ public class PlayerControllerAi extends PlayerController {
     @Override
     public void playChosenSpellAbility(SpellAbility sa) {
         // System.out.println("Playing sa: " + sa);
-        if (sa == sa.getHostCard().getGame().PLAY_LAND_SURROGATE) {
-            player.playLand(sa.getHostCard(), false);
+        if (sa instanceof LandAbility) {
+            if (sa.canPlay()) {
+                sa.resolve();
+            }
         } else {
             ComputerUtil.handlePlayingSpellAbility(player, sa, game);
         }
@@ -828,7 +838,7 @@ public class PlayerControllerAi extends PlayerController {
     }
 
     @Override
-    public Map<GameEntity, CounterType> chooseProliferation(SpellAbility sa, int max) {
+    public Map<GameEntity, CounterType> chooseProliferation(SpellAbility sa) {
         return brains.chooseProliferation(sa);
     }
 
@@ -989,29 +999,11 @@ public class PlayerControllerAi extends PlayerController {
     }
 
     @Override
-    public CardCollection chooseCardsForZoneChange(ZoneType destination,
-            List<ZoneType> origin, SpellAbility sa, CardCollection fetchList, DelayedReveal delayedReveal,
-            String selectPrompt, boolean isOptional, Player decider, int changeNum) {
-        if (delayedReveal != null) {
-            reveal(delayedReveal.getCards(), delayedReveal.getZone(), delayedReveal.getOwner(), delayedReveal.getMessagePrefix());
-        }
-        
-        CardCollection collection = new CardCollection();
-        int i = 0;
-        do {
-            Card card = brains.chooseCardToHiddenOriginChangeZone(destination, origin, sa, fetchList, player, decider);
-            if(card == null) {
-                if (fetchList.isEmpty() || decider.getController().confirmAction(sa, PlayerActionConfirmMode.ChangeZoneGeneral, selectPrompt)) {
-                    break;
-                }
-            } else {
-                fetchList.remove(card);
-                collection.add(card);
-            }
-            i++;
-        } while (i < changeNum);
-        
-        return collection;
+    public List<Card> chooseCardsForZoneChange(
+            ZoneType destination, List<ZoneType> origin, SpellAbility sa, CardCollection fetchList,
+            DelayedReveal delayedReveal, String selectPrompt, Player decider) {
+        // this isn't used
+        return null;
     }
 
     @Override

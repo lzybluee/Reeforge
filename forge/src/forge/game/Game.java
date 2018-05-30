@@ -29,7 +29,6 @@ import forge.card.CardStateName;
 import forge.card.CardType.Supertype;
 import forge.game.card.*;
 import forge.game.combat.Combat;
-import forge.game.cost.Cost;
 import forge.game.event.Event;
 import forge.game.event.GameEventGameOutcome;
 import forge.game.phase.Phase;
@@ -38,7 +37,6 @@ import forge.game.phase.PhaseType;
 import forge.game.phase.Untap;
 import forge.game.player.*;
 import forge.game.replacement.ReplacementHandler;
-import forge.game.spellability.Ability;
 import forge.game.spellability.SpellAbility;
 import forge.game.spellability.SpellAbilityStackInstance;
 import forge.game.spellability.SpellAbilityView;
@@ -171,19 +169,6 @@ public class Game {
         }
     }
 
-    public final Ability PLAY_LAND_SURROGATE = new Ability(null, (Cost) null) {
-        @Override
-        public boolean canPlay() {
-            return true; //if this ability is added anywhere, it can be assumed that land can be played
-        }
-        @Override
-        public void resolve() {
-            throw new RuntimeException("This ability is intended to indicate \"land to play\" choice only");
-        }
-        @Override
-        public String toUnsuppressedString() { return "Play land"; }
-    };
-
     private final GameEntityCache<Player, PlayerView> playerCache = new GameEntityCache<>();
     public Player getPlayer(PlayerView playerView) {
         return playerCache.get(playerView);
@@ -247,10 +232,6 @@ public class Game {
     public Game(List<RegisteredPlayer> players0, GameRules rules0, Match match0) { /* no more zones to map here */
         rules = rules0;
         match = match0;
-
-        MyRandom.updateSeed(players0, match0.getPlayedGames().size() + 1);
-
-        spabCache.put(PLAY_LAND_SURROGATE.getId(), PLAY_LAND_SURROGATE);
 
         int highestTeam = -1;
         for (RegisteredPlayer psc : players0) {
@@ -546,25 +527,61 @@ public class Game {
         return cards;
     }
 
-    public Card getCardState(final Card card) {
-        for (final Card c : getCardsInGame()) {
-            if (card.equals(c)) {
-                return c;
-            }
+    private static class CardStateVisitor extends Visitor<Card> {
+        Card found = null;
+        Card old = null;
+
+        private CardStateVisitor(final Card card) {
+            this.old = card;
         }
-        return card;
+
+        @Override
+        public boolean visit(Card object) {
+            if (object.equals(old)) {
+                found = object;
+            }
+            return found == null;
+        }
+
+        public Card getFound(final Card notFound) {
+            return found == null ? notFound : found;
+        }
+    }
+
+    public Card getCardState(final Card card) {
+        return getCardState(card, card);
+    }
+
+    public Card getCardState(final Card card, final Card notFound) {
+        CardStateVisitor visit = new CardStateVisitor(card);
+        this.forEachCardInGame(visit);
+        return visit.getFound(notFound);
     }
 
     // Allows visiting cards in game without allocating a temporary list.
     public void forEachCardInGame(Visitor<Card> visitor) {
         for (final Player player : getPlayers()) {
-            visitor.visitAll(player.getZone(ZoneType.Graveyard).getCards());
-            visitor.visitAll(player.getZone(ZoneType.Hand).getCards());
-            visitor.visitAll(player.getZone(ZoneType.Library).getCards());
-            visitor.visitAll(player.getZone(ZoneType.Battlefield).getCards(false));
-            visitor.visitAll(player.getZone(ZoneType.Exile).getCards());
-            visitor.visitAll(player.getZone(ZoneType.Command).getCards());
-            visitor.visitAll(player.getInboundTokens());
+            if (!visitor.visitAll(player.getZone(ZoneType.Graveyard).getCards())) {
+                return;
+            }
+            if (!visitor.visitAll(player.getZone(ZoneType.Hand).getCards())) {
+                return;
+            }
+            if (!visitor.visitAll(player.getZone(ZoneType.Library).getCards())) {
+                return;
+            }
+            if (!visitor.visitAll(player.getZone(ZoneType.Battlefield).getCards(false))) {
+                return;
+            }
+            if (!visitor.visitAll(player.getZone(ZoneType.Exile).getCards())) {
+                return;
+            }
+            if (!visitor.visitAll(player.getZone(ZoneType.Command).getCards())) {
+                return;
+            }
+            if (!visitor.visitAll(player.getInboundTokens())) {
+                return;
+            }
         }
         visitor.visitAll(getStackZone().getCards());
     }
@@ -572,8 +589,9 @@ public class Game {
         final CardCollection all = new CardCollection();
         Visitor<Card> visitor = new Visitor<Card>() {
             @Override
-            public void visit(Card card) {
+            public boolean visit(Card card) {
                 all.add(card);
+                return true;
             }
         };
         forEachCardInGame(visitor);

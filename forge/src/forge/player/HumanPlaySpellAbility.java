@@ -109,7 +109,7 @@ public class HumanPlaySpellAbility {
             }
             // This is should happen earlier, before the Modal spell is chosen
             // Turn face-down card face up (except case of morph spell)
-            if (ability instanceof Spell && !((Spell) ability).isCastFaceDown() && fromState == CardStateName.FaceDown) {
+            if (ability.isSpell() && !ability.isCastFaceDown() && fromState == CardStateName.FaceDown) {
                 c.turnFaceUp();
             }
             c.setCastSA(ability);
@@ -150,21 +150,12 @@ public class HumanPlaySpellAbility {
 
         // This line makes use of short-circuit evaluation of boolean values, that is each subsequent argument
         // is only executed or evaluated if the first argument does not suffice to determine the value of the expression
-        boolean prerequisitesMet = announceValuesLikeX()
+        final boolean prerequisitesMet = announceValuesLikeX()
                 && announceType()
-                && (!mayChooseTargets || setupTargets()); // if you can choose targets, then do choose them.
-
-        boolean payCost = true;
-
-        if(prerequisitesMet) {
-            payCost = isFree || payment.payCost(new HumanCostDecision(controller, human, ability, ability.getHostCard()));
-            prerequisitesMet = (prerequisitesMet && payCost);
-        }
+                && (!mayChooseTargets || setupTargets()) // if you can choose targets, then do choose them.
+                && (isFree || payment.payCost(new HumanCostDecision(controller, human, ability, ability.getHostCard())));
 
         if (!prerequisitesMet) {
-            if (ability.isTrigger() && !payCost) {
-                payment.refundPayment();
-            }
             if (!ability.isTrigger()) {
                 rollbackAbility(fromZone, fromState, zonePosition);
                 if (ability.getHostCard().isMadness()) {
@@ -172,7 +163,7 @@ public class HumanPlaySpellAbility {
                     Card newCard = game.getAction().moveToGraveyard(c, null);
                     newCard.setMadnessWithoutCast(true);
                     newCard.setMadness(false);
-                } else if (ability.hasParam("Bestow")) {
+                } else if (ability.getHostCard().isBestowed()) {
                     ability.getHostCard().unanimateBestow();
                 }
             }
@@ -205,13 +196,6 @@ public class HumanPlaySpellAbility {
             if (manaTypeConversion || manaColorConversion || keywordColor) {
                 manapool.restoreColorReplacements();
             }
-            for (final SpellAbility am : ability.getPayingManaAbilities()) {
-                if(am.getManaPart() != null && am.getManaPart().getLastManaProduced() != null) {
-                    am.getManaPart().getLastManaProduced().clear();
-                }
-            }
-            ability.getPayingManaAbilities().clear();
-            ability.clearManaPaid();
         }
         return true;
     }
@@ -263,21 +247,14 @@ public class HumanPlaySpellAbility {
 
         if (fromZone != null) { // and not a copy
             // add back to where it came from
-            game.getAction().setRollback(true);
             game.getAction().moveTo(fromZone, ability.getHostCard(), zonePosition >= 0 ? Integer.valueOf(zonePosition) : null, null);
-            game.getAction().setRollback(false);
-            if(ability.getHostCard().isSplitCard()) {
-                ability.getHostCard().setState(CardStateName.Original, true);
-            } else {
-                ability.getHostCard().setState(fromState, true);
-            }
+            ability.getHostCard().setState(fromState, true);
         }
 
         clearTargets(ability);
 
         ability.resetOnceResolved();
         payment.refundPayment();
-        game.getStack().clearUndoStack();
         game.getStack().clearFrozen();
         game.getTriggerHandler().clearWaitingTriggers();
     }
@@ -331,30 +308,12 @@ public class HumanPlaySpellAbility {
             }
             if (xInCost) {
                 final String sVar = ability.getSVar("X"); //only prompt for new X value if card doesn't determine it another way
-                boolean noNeedToChooseX = false;
-                String tgtType = ability.getParam("TargetType");
-                if(sVar.isEmpty() && "Spell".equals(tgtType)) {
-                    Card host = ability.getHostCard();
-                    if(host != null) {
-                        String v = ability.getHostCard().getSVar("X");
-                        if("Targeted$CardManaCost".equals(v)) {
-                            noNeedToChooseX = true;
-                        }
+                if ("Count$xPaid".equals(sVar) || sVar.isEmpty()) {
+                    final Integer value = controller.announceRequirements(ability, "X", allowZero && manaCost.canXbe0());
+                    if (value == null) {
+                        return false;
                     }
-                }
-
-                if(!noNeedToChooseX) {
-                    if ("Count$xPaid".equals(sVar) || sVar.isEmpty()) {
-                        if(ability.toString().startsWith("Unmanifest ") && ability.toString().endsWith(" (Turn this face up any time for its mana cost.)")) {
-                            card.setXManaCostPaid(0);
-                            return true;
-                        }
-                        final Integer value = controller.announceRequirements(ability, "X", allowZero && manaCost.canXbe0());
-                        if (value == null) {
-                            return false;
-                        }
-                        card.setXManaCostPaid(value);
-                    }
+                    card.setXManaCostPaid(value);
                 }
             } else if (manaCost.getMana().isZero() && ability.isSpell()) {
                 card.setXManaCostPaid(0);

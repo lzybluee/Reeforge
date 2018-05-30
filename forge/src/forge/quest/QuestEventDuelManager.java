@@ -23,6 +23,7 @@ import forge.quest.data.QuestPreferences.DifficultyPrefs;
 import forge.quest.data.QuestPreferences.QPref;
 import forge.quest.io.QuestDuelReader;
 import forge.util.CollectionSuppliers;
+import forge.util.MyRandom;
 import forge.util.maps.EnumMapOfLists;
 import forge.util.maps.MapOfLists;
 import forge.util.storage.IStorage;
@@ -125,7 +126,7 @@ public class QuestEventDuelManager {
             }
         }
 
-        QuestEventDuel randomOpponent = possibleDuels.get(((int) (possibleDuels.size() * Math.random())));
+        QuestEventDuel randomOpponent = possibleDuels.get(((int) (possibleDuels.size() * MyRandom.getRandom().nextDouble())));
 
         duel.setTitle("Random Opponent");
         duel.setIconImageKey(randomOpponent.getIconImageKey());
@@ -182,7 +183,7 @@ public class QuestEventDuelManager {
         } else {
             addDuel(duelOpponents, QuestEventDifficulty.HARD, 2);
             addDuel(duelOpponents, QuestEventDifficulty.EXPERT, 1);
-            if (Math.random() * 3 < 2) {
+            if (MyRandom.getRandom().nextDouble() * 3 < 2) {
                 randomDuelDifficulty = QuestEventDifficulty.HARD;
             } else {
                 randomDuelDifficulty = QuestEventDifficulty.EXPERT;
@@ -230,11 +231,9 @@ public class QuestEventDuelManager {
 
     /** */
     public void randomizeOpponents() {
-        final long seed = new Random().nextLong();
-        final Random r = new Random(seed);
         for (QuestEventDifficulty qd : sortedDuels.keySet()) {
             List<QuestEventDuel> list = (List<QuestEventDuel>) sortedDuels.get(qd);
-            Collections.shuffle(list, r);
+            Collections.shuffle(list, MyRandom.getRandom());
         }
     }
 
