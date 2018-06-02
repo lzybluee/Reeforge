@@ -98,7 +98,7 @@ public abstract class Spell extends SpellAbility implements java.io.Serializable
         boolean flash = false;
 
         // do performanceMode only for cases where the activator is different than controller
-        if (!Spell.performanceMode && activator != null && !card.getController().equals(activator)) {
+        if (!Spell.performanceMode && activator != null && !card.getController().equals(activator) && getMayPlay() == null) {
             // always make a lki copy in this case?
             card = CardUtil.getLKICopy(card);
             card.setController(activator, 0);
