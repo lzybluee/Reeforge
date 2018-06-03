@@ -71,9 +71,18 @@ public class CardPool extends ItemPool<PaperCard> {
     }
 
     // NOTE: ART indices are "1" -based
-    public void add(String cardName, String setCode, final int artIndex, final int amount) {
+    public void add(String cardName, String setCode, int artIndex, final int amount) {
 
         PaperCard paperCard = StaticData.instance().getCommonCards().getCard(cardName, setCode, artIndex);
+
+        if(paperCard == null) {
+            paperCard = StaticData.instance().getCommonCards().getCard(cardName, null, 0);
+            if(paperCard != null) {
+                setCode = paperCard.getEdition();
+                artIndex = 0;
+            }
+        }
+
         final boolean isCommonCard = paperCard != null;
 
         if (!isCommonCard) {

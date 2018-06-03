@@ -1126,10 +1126,10 @@ public class Card extends GameEntity implements Comparable<Card> {
 
                 // play the Add Counter sound
                 getGame().fireEvent(new GameEventCardCounters(this, counterType, oldValue == null ? 0 : oldValue, newValue));
-            }
 
-            for(Player p : game.getPlayers()) {
-                getGame().fireEvent(new GameEventZone(ZoneType.Battlefield, p, EventValueChangeType.ComplexUpdate, null));
+                for(Player p : game.getPlayers()) {
+                    getGame().fireEvent(new GameEventZone(ZoneType.Battlefield, p, EventValueChangeType.ComplexUpdate, null));
+                }
             }
 
             // Run triggers
@@ -2176,6 +2176,10 @@ public class Card extends GameEntity implements Comparable<Card> {
         if (currentState.removeSpellAbility(a) && updateView) {
             currentState.getView().updateAbilityText(this, currentState);
         }
+    }
+
+    public final void updateAbilityText() {
+        currentState.getView().updateAbilityText(this, currentState);
     }
 
     public final FCollectionView<SpellAbility> getSpellAbilities() {
