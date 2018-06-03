@@ -172,7 +172,7 @@ public class HumanPlaySpellAbility {
                     Card newCard = game.getAction().moveToGraveyard(c, null);
                     newCard.setMadnessWithoutCast(true);
                     newCard.setMadness(false);
-                } else if (ability.getHostCard().isBestowed()) {
+                } else if (ability.hasParam("Bestow")) {
                     ability.getHostCard().unanimateBestow();
                 }
             }

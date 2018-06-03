@@ -72,7 +72,7 @@ public class CostRemoveCounter extends CostPartWithList {
     public int paymentOrder() { return 8; }
 
     @Override
-    public boolean isUndoable() { return true; }
+    public boolean isUndoable() { return false; }
 
     /*
      * (non-Javadoc)

@@ -143,7 +143,7 @@ public interface IGuiGame {
     <T> List<T> insertInList(String title, T newItem, List<T> oldItems);
 
     List<PaperCard> sideboard(CardPool sideboard, CardPool main);
-    GameEntityView chooseSingleEntityForEffect(String title, List<? extends GameEntityView> optionList, DelayedReveal delayedReveal, boolean isOptional);
+    GameEntityView chooseSingleEntityForEffect(String title, List<? extends GameEntityView> optionList, DelayedReveal delayedReveal, boolean isOptional, int total);
     List<GameEntityView> chooseEntitiesForEffect(String title, List<? extends GameEntityView> optionList, DelayedReveal delayedReveal);
     void setCard(CardView card);
     void setPlayerAvatar(LobbyPlayer player, IHasIcon ihi);

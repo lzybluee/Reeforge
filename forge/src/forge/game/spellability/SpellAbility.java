@@ -35,11 +35,13 @@ import forge.game.cost.Cost;
 import forge.game.cost.CostPart;
 import forge.game.cost.CostPartMana;
 import forge.game.cost.CostRemoveCounter;
+import forge.game.cost.CostTap;
 import forge.game.keyword.Keyword;
 import forge.game.mana.Mana;
 import forge.game.mana.ManaCostBeingPaid;
 import forge.game.player.Player;
 import forge.game.staticability.StaticAbility;
+import forge.game.trigger.Trigger;
 import forge.game.trigger.TriggerType;
 import forge.game.trigger.WrappedAbility;
 import forge.util.Expressions;
@@ -1153,6 +1155,18 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
     }
 
     public boolean isUndoable() {
+        if (hostCard != null && isManaAbility()) {
+            for (CostPart part : payCosts.getCostParts()) {
+                if (part instanceof CostTap) {
+                    for (Trigger t : hostCard.getTriggers()) {
+                        if (t.getMode() ==  TriggerType.Taps) {
+                            return false;
+                        }
+                    }
+                }
+            }
+            
+        }
         return undoable && payCosts.isUndoable() && getHostCard().isInPlay();
     }
 
