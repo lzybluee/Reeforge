@@ -527,7 +527,8 @@ public class CardDetailUtil {
             if (area.length() != 0) {
                 area.append("\n");
             }
-            area.append("Haunting " + card.getHaunting());
+            area.append("Haunting: ");
+            area.append(StringUtils.join(card.getHaunting(), ", "));
         }
 
         // Cipher
@@ -535,7 +536,8 @@ public class CardDetailUtil {
             if (area.length() != 0) {
                 area.append("\n");
             }
-            area.append("Encoded: " + card.getEncodedCards());
+            area.append("Encoded: ");
+            area.append(StringUtils.join(card.getEncodedCards(), ", "));
         }
 
         // must block
@@ -548,11 +550,12 @@ public class CardDetailUtil {
         }
 
         // exerted
-        if (card.isExertedThisTurn()) {
+        if (card.getExerted() != null) {
             if (area.length() != 0) {
                 area.append("\n\n");
             }
-            area.append("^Exerted^");
+            area.append("Exerted by: ");
+            area.append(StringUtils.join(card.getExerted(), ", "));
         }
 
         //show current card colors if enabled

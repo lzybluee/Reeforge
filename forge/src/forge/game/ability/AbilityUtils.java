@@ -1639,6 +1639,12 @@ public class AbilityUtils {
                 }
             }
         }
+        if(ctb instanceof SpellAbility) {
+            Player activator = ((SpellAbility)ctb).getActivatingPlayer();
+            if(activator != null) {
+                return CardFactoryUtil.xCount(c, s2, activator);
+            }
+        }
         return CardFactoryUtil.xCount(c, s2);
     }
 

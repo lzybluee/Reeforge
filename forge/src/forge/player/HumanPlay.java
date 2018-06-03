@@ -217,6 +217,10 @@ public class HumanPlay {
                 if (sa.isSpell() && source.getType().hasStringType("Arcane")) {
                     sa = AbilityUtils.addSpliceEffects(sa);
                 }
+            } else if (sa.isCopied() && !sa.getSVar("CanSelectCharmEffect").isEmpty()) {
+                if (sa.getApi() == ApiType.Charm && !sa.isWrapper()) {
+                    CharmEffect.makeChoices(sa);
+                }
             }
             final CostPayment payment = new CostPayment(sa.getPayCosts(), sa);
 

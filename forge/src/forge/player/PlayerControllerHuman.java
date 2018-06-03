@@ -1573,6 +1573,42 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
                             preselect ? Lists.<SpellAbilityView>newArrayList() : orderedSAVs,
                             preselect ? orderedSAVs : Lists.<SpellAbilityView>newArrayList(), null, false);
                 } else {
+                    String refereceKey = null;
+                    for (String key : orderedSALookup.keySet()) {
+                        boolean found = true;
+                        for (String s : key.split(delim + "")) {
+                            if (!saLookupKey.contains(s)) {
+                                found = false;
+                                break;
+                            }
+                        }
+                        if (found) {
+                            refereceKey = key;
+                            break;
+                        }
+                    }
+                    if (refereceKey != null) {
+                        List<SpellAbility> copyOrderedSAs = Lists.newArrayList(orderedSAs);
+                        List<SpellAbility> newOrderedSAs = Lists.newArrayList();
+                        savedOrder = orderedSALookup.get(refereceKey);
+                        String[] strs = refereceKey.split(delim + "");
+                        for (Integer index : savedOrder) {
+                            if (index >= strs.length) {
+                                continue;
+                            }
+                            for (SpellAbility sa : copyOrderedSAs) {
+                                if (sa.toString().contains(strs[index])) {
+                                    newOrderedSAs.add(sa);
+                                    copyOrderedSAs.remove(sa);
+                                    break;
+                                }
+                            }
+                        }
+                        for (SpellAbility sa : copyOrderedSAs) {
+                            newOrderedSAs.add(sa);
+                        }
+                        orderedSAs = newOrderedSAs;
+                    }
                     orderedSAVs = getGui().order("Select order for simultaneous abilities", "Resolve first", orderedSAVs,
                             null);
                 }
@@ -1610,8 +1646,8 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
     }
 
     @Override
-    public Map<GameEntity, CounterType> chooseProliferation(final SpellAbility sa) {
-        final InputProliferate inp = new InputProliferate(this, sa);
+    public Map<GameEntity, CounterType> chooseProliferation(final SpellAbility sa, final int max) {
+        final InputProliferate inp = new InputProliferate(this, sa, max);
         inp.setCancelAllowed(true);
         inp.showAndWait();
         if (inp.hasCancelled()) {
@@ -2370,7 +2406,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
          */
         @Override
         public void repeatLastAddition() {
-            if (lastAdded == null) {
+            if (lastAdded == null || lastAddedZone == null) {
                 return;
             }
             addCardToZone(null, true, lastTrigs);

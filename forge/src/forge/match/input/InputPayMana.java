@@ -309,6 +309,7 @@ public abstract class InputPayMana extends InputSyncronizedBase {
         ColorSet colors = ColorSet.fromMask(0 == colorNeeded ? colorCanUse : colorNeeded);
         chosen.getManaPartRecursive().setExpressChoice(colors);
 
+        chosen.setNeedChooseMana(saPaidFor.tracksManaSpent());
         // System.out.println("Chosen sa=" + chosen + " of " + chosen.getHostCard() + " to pay mana");
 
         locked = true;
@@ -318,6 +319,7 @@ public abstract class InputPayMana extends InputSyncronizedBase {
                 chosen.setUsedToPayMana(InputPayMana.this.manaCost);
                 boolean b = HumanPlay.playSpellAbility(getController(), chosen.getActivatingPlayer(), chosen);
                 chosen.setUsedToPayMana(null);
+                chosen.setNeedChooseMana(false);
                 if (b) {
                     player.getManaPool().payManaFromAbility(saPaidFor, InputPayMana.this.manaCost, chosen);
 
@@ -374,7 +376,7 @@ public abstract class InputPayMana extends InputSyncronizedBase {
         else {
             String colorsProduced = m.isComboMana() ? m.getComboColors() : m.getOrigProduced();
             for (final String color : colorsProduced.split(" ")) {
-                if (0 != (neededColor & ManaAtom.fromName(color))) {
+                if (0 != (neededColor & ManaAtom.fromName(color)) || color.equals("Chosen")) {
                     return true;
                 }
             }

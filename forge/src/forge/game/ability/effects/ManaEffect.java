@@ -62,7 +62,8 @@ public class ManaEffect extends SpellAbilityEffect {
                 if (tgt == null || p.canBeTargetedBy(sa)) {
                     Player activator = sa.getActivatingPlayer();
                     String express = abMana.getExpressChoice();
-                    String[] colorsProduced = abMana.getComboColors().split(" ");
+                    String colorsProducedStr = abMana.getComboColors();
+                    String[] colorsProduced = colorsProducedStr.split(" ");
 
                     final StringBuilder choiceString = new StringBuilder();
                     ColorSet colorOptions = null;
@@ -79,7 +80,9 @@ public class ManaEffect extends SpellAbilityEffect {
                             colorOptions = ColorSet
                                     .fromMask(fullOptions.getColor() & ManaAtom.fromName(colorsNeeded[nMana - 1]));
                         }
-                        if (colorOptions.isColorless() && colorsProduced.length > 0) {
+                        if (colorsProduced.length > 0 && !colorsProduced[0].isEmpty() && sa.getNeedChooseMana()) {
+                            choice = MagicColor.toShortString(activator.getController().chooseColor("Select Mana to Produce", sa, fullOptions));
+                        } else if (colorOptions.isColorless() && colorsProduced.length > 0) {
                             // If we just need generic mana, no reason to ask the controller for a choice,
                             // just use the first possible color.
                             choice = colorsProduced[0];
@@ -90,25 +93,25 @@ public class ManaEffect extends SpellAbilityEffect {
                                 String usedToPayMana = sa.getUsedToPayMana().toString();
                                 ArrayList<String> new_colors = new ArrayList<>();
                                 
-                                if(colorOptions.hasWhite() && (usedToPayMana.contains("{W") || usedToPayMana.contains("W}"))) {
+                                if((colorOptions.hasWhite() || colorsProducedStr.contains("W")) && (usedToPayMana.contains("{W") || usedToPayMana.contains("W}"))) {
                                     new_colors.add("white");
                                 }
-                                if(colorOptions.hasBlue() && (usedToPayMana.contains("{U") || usedToPayMana.contains("U}"))) {
+                                if((colorOptions.hasBlue() || colorsProducedStr.contains("U")) && (usedToPayMana.contains("{U") || usedToPayMana.contains("U}"))) {
                                     new_colors.add("blue");
                                 }
-                                if(colorOptions.hasBlack() && (usedToPayMana.contains("{B") || usedToPayMana.contains("B}"))) {
+                                if((colorOptions.hasBlack() || colorsProducedStr.contains("B")) && (usedToPayMana.contains("{B") || usedToPayMana.contains("B}"))) {
                                     new_colors.add("black");
                                 }
-                                if(colorOptions.hasRed() && (usedToPayMana.contains("{R") || usedToPayMana.contains("R}"))) {
+                                if((colorOptions.hasRed() || colorsProducedStr.contains("R")) && (usedToPayMana.contains("{R") || usedToPayMana.contains("R}"))) {
                                     new_colors.add("red");
                                 }
-                                if(colorOptions.hasGreen() && (usedToPayMana.contains("{G") || usedToPayMana.contains("G}"))) {
+                                if((colorOptions.hasGreen() || colorsProducedStr.contains("G")) && (usedToPayMana.contains("{G") || usedToPayMana.contains("G}"))) {
                                     new_colors.add("green");
                                 }
                                 
                                 if(new_colors.size() == 1) {
                                     chosenColor = MagicColor.fromName(new_colors.iterator().next());
-                                } else if(new_colors.size() > 0) {
+                                } else if(new_colors.size() > 1) {
                                     chosenColor = activator.getController().chooseColor("Select Mana to Produce", sa, ColorSet.fromNames(new_colors));
                                 } else {
                                     chosenColor = activator.getController().chooseColor("Select Mana to Produce", sa, colorOptions);

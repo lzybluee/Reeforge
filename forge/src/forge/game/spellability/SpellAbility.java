@@ -162,6 +162,7 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
     private CardDamageMap preventMap = null;
 
     private ManaCostBeingPaid usedToPayMana = null;
+    private boolean needChooseMana = false;
 
     public CardCollection getLastStateBattlefield() {
         return lastStateBattlefield;
@@ -1631,7 +1632,7 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
             return true;
         }
         String text = hostCard.getRules().getOracleText();
-        if (isSpell() && text.contains("was spent to cast")) {
+        if (isSpell() && (text.contains("was spent to cast") || text.contains("Converge — "))) {
             return true;
         }
         if (isAbility() && text.contains("mana spent to pay")) {
@@ -1811,5 +1812,13 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
 
     public ManaCostBeingPaid getUsedToPayMana() {
         return usedToPayMana;
+    }
+
+    public void setNeedChooseMana(boolean b) {
+        needChooseMana = b;
+    }
+
+    public boolean getNeedChooseMana() {
+        return needChooseMana;
     }
 }

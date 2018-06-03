@@ -10,6 +10,7 @@ import forge.game.GameEntityView;
 import forge.game.combat.Combat;
 import forge.game.keyword.Keyword;
 import forge.game.player.Player;
+import forge.game.player.PlayerCollection;
 import forge.game.player.PlayerView;
 import forge.game.zone.ZoneType;
 import forge.item.IPaperCard;
@@ -140,11 +141,11 @@ public class CardView extends GameEntityView {
         set(TrackableProperty.Attacking, combat != null && combat.isAttacking(c));
     }
 
-    public boolean isExertedThisTurn() {
-        return get(TrackableProperty.ExertedThisTurn);
+    public FCollectionView<PlayerView> getExerted() {
+        return get(TrackableProperty.Exerted);
     }
-    void updateExertedThisTurn(Card c, boolean exerted) {
-        set(TrackableProperty.ExertedThisTurn, exerted);
+    void updateExerted(Card c, PlayerCollection players) {
+        set(TrackableProperty.Exerted, players.size() == 0 ? null : PlayerView.getCollection(players));
     }
 
     public boolean isBlocking() {

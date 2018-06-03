@@ -58,7 +58,10 @@ public class VPrompt implements IVDoc<CPrompt> {
     private CardView card = null ; 
 
     public void setCardView(final CardView card) {
-	this.card = card ;
+        this.card = card;
+        if (this.controller.getMatchUI() != null && card != null) {
+            this.controller.getMatchUI().setPaperCard(card);
+        }
     }
 
     private KeyAdapter buttonKeyAdapter = new KeyAdapter() {

@@ -75,6 +75,8 @@ public class ManaReflectedEffect extends SpellAbilityEffect {
             if (mask == 0) {
                 if (colors.isEmpty()) {
                     return "0";
+                } else if (sa.getNeedChooseMana()) {
+                    baseMana = MagicColor.toShortString(player.getController().chooseColor("Select Mana to Produce", sa, ColorSet.fromNames(colors)));
                 } else if (colors.size() == 1) {
                     baseMana = MagicColor.toShortString(colors.iterator().next());
                 } else {
@@ -105,10 +107,10 @@ public class ManaReflectedEffect extends SpellAbilityEffect {
                             
                             if(new_colors.size() == 1) {
                                 baseMana = MagicColor.toShortString(new_colors.iterator().next());
-                            } else if(new_colors.size() > 0) {
+                            } else if(new_colors.size() > 1) {
                                 baseMana = MagicColor.toShortString(player.getController().chooseColor("Select Mana to Produce", sa, ColorSet.fromNames(new_colors)));
                             } else {
-                                baseMana = MagicColor.toShortString(player.getController().chooseColor("Select Mana to Produce", sa, ColorSet.fromNames(colors)));
+                                baseMana = MagicColor.toShortString(colors.iterator().next());
                             }
                         } else {
                             baseMana = MagicColor.toShortString(player.getController().chooseColor("Select Mana to Produce", sa, ColorSet.fromNames(colors)));
