@@ -1431,6 +1431,7 @@ public class Player extends GameEntity implements Comparable<Player> {
 
         cl.addAll(getZone(ZoneType.Graveyard).getCardsPlayerCanActivate(this));
         cl.addAll(getZone(ZoneType.Exile).getCardsPlayerCanActivate(this));
+        cl.addAll(getZone(ZoneType.Exile).getCardsSuspended(this));
         cl.addAll(getZone(ZoneType.Library).getCardsPlayerCanActivate(this));
         if (includeCommandZone) {
             cl.addAll(getZone(ZoneType.Command).getCardsPlayerCanActivate(this));
@@ -2717,7 +2718,7 @@ public class Player extends GameEntity implements Comparable<Player> {
     public void createMonarchEffect() {
         final PlayerZone com = getZone(ZoneType.Command);
         if (monarchEffect == null) {
-            monarchEffect = new Card(-1, game);
+            monarchEffect = new Card(game.nextCardId(), game);
             monarchEffect.setOwner(this);
             monarchEffect.setImageKey("t:monarch");
             monarchEffect.setName("The Monarch");
@@ -2771,7 +2772,7 @@ public class Player extends GameEntity implements Comparable<Player> {
         final PlayerZone com = getZone(ZoneType.Command);
         
         if(bless) {
-            blessingEffect = new Card(-1, game);
+            blessingEffect = new Card(game.nextCardId(), game);
             blessingEffect.setOwner(this);
             blessingEffect.setImageKey("t:blessing");
             blessingEffect.setName("City's Blessing");

@@ -46,6 +46,7 @@ import forge.gui.framework.DragCell;
 import forge.gui.framework.DragTab;
 import forge.gui.framework.EDocID;
 import forge.gui.framework.IVDoc;
+import forge.screens.match.CMatchUI;
 import forge.screens.match.controllers.CStack;
 import forge.toolbox.FMouseAdapter;
 import forge.toolbox.FScrollPanel;
@@ -199,11 +200,22 @@ public class VStack implements IVDoc<CStack> {
                 @Override
                 public void mouseEntered(final MouseEvent e) {
                     hoveredItem = StackInstanceTextArea.this;
-                    controller.getMatchUI().setCard(item.getSourceCard());
+                    CMatchUI matchUI = controller.getMatchUI();
+                    if (matchUI != null) {
+                        matchUI.clearPanelSelections();
+                        if (item.getSourceCard() != null) {
+                            matchUI.setCard(item.getSourceCard());
+                            matchUI.setPanelSelection(item.getSourceCard());
+                        }
+                    }
                 }
 
                 @Override
                 public void mouseExited(final MouseEvent e) {
+                    CMatchUI matchUI = controller.getMatchUI();
+                    if (matchUI != null) {
+                        matchUI.clearPanelSelections();
+                    }
                     if (hoveredItem == StackInstanceTextArea.this) {
                         hoveredItem = null;
                     }

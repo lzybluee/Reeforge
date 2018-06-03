@@ -65,6 +65,8 @@ public class GameAction {
 
     private boolean holdCheckingStaticAbilities = false;
 
+    private CardCollection  simultaneousEtbCards;
+
     public GameAction(Game game0) {
         game = game0;
     }
@@ -439,6 +441,10 @@ public class GameAction {
                 }
                 changeZone(null, zoneTo, unmeld, position, cause, params);
             }
+            // Remove controlling
+            for (final Card bc : game.getCardsIn(ZoneType.Battlefield)) {
+                bc.removeGainControlTargets(c);
+            }
             // Reveal if face-down
             if (c.isFaceDown()) {
             	c.setState(CardStateName.Original, true);
@@ -748,12 +754,12 @@ public class GameAction {
     public final void checkStaticAbilities(final boolean runEvents) {
         checkStaticAbilities(runEvents, Sets.<Card>newHashSet(), CardCollection.EMPTY);
     }
-    public final void checkStaticAbilities(final boolean runEvents, final Set<Card> affectedCards, final CardCollectionView preList) {
+    public final boolean checkStaticAbilities(final boolean runEvents, final Set<Card> affectedCards, final CardCollectionView preList) {
         if (isCheckingStaticAbilitiesOnHold()) {
-            return;
+            return false;
         }
         if (game.isGameOver()) {
-            return;
+            return false;
         }
         game.getTracker().freeze(); //prevent views flickering during while updating for state-based effects
 
@@ -868,6 +874,7 @@ public class GameAction {
                         c.setPairedWith(null);
                         partner.setPairedWith(null);
                         affectedCards.add(c);
+                        affectedCards.add(partner);
                     }
                 }
             }
@@ -885,10 +892,15 @@ public class GameAction {
             c.updateAbilityTextForView(); // only update keywords and text for view to avoid flickering
         }
 
-        if (runEvents && !affectedCards.isEmpty()) {
-            game.fireEvent(new GameEventCardStatsChanged(affectedCards));
+        boolean ret = false;
+        if (!affectedCards.isEmpty()) {
+            if(runEvents)
+                game.fireEvent(new GameEventCardStatsChanged(affectedCards));
+            ret = true;
         }
+        
         game.getTracker().unfreeze();
+        return ret;
     }
 
     public final void checkStateEffects(final boolean runEvents) {
@@ -922,8 +934,7 @@ public class GameAction {
         boolean orderedDesCreats = false;
         boolean orderedNoRegCreats = false;
         for (int q = 0; q < 9; q++) {
-            checkStaticAbilities(false, affectedCards, CardCollection.EMPTY);
-            boolean checkAgain = false;
+            boolean checkAgain = checkStaticAbilities(false, affectedCards, CardCollection.EMPTY);
 
             for (final Player p : game.getPlayers()) {
                 for (final ZoneType zt : ZoneType.values()) {
@@ -1868,5 +1879,22 @@ public class GameAction {
         final Map<String, Object> runParams = Maps.newHashMap();
         runParams.put("Player", p);
         game.getTriggerHandler().runTrigger(TriggerType.BecomeMonarch, runParams, false);
+    }
+
+    public void setSimultaneousEtbCards(CardCollection cards) {
+        if(cards != null && cards.size() > 1) {
+            simultaneousEtbCards = new CardCollection();
+            simultaneousEtbCards.addAll(cards);
+        }
+    }
+
+    public void clearSimultaneousEtbCards(CardCollection cards) {
+        if(simultaneousEtbCards == cards) {
+            simultaneousEtbCards = null;
+        }
+    }
+
+    public CardCollection getSimultaneousEtbCards() {
+        return simultaneousEtbCards;
     }
 }

@@ -1417,6 +1417,9 @@ public class AiController {
         if (hostCard.hasAlternateState()) {
             hostCard = game.getCardState(hostCard);
         }
+        if(effect.toString().startsWith("Unleash (") && player.getLife() <= 5) {
+            return false;
+        }
 
         if (effect.getMapParams().containsKey("AICheckSVar")) {
             System.out.println("aiShouldRun?" + sa);

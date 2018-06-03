@@ -398,7 +398,22 @@ public class Combat {
     }
 
     public final CardCollection getBlockers(final AttackingBand band) {
-        Collection<Card> blockers = blockedBands.get(band);
+        Collection<Card> blockers = null;
+        if(blockersOrderedForDamageAssignment.isEmpty()) {
+            blockers = blockedBands.get(band);
+        } else {
+            blockers = new CardCollection();
+            for(Card attacker : band.getAttackers()) {
+                Collection<Card> bandBlockers = blockersOrderedForDamageAssignment.get(attacker);
+                if(bandBlockers == null)
+                    continue;
+                for(Card c : bandBlockers) {
+                    if(!blockers.contains(c)) {
+                        blockers.add(c);
+                    }
+                }
+            }
+        }
         return blockers == null ? new CardCollection() : new CardCollection(blockers);
     }
 
