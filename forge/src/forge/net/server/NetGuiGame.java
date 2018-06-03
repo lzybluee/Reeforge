@@ -243,6 +243,12 @@ public class NetGuiGame extends AbstractGuiGame {
     }
 
     @Override
+    public void setPaperCard(final CardView card) {
+        updateGameView();
+        send(ProtocolMethod.setCard, card);
+    }
+
+    @Override
     public void setPlayerAvatar(final LobbyPlayer player, final IHasIcon ihi) {
         // TODO Auto-generated method stub
     }

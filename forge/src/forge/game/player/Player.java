@@ -1679,6 +1679,10 @@ public class Player extends GameEntity implements Comparable<Player> {
             return false;
         }
 
+        if (!game.getPhaseHandler().isPlayerTurn(this)) {
+            return false;
+        }
+
         // CantBeCast static abilities
         for (final Card ca : game.getCardsIn(ZoneType.listValueOf("Battlefield,Command"))) {
             final Iterable<StaticAbility> staticAbilities = ca.getStaticAbilities();

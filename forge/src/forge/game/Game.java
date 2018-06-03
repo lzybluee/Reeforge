@@ -233,6 +233,8 @@ public class Game {
         rules = rules0;
         match = match0;
 
+        MyRandom.updateSeed(players0, match0.getPlayedGames().size() + 1);
+
         int highestTeam = -1;
         for (RegisteredPlayer psc : players0) {
             // Track highest team number for auto assigning unassigned teams
