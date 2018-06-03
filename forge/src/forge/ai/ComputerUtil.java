@@ -1573,7 +1573,7 @@ public class ComputerUtil {
                     
                     if (saviourApi == ApiType.PutCounter || saviourApi == ApiType.PutCounterAll) {
                         boolean canSave = ComputerUtilCombat.predictDamageTo(c, dmg - toughness, source, false) < ComputerUtilCombat.getDamageToKill(c);
-                        if (!canSave) {
+                        if (!canSave && !grantShroud) {
                             continue;
                         }
                     }
@@ -1632,7 +1632,7 @@ public class ComputerUtil {
                     
                     if (saviourApi == ApiType.PutCounter || saviourApi == ApiType.PutCounterAll) {
                         boolean canSave = c.getNetToughness() + toughness > dmg;
-                        if (!canSave) {
+                        if (!canSave && !grantShroud) {
                             continue;
                         }
                     }
@@ -1658,7 +1658,8 @@ public class ComputerUtil {
                         && !topStack.hasParam("NoRegen")) || saviourApi == ApiType.ChangeZone
                         || saviourApi == ApiType.Pump || saviourApi == ApiType.PumpAll
                         || saviourApi == ApiType.Protection || saviourApi == null
-                        || saviorWithSubsApi == ApiType.Pump || saviorWithSubsApi == ApiType.PumpAll)) {
+                        || saviorWithSubsApi == ApiType.Pump || saviorWithSubsApi == ApiType.PumpAll
+                        || (grantShroud && saviourApi != ApiType.Pump && saviourApi != ApiType.PumpAll))) {
             for (final Object o : objects) {
                 if (o instanceof Card) {
                     final Card c = (Card) o;
@@ -1696,6 +1697,11 @@ public class ComputerUtil {
                     if (saviourApi == ApiType.Regenerate && !c.canBeShielded()) {
                         continue;
                     }
+
+                    if(grantShroud && saviourApi != ApiType.Pump && saviourApi != ApiType.PumpAll && !topStack.isTargeting(c)) {
+                        continue;
+                    }
+
                     threatened.add(c);
                 }
             }
@@ -1703,7 +1709,7 @@ public class ComputerUtil {
         // Exiling => bounce/shroud
         else if ((threatApi == ApiType.ChangeZone || threatApi == ApiType.ChangeZoneAll)
                 && (saviourApi == ApiType.ChangeZone || saviourApi == ApiType.Pump || saviourApi == ApiType.PumpAll
-                || saviourApi == ApiType.Protection || saviourApi == null)
+                || saviourApi == ApiType.Protection || saviourApi == null || (grantShroud && saviourApi != ApiType.Pump && saviourApi != ApiType.PumpAll))
                 && topStack.hasParam("Destination")
                 && topStack.getParam("Destination").equals("Exile")) {
             for (final Object o : objects) {
@@ -1725,6 +1731,10 @@ public class ComputerUtil {
                         continue;
                     }
 
+                    if(grantShroud && saviourApi != ApiType.Pump && saviourApi != ApiType.PumpAll && !topStack.isTargeting(c)) {
+                        continue;
+                    }
+
                     threatened.add(c);
                 }
             }
@@ -1733,7 +1743,7 @@ public class ComputerUtil {
         else if ((threatApi == ApiType.GainControl 
         			|| (threatApi == ApiType.Attach && topStack.hasParam("AILogic") && topStack.getParam("AILogic").equals("GainControl") ))
                 && (saviourApi == ApiType.ChangeZone || saviourApi == ApiType.Pump || saviourApi == ApiType.PumpAll 
-                || saviourApi == ApiType.Protection || saviourApi == null)) {
+                || saviourApi == ApiType.Protection || saviourApi == null || (grantShroud && saviourApi != ApiType.Pump && saviourApi != ApiType.PumpAll))) {
             for (final Object o : objects) {
                 if (o instanceof Card) {
                     final Card c = (Card) o;
@@ -1746,6 +1756,11 @@ public class ComputerUtil {
                             continue;
                         }
                     }
+
+                    if(grantShroud && saviourApi != ApiType.Pump && saviourApi != ApiType.PumpAll && !topStack.isTargeting(c)) {
+                        continue;
+                    }
+
                     threatened.add(c);
                 }
             }

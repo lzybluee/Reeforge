@@ -416,6 +416,7 @@ public abstract class GameState {
 
         boolean isHuman = categoryName.startsWith("human");
 
+        turn = 1;
         if (categoryName.equals("turn")) {
             turn = Integer.parseInt(categoryValue);
         }

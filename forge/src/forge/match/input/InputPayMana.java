@@ -195,6 +195,7 @@ public abstract class InputPayMana extends InputSyncronizedBase {
         }
 
         HashMap<SpellAbilityView, SpellAbility> abilitiesMap = new HashMap<>();
+        ArrayList<SpellAbilityView> abilitiesVec = new ArrayList<>();
         // you can't remove unneeded abilities inside a for (am:abilities) loop :(
 
         final String typeRes = manaCost.getSourceRestriction();
@@ -219,6 +220,7 @@ public abstract class InputPayMana extends InputSyncronizedBase {
             }
 
             abilitiesMap.put(ma.getView(), ma);
+            abilitiesVec.add(ma.getView());
 
             // skip express mana if the ability is not undoable or reusable
             if (!ma.isUndoable() || !ma.getPayCosts().isRenewableResource() || ma.getSubAbility() != null) {
@@ -289,7 +291,16 @@ public abstract class InputPayMana extends InputSyncronizedBase {
 
         SpellAbility chosen;
         if (chosenAbility == null) {
-            ArrayList<SpellAbilityView> choices = new ArrayList<>(abilitiesMap.keySet());
+            ArrayList<SpellAbilityView> toRemove = new ArrayList<>();
+            for(SpellAbilityView view : abilitiesVec) {
+                if (!abilitiesMap.containsKey(view)) {
+                    toRemove.add(view);
+                }
+            }
+            for(SpellAbilityView view : toRemove) {
+                abilitiesVec.remove(view);
+            }
+            ArrayList<SpellAbilityView> choices = new ArrayList<>(abilitiesVec);
             if(abilitiesMap.size() > 1) {
                 if(choice) {
                     chosen = abilitiesMap.get(getController().getGui().one("Choose mana ability",  choices));

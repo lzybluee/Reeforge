@@ -28,8 +28,9 @@ import com.google.common.collect.ImmutableList;
  */
 public enum CounterType {
 
-    M1M1("-1/-1", "-1/-1", 255, 110, 106),
     P1P1("+1/+1", "+1/+1", 96, 226, 23),
+
+    M1M1("-1/-1", "-1/-1", 255, 110, 106),
 
     LOYALTY("LOYAL", 198, 198, 198),
 

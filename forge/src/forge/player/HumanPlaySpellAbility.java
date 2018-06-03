@@ -211,6 +211,7 @@ public class HumanPlaySpellAbility {
                 }
             }
             ability.getPayingManaAbilities().clear();
+            ability.clearManaPaid();
         }
         return true;
     }
