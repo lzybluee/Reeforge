@@ -234,6 +234,10 @@ public class SpellAbilityRestriction extends SpellAbilityVariables {
             }
         }
 
+        if (sa.toString().startsWith("Fuse (") && !cardZone.is(ZoneType.Hand, activator)) {
+            return false;
+        }
+
         if (cardZone == null || this.getZone() == null || !cardZone.is(this.getZone())) {
             // If Card is not in the default activating zone, do some additional checks
 

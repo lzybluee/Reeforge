@@ -248,9 +248,7 @@ public final class CardDb implements ICardDatabase, IDeckGenPool {
         allCards.clear();
         for (Entry<String, Collection<PaperCard>> kv : allCardsByName.asMap().entrySet()) {
             PaperCard paper = getFirstWithImage(kv.getValue());
-            if(!uniqueCardsByName.containsValue(paper)) {
-                uniqueCardsByName.put(kv.getKey(), paper);
-            }
+            uniqueCardsByName.put(kv.getKey(), paper);
             for(PaperCard c : kv.getValue()) {
                 if(!allCards.contains(c)) {
                     allCards.add(c);

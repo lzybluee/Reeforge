@@ -235,6 +235,7 @@ public class DiscardEffect extends SpellAbilityEffect {
 
                         for (Card c : toDiscard) {
                             c.getController().discard(c, sa);
+                            discarded.add(c);
                         }
                     }
                 }

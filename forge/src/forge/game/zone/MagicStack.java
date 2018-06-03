@@ -366,7 +366,7 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
 
             // Run SpellCast triggers
             if (sp.isSpell()) {
-                if (source.isCommander()) {
+                if (source.isCommander() && sp.getHostCard().getCastFrom() == ZoneType.Command) {
                     activator.incCommanderCast(source);
                 }
                 game.getTriggerHandler().runTrigger(TriggerType.SpellCast, runParams, true);
@@ -533,8 +533,6 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
 
         if (isEmpty()) {
             game.copyLastState();
-            // FIXME: assuming that if the stack is empty, no reason to hold on to old LKI data (everything is a new object). Is this correct?
-            game.clearChangeZoneLKIInfo();
         }
     }
 

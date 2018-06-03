@@ -114,6 +114,10 @@ public class PlayerView extends GameEntityView {
             opponents = Collections.emptyList();
         }
         for (final PlayerView p : Iterables.concat(Collections.singleton(this), opponents)) {
+            final int cast = p.getCommanderCast(v);
+            if (cast > 0) {
+                sb.append(String.format("Commander cast from commander zone: %d\r\n", cast));
+            }
             final int damage = p.getCommanderDamage(v);
             if (damage > 0) {
                 final String text = TextUtil.concatWithSpace("Commander damage to", p.toString(),"from", TextUtil.addSuffix(v.getName(),":"));
@@ -139,6 +143,9 @@ public class PlayerView extends GameEntityView {
         final List<String> info = Lists.newArrayListWithExpectedSize(opponents.size());
         info.add(TextUtil.concatWithSpace("Commanders:", Lang.joinHomogenous(commanders)));
         for (final PlayerView p : Iterables.concat(Collections.singleton(this), opponents)) {
+            if (p.getCommanders() == null) {
+                continue;
+            }
             for (final CardView v : p.getCommanders()) {
                 final int damage = this.getCommanderDamage(v);
                 if (damage > 0) {
@@ -149,6 +156,10 @@ public class PlayerView extends GameEntityView {
                         text = TextUtil.concatWithSpace("Commander damage from", TextUtil.addSuffix(p.toString(),"'s"), TextUtil.addSuffix(v.toString(),":"));
                     }
                     info.add(TextUtil.concatWithSpace(text,TextUtil.addSuffix(String.valueOf(damage),"\r\n")));
+                }
+                final int cast = this.getCommanderCast(v);
+                if (cast > 0) {
+                    info.add(String.format("Cast %s from commander zone: %d\r\n", v, cast));
                 }
             }
         }
@@ -266,6 +277,20 @@ public class PlayerView extends GameEntityView {
             map.put(entry.getKey().getId(), entry.getValue());
         }
         set(TrackableProperty.CommanderDamage, map);
+    }
+
+    public int getCommanderCast(CardView commander) {
+        Map<Integer, Integer> map = get(TrackableProperty.CommanderCast);
+        if (map == null) { return 0; }
+        Integer cast = map.get(commander.getId());
+        return cast == null ? 0 : cast.intValue();
+    }
+    void updateCommanderCast(Player p) {
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+        for (Entry<Card, Integer> entry : p.getCommanderCast()) {
+            map.put(entry.getKey().getId(), entry.getValue());
+        }
+        set(TrackableProperty.CommanderCast, map);
     }
 
     public PlayerView getMindSlaveMaster() {
