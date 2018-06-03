@@ -1,0 +1,40 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Duel Decks Merfolk vs. Goblins - Merfolk
+Description=Duel Decks
+Deck Type=constructed
+Set=DDT
+Image=merfolk.jpg
+[Main]
+4 Aquitect's Will|DDT
+1 Blighted Cataract|DDT
+2 Claustrophobia|IMA
+1 Cold-Eyed Selkie|DDT
+1 Concentrate|DDT
+1 Engulf the Shore|DDT
+2 Essence Scatter|DDT
+1 Harbinger of the Tides|DDT
+1 Inkfathom Divers|DDT
+21 Island|DDT
+2 Lonely Sandbar|DDT
+1 Master of the Pearl Trident|DDT
+1 Master of Waves|DDT
+1 Merfolk Looter|A25
+1 Merfolk Sovereign|DDT
+1 Merfolk Wayfinder|DDT
+1 Merrow Reejerey|DDT
+1 Mind Spring|DDT
+1 Misdirection|DDT
+2 Rootwater Hunter|DDT
+2 Scroll Thief|DDT
+3 Streambed Aquitects|DDT
+2 Tidal Courier|DDT
+2 Tidal Warrior|DDT
+1 Tidal Wave|DDT
+1 Tidebinder Mage|DDT
+1 Triton Tactics|DDT
+1 Wake Thrasher|DDT

@@ -1,0 +1,32 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Hands of Flame
+Description=Burn them all with Chandra's red deck. Put your opponent on the defensive, then unload an awesome arsenal of fiery destruction.
+Deck Type=constructed
+Set=ZEN
+Image=hands_of_flame.jpg
+[Main]
+2 Act of Treason|M10
+1 Banefire|CFX
+1 Blaze|10E
+1 Bloodmark Mentor|SHM
+2 Cinder Pyromancer|EVE
+2 Dragon's Claw|M10
+2 Earth Elemental|10E
+1 Enrage|9ED
+1 Furnace of Rath|10E
+4 Goblin Piker|M10
+2 Goblin Sky Raider|10E
+4 Hill Giant|10E
+3 Incinerate|10E
+1 Kamahl, Pit Fighter|10E
+4 Lightning Elemental|M10
+24 Mountain|ZEN|1
+1 Prodigal Pyromancer|M10
+1 Rage Reflection|SHM
+1 Shivan Dragon|M10
+2 Shock|10E

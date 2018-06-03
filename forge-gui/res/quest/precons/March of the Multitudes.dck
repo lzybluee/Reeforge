@@ -1,0 +1,39 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=March of the Multitudes
+Description=Modern Event Deck
+Deck Type=constructed
+Set=THS
+Image=march_of_the_multitudes.jpg
+[Main]
+4 Caves of Koilos|10E
+2 City of Brass|MMA
+1 Elspeth, Knight-Errant|MMA
+3 Honor of the Pure|M12
+2 Inquisition of Kozilek|ROE
+4 Intangible Virtue|ISD
+4 Isolated Chapel|ISD
+4 Lingering Souls|DKA
+3 Path to Exile|MMA
+5 Plains|THS|1
+4 Raise the Alarm|MRD
+2 Shrine of Loyal Legions|NPH
+2 Soul Warden|M10
+4 Spectral Procession|SHM
+4 Swamp|THS|1
+1 Sword of Feast and Famine|MBS
+3 Tidehollow Sculler|MMA
+1 Vault of the Archangel|DKA
+4 Windbrisk Heights|LRW
+3 Zealous Persecution|ARB
+[Sideboard]
+2 Burrenton Forge-Tender|LRW
+2 Dismember|NPH
+3 Duress|M14
+2 Ghost Quarter|ISD
+3 Kataki, War's Wage|MMA
+3 Relic of Progenitus|MMA

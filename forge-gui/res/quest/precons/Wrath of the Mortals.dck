@@ -1,0 +1,41 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Wrath of the Mortals
+Description=The "Wrath of the Mortals" features a wide range of damage spells as well as creatures that reward you for casting them.
+Deck Type=constructed
+Set=JOU
+Image=wrath_of_the_mortals.jpg
+[Main]
+1 AEtherling|DGM
+1 Anger of the Gods|THS
+1 Battlefield Thaumaturge|JOU
+1 Chandra's Phoenix|M14
+2 Divination|BNG
+1 Fated Conflagration|BNG
+2 Flames of the Firebrand|M14
+3 Guttersnipe|RTR
+1 Harness by Force|JOU
+9 Island|THS|1
+4 Izzet Guildgate|DGM
+4 Lightning Strike|THS
+3 Magma Jet|THS
+1 Mizzium Mortars|RTR
+12 Mountain|THS|1
+1 Ogre Battledriver|M14
+1 Oracle of Bones|BNG
+2 Searing Blood|BNG
+4 Spellheart Chimera|THS
+1 Steam Augury|THS
+2 Turn // Burn|DGM
+3 Young Pyromancer|M14
+[Sideboard]
+2 Dispel|RTR
+2 Elixir of Immortality|M14
+3 Essence Scatter|M14
+2 Flames of the Firebrand|M14
+3 Izzet Staticaster|RTR
+3 Negate|M14

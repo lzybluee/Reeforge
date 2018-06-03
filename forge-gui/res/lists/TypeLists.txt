@@ -28,7 +28,6 @@ Assembly-Worker:Assembly-Workers
 Atog:Atogs
 Aurochs:Aurochs
 Avatar:Avatars
-Azra:Azra
 Badger:Badgers
 Barbarian:Barbarians
 Basilisk:Basilisks
@@ -297,7 +296,6 @@ Narset
 Nissa
 Nixilis
 Ral
-Rowan
 Saheeli
 Samut
 Sarkhan
@@ -309,7 +307,4 @@ Tibalt
 Ugin
 Venser
 Vraska
-Will
 Xenagos
-Yanggu
-Yanling

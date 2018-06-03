@@ -1,0 +1,43 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Dangerous
+Description=Clash Pack
+Deck Type=constructed
+Set=ORI
+Image=dangerous.jpg
+[Main]
+1 Abzan Ascendancy|KTK
+1 Abzan Battle Priest|KTK
+2 Abzan Falconer|KTK
+2 Ainok Bond-Kin|KTK
+1 Anafenza, Kin-Tree Spirit|DTK
+1 Ancestral Vengeance|FRF
+1 Avatar of the Resolute|DTK
+2 Blossoming Sands|FRF
+2 Cached Defenses|FRF
+1 Citadel Siege|FRF
+1 Debilitating Injury|KTK
+2 Disowned Ancestor|KTK
+2 Dromoka's Gift|DTK
+1 Dromoka, the Eternal|FRF
+1 Elite Scaleguard|FRF
+6 Forest|ORI|1
+2 Incremental Growth|KTK
+2 Jungle Hollow|FRF
+3 Lightwalker|DTK
+1 Longshot Squad|KTK
+2 Map the Wastes|FRF
+1 Mer-Ek Nightblade|KTK
+7 Plains|ORI|1
+1 Sandsteppe Citadel|KTK
+1 Scale Blessing|DTK
+2 Scoured Barrens|FRF
+1 Siege Rhino|KTK
+1 Suspension Field|KTK
+6 Swamp|ORI|1
+1 Tuskguard Captain|KTK
+2 Ultimate Price|DTK

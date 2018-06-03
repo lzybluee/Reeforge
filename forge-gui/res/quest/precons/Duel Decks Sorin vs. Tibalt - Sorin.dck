@@ -1,0 +1,48 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Duel Decks: Sorin vs. Tibalt - Sorin
+Description=Duel Decks
+Deck Type=constructed
+Set=DDK
+Image=sorin.jpg
+[Main]
+1 Absorb Vis|DDK
+1 Ancient Craving|DDK
+1 Bloodrage Vampire|DDK
+1 Butcher of Malakir|DDK
+1 Child of Night|DDK
+1 Death Grasp|DDK
+1 Decompose|DDK
+2 Doomed Traveler|DDK
+2 Duskhunter Bat|DDK
+2 Evolving Wilds|DDK
+1 Field of Souls|DDK
+1 Fiend Hunter|DDK
+1 Gatekeeper of Malakir|DDK
+1 Lingering Souls|DDK
+1 Mark of the Vampire|DDK
+1 Mausoleum Guard|DDK
+1 Mesmeric Fiend|DDK
+1 Mortify|DDK
+1 Phantom General|DDK
+9 Plains|DDK|1
+1 Revenant Patriarch|DDK
+1 Sengir Vampire|DDK
+1 Sorin's Thirst|DDK
+1 Sorin, Lord of Innistrad|DDK
+2 Spectral Procession|DDK
+12 Swamp|DDK|1
+2 Tainted Field|DDK
+1 Twilight Drover|DDK
+1 Unmake|DDK
+1 Urge to Feed|DDK
+1 Vampire Lacerator|DDK
+1 Vampire Nighthawk|DDK
+1 Vampire Outcasts|DDK
+1 Vampire's Bite|DDK
+1 Wall of Omens|DDK
+1 Zealous Persecution|DDK

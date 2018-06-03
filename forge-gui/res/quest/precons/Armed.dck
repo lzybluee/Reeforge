@@ -1,0 +1,41 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Armed
+Description=Clash Pack
+Deck Type=constructed
+Set=ORI
+Image=armed.jpg
+[Main]
+1 Anointer of Champions|ORI
+2 Blossoming Sands|FRF
+2 Citadel Castellan|ORI
+1 Collected Company|DTK
+1 Consul's Lieutenant|ORI
+1 Dragon Bell Monk|FRF
+1 Dragon Hunter|DTK
+1 Dromoka Warrior|DTK
+1 Dromoka's Command|DTK
+2 Enshrouding Mist|ORI
+2 Epic Confrontation|DTK
+2 Evolving Wilds|ORI
+1 Feat of Resistance|KTK
+10 Forest|ORI|1
+1 Honored Hierarch|ORI
+1 Kytheon's Irregulars|ORI
+2 Mighty Leap|ORI
+1 Outland Colossus|ORI
+2 Pacifism|DTK
+11 Plains|ORI|1
+1 Pressure Point|FRF
+1 Seeker of the Way|KTK
+2 Titanic Growth|ORI
+2 Topan Freeblade|ORI
+2 Undercity Troll|ORI
+2 Valeron Wardens|ORI
+1 Valorous Stance|FRF
+2 War Oracle|ORI
+1 Windswept Heath|KTK

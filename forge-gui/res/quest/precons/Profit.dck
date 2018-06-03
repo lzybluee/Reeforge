@@ -1,0 +1,40 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Profit
+Description=Clash Pack
+Deck Type=constructed
+Set=FRF
+Image=profit.jpg
+[Main]
+1 Baleful Eidolon|THS
+2 Brain Maggot|JOU
+3 Commune with the Gods|THS
+1 Courser of Kruphix|BNG
+2 Dark Betrayal|THS
+1 Debilitating Injury|KTK
+1 Defend the Hearth|THS
+1 Doomwake Giant|JOU
+1 Eidolon of Blossoms|JOU
+1 Font of Fertility|JOU
+12 Forest|FRF|1
+1 Graverobber Spider|BNG
+2 Grim Guardian|JOU
+2 Jungle Hollow|FRF
+1 Leafcrown Dryad|THS
+1 Loathsome Catoblepas|THS
+2 Nemesis of Mortals|THS
+1 Nighthowler|THS
+1 Noble Quarry|BNG
+1 Nyx Infusion|JOU
+3 Nyx Weaver|JOU
+2 Oakheart Dryads|JOU
+1 Plummet|M15
+1 Reaper of the Wilds|THS
+1 Reviving Melody|JOU
+11 Swamp|FRF|1
+2 Vineweft|M15
+1 Whip of Erebos|THS

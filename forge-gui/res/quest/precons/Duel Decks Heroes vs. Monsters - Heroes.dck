@@ -1,0 +1,48 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Duel Decks: Heroes vs. Monsters - Heroes
+Description=Duel Decks
+Deck Type=constructed
+Set=DDL
+Image=heroes.jpg
+[Main]
+1 Anax and Cymede|DDL
+2 Armory Guard|DDL
+1 Auramancer|DDL
+1 Battle Mastery|DDL
+1 Bonds of Faith|DDL
+2 Boros Guildgate|DDL
+1 Cavalry Pegasus|DDL
+2 Condemn|DDL
+1 Daily Regimen|DDL
+1 Dawnstrike Paladin|DDL
+1 Fencing Ace|DDL
+1 Figure of Destiny|DDL
+2 Freewind Equenaut|DDL
+1 Griffin Guide|DDL
+1 Gustcloak Sentinel|DDL
+1 Kamahl, Pit Fighter|DDL
+1 Magma Jet|DDL
+1 Miraculous Recovery|DDL
+1 Moment of Heroism|DDL
+11 Mountain|DDL|1
+2 New Benalia|DDL
+1 Nobilis of War|DDL
+1 Ordeal of Purphoros|DDL
+1 Pay No Heed|DDL
+9 Plains|DDL|1
+1 Pyrokinesis|DDL
+1 Righteousness|DDL
+1 Smite the Monstrous|DDL
+1 Somberwald Vigilante|DDL
+1 Stand Firm|DDL
+2 Stun Sniper|DDL
+1 Sun Titan|DDL
+1 Thraben Valiant|DDL
+1 Truefire Paladin|DDL
+1 Undying Rage|DDL
+1 Winds of Rath|DDL

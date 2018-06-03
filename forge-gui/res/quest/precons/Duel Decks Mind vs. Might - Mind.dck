@@ -1,0 +1,41 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Duel Decks: Mind vs. Might - Mind
+Description=Duel Decks
+Deck Type=constructed
+Set=DDS
+Image=mind.jpg
+[Main]
+1 Beacon of Tomorrows|DDS
+1 Deep-Sea Kraken|DDS
+1 Desperate Ritual|DDS
+2 Empty the Warrens|DDS
+1 Firemind's Foresight|DDS
+2 Goblin Electromancer|DDS
+1 Grapeshot|DDS
+10 Island|DDS
+1 Jhoira of the Ghitu|DDS
+1 Jori En, Ruin Diver|DDS
+1 Mind's Desire|DDS
+10 Mountain|DDS
+1 Nivix Cyclops|DDS
+1 Nucklavee|DDS
+2 Peer Through Depths|DDS
+1 Quicken|DDS
+3 Reach Through Mists|DDS
+3 Rift Bolt|DDS
+1 Sage-Eye Avengers|DDS
+1 Shivan Meteor|DDS
+2 Sift Through Sands|DDS
+2 Snap|DDS
+1 Spellheart Chimera|DDS
+4 Swiftwater Cliffs|DDS
+1 Talrand, Sky Summoner|DDS
+1 Temporal Fissure|DDS
+1 The Unspeakable|DDS
+1 Volcanic Vision|DDS
+2 Young Pyromancer|DDS

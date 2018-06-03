@@ -1,0 +1,45 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Dimir Manipulation
+Description=MTGA Starting Deck
+Deck Type=constructed
+Set=RIX
+[Main]
+1 Air Elemental|XLN
+1 Angler Drake|AKH
+2 Cancel|XLN
+1 Censor|AKH
+1 Champion of Wits|HOU
+1 Doomfall|HOU
+2 Essence Scatter|AKH
+2 Evolving Wilds|RIX
+1 Field of Ruin|XLN
+1 Final Reward|AKH
+1 Glyph Keeper|AKH
+1 Golden Demise|RIX
+2 Hieroglyphic Illumination|AKH
+1 Hornswoggle|RIX
+1 Impale|RIX
+10 Island|RIX
+1 Labyrinth Guardian|AKH
+2 Moment of Craving|RIX
+1 Negate|RIX
+1 Nezahal, Primal Tide|RIX
+2 Opt|XLN
+1 Overflowing Insight|XLN
+1 Ravenous Chupacabra|RIX
+1 Reaver Ambush|RIX
+1 Secrets of the Golden City|RIX
+1 Soul of the Rapids|RIX
+4 Submerged Boneyard|AKH
+1 Supreme Will|HOU
+9 Swamp|RIX
+1 Tetzimoc, Primal Death|RIX
+1 Treasure Map|XLN
+1 Unsummon|HOU
+1 Vanquish the Weak|XLN
+1 Walk the Plank|XLN

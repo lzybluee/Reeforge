@@ -1,0 +1,36 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
+[metadata]
+Name=Simic Mutology
+Description=Strap on some goggles and snap on some gloves. You're joining the Simic guild in the lab.
+Deck Type=constructed
+Set=DIS
+Image=simic_mutology.jpg
+[Main]
+2 Coiling Oracle|DIS
+1 Drowned Rusalka|GPT
+1 Experiment Kraj|DIS
+2 Flash Foliage|DIS
+10 Forest|RAV|1
+2 Helium Squirter|DIS
+1 Indrik Stomphowler|DIS
+11 Island|RAV|1
+1 Novijen, Heart of Progress|DIS
+2 Plaxmanta|DIS
+1 Protean Hulk|DIS
+2 Shielding Plax|DIS
+2 Silkwing Scout|DIS
+2 Simic Basilisk|DIS
+2 Simic Growth Chamber|DIS
+1 Simic Guildmage|DIS
+3 Simic Initiate|DIS
+2 Simic Ragworm|DIS
+1 Starved Rusalka|GPT
+2 Stasis Cell|RAV
+2 Surveilling Sprite|RAV
+2 Thrive|DIS
+2 Vigean Graftmage|DIS
+3 Vigean Hydropon|DIS
