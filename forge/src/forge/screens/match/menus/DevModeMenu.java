@@ -42,6 +42,7 @@ public class DevModeMenu implements ActionListener, IDevListener {
         PLAY_UNLIMITED_LANDS("Play Unlimited Lands"),
         VIEW_ALL("View All Cards"),
         ADD_COUNTER("Add Counters to Permanent"),
+        REMOVE_COUNTER("Remove Counters from Permanent"),
         TAP_PERMANENT("Tap Permanents"),
         UNTAP_PERMANENT("Untap Permanents"),
         RIGGED_PLANAR_ROLL("Rigged Planar Roll"),
@@ -87,9 +88,8 @@ public class DevModeMenu implements ActionListener, IDevListener {
         menu.add(getMenuItem(DevMenuItem.SETUP_GAME_STATE));
         menu.add(getMenuItem(DevMenuItem.DUMP_GAME_STATE));
         menu.addSeparator();
-        menu.add(playUnlimitedLands = getCheckboxMenuItem(DevMenuItem.PLAY_UNLIMITED_LANDS));
-        menu.add(viewAll = getCheckboxMenuItem(DevMenuItem.VIEW_ALL));
         menu.add(getMenuItem(DevMenuItem.ADD_COUNTER));
+        menu.add(getMenuItem(DevMenuItem.REMOVE_COUNTER));
         menu.addSeparator();
         menu.add(getMenuItem(DevMenuItem.TAP_PERMANENT));
         menu.add(getMenuItem(DevMenuItem.UNTAP_PERMANENT));
@@ -98,6 +98,9 @@ public class DevModeMenu implements ActionListener, IDevListener {
         menu.add(getMenuItem(DevMenuItem.PLANESWALK_TO));
         menu.addSeparator();
         menu.add(getMenuItem(DevMenuItem.DEV_CORNER));
+        menu.addSeparator();
+        menu.add(playUnlimitedLands = getCheckboxMenuItem(DevMenuItem.PLAY_UNLIMITED_LANDS));
+        menu.add(viewAll = getCheckboxMenuItem(DevMenuItem.VIEW_ALL));
         return menu;
     }
 
@@ -131,7 +134,8 @@ public class DevModeMenu implements ActionListener, IDevListener {
         case DUMP_GAME_STATE:      { controller.dumpGameState(); break; }
         case PLAY_UNLIMITED_LANDS: { controller.togglePlayManyLandsPerTurn(); break; }
         case VIEW_ALL:             { controller.toggleViewAllCards(); break; }
-        case ADD_COUNTER:          { controller.addCounterToPermanent(); break; }
+        case ADD_COUNTER:          { controller.addCounterToPermanent(false); break; }
+        case REMOVE_COUNTER:       { controller.removeCountersFromPermanent(false); break; }
         case TAP_PERMANENT:        { controller.tapPermanent(false); break; }
         case UNTAP_PERMANENT:      { controller.untapPermanent(false); break; }
         case RIGGED_PLANAR_ROLL:   { controller.riggedPlanerRoll(); break; }

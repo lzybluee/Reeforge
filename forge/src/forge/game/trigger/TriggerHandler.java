@@ -399,7 +399,7 @@ public class TriggerHandler {
 
         final TriggerType mode = wt.getMode(); 
         final Map<String, Object> runParams = wt.getParams();
-        final List<Trigger> triggers = wt.getTriggers() != null ? wt.getTriggers() : activeTriggers;
+        final List<Trigger> triggers = (wt.getTriggers() != null && wt.getTriggers().size() > 0) ? wt.getTriggers() : activeTriggers; 
 
         Card card = null;
         boolean checkStatics = false;

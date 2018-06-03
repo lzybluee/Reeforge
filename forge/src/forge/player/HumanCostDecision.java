@@ -1095,7 +1095,11 @@ public class HumanCostDecision extends CostDecisionMakerBase {
 
         if (cost.payCostFromSource()) {
             if (source.getController() == ability.getActivatingPlayer() && source.isInPlay()) {
-                return player.getController().confirmPayment(cost, "Sacrifice " + source.getName() + "?",ability) ? PaymentDecision.card(source) : null;
+                if (cost.mustPay()) {
+                    return PaymentDecision.card(source);
+                } else {
+                    return player.getController().confirmPayment(cost, "Sacrifice " + source.getName() + "?",ability) ? PaymentDecision.card(source) : null;
+                }
             }
             else {
                 return null;
@@ -1123,7 +1127,7 @@ public class HumanCostDecision extends CostDecisionMakerBase {
         }
         final InputSelectCardsFromList inp = new InputSelectCardsFromList(controller, c, c, list, ability);
         inp.setMessage("Select a " + cost.getDescriptiveType() + " to sacrifice (%d left)");
-        inp.setCancelAllowed(true);
+        inp.setCancelAllowed(!cost.mustPay());
         if(c > 0) {
             inp.showAndWait();
         }

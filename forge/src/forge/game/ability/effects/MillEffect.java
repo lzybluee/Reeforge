@@ -60,7 +60,7 @@ public class MillEffect extends SpellAbilityEffect {
                     for (final Card c : milled) {
                         c.setExiledWith(host);
                     	if (facedown) {
-                            c.setState(CardStateName.FaceDown, true);
+                            c.setState(CardStateName.FaceDown, true, true);
                         }
                     }
                 }

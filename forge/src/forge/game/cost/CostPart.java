@@ -39,6 +39,7 @@ public abstract class CostPart implements Comparable<CostPart>, Cloneable, Seria
     private String amount;
     private final String originalType, originalTypeDescription;
     private String typeDescription, type;
+    private boolean mustPay;
 
     /**
      * Instantiates a new cost part.
@@ -205,5 +206,13 @@ public abstract class CostPart implements Comparable<CostPart>, Cloneable, Seria
     @Override
     public int compareTo(CostPart o) {
         return this.paymentOrder() - o.paymentOrder();
+    }
+
+    public boolean mustPay() {
+        return mustPay;
+    }
+
+    public void setMustPay(boolean pay) {
+        mustPay = pay;
     }
 }
