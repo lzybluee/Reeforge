@@ -369,7 +369,7 @@ public class AddBasicLandsDialog {
         }
 
         private PaperCard generateCard(int artIndex) {
-            PaperCard c = FModel.getMagicDb().getCommonCards().getCard(cardName, landSet.getCode(), artIndex);
+            PaperCard c = FModel.getMagicDb().getCommonCards().getCard(cardName, landSet == null ? null : landSet.getCode(), artIndex);
             if (c == null) {
                 //if can't find land for this set, fall back to Zendikar lands
                 c = FModel.getMagicDb().getCommonCards().getCard(cardName, "ZEN");

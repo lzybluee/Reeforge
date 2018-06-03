@@ -529,7 +529,7 @@ public final class CardEdition implements Comparable<CardEdition> { // immutable
                     return false;
                 }
                 for(String landName : MagicColor.Constant.BASIC_LANDS) {
-                    if (null == StaticData.instance().getCommonCards().getCard(landName, ed.getCode(), 0))
+                    if (null == StaticData.instance().getCommonCards().getCard(landName, ed == null ? null : ed.getCode(), 0))
                         return false;
                 }
                 return true;

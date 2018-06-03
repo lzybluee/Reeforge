@@ -280,9 +280,14 @@ public class TargetSelection {
                 Object madeChoice = mandatory ? controller.getGui().one(message, selectOptions) : controller.getGui().oneOrNone(message, selectOptions);
                 if (madeChoice == null) {
                     return false;
+                } else {
+                    selectOptions.remove(madeChoice);
                 }
                 if (madeChoice instanceof StackItemView) {
                     ability.getTargets().add(stackItemViewCache.get(madeChoice).getSpellAbility(true));
+                    if(selectOptions.isEmpty()) {
+                        bTargetingDone = true;
+                    }
                 }
                 else {// 'FINISH TARGETING' chosen 
                     bTargetingDone = true;

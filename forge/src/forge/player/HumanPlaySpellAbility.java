@@ -257,7 +257,9 @@ public class HumanPlaySpellAbility {
 
         if (fromZone != null) { // and not a copy
             // add back to where it came from
+            game.getAction().setRollback(true);
             game.getAction().moveTo(fromZone, ability.getHostCard(), zonePosition >= 0 ? Integer.valueOf(zonePosition) : null, null);
+            game.getAction().setRollback(false);
             if(ability.getHostCard().isSplitCard()) {
                 ability.getHostCard().setState(CardStateName.Original, true);
             } else {
@@ -323,12 +325,26 @@ public class HumanPlaySpellAbility {
             }
             if (xInCost) {
                 final String sVar = ability.getSVar("X"); //only prompt for new X value if card doesn't determine it another way
-                if ("Count$xPaid".equals(sVar) || sVar.isEmpty()) {
-                    final Integer value = controller.announceRequirements(ability, "X", allowZero && manaCost.canXbe0());
-                    if (value == null) {
-                        return false;
+                boolean noNeedToChooseX = false;
+                String tgtType = ability.getParam("TargetType");
+                if(sVar.isEmpty() && "Spell".equals(tgtType)) {
+                    Card host = ability.getHostCard();
+                    if(host != null) {
+                        String v = ability.getHostCard().getSVar("X");
+                        if("Targeted$CardManaCost".equals(v)) {
+                            noNeedToChooseX = true;
+                        }
                     }
-                    card.setXManaCostPaid(value);
+                }
+
+                if(!noNeedToChooseX) {
+                    if ("Count$xPaid".equals(sVar) || sVar.isEmpty()) {
+                        final Integer value = controller.announceRequirements(ability, "X", allowZero && manaCost.canXbe0());
+                        if (value == null) {
+                            return false;
+                        }
+                        card.setXManaCostPaid(value);
+                    }
                 }
             } else if (manaCost.getMana().isZero() && ability.isSpell()) {
                 card.setXManaCostPaid(0);

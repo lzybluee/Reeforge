@@ -931,7 +931,8 @@ public class ChangeZoneEffect extends SpellAbilityEffect {
                         if (changeNum > 1) { //indicate progress if multiple cards being chosen
                             title += " (" + (i + 1) + " / " + changeNum + ")";
                         }
-                        c = decider.getController().chooseSingleCardForZoneChange(destination, origin, sa, fetchList, shouldReveal ? delayedReveal : null, title, !sa.hasParam("Mandatory"), decider);
+                        c = decider.getController().chooseSingleCardForZoneChange(destination, origin, sa, fetchList, 
+                                i == 0 ? delayedReveal : null, "[" + (i + 1) + "] " + title, !sa.hasParam("Mandatory"), decider);
                     }
     
                     if (c == null) {
