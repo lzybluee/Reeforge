@@ -258,7 +258,7 @@ public class Match {
 
             if (isFirstGame) {
                 Collection<? extends PaperCard> cardsComplained = player.getController().complainCardsCantPlayWell(myDeck);
-                if (null != cardsComplained) {
+                if (null != cardsComplained && cardsComplained.size() > 0) {
                     rAICards.putAll(player, cardsComplained);
                     System.out.println("AI can't play these cards well");
                     for(PaperCard card : cardsComplained) {

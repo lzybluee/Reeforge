@@ -26,6 +26,7 @@ import forge.game.card.Card;
 import forge.game.card.CardView;
 import forge.game.card.CardView.CardStateView;
 import forge.game.keyword.Keyword;
+import forge.game.player.PlayerView;
 import forge.game.card.CounterType;
 import forge.gui.CardContainer;
 import forge.item.PaperCard;
@@ -98,7 +99,7 @@ public class CardPanel extends SkinnedPanel implements CardContainer, IDisposabl
     private static Font smallCounterFont;
     private static Font largeCounterFont;
 
-    private boolean inFlashbackZone = false;
+    private PlayerView flashbackPlayer = null;
 
     static {
 
@@ -807,11 +808,11 @@ public class CardPanel extends SkinnedPanel implements CardContainer, IDisposabl
         doLayout();
     }
 
-    public boolean isInFlashbackZone() {
-        return inFlashbackZone;
+    public PlayerView getFlashbackPlayer() {
+        return flashbackPlayer;
     }
 
-    public void setInFlashbackZone(boolean b) {
-        inFlashbackZone = b;
+    public void setFlashbackPlayer(PlayerView player) {
+        flashbackPlayer = player;
     }
 }

@@ -339,6 +339,10 @@ public class HumanPlaySpellAbility {
 
                 if(!noNeedToChooseX) {
                     if ("Count$xPaid".equals(sVar) || sVar.isEmpty()) {
+                        if(ability.toString().startsWith("Unmanifest ") && ability.toString().endsWith(" (Turn this face up any time for its mana cost.)")) {
+                            card.setXManaCostPaid(0);
+                            return true;
+                        }
                         final Integer value = controller.announceRequirements(ability, "X", allowZero && manaCost.canXbe0());
                         if (value == null) {
                             return false;

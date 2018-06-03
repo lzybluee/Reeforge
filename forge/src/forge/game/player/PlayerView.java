@@ -202,6 +202,22 @@ public class PlayerView extends GameEntityView {
         return hasUnlimitedHandSize() ? "unlimited" : String.valueOf(getMaxHandSize());
     }
 
+    public int getLandsPlayedThisTurn() {
+        return get(TrackableProperty.LandsPlayedThisTurn);
+    }
+
+    public void updateLandsPlayedThisTurn(Player p) {
+        set(TrackableProperty.LandsPlayedThisTurn, p.getLandsPlayedThisTurn());
+    }
+
+    public int getSpellsCastThisTurn() {
+        return get(TrackableProperty.SpellsCastThisTurn);
+    }
+
+    public void updateSpellsCastThisTurn(Player p) {
+        set(TrackableProperty.SpellsCastThisTurn, p.getSpellsCastThisTurn());
+    }
+
     public int getNumDrawnThisTurn() {
         return get(TrackableProperty.NumDrawnThisTurn);
     }
@@ -419,6 +435,8 @@ public class PlayerView extends GameEntityView {
         }
 
         details.add(TextUtil.concatNoSpace("Cards in hand: ", TextUtil.addSuffix(String.valueOf(getHandSize()),"/"), getMaxHandString()));
+        details.add(TextUtil.concatWithSpace("Lands played this turn:", String.valueOf(getLandsPlayedThisTurn())));
+        details.add(TextUtil.concatWithSpace("Spells cast this turn:", String.valueOf(getSpellsCastThisTurn())));
         details.add(TextUtil.concatWithSpace("Cards drawn this turn:", String.valueOf(getNumDrawnThisTurn())));
         details.add(TextUtil.concatWithSpace("Damage prevention:", String.valueOf(getPreventNextDamage())));
         final String keywords = Lang.joinHomogenous(getDisplayableKeywords());

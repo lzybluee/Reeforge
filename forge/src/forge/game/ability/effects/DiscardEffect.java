@@ -17,6 +17,7 @@ import forge.util.TextUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class DiscardEffect extends SpellAbilityEffect {
@@ -315,6 +316,21 @@ public class DiscardEffect extends SpellAbilityEffect {
         if (sa.hasParam("RememberDiscarded")) {
             for (final Card c : discarded) {
                 source.addRemembered(c);
+            }
+        }
+
+        HashMap<Player, CardCollection> revealCards = new HashMap<Player, CardCollection>();
+        for(Card c : discarded) {
+            Player p = c.getOwner();
+            if(!revealCards.containsKey(p)) {
+                revealCards.put(p, new CardCollection());
+            }
+            revealCards.get(c.getOwner()).add(c);
+        }
+
+        for(Player p : discarders) {
+            if(revealCards.containsKey(p)) {
+                p.getGame().getAction().reveal(revealCards.get(p), p, true);
             }
         }
     } // discardResolve()
