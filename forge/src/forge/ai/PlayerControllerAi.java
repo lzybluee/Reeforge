@@ -999,6 +999,32 @@ public class PlayerControllerAi extends PlayerController {
     }
 
     @Override
+    public CardCollection chooseCardsForZoneChange(ZoneType destination,
+            List<ZoneType> origin, SpellAbility sa, CardCollection fetchList, DelayedReveal delayedReveal,
+            String selectPrompt, boolean isOptional, Player decider, int changeNum) {
+        if (delayedReveal != null) {
+            reveal(delayedReveal.getCards(), delayedReveal.getZone(), delayedReveal.getOwner(), delayedReveal.getMessagePrefix());
+        }
+        
+        CardCollection collection = new CardCollection();
+        int i = 0;
+        do {
+            Card card = brains.chooseCardToHiddenOriginChangeZone(destination, origin, sa, fetchList, player, decider);
+            if(card == null) {
+                if (fetchList.isEmpty() || decider.getController().confirmAction(sa, PlayerActionConfirmMode.ChangeZoneGeneral, selectPrompt)) {
+                    break;
+                }
+            } else {
+                fetchList.remove(card);
+                collection.add(card);
+            }
+            i++;
+        } while (i < changeNum);
+        
+        return collection;
+    }
+
+    @Override
     public List<Card> chooseCardsForZoneChange(
             ZoneType destination, List<ZoneType> origin, SpellAbility sa, CardCollection fetchList,
             DelayedReveal delayedReveal, String selectPrompt, Player decider) {

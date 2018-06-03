@@ -233,6 +233,8 @@ public abstract class PlayerController {
 
     public abstract List<Card> chooseCardsForZoneChange(ZoneType destination, List<ZoneType> origin, SpellAbility sa, CardCollection fetchList, DelayedReveal delayedReveal, String selectPrompt, Player decider);
 
+    public abstract CardCollection chooseCardsForZoneChange(ZoneType destination, List<ZoneType> origin, SpellAbility sa, CardCollection fetchList, DelayedReveal delayedReveal, String selectPrompt, boolean isOptional, Player decider, int changeNum);
+
     public abstract void autoPassCancel();
 
     public abstract void awaitNextInput();

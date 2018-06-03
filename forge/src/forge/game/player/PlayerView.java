@@ -213,10 +213,14 @@ public class PlayerView extends GameEntityView {
         return get(TrackableProperty.Keywords);
     }
     public List<String> getDisplayableKeywords() {
-        final List<String> allKws;
+        final List<String> allKws = new ArrayList<>();
         final ImmutableMultiset<String> kws = getKeywords();
         synchronized (kws) {
-            allKws = Lists.newArrayList(kws.elementSet());
+            for(String s : kws) {
+                if(s.contains(":") || !allKws.contains(s)) {
+                    allKws.add(s);
+                }
+            }
         }
         return allKws;
     }

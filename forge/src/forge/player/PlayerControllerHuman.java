@@ -1724,6 +1724,81 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
             final String selectPrompt, final boolean isOptional, final Player decider) {
         return chooseSingleEntityForEffect(fetchList, delayedReveal, sa, selectPrompt, isOptional, decider);
     }
+    
+    @Override
+    public CardCollection chooseCardsForZoneChange(ZoneType destination,
+            List<ZoneType> origin, SpellAbility sa, CardCollection optionList, DelayedReveal delayedReveal,
+            String selectPrompt, boolean isOptional, Player targetedPlayer, int changeNum) {
+     // Human is supposed to read the message and understand from it what to
+        // choose
+        if (optionList.isEmpty()) {
+            if (delayedReveal != null) {
+                reveal(delayedReveal.getCards(), delayedReveal.getZone(), delayedReveal.getOwner(),
+                        delayedReveal.getMessagePrefix());
+            }
+            return null;
+        }
+        if (!isOptional && optionList.size() == 1) {
+            if (delayedReveal != null) {
+                reveal(delayedReveal.getCards(), delayedReveal.getZone(), delayedReveal.getOwner(),
+                        delayedReveal.getMessagePrefix());
+            }
+            return optionList;
+        }
+
+        boolean canUseSelectCardsInput = true;
+        for (final GameEntity c : optionList) {
+            if (c instanceof Player) {
+                continue;
+            }
+            final Zone cz = ((Card) c).getZone();
+            // can point at cards in own hand and anyone's battlefield
+            final boolean canUiPointAtCards = cz != null
+                    && (cz.is(ZoneType.Hand) && cz.getPlayer() == player || cz.is(ZoneType.Battlefield));
+            if (!canUiPointAtCards) {
+                canUseSelectCardsInput = false;
+                break;
+            }
+        }
+
+        if (canUseSelectCardsInput) {
+            if (delayedReveal != null) {
+                reveal(delayedReveal.getCards(), delayedReveal.getZone(), delayedReveal.getOwner(),
+                        delayedReveal.getMessagePrefix());
+            }
+            final InputSelectCardsFromList input = new InputSelectCardsFromList(this, isOptional ? 0 : 1, changeNum, optionList, sa);
+            input.setCancelAllowed(isOptional);
+            input.setMessage(MessageUtil.formatMessage(selectPrompt, player, targetedPlayer));
+            input.showAndWait();
+            return new CardCollection(input.getSelected());
+        }
+
+        CardCollection collection = new CardCollection();
+        int i = 0;
+        do {
+            tempShow(optionList);
+            if (delayedReveal != null) {
+                tempShow(delayedReveal.getCards());
+            }
+            final GameEntityView result = getGui().chooseSingleEntityForEffect(selectPrompt,
+                    GameEntityView.getEntityCollection(optionList), delayedReveal, isOptional);
+            endTempShowCards();
+    
+            if(result == null) {
+                if (optionList.isEmpty() || confirmAction(sa, PlayerActionConfirmMode.ChangeZoneGeneral, selectPrompt)) {
+                    break;
+                }
+            } else {
+                if (result instanceof CardView) {
+                    collection.add(game.getCard((CardView)result));
+                    optionList.remove(game.getCard((CardView)result));
+                }
+            }
+            i++;
+        } while (i < changeNum);
+
+        return collection;
+    }
 
     public List<Card> chooseCardsForZoneChange(final ZoneType destination, final List<ZoneType> origin,
             final SpellAbility sa, final CardCollection fetchList, final DelayedReveal delayedReveal,

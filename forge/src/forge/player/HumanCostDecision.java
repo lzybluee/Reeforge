@@ -1124,7 +1124,9 @@ public class HumanCostDecision extends CostDecisionMakerBase {
         final InputSelectCardsFromList inp = new InputSelectCardsFromList(controller, c, c, list, ability);
         inp.setMessage("Select a " + cost.getDescriptiveType() + " to sacrifice (%d left)");
         inp.setCancelAllowed(true);
-        inp.showAndWait();
+        if(c > 0) {
+            inp.showAndWait();
+        }
         if (inp.hasCancelled()) {
             return null;
         }
@@ -1239,7 +1241,9 @@ public class HumanCostDecision extends CostDecisionMakerBase {
         final InputSelectCardsFromList inp = new InputSelectCardsFromList(controller, c, c, typeList, ability);
         inp.setCancelAllowed(true);
         inp.setMessage("Select a " + cost.getDescriptiveType() + " to tap (%d left)");
-        inp.showAndWait();
+        if(c > 0) {
+            inp.showAndWait();
+        }
         if (inp.hasCancelled()) {
             return null;
         }
@@ -1268,7 +1272,9 @@ public class HumanCostDecision extends CostDecisionMakerBase {
         final InputSelectCardsFromList inp = new InputSelectCardsFromList(controller, c, c, typeList, ability);
         inp.setCancelAllowed(true);
         inp.setMessage("Select a " + cost.getDescriptiveType() + " to untap (%d left)");
-        inp.showAndWait();
+        if(c > 0) {
+            inp.showAndWait();
+        }
         if (inp.hasCancelled() || inp.getSelected().size() != c) {
             return null;
         }
