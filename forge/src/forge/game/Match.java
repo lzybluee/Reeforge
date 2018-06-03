@@ -16,6 +16,7 @@ import forge.game.zone.PlayerZone;
 import forge.game.zone.ZoneType;
 import forge.item.PaperCard;
 import forge.model.FModel;
+import forge.player.LobbyPlayerHuman;
 import forge.properties.ForgePreferences.FPref;
 import forge.util.MyRandom;
 import forge.util.collect.FCollectionView;
@@ -259,8 +260,11 @@ public class Match {
 
             player.initVariantsZones(psc);
 
-            player.shuffle(null);
-
+            if(player.getLobbyPlayer() instanceof LobbyPlayerHuman && FModel.getPreferences().getPrefBoolean(FPref.UI_ENABLE_MTGA_SHUFFLE)) {
+                player.MTGAShuffle(null);
+            } else {
+                player.shuffle(null);
+            }
 
             if (isFirstGame) {
                 Collection<? extends PaperCard> cardsComplained = player.getController().complainCardsCantPlayWell(myDeck);

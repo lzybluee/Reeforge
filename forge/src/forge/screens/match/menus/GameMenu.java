@@ -49,6 +49,7 @@ public final class GameMenu {
         menu.add(new CardOverlaysMenu(matchUI).getMenu());
         menu.add(getMenuItem_AutoYields());
         menu.add(getMenuItem_SkipRestoreDeck());
+        menu.add(getMenuItem_MTGAShuffle());
         menu.add(getMenuItem_StartPlayer());
         menu.addSeparator();
         menu.add(getMenuItem_ViewDeckList());
@@ -268,6 +269,26 @@ public final class GameMenu {
     private static void toggleSkipRestoreDeck() {
         final boolean skipRestoreDeck = !prefs.getPrefBoolean(FPref.UI_SKIP_RESTORE_DECK);
         prefs.setPref(FPref.UI_SKIP_RESTORE_DECK, skipRestoreDeck);
+        prefs.save();
+    }
+
+    private static SkinnedCheckBoxMenuItem getMenuItem_MTGAShuffle() {
+        SkinnedCheckBoxMenuItem menuItem = new SkinnedCheckBoxMenuItem("MTGA Shuffle");
+        menuItem.setState(prefs.getPrefBoolean(FPref.UI_ENABLE_MTGA_SHUFFLE));
+        menuItem.addActionListener(getMTGAShuffle());
+        return menuItem;
+    }
+    private static ActionListener getMTGAShuffle() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                toggleMTGAShuffle();
+            }
+        };
+    }
+    private static void toggleMTGAShuffle() {
+        final boolean MTGAShuffle = !prefs.getPrefBoolean(FPref.UI_ENABLE_MTGA_SHUFFLE);
+        prefs.setPref(FPref.UI_ENABLE_MTGA_SHUFFLE, MTGAShuffle);
         prefs.save();
     }
 

@@ -44,7 +44,9 @@ public class TournamentUtil {
                     break;
                 case CUSTOM_DECK:
                     deck = DeckgenUtil.getRandomCustomDeck();
-                    eventNames.add(deck.getName());
+                    if(deck != null) {
+                        eventNames.add(deck.getName());
+                    }
                     break;
                 case PRECONSTRUCTED_DECK:
                     deck = DeckgenUtil.getRandomPreconDeck();
@@ -61,7 +63,9 @@ public class TournamentUtil {
                 default:
                     continue;
             }
-            decks.add(deck);
+            if(deck != null) {
+                decks.add(deck);
+            }
         }
 
         tournament.setDecks(decks);

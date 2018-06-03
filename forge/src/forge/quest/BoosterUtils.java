@@ -56,7 +56,7 @@ public final class BoosterUtils {
     };
 
     private static final GameFormat.Collection  formats   = FModel.getFormats();
-    private static final Predicate<CardEdition> filterExt = formats.getExtended().editionLegalPredicate;
+    private static final Predicate<CardEdition> filterExt = formats.getModern().editionLegalPredicate;
 
     /** The filter t2booster. */
     private static final Predicate<CardEdition> filterT2booster = Predicates.and(CardEdition.Predicates.CAN_MAKE_BOOSTER,

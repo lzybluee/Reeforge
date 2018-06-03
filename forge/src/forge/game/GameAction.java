@@ -1095,7 +1095,10 @@ public class GameAction {
         // trigger reset above will activate the copy's Always trigger, which needs to be triggered at
         // this point.
         checkStaticAbilities(false, affectedCards, CardCollection.EMPTY);
-        game.clearChangeZoneLKIInfo();
+
+        if(game.getStack().isEmpty()) {
+            game.clearChangeZoneLKIInfo();
+        }
 
         if (!refreeze) {
             game.getStack().unfreezeStack();
@@ -1625,7 +1628,7 @@ public class GameAction {
 
             // Choose starting hand for each player with multiple hands
             if (game.getRules().getGameType() != GameType.Puzzle) {
-                performMulligans(first, game.getRules().hasAppliedVariant(GameType.Commander));
+                performMulligans(first, false);
             }
             if (game.isGameOver()) { break; } // conceded during "mulligan" prompt
 

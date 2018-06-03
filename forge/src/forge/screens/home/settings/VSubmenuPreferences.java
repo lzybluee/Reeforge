@@ -60,7 +60,7 @@ public enum VSubmenuPreferences implements IVSubmenu<CSubmenuPreferences> {
     private final JCheckBox cbRemoveArtifacts = new OptionsCheckBox("Remove Artifacts");
     private final JCheckBox cbAnte = new OptionsCheckBox("Play for Ante");
     private final JCheckBox cbAnteMatchRarity = new OptionsCheckBox("Match Ante Rarity");
-    private final JCheckBox cbEnableAICheats = new OptionsCheckBox("Allow AI Cheating");
+    private final JCheckBox cbEnableMTGAShuffle = new OptionsCheckBox("Enable MTGA Shuffle");
     private final JCheckBox cbManaBurn = new OptionsCheckBox("Mana Burn");
     private final JCheckBox cbManaLostPrompt = new OptionsCheckBox("Prompt Mana Pool Emptying");
     private final JCheckBox cbDevMode = new OptionsCheckBox("Developer Mode");
@@ -160,8 +160,8 @@ public enum VSubmenuPreferences implements IVSubmenu<CSubmenuPreferences> {
         pnlPrefs.add(cbAnteMatchRarity, titleConstraints);
         pnlPrefs.add(new NoteLabel("Attempts to make antes the same rarity for all players."), descriptionConstraints);
 
-        pnlPrefs.add(cbEnableAICheats, titleConstraints);
-        pnlPrefs.add(new NoteLabel("Allow the AI to cheat to gain advantage (for personalities that have cheat shuffling options set)."), descriptionConstraints);
+        pnlPrefs.add(cbEnableMTGAShuffle, titleConstraints);
+        pnlPrefs.add(new NoteLabel("The system draws an opening hand from each of two separately randomized decks, and leans towards the hand with the mix of spells and lands closest to average for that deck."), descriptionConstraints);
 
         pnlPrefs.add(cbManaBurn, titleConstraints);
         pnlPrefs.add(new NoteLabel("Play with mana burn (from pre-Magic 2010 rules)."), descriptionConstraints);
@@ -525,8 +525,8 @@ public enum VSubmenuPreferences implements IVSubmenu<CSubmenuPreferences> {
     }
 
     /** @return {@link javax.swing.JCheckBox} */
-    public JCheckBox getCbEnableAICheats() {
-        return cbEnableAICheats;
+    public JCheckBox getCbEnableMTGAShuffle() {
+        return cbEnableMTGAShuffle;
     }
 
     /** @return {@link javax.swing.JCheckBox} */
