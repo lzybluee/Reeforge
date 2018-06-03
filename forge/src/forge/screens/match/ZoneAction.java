@@ -13,6 +13,7 @@ public final class ZoneAction implements Runnable {
     private final CMatchUI matchUI;
     private final PlayerView player;
     private final ZoneType zone;
+    private boolean autoClose = true;
 
     /**
      * Receives click and programmatic requests for viewing data stacks in
@@ -25,8 +26,12 @@ public final class ZoneAction implements Runnable {
         this.zone = zone;
     }
 
+    public void setAutoClose(boolean auto) {
+        autoClose = auto;
+    }
+
     @Override
     public void run() {
-        FloatingCardArea.showOrHide(matchUI, player, zone);
+        FloatingCardArea.showOrHide(matchUI, player, zone, autoClose);
     }
 }

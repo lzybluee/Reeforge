@@ -80,6 +80,20 @@ public class BoosterDraft implements IBoosterDraft {
                 IBoosterDraft.LAND_SET_CODE[0] = CardEdition.Predicates.getRandomSetWithAllBasicLands(FModel.getMagicDb().getEditions());
                 IBoosterDraft.CUSTOM_RANKINGS_FILE[0] = null;
                 break;
+                
+            case Format:
+                final String format = SGuiChoose.oneOrNone("Choose Format", new String[] {"Modern", "Frontier", "Standard"});
+                if (format == null) {
+                    return false;
+                }
+
+                final Supplier<List<PaperCard>> cards = new UnOpenedProduct(SealedProduct.Template.genericBooster, format);
+                for (int i = 0; i < 3; i++) {
+                    this.product.add(cards);
+                }
+                IBoosterDraft.LAND_SET_CODE[0] = FModel.getMagicDb().getEditions().get("DOM");
+                IBoosterDraft.CUSTOM_RANKINGS_FILE[0] = null;
+                break;
 
             case Block: // Draft from cards by block or set
             case FantasyBlock:

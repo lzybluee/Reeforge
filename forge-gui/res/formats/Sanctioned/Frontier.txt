@@ -1,0 +1,6 @@
+[format]
+Name:Frontier
+Order:106
+Subtype:Frontier
+Type:Sanctioned
+Sets:M15, KTK, FRF, DTK, ORI, BFZ, OGW, SOI, EMN, W16, KLD, AER, W17, AKH, HOU, XLN, RIX, DOM

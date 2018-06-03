@@ -20,6 +20,7 @@ public class UnOpenedProduct implements IUnOpenedProduct {
     private final SealedProduct.Template tpl;
     private final Map<String, PrintSheet> sheets;
     private boolean poolLimited = false; // if true after successful generation cards are removed from printsheets.
+    private String format = null;
 
     public final boolean isPoolLimited() {
         return poolLimited;
@@ -34,6 +35,12 @@ public class UnOpenedProduct implements IUnOpenedProduct {
     public UnOpenedProduct(SealedProduct.Template template) {
         tpl = template;
         sheets = null;
+    }
+
+    public UnOpenedProduct(SealedProduct.Template template, String f) {
+        tpl = template;
+        sheets = null;
+        format = f;
     }
 
     // Invoke this constructor only if you are sure that the pool is not equal to deafult carddb
@@ -59,7 +66,7 @@ public class UnOpenedProduct implements IUnOpenedProduct {
 
     @Override
     public List<PaperCard> get() {
-        return sheets == null ? BoosterGenerator.getBoosterPack(tpl) : getBoosterPack();
+        return sheets == null ? BoosterGenerator.getBoosterPack(tpl, format) : getBoosterPack();
     }
 
     // If they request cards from an arbitrary pool, there's no use to cache printsheets.

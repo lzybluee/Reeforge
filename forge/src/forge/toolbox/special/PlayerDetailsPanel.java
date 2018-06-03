@@ -21,6 +21,7 @@ import com.google.common.base.Function;
 
 import forge.assets.FSkinProp;
 import forge.game.player.PlayerView;
+import forge.screens.match.ZoneAction;
 import forge.toolbox.FLabel;
 import forge.toolbox.FMouseAdapter;
 import forge.toolbox.FSkin;
@@ -146,37 +147,67 @@ public class PlayerDetailsPanel extends JPanel {
         }
     }
 
-    public void setupMouseActions(final Runnable handAction, final Runnable libraryAction, final Runnable exileAction,
-                                  final Runnable graveAction, final Runnable flashBackAction, final Runnable commandAction,
+    public void setupMouseActions(final ZoneAction handAction, final ZoneAction libraryAction, final ZoneAction exileAction,
+                                  final ZoneAction graveAction, final ZoneAction flashBackAction, final ZoneAction commandAction,
                                   final Function<Byte, Boolean> manaAction) {
         // Detail label listeners
         lblGraveyard.addMouseListener(new FMouseAdapter() {
             @Override public void onLeftClick(final MouseEvent e) {
+                graveAction.setAutoClose(true);
+                graveAction.run();
+            }
+            @Override public void onRightClick(final MouseEvent e) {
+                graveAction.setAutoClose(false);
                 graveAction.run();
             }
         });
         lblExile.addMouseListener(new FMouseAdapter() {
             @Override public void onLeftClick(final MouseEvent e) {
+                exileAction.setAutoClose(true);
+                exileAction.run();
+            }
+            @Override public void onRightClick(final MouseEvent e) {
+                exileAction.setAutoClose(false);
                 exileAction.run();
             }
         });
         lblLibrary.addMouseListener(new FMouseAdapter() {
             @Override public void onLeftClick(final MouseEvent e) {
+                libraryAction.setAutoClose(true);
+                libraryAction.run();
+            }
+            @Override public void onRightClick(final MouseEvent e) {
+                libraryAction.setAutoClose(false);
                 libraryAction.run();
             }
         });
         lblHand.addMouseListener(new FMouseAdapter() {
             @Override public void onLeftClick(final MouseEvent e) {
+                handAction.setAutoClose(true);
+                handAction.run();
+            }
+            @Override public void onRightClick(final MouseEvent e) {
+                handAction.setAutoClose(false);
                 handAction.run();
             }
         });
         lblFlashback.addMouseListener(new FMouseAdapter() {
             @Override public void onLeftClick(final MouseEvent e) {
+                flashBackAction.setAutoClose(true);
+                flashBackAction.run();
+            }
+            @Override public void onRightClick(final MouseEvent e) {
+                flashBackAction.setAutoClose(false);
                 flashBackAction.run();
             }
         });
         lblCommand.addMouseListener(new FMouseAdapter() {
             @Override public void onLeftClick(final MouseEvent e) {
+                commandAction.setAutoClose(true);
+                commandAction.run();
+            }
+            @Override public void onRightClick(final MouseEvent e) {
+                commandAction.setAutoClose(false);
                 commandAction.run();
             }
         });

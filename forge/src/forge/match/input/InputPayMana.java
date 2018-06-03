@@ -207,14 +207,22 @@ public abstract class InputPayMana extends InputSyncronizedBase {
         SpellAbility priorAbility = null;
         int amountOfMana = -1;
 
+        boolean hasSpecialEffect = false;
+        boolean canProduceMoreMana = false;
+
         for (SpellAbility ma : card.getManaAbilities()) {
             ma.setActivatingPlayer(player);
 
+            boolean skipManaCheck = false;
+            if(ma.hasParam("ConditionCheckSVar") || ma.hasParam("ReplaceIfLandPlayed")) {
+                skipManaCheck = true;
+            }
+
             AbilityManaPart m = ma.getManaPartRecursive();
-            if (m == null || !ma.canPlay())                                 { continue; }
-            if (!abilityProducesManaColor(ma, m, colorCanUse))              { continue; }
-            if (ma.isAbility() && ma.getRestrictions().isInstantSpeed())    { continue; }
-            if (!m.meetsManaRestrictions(saPaidFor))                        { continue; }
+            if (m == null || !ma.canPlay())                                         { continue; }
+            if (!abilityProducesManaColor(ma, m, colorCanUse) && !skipManaCheck)    { continue; }
+            if (ma.isAbility() && ma.getRestrictions().isInstantSpeed())            { continue; }
+            if (!m.meetsManaRestrictions(saPaidFor))                                { continue; }
 
             // If Mana Abilities produce differing amounts of mana, let the player choose
             int maAmount = GameActionUtil.amountOfManaGenerated(ma, true);
@@ -232,6 +240,14 @@ public abstract class InputPayMana extends InputSyncronizedBase {
 
             abilitiesMap.put(ma.getView(), ma);
             abilitiesVec.add(ma.getView());
+
+            if(ma.hasParam("Amount") && ma.hasParam("RestrictValid")) {
+                canProduceMoreMana = true;
+            }
+
+            if(ma.hasParam("AddsNoCounter")) {
+                hasSpecialEffect = true;
+            }
 
             // skip express mana if the ability is not undoable or reusable
             if (!ma.isUndoable() || !ma.getPayCosts().isRenewableResource() || ma.getSubAbility() != null) {
@@ -292,11 +308,11 @@ public abstract class InputPayMana extends InputSyncronizedBase {
         }
 
         // Exceptions for cards that have conditional abilities which are better handled manually
-        if (card.getName().equals("Cavern of Souls") && isPayingGeneric) {
+        if (hasSpecialEffect && isPayingGeneric) {
             choice = true;
         }
 
-        if (card.getName().equals("Eldrazi Temple") && priorAbility != null) {
+        if (canProduceMoreMana && priorAbility != null) {
             choice = false;
         }
 

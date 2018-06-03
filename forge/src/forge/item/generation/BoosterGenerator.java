@@ -28,11 +28,13 @@ import forge.card.CardRarity;
 import forge.card.CardRulesPredicates;
 import forge.card.CardSplitType;
 import forge.card.PrintSheet;
+import forge.game.GameFormat;
 import forge.card.CardEdition.FoilType;
 import forge.item.IPaperCard;
 import forge.item.IPaperCard.Predicates.Presets;
 import forge.item.PaperCard;
 import forge.item.SealedProduct;
+import forge.model.FModel;
 import forge.util.Aggregates;
 import forge.util.MyRandom;
 import forge.util.TextUtil;
@@ -68,7 +70,28 @@ public class BoosterGenerator {
         return StaticData.instance().getCommonCards().getFoiled(cardList.get(0));
     }
 
+    public static String addSets(String sheetKey, String format) {
+        for(GameFormat f : FModel.getFormats().getOrderedList()) {
+            if(f.getName().equals(format)) {
+                String sets = "";
+                for(String s : f.getAllowedSetCodes()) {
+                    sets += s + ",";
+                }
+                if(sets.endsWith(",")) {
+                    sets = sets.substring(0, sets.length() - 1);
+                }
+                sheetKey += ":fromSets(\"" + sets + "\")";
+                break;
+            }
+        }
+        return sheetKey;
+    }
+
     public static List<PaperCard> getBoosterPack(SealedProduct.Template template) {
+        return getBoosterPack(template, null);
+    }
+
+    public static List<PaperCard> getBoosterPack(SealedProduct.Template template, String format) {
         // TODO: tweak the chances of generating Masterpieces to be more authentic
         // (currently merely added to the Rare/Mythic Rare print sheet via ExtraFoilSheetKey)
 
@@ -258,6 +281,10 @@ public class BoosterGenerator {
                 result.addAll(replaceSheet.random(1, true));
                 sheetsUsed.add(replaceSheet);
                 replaceCommon = false;
+            }
+
+            if(format != null) {
+                sheetKey = addSets(sheetKey, format);
             }
 
             PrintSheet ps = getPrintSheet(sheetKey);
