@@ -86,7 +86,7 @@ public final class CEditorCommander extends ACEditorBase<PaperCard, Deck> {
             normalPool = ItemPool.createFrom(FModel.getFormats().get("Brawl").getAllCards(), PaperCard.class);
         } else{
             Predicate<CardRules> commanderFilter = CardRulesPredicates.Presets.CAN_BE_COMMANDER ;
-            commanderPool = ItemPool.createFrom(FModel.getMagicDb().getCommonCards().getAllCards(Predicates.compose(commanderFilter, PaperCard.FN_GET_RULES)),PaperCard.class);
+            ItemPool.createFrom(FModel.getMagicDb().getCommonCards().getAllCards(Predicates.compose(Predicates.and(Presets.IS_NON_LAND, Presets.IS_LEGENDARY), PaperCard.FN_GET_RULES)),PaperCard.class);
             normalPool = ItemPool.createFrom(FModel.getMagicDb().getCommonCards().getAllCards(), PaperCard.class);
         }
 
