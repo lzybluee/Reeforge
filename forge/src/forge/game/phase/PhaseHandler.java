@@ -281,7 +281,7 @@ public class PhaseHandler implements java.io.Serializable {
                         game.getStack().unfreezeStack();
 
                         if (combat != null && combat.getAttackers().isEmpty()
-                                && !game.getTriggerHandler().hasDelayedTriggers()) {
+                                && !game.getTriggerHandler().hasDelayedTriggersDuringCombat()) {
                             endCombat();
                         }
 

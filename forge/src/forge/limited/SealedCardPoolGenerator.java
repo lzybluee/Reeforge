@@ -159,6 +159,17 @@ public class SealedCardPoolGenerator {
                 landSetCode = CardEdition.Predicates.getRandomSetWithAllBasicLands(FModel.getMagicDb().getEditions()).getCode();
                 break;
 
+            case Format:
+                final String format = SGuiChoose.oneOrNone("Choose Format", new String[] {"Modern", "Frontier", "Standard"});
+                if (format == null) {
+                    return;
+                }
+                if (!chooseNumberOfBoosters(new UnOpenedProduct(SealedProduct.Template.genericBooster, format))) {
+                    return;
+                }
+                landSetCode = "DOM";
+                break;
+
             case Block:
             case FantasyBlock:
                 List<CardBlock> blocks = new ArrayList<CardBlock>();

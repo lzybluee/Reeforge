@@ -23,6 +23,7 @@ import com.google.common.base.Supplier;
 import forge.UiCommand;
 import forge.card.CardRules;
 import forge.card.CardRulesPredicates;
+import forge.card.CardRulesPredicates.Presets;
 import forge.deck.Deck;
 import forge.deck.DeckSection;
 import forge.gui.framework.DragCell;
@@ -35,6 +36,7 @@ import forge.screens.deckeditor.SEditorIO;
 import forge.screens.deckeditor.views.VAllDecks;
 import forge.screens.deckeditor.views.VDeckgen;
 import forge.screens.match.controllers.CDetailPicture;
+import forge.util.ComparableOp;
 import forge.util.ItemPool;
 
 import java.util.ArrayList;
@@ -70,22 +72,21 @@ public final class CEditorCommander extends ACEditorBase<PaperCard, Deck> {
     public CEditorCommander(final CDetailPicture cDetailPicture, boolean tinyLeaders, boolean brawl) {
         super(tinyLeaders ? FScreen.DECK_EDITOR_TINY_LEADERS : brawl ? FScreen.DECK_EDITOR_BRAWL : FScreen.DECK_EDITOR_COMMANDER, cDetailPicture);
         allSections.add(DeckSection.Main);
-        allSections.add(DeckSection.Sideboard);
         allSections.add(DeckSection.Commander);
+        allSections.add(DeckSection.Sideboard);
 
-        if(brawl){
+        if(tinyLeaders) {
+            Predicate<CardRules> cmcPrep = new CardRulesPredicates.LeafNumber(CardRulesPredicates.LeafNumber.CardField.CMC, ComparableOp.LT_OR_EQUAL, 3);
+            commanderPool = ItemPool.createFrom(FModel.getMagicDb().getCommonCards().getAllCards(Predicates.compose(Predicates.and(cmcPrep, Presets.CAN_BE_COMMANDER), PaperCard.FN_GET_RULES)),PaperCard.class);
+            normalPool = ItemPool.createFrom(FModel.getMagicDb().getCommonCards().getAllCards(Predicates.compose(cmcPrep, PaperCard.FN_GET_RULES)), PaperCard.class);
+        } else if(brawl){
             Predicate<CardRules> commanderFilter = CardRulesPredicates.Presets.CAN_BE_BRAWL_COMMANDER;
             commanderPool = ItemPool.createFrom(FModel.getMagicDb().getCommonCards().getAllCards(Predicates.and(
                     FModel.getFormats().get("Brawl").getFilterPrinted(),Predicates.compose(commanderFilter, PaperCard.FN_GET_RULES))),PaperCard.class);
-        }else{
+            normalPool = ItemPool.createFrom(FModel.getFormats().get("Brawl").getAllCards(), PaperCard.class);
+        } else{
             Predicate<CardRules> commanderFilter = CardRulesPredicates.Presets.CAN_BE_COMMANDER ;
             commanderPool = ItemPool.createFrom(FModel.getMagicDb().getCommonCards().getAllCards(Predicates.compose(commanderFilter, PaperCard.FN_GET_RULES)),PaperCard.class);
-        }
-
-
-        if(brawl){
-            normalPool = ItemPool.createFrom(FModel.getFormats().get("Brawl").getAllCards(), PaperCard.class);
-        }else {
             normalPool = ItemPool.createFrom(FModel.getMagicDb().getCommonCards().getAllCards(), PaperCard.class);
         }
 

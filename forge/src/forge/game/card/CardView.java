@@ -624,7 +624,7 @@ public class CardView extends GameEntityView {
             sb.append("\r\nCloned by: ").append(cloner);
         }
 
-        return sb.toString().trim();
+        return sb.toString().trim().replaceAll("\\r\\n\\s*\\r\\n\\s*\\r\\n", "\r\n\r\n");
     }
 
     public CardStateView getCurrentState() {

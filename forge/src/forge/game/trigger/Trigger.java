@@ -553,6 +553,10 @@ public abstract class Trigger extends TriggerReplacementBase {
         validPhases = phases;
     }
 
+    public List<PhaseType> getTriggerPhases() {
+        return validPhases;
+    }
+
     //public String getImportantStackObjects(SpellAbility sa) { return ""; };
     abstract public String getImportantStackObjects(SpellAbility sa);
 

@@ -44,6 +44,7 @@ import forge.quest.QuestWorld;
 import forge.screens.deckeditor.CDeckEditorUI;
 import forge.screens.deckeditor.SEditorIO;
 import forge.screens.deckeditor.controllers.ACEditorBase;
+import forge.screens.deckeditor.controllers.CEditorCommander;
 import forge.screens.deckeditor.controllers.CEditorLimited;
 import forge.screens.deckeditor.controllers.CEditorQuest;
 import forge.screens.home.quest.DialogChooseSets;
@@ -295,7 +296,21 @@ public final class DeckManager extends ItemManager<DeckProxy> implements IHasGam
             screen = FScreen.DECK_EDITOR_DRAFT;
             editorCtrl = new CEditorLimited(FModel.getDecks().getWinston(), screen, getCDetailPicture());
             break;
-
+        case Commander:
+            screen = FScreen.DECK_EDITOR_COMMANDER;
+            DeckPreferences.setCurrentDeck(deck.toString());
+            editorCtrl = new CEditorCommander(getCDetailPicture(), false, false);
+            break;
+        case TinyLeaders:
+            screen = FScreen.DECK_EDITOR_TINY_LEADERS;
+            DeckPreferences.setCurrentDeck(deck.toString());
+            editorCtrl = new CEditorCommander(getCDetailPicture(), true, false);
+            break;
+        case Brawl:
+            screen = FScreen.DECK_EDITOR_BRAWL;
+            DeckPreferences.setCurrentDeck(deck.toString());
+            editorCtrl = new CEditorCommander(getCDetailPicture(), false, true);
+            break;
         default:
             return;
         }
