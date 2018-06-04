@@ -34,6 +34,10 @@ public class TournamentIO {
         final XStream xStream = isIgnoring ? new IgnoringXStream() : new XStream();
         xStream.registerConverter(new DeckSectionToXml());
         xStream.autodetectAnnotations(true);
+        XStream.setupDefaultSecurity(xStream);
+        xStream.allowTypesByWildcard(new String[] {
+            "**.**"
+        });
         return xStream;
     }
 

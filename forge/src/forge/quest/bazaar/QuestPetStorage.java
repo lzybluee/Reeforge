@@ -43,7 +43,11 @@ public class QuestPetStorage {
 
             final XStream xs = new IgnoringXStream();
             xs.autodetectAnnotations(true);
-
+            XStream.setupDefaultSecurity(xs);
+            xs.allowTypesByWildcard(new String[] {
+                "**.**"
+            });
+            
             final NodeList xmlPets = document.getElementsByTagName("pets").item(0).getChildNodes();
             for (int iN = 0; iN < xmlPets.getLength(); iN++) {
                 final Node n = xmlPets.item(iN);

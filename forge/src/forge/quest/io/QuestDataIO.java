@@ -86,6 +86,10 @@ public class QuestDataIO {
         xStream.autodetectAnnotations(true);
         xStream.alias("CardPool", ItemPool.class);
         xStream.alias("DeckSection", CardPool.class);
+        XStream.setupDefaultSecurity(xStream);
+        xStream.allowTypesByWildcard(new String[] {
+            "**.**"
+        });
         return xStream;
     }
 

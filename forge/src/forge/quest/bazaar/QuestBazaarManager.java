@@ -70,6 +70,10 @@ public class QuestBazaarManager {
 
             final XStream xs = new IgnoringXStream();
             xs.autodetectAnnotations(true);
+            XStream.setupDefaultSecurity(xs);
+            xs.allowTypesByWildcard(new String[] {
+                "**.**"
+            });
 
             final NodeList xmlStalls = document.getElementsByTagName("stalls").item(0).getChildNodes();
             for (int iN = 0; iN < xmlStalls.getLength(); iN++) {
