@@ -1663,25 +1663,29 @@ public class Player extends GameEntity implements Comparable<Player> {
         }
         float deckLandRadio = (float)lands / cards;
 
-        lands = 0;
+        int landsA = 0;
         for(int i = 0; i < getMaxHandSize(); i++) {
             if(listA.get(i).isLand()) {
-                lands++;
+                landsA++;
             }
         }
-        float listALandRadio = (float)lands / getMaxHandSize();
+        float listALandRadio = (float)landsA / getMaxHandSize();
 
-        lands = 0;
+        int landsB = 0;
         for(int i = 0; i < getMaxHandSize(); i++) {
             if(listB.get(i).isLand()) {
-                lands++;
+                landsB++;
             }
         }
-        float listBLandRadio = (float)lands / getMaxHandSize();
+        float listBLandRadio = (float)landsB / getMaxHandSize();
+
+        System.err.println("landsA:" + landsA + " landsB:" + landsB + " deck:" + deckLandRadio * 100.0f + "%");
 
         if(Math.abs(listALandRadio - deckLandRadio) <= Math.abs(listBLandRadio - deckLandRadio)) {
+            System.err.println("Choose listA");
             getZone(ZoneType.Library).setCards(listA);
         } else {
+            System.err.println("Choose listB");
             getZone(ZoneType.Library).setCards(listB);
         }
 
