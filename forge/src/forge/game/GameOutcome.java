@@ -76,7 +76,7 @@ public final class GameOutcome implements Iterable<Entry<RegisteredPlayer, Playe
     private int winningTeam = -1;
 
     private final HashMap<RegisteredPlayer, PlayerStatistics> playerRating  = new HashMap<>();
-    private final HashMap<RegisteredPlayer, String> playerNames = new HashMap<>();
+    private final LinkedHashMap<RegisteredPlayer, String> playerNames = new LinkedHashMap<>();
 
     public final Map<RegisteredPlayer, AnteResult> anteResult = new HashMap<>();
     private GameEndReason winCondition;
