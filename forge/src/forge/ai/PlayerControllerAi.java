@@ -62,10 +62,6 @@ public class PlayerControllerAi extends PlayerController {
         brains = new AiController(p, game);
     }
     
-    public void allowCheatShuffle(boolean value){
-        brains.allowCheatShuffle(value);
-    }
-    
     public void setUseSimulation(boolean value) {
         brains.setUseSimulation(value);
     }
@@ -877,11 +873,6 @@ public class PlayerControllerAi extends PlayerController {
     @Override
     public Collection<? extends PaperCard> complainCardsCantPlayWell(Deck myDeck) {
         return brains.complainCardsCantPlayWell(myDeck);
-    }
-
-    @Override
-    public CardCollectionView cheatShuffle(CardCollectionView list) {
-        return brains.getBooleanProperty(AiProps.CHEAT_WITH_MANA_ON_SHUFFLE) ? brains.cheatShuffle(list) : list;
     }
 
     @Override

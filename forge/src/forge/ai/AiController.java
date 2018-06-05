@@ -77,17 +77,8 @@ public class AiController {
     private final Game game;
     private final AiCardMemory memory;
     private Combat predictedCombat;
-    private boolean cheatShuffle;
     private boolean useSimulation;
     private SpellAbilityPicker simPicker;
-
-    public boolean canCheatShuffle() {
-        return cheatShuffle;
-    }
-
-    public void allowCheatShuffle(boolean canCheatShuffle) {
-        this.cheatShuffle = canCheatShuffle;
-    }
 
     public void setUseSimulation(boolean value) {
         this.useSimulation = value;
@@ -1705,63 +1696,6 @@ public class AiController {
     // this is where the computer cheats
     // changes AllZone.getComputerPlayer().getZone(Zone.Library)
     
-    /**
-     * <p>
-     * smoothComputerManaCurve.
-     * </p>
-     * 
-     * @param in
-     *            an array of {@link forge.game.card.Card} objects.
-     * @return an array of {@link forge.game.card.Card} objects.
-     */
-    public CardCollectionView cheatShuffle(CardCollectionView in) {
-        if (in.size() < 20 || !canCheatShuffle()) {
-            return in;
-        }
-
-        final CardCollection library = new CardCollection(in);
-        CardLists.shuffle(library);
-    
-        // remove all land, keep non-basicland in there, shuffled
-        CardCollection land = CardLists.filter(library, CardPredicates.Presets.LANDS);
-        for (Card c : land) {
-            if (c.isLand()) {
-                library.remove(c);
-            }
-        }
-    
-        try {
-            // mana weave, total of 7 land
-            // The Following have all been reduced by 1, to account for the
-            // computer starting first.
-            library.add(5, land.get(0));
-            library.add(6, land.get(1));
-            library.add(8, land.get(2));
-            library.add(9, land.get(3));
-            library.add(10, land.get(4));
-    
-            library.add(12, land.get(5));
-            library.add(15, land.get(6));
-        } catch (final IndexOutOfBoundsException e) {
-            System.err.println("Error: cannot smooth mana curve, not enough land");
-            return in;
-        }
-    
-        // add the rest of land to the end of the deck
-        for (int i = 0; i < land.size(); i++) {
-            if (!library.contains(land.get(i))) {
-                library.add(land.get(i));
-            }
-        }
-    
-        // check
-        for (int i = 0; i < library.size(); i++) {
-            System.out.println(library.get(i));
-        }
-    
-        return library;
-    } // smoothComputerManaCurve()
-
     public int chooseNumber(SpellAbility sa, String title,List<Integer> options, Player relatedPlayer) {
         switch(sa.getApi())
         {

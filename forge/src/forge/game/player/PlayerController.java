@@ -210,8 +210,6 @@ public abstract class PlayerController {
 
     public abstract void revealAnte(String message, Multimap<Player, PaperCard> removedAnteCards);
 
-    // These 2 are for AI
-    public CardCollectionView cheatShuffle(CardCollectionView list) { return list; }
     public Collection<? extends PaperCard> complainCardsCantPlayWell(Deck myDeck) { return null; }
 
     public abstract void resetAtEndOfTurn(); // currently used by the AI to perform card memory cleanup

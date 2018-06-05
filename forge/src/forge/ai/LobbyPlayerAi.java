@@ -12,7 +12,6 @@ public class LobbyPlayerAi extends LobbyPlayer implements IGameEntitiesFactory {
 
     private String aiProfile = "";
     private boolean rotateProfileEachGame;
-    private boolean allowCheatShuffle;
     private boolean useSimulation;
     
     public LobbyPlayerAi(String name, Set<AIOption> options) {
@@ -20,14 +19,6 @@ public class LobbyPlayerAi extends LobbyPlayer implements IGameEntitiesFactory {
         if (options != null && options.contains(AIOption.USE_SIMULATION)) {
             this.useSimulation = true;
         }
-    }
-    
-    public boolean isAllowCheatShuffle() {
-        return allowCheatShuffle;
-    }
-
-    public void setAllowCheatShuffle(boolean allowCheatShuffle) {
-        this.allowCheatShuffle = allowCheatShuffle;
     }
 
     public void setAiProfile(String profileName) {
@@ -45,7 +36,6 @@ public class LobbyPlayerAi extends LobbyPlayer implements IGameEntitiesFactory {
     private PlayerControllerAi createControllerFor(Player ai) {
         PlayerControllerAi result = new PlayerControllerAi(ai.getGame(), ai, this);
         result.setUseSimulation(useSimulation);
-        result.allowCheatShuffle(allowCheatShuffle);
         return result;
     }
 

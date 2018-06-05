@@ -1708,7 +1708,7 @@ public class Player extends GameEntity implements Comparable<Player> {
 
         shuffleCards(list);
 
-        getZone(ZoneType.Library).setCards(getController().cheatShuffle(list));
+        getZone(ZoneType.Library).setCards(list);
 
         // Run triggers
         final Map<String, Object> runParams = Maps.newHashMap();
