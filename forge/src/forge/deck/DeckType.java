@@ -35,12 +35,12 @@ public enum DeckType {
                     DeckType.CUSTOM_DECK,
                     DeckType.PRECONSTRUCTED_DECK,
                     DeckType.QUEST_OPPONENT_DECK,
-                    DeckType.COLOR_DECK,
-                    DeckType.STANDARD_COLOR_DECK,
-                    DeckType.STANDARD_CARDGEN_DECK,
-                    DeckType.MODERN_COLOR_DECK,
-                    DeckType.MODERN_CARDGEN_DECK,
                     DeckType.THEME_DECK,
+                    DeckType.COLOR_DECK,
+                    DeckType.STANDARD_CARDGEN_DECK,
+                    DeckType.MODERN_CARDGEN_DECK,
+                    DeckType.STANDARD_COLOR_DECK,
+                    DeckType.MODERN_COLOR_DECK,
                     DeckType.RANDOM_DECK,
                     DeckType.NET_DECK
             };
