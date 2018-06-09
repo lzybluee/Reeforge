@@ -1014,7 +1014,7 @@ public class StaticEffect {
             // TODO regular keywords currently don't try to use keyword multiplier
             // (Although nothing uses it at this time)
             if (params.containsKey("AddKeyword") || params.containsKey("RemoveKeyword")
-                    || params.containsKey("RemoveAllAbilities")) {
+                    || params.containsKey("RemoveAllAbilities") || params.containsKey("RemoveIntrinsicAbilities")) {
                 affectedCard.removeChangedCardKeywords(getTimestamp());
             }
 

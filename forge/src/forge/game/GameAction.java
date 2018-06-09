@@ -369,6 +369,13 @@ public class GameAction {
             c.setMustAttackEntity(null);
         }
 
+        if(c.getTimestamp() == -1 && (toBattlefield || zoneTo.is(ZoneType.Graveyard)
+                || zoneTo.is(ZoneType.Hand)
+                || zoneTo.is(ZoneType.Library)
+                || zoneTo.is(ZoneType.Exile))) {
+            c.setTimestamp(game.getTimestamp() + 1);
+        }
+
         // Need to apply any static effects to produce correct triggers
         checkStaticAbilities();
         game.getTriggerHandler().clearInstrinsicActiveTriggers(c, zoneFrom);
