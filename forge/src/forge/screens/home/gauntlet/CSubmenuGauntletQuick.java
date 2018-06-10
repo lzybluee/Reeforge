@@ -70,6 +70,10 @@ public enum CSubmenuGauntletQuick implements ICDoc {
         if (view.getBoxQuestDecks().isSelected()) { allowedDeckTypes.add(DeckType.QUEST_OPPONENT_DECK); }
         if (view.getBoxPreconDecks().isSelected()) { allowedDeckTypes.add(DeckType.PRECONSTRUCTED_DECK); }
 
+        if(allowedDeckTypes.isEmpty()) {
+            return;
+        }
+
         final GauntletData gd = GauntletUtil.createQuickGauntlet(view.getLstDecks().getPlayer().getDeck(), view.getSliOpponents().getValue(), allowedDeckTypes, null);
 
         if(gd.getDecks().isEmpty()) {

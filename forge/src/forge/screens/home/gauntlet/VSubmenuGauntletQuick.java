@@ -46,7 +46,7 @@ public enum VSubmenuGauntletQuick implements IVSubmenu<CSubmenuGauntletQuick> {
         .text("Double click a non-random deck for its decklist.")
         .fontSize(12).build();
 
-    private final SkinnedSlider sliOpponents = new SkinnedSlider(SwingConstants.HORIZONTAL, 5, 50, 20);
+    private final SkinnedSlider sliOpponents = new SkinnedSlider(SwingConstants.HORIZONTAL, 5, 50, 5);
     //private SkinnedSlider sliGamesPerMatch = new SkinnedSlider(JSlider.HORIZONTAL, 1, 7, 3);
 
     private final JCheckBox boxUserDecks = new FCheckBox(DeckType.CUSTOM_DECK.toString());
@@ -79,20 +79,20 @@ public enum VSubmenuGauntletQuick implements IVSubmenu<CSubmenuGauntletQuick> {
     private VSubmenuGauntletQuick() {
         lblTitle.setBackground(FSkin.getColor(FSkin.Colors.CLR_THEME2));
 
-        boxUserDecks.setSelected(true);
-        boxPreconDecks.setSelected(true);
-        boxQuestDecks.setSelected(true);
-        boxThemeDecks.setSelected(true);
-        boxColorDecks.setSelected(true);
-        boxStandardColorDecks.setSelected(true);
+        boxUserDecks.setSelected(false);
+        boxPreconDecks.setSelected(false);
+        boxQuestDecks.setSelected(false);
+        boxThemeDecks.setSelected(false);
+        boxColorDecks.setSelected(false);
+        boxStandardColorDecks.setSelected(false);
         if(FModel.isdeckGenMatrixLoaded()) {
             boxStandardCardgenDecks.setSelected(true);
             boxModernCardgenDecks.setSelected(true);
         }else{
-            boxStandardCardgenDecks.setSelected(false);
-            boxModernCardgenDecks.setSelected(false);
+            boxStandardCardgenDecks.setSelected(true);
+            boxModernCardgenDecks.setSelected(true);
         }
-        boxModernColorDecks.setSelected(true);
+        boxModernColorDecks.setSelected(false);
 
         sliOpponents.setMajorTickSpacing(5);
         sliOpponents.setMinorTickSpacing(0);
