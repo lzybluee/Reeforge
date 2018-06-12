@@ -18,6 +18,7 @@ import forge.game.spellability.TargetRestrictions;
 import forge.game.zone.PlayerZone;
 import forge.game.zone.ZoneType;
 import forge.util.Lang;
+import forge.util.MessageUtil;
 import forge.util.TextUtil;
 
 import java.util.*;
@@ -231,6 +232,10 @@ public class DigEffect extends SpellAbilityEffect {
                             prompt = "Choose a card to leave in {player's} " + destZone2.name();
                         }
 
+                        if(prompt != null) {
+                            prompt = MessageUtil.formatMessage(prompt, chooser.getController().getPlayer(), p);
+                        }
+
                         Card chosen = chooser.getController().chooseSingleEntityForEffect(valid, delayedReveal, sa, prompt, false, p);
                         movedCards.remove(chosen);
                         if (sa.hasParam("RandomOrder")) {
@@ -252,6 +257,10 @@ public class DigEffect extends SpellAbilityEffect {
                                     prompt = "Choose a card to put on top of {player's} library";
                                 }
                             }
+                        }
+
+                        if(prompt != null) {
+                            prompt = MessageUtil.formatMessage(prompt, chooser.getController().getPlayer(), p);
                         }
 
                         movedCards = new CardCollection();
