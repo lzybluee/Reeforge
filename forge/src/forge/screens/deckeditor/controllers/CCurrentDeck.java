@@ -107,7 +107,7 @@ public enum CCurrentDeck implements ICDoc {
         VCurrentDeck.SINGLETON_INSTANCE.getTxfTitle().addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(final KeyEvent e) {
-                if (Character.isLetterOrDigit(e.getKeyChar())) {
+                if (e.getKeyCode() != KeyEvent.VK_UP && e.getKeyCode() != KeyEvent.VK_DOWN && e.getKeyCode() != KeyEvent.VK_LEFT && e.getKeyCode() != KeyEvent.VK_RIGHT) {
                     CDeckEditorUI.SINGLETON_INSTANCE.getCurrentEditorController().getDeckController().notifyModelChanged();
                 }
             }
