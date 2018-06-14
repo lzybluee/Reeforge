@@ -165,6 +165,7 @@ Orgg:Orggs
 Ouphe:Ouphes
 Ox:Oxen
 Oyster:Oysters
+Pangolin:Pangolins
 Pegasus:Pegasi
 Pentavite:Pentavites
 Pest:Pests
