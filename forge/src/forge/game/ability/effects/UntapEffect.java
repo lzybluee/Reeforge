@@ -79,6 +79,8 @@ public class UntapEffect extends SpellAbilityEffect {
             CardCollectionView list = CardLists.getValidCards(p.getGame().getCardsIn(ZoneType.Battlefield),
                     valid, sa.getActivatingPlayer(), sa.getHostCard());
 
+            list = CardLists.filter(list, Presets.TAPPED);
+
             if(list.isEmpty()) {
                 return;
             }
