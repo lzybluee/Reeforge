@@ -1,0 +1,33 @@
+[metadata]
+Name=Standard_Rakdos
+[Main]
+3 Abrade|HOU
+2 Aether Hub|KLD
+4 Bomat Courier|KLD
+4 Canyon Slough|AKH
+2 Chandra, Torch of Defiance|KLD
+1 Cut // Ribbons|AKH
+4 Dragonskull Summit|XLN
+1 Glorybringer|AKH
+4 Goblin Chainwhirler|DOM
+2 Heart of Kiran|AER
+2 Kari Zev, Skyship Raider|AER
+13 Mountain|DOM|1
+2 Pia Nalaar|KLD
+4 Rekindling Phoenix|RIX
+4 Scrapheap Scrounger|KLD
+1 Shock|AER
+3 Soul-Scar Mage|AKH
+1 Spire of Industry|AER
+3 Unlicensed Disintegration|KLD
+[Sideboard]
+1 Abrade|HOU
+1 Aethersphere Harvester|AER
+1 Angrath, the Flame-Chained|RIX
+2 Chandra's Defeat|HOU
+1 Cut // Ribbons|AKH
+2 Doomfall|HOU
+2 Duress|XLN
+2 Glorybringer|AKH
+2 Siege-Gang Commander|DOM
+1 Swamp|DOM|1

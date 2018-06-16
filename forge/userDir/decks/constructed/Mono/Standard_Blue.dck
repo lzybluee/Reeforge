@@ -1,0 +1,24 @@
+[metadata]
+Name=Standard_Blue
+[Main]
+4 Artificer's Assistant|DOM
+4 Heart of Kiran|AER
+20 Island|DOM|1
+4 Karn, Scion of Urza|DOM
+4 Merchant's Dockhand|AER
+4 Metallic Mimic|AER
+2 Metallic Rebuke|AER
+3 Scrap Trawler|AER
+4 Tempest Djinn|DOM
+3 Unsummon|HOU
+4 Walking Ballista|AER
+2 Zahid, Djinn of the Lamp|DOM
+2 Zhalfirin Void|DOM
+[Sideboard]
+2 Aethersphere Harvester|AER
+2 Baral's Expertise|AER
+2 Metallic Rebuke|AER
+3 Negate|RIX
+1 Scrap Trawler|AER
+2 Sorcerous Spyglass|XLN
+3 The Antiquities War|DOM

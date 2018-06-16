@@ -1,0 +1,39 @@
+[metadata]
+Name=Modern_Lantern Control
+[Main]
+1 Abrupt Decay|RTR
+1 Academy Ruins|TSP
+4 Ancient Stirrings|ROE
+3 Botanical Sanctum|KLD
+4 Codex Shredder|RTR
+4 Darkslick Shores|SOM
+3 Ensnaring Bridge|8ED
+4 Glimmervoid|MRD
+1 Grafdigger's Cage|DKA
+4 Inquisition of Kozilek|ROE
+1 Inventors' Fair|KLD
+1 Island|DOM|1
+4 Lantern of Insight|5DN
+4 Mishra's Bauble|CSP
+4 Mox Opal|SOM
+2 Pithing Needle|RTR
+1 Pyrite Spellbomb|MRD
+2 Pyxis of Pandemonium|THS
+4 Spire of Industry|AER
+3 Thoughtseize|THS
+4 Whir of Invention|AER
+1 Witchbane Orb|ISD
+[Sideboard]
+1 Abrupt Decay|RTR
+1 Ancient Grudge|ISD
+2 Collective Brutality|EMN
+1 Damping Sphere|DOM
+1 Grafdigger's Cage|DKA
+1 Karn, Scion of Urza|DOM
+1 Maelstrom Pulse|ARB
+1 Nature's Claim|WWK
+1 Phyrexian Revoker|M15
+1 Pyroclasm|M11
+1 Search for Azcanta|XLN
+1 Tezzeret, Agent of Bolas|MBS
+2 Welding Jar|MRD

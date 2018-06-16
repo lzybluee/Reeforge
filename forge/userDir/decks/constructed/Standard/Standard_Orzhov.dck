@@ -1,0 +1,36 @@
+[metadata]
+Name=Standard_Orzhov
+[Main]
+4 Aether Hub|KLD
+1 Aethersphere Harvester|AER
+3 Cast Out|AKH
+4 Concealed Courtyard|KLD
+3 Fatal Push|AER
+4 Glint-Sleeve Siphoner|AER
+3 Heart of Kiran|AER
+3 History of Benalia|DOM
+2 Ifnir Deadlands|HOU
+4 Isolated Chapel|DOM
+1 Ixalan's Binding|XLN
+2 Karn, Scion of Urza|DOM
+4 Knight of Malice|DOM
+2 Lyra Dawnbringer|DOM
+7 Plains|DOM|1
+1 Scavenger Grounds|HOU
+2 Scrapheap Scrounger|KLD
+2 Swamp|DOM|1
+4 Toolcraft Exemplar|KLD
+3 Walking Ballista|AER
+1 Weatherlight|DOM
+[Sideboard]
+1 Angel of Sanctions|AKH
+1 Arguel's Blood Fast|XLN
+1 Cast Down|DOM
+3 Doomfall|HOU
+2 Duress|XLN
+1 Forsake the Worldly|AKH
+1 Gonti, Lord of Luxury|KLD
+1 Lyra Dawnbringer|DOM
+2 Seal Away|DOM
+1 Treasure Map|XLN
+1 Vraska's Contempt|XLN

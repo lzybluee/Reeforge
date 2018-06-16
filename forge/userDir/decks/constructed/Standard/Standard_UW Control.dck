@@ -1,0 +1,32 @@
+[metadata]
+Name=Standard_UW Control
+[Main]
+3 Blink of an Eye|DOM
+3 Cast Out|AKH
+1 Commit // Memory|AKH
+4 Disallow|AER
+3 Essence Scatter|AKH
+2 Field of Ruin|XLN
+2 Fumigate|KLD
+4 Glacial Fortress|XLN
+2 Ipnu Rivulet|HOU
+4 Irrigated Farmland|AKH
+5 Island|DOM|1
+2 Memorial to Genius|DOM
+1 Negate|RIX
+8 Plains|DOM|1
+2 Pull from Tomorrow|AKH
+3 Seal Away|DOM
+2 Search for Azcanta|XLN
+3 Settle the Wreckage|XLN
+2 Syncopate|DOM
+4 Teferi, Hero of Dominaria|DOM
+[Sideboard]
+1 Aether Meltdown|KLD
+1 Fumigate|KLD
+1 Gideon of the Trials|AKH
+3 History of Benalia|DOM
+2 Invoke the Divine|DOM
+3 Knight of Grace|DOM
+2 Negate|RIX
+2 Sorcerous Spyglass|XLN

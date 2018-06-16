@@ -1,0 +1,31 @@
+[metadata]
+Name=Standard_Selesnya
+[Main]
+2 Ajani Unyielding|AER
+2 Angel of Sanctions|AKH
+3 Blossoming Defense|KLD
+2 Cast Out|AKH
+7 Forest|DOM|1
+2 Hashep Oasis|HOU
+3 Jadelight Ranger|RIX
+4 Llanowar Elves|DOM
+3 Lyra Dawnbringer|DOM
+6 Plains|DOM|1
+2 Rishkar, Peema Renegade|AER
+4 Scattered Groves|AKH
+4 Servant of the Conduit|KLD
+3 Shalai, Voice of Plenty|DOM
+1 Shefet Dunes|HOU
+2 Skysovereign, Consul Flagship|KLD
+4 Sunpetal Grove|XLN
+2 Thrashing Brontodon|RIX
+4 Walking Ballista|AER
+[Sideboard]
+3 Baffling End|RIX
+2 Heroic Intervention|AER
+1 Karn, Scion of Urza|DOM
+1 Naturalize|RIX
+2 Nissa, Vital Force|KLD
+3 Prowling Serpopard|AKH
+1 Sentinel Totem|XLN
+2 Thopter Arrest|AER

@@ -1,0 +1,32 @@
+[metadata]
+Name=Modern_Mardu Pyromancer
+[Main]
+4 Bedlam Reveler|EMN
+4 Blackcleave Cliffs|SOM
+2 Blood Crypt|RTR
+3 Blood Moon|9ED
+4 Bloodstained Mire|KTK
+3 Collective Brutality|EMN
+1 Dreadbore|RTR
+4 Faithless Looting|DKA
+2 Fatal Push|AER
+3 Inquisition of Kozilek|ROE
+3 Kolaghan's Command|DTK
+4 Lightning Bolt|M11
+4 Lingering Souls|DKA
+4 Marsh Flats|ZEN
+2 Mountain|DOM|1
+2 Sacred Foundry|GTC
+2 Swamp|DOM|1
+1 Terminate|ARB
+4 Thoughtseize|THS
+4 Young Pyromancer|M14
+[Sideboard]
+1 Anguished Unmaking|SOI
+2 Engineered Explosives|5DN
+1 Hazoret the Fervent|AKH
+2 Kambal, Consul of Allocation|KLD
+3 Leyline of the Void|M11
+1 Liliana, the Last Hope|EMN
+3 Molten Rain|MRD
+2 Wear // Tear|DGM

@@ -1,0 +1,28 @@
+[metadata]
+Name=Standard_Simic
+[Main]
+4 Aether Hub|KLD
+4 Aethersphere Harvester|AER
+4 Botanical Sanctum|KLD
+7 Forest|DOM|1
+4 Glint-Nest Crane|KLD
+4 Hinterland Harbor|DOM
+3 Implement of Ferocity|AER
+5 Island|DOM|1
+4 Karn, Scion of Urza|DOM
+4 Llanowar Elves|DOM
+2 Metallic Rebuke|AER
+4 Scrap Trawler|AER
+1 Servant of the Conduit|KLD
+2 Sorcerous Spyglass|XLN
+4 Verdurous Gearhulk|KLD
+4 Walking Ballista|AER
+[Sideboard]
+2 Blink of an Eye|DOM
+3 Lifecrafter's Bestiary|AER
+1 Manglehorn|AKH
+2 Metallic Rebuke|AER
+2 Negate|RIX
+2 Nissa, Steward of Elements|AKH
+1 River's Rebuke|XLN
+2 Zahid, Djinn of the Lamp|DOM

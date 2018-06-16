@@ -1,0 +1,35 @@
+[metadata]
+Name=Modern_UR Aggro
+[Main]
+2 Bedlam Reveler|EMN
+4 Flooded Strand|KTK
+1 Hallowed Fountain|RTR
+2 Island|DOM|1
+4 Lightning Bolt|M11
+4 Lightning Helix|RAV
+4 Manamorphose|SHM
+1 Mountain|DOM|1
+4 Opt|DOM
+2 Path to Exile|CFX
+1 Plains|DOM|1
+4 Pyromancer Ascension|ZEN
+2 Remand|RAV
+1 Sacred Foundry|GTC
+3 Scalding Tarn|ZEN
+4 Serum Visions|5DN
+4 Sleight of Hand|9ED
+3 Spirebluff Canal|KLD
+2 Steam Vents|RTR
+4 Thing in the Ice|SOI
+4 Thought Scour|DKA
+[Sideboard]
+1 Abrade|HOU
+2 Anger of the Gods|THS
+1 Blessed Alliance|EMN
+1 Dispel|BFZ
+1 Engineered Explosives|5DN
+2 Molten Rain|MRD
+2 Monastery Mentor|FRF
+2 Negate|RIX
+2 Surgical Extraction|NPH
+1 Wear // Tear|DGM
