@@ -1,34 +1,38 @@
 [metadata]
 Name=Modern_Blue Moon
 [Main]
+1 Abrade|HOU
 3 Blood Moon|9ED
-3 Cryptic Command|LRW
+4 Cryptic Command|LRW
 1 Desolate Lighthouse|AVR
 1 Electrolyze|GPT
-3 Emrakul, the Aeons Torn|ROE
-1 Flame Slash|ROE
+2 Flooded Strand|KTK
 1 Harvest Pyre|ISD
 7 Island|DOM|1
 2 Jace, the Mind Sculptor|WWK
 4 Lightning Bolt|M11
-4 Misty Rainforest|ZEN
+1 Logic Knot|FUT
+2 Misty Rainforest|ZEN
 1 Mountain|DOM|1
-3 Opt|DOM
+4 Opt|DOM
+1 Pia and Kiran Nalaar|ORI
 4 Remand|RAV
 4 Scalding Tarn|ZEN
 3 Serum Visions|5DN
 4 Snapcaster Mage|ISD
-1 Spell Snare|DIS
+2 Spell Snare|DIS
 3 Steam Vents|RTR
-2 Sulfur Falls|DOM
-4 Through the Breach|CHK
-1 Torrential Gearhulk|KLD
+3 Sulfur Falls|DOM
+2 Vendilion Clique|MOR
 [Sideboard]
-2 Abrade|HOU
+1 Abrade|HOU
 2 Anger of the Gods|THS
 2 Ceremonious Rejection|KLD
-3 Dispel|BFZ
+1 Counterflux|RTR
+2 Dispel|BFZ
 1 Engineered Explosives|5DN
 1 Grim Lavamancer|M12
-3 Thing in the Ice|SOI
-1 Vendilion Clique|MOR
+1 Keranos, God of Storms|JOU
+1 Negate|RIX
+1 Roast|DTK
+2 Thing in the Ice|SOI
