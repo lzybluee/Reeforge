@@ -74,7 +74,7 @@ public class CardFactory {
      *            a {@link forge.game.card.Card} object.
      * @return a {@link forge.game.card.Card} object.
      */
-    public final static Card copyCard(final Card in, boolean assignNewId, boolean original) {
+    public final static Card copyCard(final Card in, boolean assignNewId, boolean originalState) {
         Card out;
         if (!(in.isToken() || in.getCopiedPermanent() != null)) {
             out = assignNewId ? getCard(in.getPaperCard(), in.getOwner(), in.getGame()) 
@@ -90,10 +90,20 @@ public class CardFactory {
         }
 
         out.setZone(in.getZone());
-        for (final CardStateName state : in.getStates()) {
-            CardFactory.copyState(in, state, out, state);
+        
+        if(originalState && in.getCurrentStateName() == CardStateName.FaceDown) {
+            for (final CardStateName state : in.getStates()) {
+                if(state != CardStateName.FaceDown) {
+                    CardFactory.copyState(in, state, out, state);
+                }
+            }
+        } else {
+            for (final CardStateName state : in.getStates()) {
+                CardFactory.copyState(in, state, out, state);
+            }
         }
-        if(!original) {
+
+        if(!originalState) {
             out.setState(in.getCurrentStateName(), true);
         }
         // this's necessary for forge.game.GameAction.unattachCardLeavingBattlefield(Card)
