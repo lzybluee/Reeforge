@@ -33,14 +33,20 @@ public class TournamentUtil {
                 case STANDARD_COLOR_DECK:
                     deck = DeckgenUtil.getRandomColorDeck(FModel.getFormats().getStandard().getFilterPrinted(),true);
                     break;
+                case MODERN_COLOR_DECK:
+                    deck = DeckgenUtil.getRandomColorDeck(FModel.getFormats().getModern().getFilterPrinted(),true);
+                    break;
                 case STANDARD_CARDGEN_DECK:
                     deck = DeckgenUtil.buildCardGenDeck(FModel.getFormats().getStandard(),true);
                     break;
                 case MODERN_CARDGEN_DECK:
                     deck = DeckgenUtil.buildCardGenDeck(FModel.getFormats().getModern(),true);
                     break;
-                case MODERN_COLOR_DECK:
-                    deck = DeckgenUtil.getRandomColorDeck(FModel.getFormats().getModern().getFilterPrinted(),true);
+                case LEGACY_CARDGEN_DECK:
+                    deck = DeckgenUtil.buildLDACArchetypeDeck(FModel.getFormats().get("Legacy"),true);
+                    break;
+                case VINTAGE_CARDGEN_DECK:
+                    deck = DeckgenUtil.buildLDACArchetypeDeck(FModel.getFormats().get("Vintage"),true);
                     break;
                 case CUSTOM_DECK:
                     deck = DeckgenUtil.getRandomCustomDeck();
