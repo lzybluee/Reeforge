@@ -1,7 +1,6 @@
 [metadata]
 Name=Modern_Hollowine
 [Main]
-1 Arid Mesa|ZEN
 3 Blackcleave Cliffs|SOM
 3 Blood Crypt|RTR
 4 Bloodghast|ZEN
@@ -12,23 +11,20 @@ Name=Modern_Hollowine
 4 Flameblade Adept|AKH
 4 Flamewake Phoenix|FRF
 4 Goblin Lore|10E
-4 Gurmag Angler|FRF
+3 Gurmag Angler|FRF
 4 Hollow One|HOU
 4 Lightning Bolt|M11
 2 Mountain|DOM|1
-1 Scalding Tarn|ZEN
+2 Scalding Tarn|ZEN
 1 Stomping Ground|GTC
 4 Street Wraith|FUT
 1 Swamp|DOM|1
+1 Tasigur, the Golden Fang|FRF
 2 Wooded Foothills|KTK
 [Sideboard]
 2 Ancient Grudge|ISD
-1 Blood Moon|9ED
 2 Engineered Explosives|5DN
 3 Fatal Push|AER
-2 Grim Lavamancer|M12
-1 Kozilek's Return|OGW
-1 Leyline of the Void|M11
-1 Terminate|ARB
-1 Thoughtseize|THS
-1 Torpor Orb|NPH
+3 Grim Lavamancer|M12
+3 Leyline of the Void|M11
+2 Thoughtseize|THS

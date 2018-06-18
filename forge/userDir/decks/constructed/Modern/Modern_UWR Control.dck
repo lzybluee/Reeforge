@@ -1,41 +1,39 @@
 [metadata]
 Name=Modern_UWR Control
 [Main]
-1 Arid Mesa|ZEN
-2 Celestial Colonnade|WWK
+4 Celestial Colonnade|WWK
 4 Cryptic Command|LRW
 2 Electrolyze|GPT
-1 Field of Ruin|XLN
+2 Field of Ruin|XLN
 4 Flooded Strand|KTK
-2 Glacial Fortress|XLN
-2 Hallowed Fountain|RTR
+1 Hallowed Fountain|RTR
 3 Island|DOM|1
-3 Lightning Bolt|M11
+4 Lightning Bolt|M11
 3 Lightning Helix|RAV
-3 Logic Knot|FUT
-1 Mountain|DOM|1
-1 Negate|RIX
+2 Logic Knot|FUT
+2 Mana Leak|M12
 4 Path to Exile|CFX
 1 Plains|DOM|1
 1 Sacred Foundry|GTC
 4 Scalding Tarn|ZEN
 2 Search for Azcanta|XLN
-1 Secure the Wastes|DTK
 4 Serum Visions|5DN
 4 Snapcaster Mage|ISD
 1 Spell Snare|DIS
 2 Steam Vents|RTR
+2 Sulfur Falls|DOM
 2 Supreme Verdict|RTR
 2 Teferi, Hero of Dominaria|DOM
 [Sideboard]
-1 Baneslayer Angel|M11
-2 Celestial Purge|M12
-1 Detention Sphere|RTR
-1 Disdainful Stroke|KTK
+1 Blood Moon|9ED
+1 Celestial Purge|M12
+1 Damping Sphere|DOM
+2 Disdainful Stroke|KTK
 2 Dispel|BFZ
-1 Elspeth, Sun's Champion|THS
-1 Engineered Explosives|5DN
+2 Geist of Saint Traft|ISD
+1 Grafdigger's Cage|DKA
+1 Izzet Staticaster|RTR
 1 Negate|RIX
-2 Runed Halo|SHM
-2 Vendilion Clique|MOR
+1 Runed Halo|SHM
+1 Settle the Wreckage|XLN
 1 Wear // Tear|DGM
