@@ -49,12 +49,18 @@ public class DeckImportController {
 
     public List<DeckRecognizer.Token> parseInput(String input) {
         tokens.clear();
+        input = input.replaceAll("Æ", "Ae");
 
         DeckRecognizer recognizer = new DeckRecognizer(newEditionCheck.isSelected(), onlyCoreExpCheck.isSelected(), FModel.getMagicDb().getCommonCards());
         if (dateTimeCheck.isSelected()) {
             recognizer.setDateConstraint(monthDropdown.getSelectedIndex(), yearDropdown.getSelectedItem());
         }
-        String[] lines = input.split("\n");
+        String[] lines = null;
+        if(input.contains("\n")) {
+        	lines = input.split("\n");
+        } else {
+        	lines = input.split("\r");
+        }
         for (String line : lines) {
             tokens.add(recognizer.recognizeLine(line));
         }
@@ -104,16 +110,31 @@ public class DeckImportController {
 
         final Deck result = new Deck();
         boolean isMain = true;
+        boolean isCommander = false;
         for (final DeckRecognizer.Token t : tokens) {
             final DeckRecognizer.TokenType type = t.getType();
-            if ((type == DeckRecognizer.TokenType.SectionName) && t.getText().toLowerCase().contains("side")) {
-                isMain = false;
+            if (type == DeckRecognizer.TokenType.SectionName) {
+            	if(t.getText().toLowerCase().contains("commander")) {
+            		isCommander = true;
+            	} else {
+            		isCommander = false;
+            		if(t.getText().toLowerCase().contains("side")) {
+                		isMain = false;
+                	}
+            	}
+            	continue;
             }
             if (type != DeckRecognizer.TokenType.KnownCard) {
+            	if(!t.getText().trim().isEmpty()) {
+            		isCommander = false;
+            	}
                 continue;
             }
             final PaperCard crd = t.getCard();
-            if (isMain) {
+            if(isCommander) {
+            	result.getOrCreate(DeckSection.Commander).add(crd, t.getNumber());
+            }
+            else if (isMain) {
                 result.getMain().add(crd, t.getNumber());
             }
             else {
