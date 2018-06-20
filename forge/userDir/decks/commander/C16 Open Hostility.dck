@@ -31,7 +31,7 @@ Name=C16 Open Hostility
 1 Exotic Orchard|C16
 1 Farseek|C16
 1 Fellwar Stone|C16
-5 Forest|C16|1
+5 Forest|C16
 1 Frenzied Fugue|C16
 1 Grab the Reins|C16
 1 Grand Coliseum|C16
@@ -48,14 +48,14 @@ Name=C16 Open Hostility
 1 Mentor of the Meek|C16
 1 Mirror Entity|C16
 1 Mosswort Bridge|C16
-5 Mountain|C16|1
+5 Mountain|C16
 1 Mycoloth|C16
 1 Naya Charm|C16
 1 Necrogenesis|C16
 1 Nomad Outpost|C16
 1 Order // Chaos|C16
 1 Orzhov Basilica|C16
-3 Plains|C16|1
+3 Plains|C16
 1 Primeval Protector|C16
 1 Quirion Explorer|C16
 1 Rampant Growth|C16
@@ -73,7 +73,7 @@ Name=C16 Open Hostility
 1 Stonehoof Chieftain|C16
 1 Sunforger|C16
 1 Sunpetal Grove|C16
-3 Swamp|C16|1
+3 Swamp|C16
 1 Sylvan Reclamation|C16
 1 Sylvok Explorer|C16
 1 Tana, the Bloodsower|C16
@@ -90,5 +90,3 @@ Name=C16 Open Hostility
 1 Wilderness Elemental|C16
 1 Windbrisk Heights|C16
 1 Zhur-Taa Druid|C16
-[Sideboard]
-

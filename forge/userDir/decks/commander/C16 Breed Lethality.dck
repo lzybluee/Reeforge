@@ -35,7 +35,7 @@ Name=C16 Breed Lethality
 1 Fathom Mage|C16
 1 Fellwar Stone|C16
 1 Festercreep|C16
-7 Forest|C16|1
+7 Forest|C16
 1 Forgotten Ancient|C16
 1 Ghave, Guru of Spores|C16
 1 Golgari Rot Farm|C16
@@ -45,7 +45,7 @@ Name=C16 Breed Lethality
 1 Ikra Shidiqi, the Usurper|C16
 1 Inspiring Call|C16
 1 Ishai, Ojutai Dragonspeaker|C16
-4 Island|C16|1
+4 Island|C16
 1 Juniper Order Ranger|C16
 1 Kalonian Hydra|C16
 1 Languish|C16
@@ -59,8 +59,9 @@ Name=C16 Breed Lethality
 1 Necroplasm|C16
 1 Opal Palace|C16
 1 Opulent Palace|C16
+1 Orzhov Advokist|C16
 1 Orzhov Signet|C16
-5 Plains|C16|1
+5 Plains|C16
 1 Putrefy|C16
 1 Reveillark|C16
 1 Reyhan, Last of the Abzan|C16
@@ -73,7 +74,7 @@ Name=C16 Breed Lethality
 1 Spitting Image|C16
 1 Sublime Exhalation|C16
 1 Sungrass Prairie|C16
-5 Swamp|C16|1
+5 Swamp|C16
 1 Sylvan Reclamation|C16
 1 Temple of the False God|C16
 1 Terramorphic Expanse|C16
@@ -84,5 +85,3 @@ Name=C16 Breed Lethality
 1 Underground River|C16
 1 Vorel of the Hull Clade|C16
 1 Vulturous Zombie|C16
-[Sideboard]
-

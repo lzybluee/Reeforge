@@ -32,7 +32,7 @@ Name=C16 Entropic Uprising
 1 Exotic Orchard|C16
 1 Far Wanderings|C16
 1 Fellwar Stone|C16
-5 Forest|C16|1
+5 Forest|C16
 1 Frenzied Fugue|C16
 1 Frontier Bivouac|C16
 1 Gamekeeper|C16
@@ -43,10 +43,10 @@ Name=C16 Entropic Uprising
 1 Guiltfeeder|C16
 1 Horizon Chimera|C16
 1 In Garruk's Wake|C16
-5 Island|C16|1
+5 Island|C16
 1 Jungle Hollow|C16
 1 Kydele, Chosen of Kruphix|C16
-5 Mountain|C16|1
+5 Mountain|C16
 1 Nath of the Gilt-Leaf|C16
 1 Opulent Palace|C16
 1 Parting Thoughts|C16
@@ -68,7 +68,7 @@ Name=C16 Entropic Uprising
 1 Sol Ring|C16
 1 Spellheart Chimera|C16
 1 Spelltwine|C16
-5 Swamp|C16|1
+5 Swamp|C16
 1 Swiftwater Cliffs|C16
 1 Terramorphic Expanse|C16
 1 Thornwood Falls|C16
@@ -85,5 +85,3 @@ Name=C16 Entropic Uprising
 1 Whispersilk Cloak|C16
 1 Windfall|C16
 1 Worm Harvest|C16
-[Sideboard]
-

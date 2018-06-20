@@ -43,13 +43,13 @@ Name=C16 Invent Superiority
 1 Hellkite Igniter|C16
 1 Hellkite Tyrant|C16
 1 Ichor Wellspring|C16
-5 Island|C16|1
+5 Island|C16
 1 Jor Kadeen, the Prevailer|C16
 1 Loxodon Warhammer|C16
 1 Magus of the Will|C16
 1 Master of Etherium|C16
 1 Migratory Route|C16
-4 Mountain|C16|1
+4 Mountain|C16
 1 Mycosynth Wellspring|C16
 1 Myr Battlesphere|C16
 1 Myr Retriever|C16
@@ -59,7 +59,7 @@ Name=C16 Invent Superiority
 1 Open the Vaults|C16
 1 Parting Thoughts|C16
 1 Phyrexian Rebirth|C16
-5 Plains|C16|1
+5 Plains|C16
 1 Rakdos Carnarium|C16
 1 Read the Runes|C16
 1 Rupture Spire|C16
@@ -74,7 +74,7 @@ Name=C16 Invent Superiority
 1 Solemn Simulacrum|C16
 1 Soul of New Phyrexia|C16
 1 Sphinx Summoner|C16
-4 Swamp|C16|1
+4 Swamp|C16
 1 Swiftfoot Boots|C16
 1 Sydri, Galvanic Genius|C16
 1 Temple of the False God|C16
@@ -87,5 +87,3 @@ Name=C16 Invent Superiority
 1 Trinket Mage|C16
 1 Vedalken Engineer|C16
 1 Whipflare|C16
-[Sideboard]
-

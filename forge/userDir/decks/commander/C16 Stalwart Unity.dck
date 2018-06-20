@@ -24,7 +24,7 @@ Name=C16 Stalwart Unity
 1 Evolving Wilds|C16
 1 Exotic Orchard|C16
 1 Forbidden Orchard|C16
-5 Forest|C16|1
+5 Forest|C16
 1 Frontier Bivouac|C16
 1 Ghostly Prison|C16
 1 Gruul Turf|C16
@@ -35,7 +35,7 @@ Name=C16 Stalwart Unity
 1 Howling Mine|C16
 1 Humble Defector|C16
 1 Hushwing Gryff|C16
-5 Island|C16|1
+5 Island|C16
 1 Izzet Boilerworks|C16
 1 Jungle Shrine|C16
 1 Kazuul, Tyrant of the Cliffs|C16
@@ -47,13 +47,14 @@ Name=C16 Stalwart Unity
 1 Lurking Predators|C16
 1 Migratory Route|C16
 1 Minds Aglow|C16
-5 Mountain|C16|1
+5 Mountain|C16
 1 Myriad Landscape|C16
 1 Mystic Monastery|C16
 1 Oath of Druids|C16
 1 Oblation|C16
 1 Opal Palace|C16
-5 Plains|C16|1
+1 Orzhov Advokist|C16
+5 Plains|C16
 1 Prismatic Geoscope|C16
 1 Progenitor Mimic|C16
 1 Propaganda|C16
@@ -85,5 +86,3 @@ Name=C16 Stalwart Unity
 1 Wave of Reckoning|C16
 1 Windborn Muse|C16
 1 Zedruu the Greathearted|C16
-[Sideboard]
-
