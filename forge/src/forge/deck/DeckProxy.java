@@ -642,6 +642,12 @@ public class DeckProxy implements InventoryItem {
 
     @Override
     public String getImageKey(boolean altState) {
+    	if(deck instanceof PreconDeck) {
+    		PreconDeck precon = (PreconDeck) deck;
+    		if(precon != null) {
+    			return precon.getImageKey(altState);
+    		}
+    	}
         return null;
     }
 }
