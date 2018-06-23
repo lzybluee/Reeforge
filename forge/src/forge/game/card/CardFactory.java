@@ -61,10 +61,6 @@ import java.util.Map.Entry;
  * @version $Id$
  */
 public class CardFactory {
-    
-    public final static Card copyCard(final Card in, boolean assignNewId) {
-        return copyCard(in, assignNewId, false);
-    }
     /**
      * <p>
      * copyCard.
@@ -74,7 +70,7 @@ public class CardFactory {
      *            a {@link forge.game.card.Card} object.
      * @return a {@link forge.game.card.Card} object.
      */
-    public final static Card copyCard(final Card in, boolean assignNewId, boolean originalState) {
+    public final static Card copyCard(final Card in, boolean assignNewId) {
         Card out;
         if (!(in.isToken() || in.getCopiedPermanent() != null)) {
             out = assignNewId ? getCard(in.getPaperCard(), in.getOwner(), in.getGame()) 
@@ -90,22 +86,11 @@ public class CardFactory {
         }
 
         out.setZone(in.getZone());
-        
-        if(originalState && in.getCurrentStateName() == CardStateName.FaceDown) {
-            for (final CardStateName state : in.getStates()) {
-                if(state != CardStateName.FaceDown) {
-                    CardFactory.copyState(in, state, out, state);
-                }
-            }
-        } else {
-            for (final CardStateName state : in.getStates()) {
-                CardFactory.copyState(in, state, out, state);
-            }
+        for (final CardStateName state : in.getStates()) {
+            CardFactory.copyState(in, state, out, state);
         }
+        out.setState(in.getCurrentStateName(), true);
 
-        if(!originalState) {
-            out.setState(in.getCurrentStateName(), true);
-        }
         // this's necessary for forge.game.GameAction.unattachCardLeavingBattlefield(Card)
         out.setEquipping(in.getEquipping());
         out.setEquippedBy(in.getEquippedBy(false));

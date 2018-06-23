@@ -663,17 +663,16 @@ public class CardView extends GameEntityView {
         }
 
         CardStateView currentStateView = currentState.getView();
-        if (getCurrentState() != currentStateView) {
-            set(TrackableProperty.CurrentState, currentStateView);
-            currentStateView.updatePower(c); //ensure power, toughness, and loyalty updated when current state changes
-            currentStateView.updateToughness(c);
-            currentStateView.updateLoyalty(c);
+        set(TrackableProperty.CurrentState, currentStateView);
+        currentStateView.updatePower(c); //ensure power, toughness, and loyalty updated when current state changes
+        currentStateView.updateToughness(c);
+        currentStateView.updateLoyalty(c);
 
-            // update the color only while in Game
-            if (c.getGame() != null) {
-                currentStateView.updateColors(currentState);
-            }
+        // update the color only while in Game
+        if (c.getGame() != null) {
+            currentStateView.updateColors(currentState);
         }
+
         currentState.getView().updateKeywords(c, currentState); //update keywords even if state doesn't change
 
         CardState alternateState = isSplitCard && isFaceDown() ? c.getState(CardStateName.RightSplit) : c.getAlternateState();
