@@ -687,16 +687,14 @@ public class CardView extends GameEntityView {
         }
         else {
             CardStateView alternateStateView = alternateState.getView();
-            if (getAlternateState() != alternateStateView) {
-                set(TrackableProperty.AlternateState, alternateStateView);
-                alternateStateView.updatePower(c); //ensure power, toughness, and loyalty updated when current state changes
-                alternateStateView.updateToughness(c);
-                alternateStateView.updateLoyalty(c);
+            set(TrackableProperty.AlternateState, alternateStateView);
+            alternateStateView.updatePower(c); //ensure power, toughness, and loyalty updated when current state changes
+            alternateStateView.updateToughness(c);
+            alternateStateView.updateLoyalty(c);
 
-                // update the color only while in Game
-                if (c.getGame() != null) {
-                    alternateStateView.updateColors(alternateState);
-                }
+            // update the color only while in Game
+            if (c.getGame() != null) {
+                alternateStateView.updateColors(alternateState);
             }
             alternateState.getView().updateKeywords(c, alternateState);
         }
