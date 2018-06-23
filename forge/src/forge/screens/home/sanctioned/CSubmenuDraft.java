@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.*;
 
@@ -151,8 +152,14 @@ public enum CSubmenuDraft implements ICDoc {
             }
         });
 
+        int aiIndex = 0;
+        if("Random".equals(duelType)) {
+        	aiIndex = new Random().nextInt(opponentDecks.getAiDecks().size());
+        } else {
+        	aiIndex = Integer.parseInt(duelType)-1;
+        }
+        
         // Restore Zero Indexing
-        final int aiIndex = Integer.parseInt(duelType)-1;
         final Deck aiDeck = opponentDecks.getAiDecks().get(aiIndex);
         if (aiDeck == null) {
             throw new IllegalStateException("Draft: Computer deck is null!");
@@ -207,6 +214,7 @@ public enum CSubmenuDraft implements ICDoc {
             // Single opponent
             final DeckGroup opponentDecks = FModel.getDecks().getDraft().get(humanDeck.getName());
             int indx = 0;
+            combo.addItem("Random");
             for (@SuppressWarnings("unused") Deck d : opponentDecks.getAiDecks()) {
                 indx++;
                 // 1-7 instead of 0-6
