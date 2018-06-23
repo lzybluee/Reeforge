@@ -822,7 +822,11 @@ public abstract class ItemManager<T extends InventoryItem> extends JPanel implem
      */
     @Override
     public int getItemCount(final T item) {
-        return this.model.isInfinite() ? Integer.MAX_VALUE : this.pool.count(item);
+		if (item.getName().equals("Plains") || item.getName().equals("Island") || item.getName().equals("Mountain")
+				|| item.getName().equals("Swamp") || item.getName().equals("Forest")) {
+			return Integer.MAX_VALUE;
+		}
+		return this.model.isInfinite() ? Integer.MAX_VALUE : this.pool.count(item);
     }
 
     /**
