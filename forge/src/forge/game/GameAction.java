@@ -905,10 +905,8 @@ public class GameAction {
             }
         }
 
-        if (runEvents) {
-            final Map<String, Object> runParams = Maps.newHashMap();
-            game.getTriggerHandler().runTrigger(TriggerType.Always, runParams, false);
-        }
+        final Map<String, Object> runParams = Maps.newHashMap();
+        game.getTriggerHandler().runTrigger(TriggerType.Always, runParams, false);
 
         // Update P/T and type in the view only once after all the cards have been processed, to avoid flickering
         for (Card c : affectedCards) {
@@ -1056,8 +1054,6 @@ public class GameAction {
                 }
             }
             setHoldCheckingStaticAbilities(false);
-
-            checkStaticAbilities();
 
             if (game.getTriggerHandler().runWaitingTriggers()) {
                 checkAgain = true;
