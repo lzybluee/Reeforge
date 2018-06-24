@@ -1057,6 +1057,8 @@ public class GameAction {
             }
             setHoldCheckingStaticAbilities(false);
 
+            checkStaticAbilities();
+
             if (game.getTriggerHandler().runWaitingTriggers()) {
                 checkAgain = true;
             }
