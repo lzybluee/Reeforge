@@ -261,8 +261,10 @@ public class ImageView<T extends InventoryItem> extends ItemView<T> {
                 ItemInfo item = getItemAtPoint(e.getPoint());
                 if (item != null && item.item instanceof IPaperCard) {
                     setLockHoveredItem(true); //lock hoveredItem while zoomer open
-                    final CardView card = CardView.getCardForUi((IPaperCard) item.item);
-                    CardZoomer.SINGLETON_INSTANCE.setCard(card.getCurrentState(), true);
+                    final Card card = Card.getCardForUi((IPaperCard) item.item);
+                    final CardView view = card.getView();
+                    CardZoomer.SINGLETON_INSTANCE.setCard(view.getCurrentState(),
+                    		card.isDoubleFaced() || card.isFlipCard() || card.isMeldable());
                     CardZoomer.SINGLETON_INSTANCE.doMouseButtonZoom();
                 }
             }
