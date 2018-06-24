@@ -574,6 +574,10 @@ public abstract class GameState {
             game.getPhaseHandler().devAdvanceToPhase(advPhase);
         }
 
+        if(tChangePlayer.equalsIgnoreCase("ai")) {
+        	game.getPhaseHandler().setPriority(human);
+        }
+
         game.getAction().checkStateEffects(true); //ensure state based effects and triggers are updated
     }
 
