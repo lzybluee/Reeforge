@@ -1,0 +1,32 @@
+[metadata]
+Name=Standard_GB Midrange
+[Main]
+4 Aether Hub|KLD
+4 Blooming Marsh|KLD
+3 Fatal Push|AER
+7 Forest|DOM|1
+4 Glint-Sleeve Siphoner|AER
+2 Ifnir Deadlands|HOU
+4 Karn, Scion of Urza|DOM
+4 Llanowar Elves|DOM
+2 Nissa, Vital Force|KLD
+2 Ravenous Chupacabra|RIX
+2 Rishkar, Peema Renegade|AER
+3 Servant of the Conduit|KLD
+2 Swamp|DOM|1
+2 The Eldest Reborn|DOM
+4 Thrashing Brontodon|RIX
+3 Vraska's Contempt|XLN
+2 Vraska, Relic Seeker|XLN
+2 Walking Ballista|AER
+4 Woodland Cemetery|DOM
+[Sideboard]
+2 Arguel's Blood Fast|XLN
+2 Carnage Tyrant|XLN
+2 Cast Out|AKH
+2 Doomfall|HOU
+3 Duress|XLN
+1 Fatal Push|AER
+1 Gonti, Lord of Luxury|KLD
+1 Sorcerous Spyglass|XLN
+1 Vraska's Contempt|XLN

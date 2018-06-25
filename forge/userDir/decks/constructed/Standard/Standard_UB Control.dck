@@ -1,0 +1,36 @@
+[metadata]
+Name=Standard_UB Control
+[Main]
+1 Blink of an Eye|DOM
+2 Cast Down|DOM
+1 Commit // Memory|AKH
+4 Disallow|AER
+4 Drowned Catacomb|XLN
+2 Essence Scatter|AKH
+4 Fatal Push|AER
+4 Fetid Pools|AKH
+2 Field of Ruin|XLN
+3 Glimmer of Genius|KLD
+1 Hieroglyphic Illumination|AKH
+2 Ipnu Rivulet|HOU
+7 Island|DOM|1
+1 Negate|RIX
+2 Search for Azcanta|XLN
+8 Swamp|DOM|1
+2 Syncopate|DOM
+3 The Scarab God|HOU
+3 Torrential Gearhulk|KLD
+4 Vraska's Contempt|XLN
+[Sideboard]
+1 Arguel's Blood Fast|XLN
+1 Cast Down|DOM
+1 Commit // Memory|AKH
+1 Doomfall|HOU
+3 Duress|XLN
+1 Essence Scatter|AKH
+1 Fungal Infection|DOM
+1 Golden Demise|RIX
+2 Negate|RIX
+1 Reaver Ambush|RIX
+1 Sorcerous Spyglass|XLN
+1 The Eldest Reborn|DOM

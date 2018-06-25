@@ -1,0 +1,31 @@
+[metadata]
+Name=Standard_UB Midrange
+[Main]
+4 Aether Hub|KLD
+2 Arguel's Blood Fast|XLN
+1 Cast Down|DOM
+4 Champion of Wits|HOU
+1 Commit // Memory|AKH
+2 Doomfall|HOU
+4 Drowned Catacomb|XLN
+3 Essence Scatter|AKH
+4 Fatal Push|AER
+4 Fetid Pools|AKH
+2 Field of Ruin|XLN
+4 Glint-Sleeve Siphoner|AER
+4 Island|DOM|1
+1 Liliana, Death's Majesty|AKH
+1 Never // Return|AKH
+2 Ravenous Chupacabra|RIX
+8 Swamp|DOM|1
+3 The Scarab God|HOU
+2 Torrential Gearhulk|KLD
+4 Vraska's Contempt|XLN
+[Sideboard]
+3 Duress|XLN
+2 Essence Extraction|KLD
+3 Gifted Aetherborn|AER
+3 Negate|RIX
+1 Search for Azcanta|XLN
+1 Sorcerous Spyglass|XLN
+2 Yahenni's Expertise|AER
