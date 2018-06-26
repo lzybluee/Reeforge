@@ -118,10 +118,12 @@ public class AiController {
 
     private List<SpellAbility> getPossibleETBCounters() {
         CardCollection all = new CardCollection(player.getCardsIn(ZoneType.Hand));
+        CardCollectionView ccvPlayerLibrary = player.getCardsIn(ZoneType.Library);
+        
         all.addAll(player.getCardsIn(ZoneType.Exile));
         all.addAll(player.getCardsIn(ZoneType.Graveyard));
-        if (!player.getCardsIn(ZoneType.Library).isEmpty()) {
-            all.add(player.getCardsIn(ZoneType.Library).get(0));
+        if (!ccvPlayerLibrary.isEmpty()) {
+            all.add(ccvPlayerLibrary.get(0));
         }
 
         for (final Player opp : player.getOpponents()) {
@@ -144,30 +146,34 @@ public class AiController {
     
     // look for cards on the battlefield that should prevent the AI from using that spellability
     private boolean checkCurseEffects(final SpellAbility sa) {
-        for (final Card c : game.getCardsIn(ZoneType.Battlefield)) {
+        CardCollectionView ccvGameBattlefield = game.getCardsIn(ZoneType.Battlefield);
+        for (final Card c : ccvGameBattlefield) {
             if (c.hasSVar("AICurseEffect")) {
                 final String curse = c.getSVar("AICurseEffect");
-                final Card host = sa.getHostCard();
                 if ("NonActive".equals(curse) && !player.equals(game.getPhaseHandler().getPlayerTurn())) {
                     return true;
-                } else if ("DestroyCreature".equals(curse) && sa.isSpell() && host.isCreature()
-                        && !sa.getHostCard().hasKeyword(Keyword.INDESTRUCTIBLE)) {
-                    return true;
-                } else if ("CounterEnchantment".equals(curse) && sa.isSpell() && host.isEnchantment()
-                        && CardFactoryUtil.isCounterable(host)) {
-                    return true;
-                } else if ("ChaliceOfTheVoid".equals(curse) && sa.isSpell() && CardFactoryUtil.isCounterable(host)
-                        && host.getCMC() == c.getCounters(CounterType.CHARGE)) {
-                    return true;
-                }  else if ("BazaarOfWonders".equals(curse) && sa.isSpell() && CardFactoryUtil.isCounterable(host)) {
-                    for (Card card : game.getCardsIn(ZoneType.Battlefield)) {
-                        if (!card.isToken() && card.getName().equals(host.getName())) {
-                            return true;
+                } else {
+                    final Card host = sa.getHostCard();
+                    if ("DestroyCreature".equals(curse) && sa.isSpell() && host.isCreature()
+                            && !host.hasKeyword(Keyword.INDESTRUCTIBLE)) {
+                        return true;
+                    } else if ("CounterEnchantment".equals(curse) && sa.isSpell() && host.isEnchantment()
+                            && CardFactoryUtil.isCounterable(host)) {
+                        return true;
+                    } else if ("ChaliceOfTheVoid".equals(curse) && sa.isSpell() && CardFactoryUtil.isCounterable(host)
+                            && host.getCMC() == c.getCounters(CounterType.CHARGE)) {
+                        return true;
+                    }  else if ("BazaarOfWonders".equals(curse) && sa.isSpell() && CardFactoryUtil.isCounterable(host)) {
+                        String hostName = host.getName();
+                        for (Card card : ccvGameBattlefield) {
+                            if (!card.isToken() && card.getName().equals(hostName)) {
+                                return true;
+                            }
                         }
-                    }
-                    for (Card card : game.getCardsIn(ZoneType.Graveyard)) {
-                        if (card.getName().equals(host.getName())) {
-                            return true;
+                        for (Card card : game.getCardsIn(ZoneType.Graveyard)) {
+                            if (card.getName().equals(hostName)) {
+                                return true;
+                            }
                         }
                     }
                 } 
@@ -177,13 +183,14 @@ public class AiController {
     }
 
     public boolean checkETBEffects(final Card card, final SpellAbility sa, final ApiType api) {
-        boolean rightapi = false;
-
         if (card.isCreature()
                 && game.getStaticEffects().getGlobalRuleChange(GlobalRuleChange.noCreatureETBTriggers)) {
             return api == null;
         }
-
+        boolean rightapi = false;
+        String battlefield = ZoneType.Battlefield.toString();
+        Player activatingPlayer = sa.getActivatingPlayer();
+        
         // Trigger play improvements
         for (final Trigger tr : card.getTriggers()) {
             // These triggers all care for ETB effects
@@ -193,21 +200,22 @@ public class AiController {
                 continue;
             }
 
-            if (!params.get("Destination").equals(ZoneType.Battlefield.toString())) {
+            if (!params.get("Destination").equals(battlefield)) {
                 continue;
             }
 
             if (params.containsKey("ValidCard")) {
-                if (!params.get("ValidCard").contains("Self")) {
+                String validCard = params.get("ValidCard");
+                if (!validCard.contains("Self")) {
                     continue;
                 }
-                if (params.get("ValidCard").contains("notkicked")) {
+                if (validCard.contains("notkicked")) {
                     if (sa.isKicked()) {
                         continue;
                     }
-                } else if (params.get("ValidCard").contains("kicked")) {
-                    if (params.get("ValidCard").contains("kicked ")) { // want a specific kicker
-                        String s = params.get("ValidCard").split("kicked ")[1];
+                } else if (validCard.contains("kicked")) {
+                    if (validCard.contains("kicked ")) { // want a specific kicker
+                        String s = validCard.split("kicked ")[1];
                         if ("1".equals(s) && !sa.isOptionalCostPaid(OptionalCost.Kicker1)) continue;
                         if ("2".equals(s) && !sa.isOptionalCostPaid(OptionalCost.Kicker2)) continue;
                     } else if (!sa.isKicked()) { 
@@ -250,7 +258,7 @@ public class AiController {
             }
 
             if (sa != null) {
-                exSA.setActivatingPlayer(sa.getActivatingPlayer());
+                exSA.setActivatingPlayer(activatingPlayer);
             }
             else {
                 exSA.setActivatingPlayer(player);
@@ -258,13 +266,11 @@ public class AiController {
             exSA.setTrigger(true);
 
             // for trigger test, need to ignore the conditions
-            if (exSA.getConditions() != null) {
-                SpellAbilityCondition cons = exSA.getConditions();
-                if (cons.getIsPresent() != null) {
-                    String pres = cons.getIsPresent();
-                    if ("Card.Self".equals(pres) || "Card.StrictlySelf".equals(pres)) {
+            SpellAbilityCondition cons = exSA.getConditions();
+            if (cons != null) {
+                String pres = cons.getIsPresent();
+                if (pres != null && pres.matches("Card\\.(Strictly)?Self")) {
                         cons.setIsPresent(null);
-                    }
                 }
             }
 
@@ -288,21 +294,22 @@ public class AiController {
                 continue;
             }
 
-            if (!params.get("Destination").equals(ZoneType.Battlefield.toString())) {
+            if (!params.get("Destination").equals(battlefield)) {
                 continue;
             }
 
             if (params.containsKey("ValidCard")) {
-                if (!params.get("ValidCard").contains("Self")) {
+                String validCard = params.get("ValidCard");
+                if (!validCard.contains("Self")) {
                     continue;
                 }
-                if (params.get("ValidCard").contains("notkicked")) {
+                if (validCard.contains("notkicked")) {
                     if (sa.isKicked()) {
                         continue;
                     }
-                } else if (params.get("ValidCard").contains("kicked")) {
-                    if (params.get("ValidCard").contains("kicked ")) { // want a specific kicker
-                        String s = params.get("ValidCard").split("kicked ")[1];
+                } else if (validCard.contains("kicked")) {
+                    if (validCard.contains("kicked ")) { // want a specific kicker
+                        String s = validCard.split("kicked ")[1];
                         if ("1".equals(s) && !sa.isOptionalCostPaid(OptionalCost.Kicker1)) continue;
                         if ("2".equals(s) && !sa.isOptionalCostPaid(OptionalCost.Kicker2)) continue;
                     } else if (!sa.isKicked()) { // otherwise just any must be present
@@ -318,7 +325,7 @@ public class AiController {
 
             if (exSA != null) {
                 if (sa != null) {
-                    exSA.setActivatingPlayer(sa.getActivatingPlayer());
+                    exSA.setActivatingPlayer(activatingPlayer);
                 }
                 else {
                     exSA.setActivatingPlayer(player);
@@ -366,8 +373,9 @@ public class AiController {
             if (landsInPlay.size() + landList.size() > max) {
                 for (Card c : allCards) {
                     for (SpellAbility sa : c.getSpellAbilities()) {
-                        if (sa.getPayCosts() != null) {
-                            for (CostPart part : sa.getPayCosts().getCostParts()) {
+                        Cost payCosts = sa.getPayCosts();
+                        if (payCosts != null) {
+                            for (CostPart part : payCosts.getCostParts()) {
                                 if (part instanceof CostDiscard) {
                                     return null;
                                 }
@@ -381,10 +389,11 @@ public class AiController {
         landList = CardLists.filter(landList, new Predicate<Card>() {
             @Override
             public boolean apply(final Card c) {
+                CardCollectionView battlefield = player.getCardsIn(ZoneType.Battlefield);
                 canPlaySpellBasic(c, null);
-                if (c.getType().isLegendary() && !c.getName().equals("Flagstones of Trokair")) {
-                    final CardCollectionView list = player.getCardsIn(ZoneType.Battlefield);
-                    if (Iterables.any(list, CardPredicates.nameEquals(c.getName()))) {
+                String name = c.getName();
+                if (c.getType().isLegendary() && !name.equals("Flagstones of Trokair")) {
+                    if (Iterables.any(battlefield, CardPredicates.nameEquals(name))) {
                         return false;
                     }
                 }
@@ -393,7 +402,7 @@ public class AiController {
                 final FCollectionView<SpellAbility> spellAbilities = c.getSpellAbilities();
 
                 final CardCollectionView hand = player.getCardsIn(ZoneType.Hand);
-                CardCollection lands = new CardCollection(player.getCardsIn(ZoneType.Battlefield));
+                CardCollection lands = new CardCollection(battlefield);
                 lands.addAll(hand);
                 lands = CardLists.filter(lands, CardPredicates.Presets.LANDS);
                 int maxCmcInHand = Aggregates.max(hand, CardPredicates.Accessors.fnGetCmc);
@@ -556,14 +565,17 @@ public class AiController {
         Collections.sort(all, saComparator); // put best spells first
 
         for (final SpellAbility sa : ComputerUtilAbility.getOriginalAndAltCostAbilities(all, player)) {
-            if (sa.getApi() == ApiType.Counter || sa.getApi() == exceptSA) {
+            ApiType saApi = sa.getApi();
+            
+            if (saApi == ApiType.Counter || saApi == exceptSA) {
                 continue;
             }
             sa.setActivatingPlayer(player);
             // TODO: this currently only works as a limited prediction of permanent spells.
             // Ideally this should cast canPlaySa to determine that the AI is truly able/willing to cast a spell,
             // but that is currently difficult to implement due to various side effects leading to stack overflow.
-            if (!ComputerUtil.castPermanentInMain1(player, sa) && sa.getHostCard() != null && !sa.getHostCard().isLand() && ComputerUtilCost.canPayCost(sa, player)) {
+            Card host = sa.getHostCard();
+            if (!ComputerUtil.castPermanentInMain1(player, sa) && host != null && !host.isLand() && ComputerUtilCost.canPayCost(sa, player)) {
                 if (sa instanceof SpellPermanent) {
                     return sa;
                 }
