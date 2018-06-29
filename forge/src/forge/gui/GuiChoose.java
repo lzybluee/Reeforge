@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.google.common.base.Function;
 
 import forge.FThreads;
+import forge.card.CardStateName;
 import forge.card.ICardFace;
 import forge.game.card.Card;
 import forge.game.card.CardView;
@@ -170,7 +171,23 @@ public class GuiChoose {
                                 if (paper == null) {
                                     paper = FModel.getMagicDb().getVariantCards().getUniqueByName(face.getName());
                                 }
-                                matchUI.setCard(paper);
+                                if (paper != null && !paper.getName().equals(face.getName())) {
+                                    Card c = Card.getCardForUi(paper);
+                                    boolean foundState = false;
+                                    for (CardStateName cs : c.getStates()) {
+                                        if (c.getState(cs).getName().equals(face.getName())) {
+                                            foundState = true;
+                                            c.setState(cs, true);
+                                            matchUI.setCard(c.getView());
+                                            break;
+                                        }
+                                    }
+                                    if (!foundState) {
+                                        matchUI.setCard(paper);
+                                    }
+                                } else {
+                                    matchUI.setCard(paper);
+                                }
                                 return;
                             }
 
