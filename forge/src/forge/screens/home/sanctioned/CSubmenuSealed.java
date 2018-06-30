@@ -140,9 +140,10 @@ public enum CSubmenuSealed implements ICDoc {
         if (gauntlet) {
             if ("Gauntlet".equals(duelType)) {
                 final int rounds = opponentDecks.getAiDecks().size();
-                FModel.getGauntletMini().launch(rounds, humanDeck.getDeck(), gameType);
-            } else if ("Tournament".equals(duelType)) {
-                // TODO Allow for tournament style sealed, instead of always a gauntlet
+                FModel.getGauntletMini().launch(rounds, humanDeck.getDeck(), gameType, false);
+            } else if ("Gauntlet Random".equals(duelType)) {
+            	final int rounds = opponentDecks.getAiDecks().size();
+                FModel.getGauntletMini().launch(rounds, humanDeck.getDeck(), gameType, true);
             }
             return;
         }
@@ -219,9 +220,8 @@ public enum CSubmenuSealed implements ICDoc {
                 combo.addItem(String.valueOf(indx));
             }
         } else {
-            // Gauntlet/Tournament
+            combo.addItem("Gauntlet Random");
             combo.addItem("Gauntlet");
-            //combo.addItem("Tournament");
         }
     }
 

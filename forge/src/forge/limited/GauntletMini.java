@@ -18,7 +18,9 @@
 package forge.limited;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import forge.GuiBase;
 import forge.deck.Deck;
@@ -98,7 +100,7 @@ public class GauntletMini {
      * @param gauntletType0
      *          game type (Sealed, Draft, Constructed...)
      */
-    public void launch(final int rounds0, final Deck humanDeck0, final GameType gauntletType0) {
+    public void launch(final int rounds0, final Deck humanDeck0, final GameType gauntletType0, boolean random) {
         rounds = rounds0;
         humanDeck = humanDeck0;
         gauntletType = gauntletType0;
@@ -113,6 +115,11 @@ public class GauntletMini {
         else {
             throw new IllegalStateException("Cannot launch Gauntlet, game mode not implemented.");
         }
+
+        if(random) {
+        	Collections.shuffle(aiDecks, new Random());
+        }
+
         aiOpponents.clear();
 
         if (rounds == 1) { //play random opponent if only playing one round
