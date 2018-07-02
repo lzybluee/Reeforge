@@ -4,3 +4,4 @@ Order:108
 Subtype:Custom
 Type:Casual
 Rarities:L, C
+Banned:Cloud of Faeries;Cloudpost;Cranial Plating;Empty the Warrens;Frantic Search;Grapeshot;Invigorate;Peregrine Drake;Temporal Fissure;Treasure Cruise
