@@ -1,0 +1,35 @@
+[metadata]
+Name=Modern_Eldrazi Tron
+[Main]
+1 All Is Dust|ROE
+1 Batterskull|NPH
+3 Chalice of the Void|MRD
+2 Dismember|NPH
+4 Eldrazi Temple|ROE
+2 Endbringer|OGW
+4 Expedition Map|ZEN
+3 Ghost Quarter|ISD
+1 Karn Liberated|NPH
+4 Matter Reshaper|OGW
+2 Phyrexian Metamorph|NPH
+4 Reality Smasher|OGW
+2 Relic of Progenitus|ALA
+1 Scavenger Grounds|HOU
+1 Sea Gate Wreckage|OGW
+4 Thought-Knot Seer|OGW
+1 Ugin, the Spirit Dragon|FRF
+4 Urza's Mine|9ED
+4 Urza's Power Plant|9ED
+4 Urza's Tower|9ED
+3 Walking Ballista|AER
+2 Warping Wail|OGW
+3 Wastes|OGW|1
+[Sideboard]
+1 Karn, Scion of Urza|DOM
+2 Pithing Needle|RTR
+3 Ratchet Bomb|M14
+2 Relic of Progenitus|ALA
+2 Spellskite|NPH
+2 Surgical Extraction|NPH
+1 Ulamog, the Ceaseless Hunger|BFZ
+2 Wurmcoil Engine|SOM

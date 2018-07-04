@@ -1,0 +1,40 @@
+[metadata]
+Name=Modern_BG Aggro
+[Main]
+1 Abrupt Decay|RTR
+1 Blood Crypt|RTR
+3 Bloodstained Mire|KTK
+1 Breeding Pool|GTC
+4 Death's Shadow|WWK
+2 Dismember|NPH
+2 Fatal Push|AER
+1 Forest|DOM|1
+1 Grim Flayer|EMN
+4 Inquisition of Kozilek|ROE
+2 Liliana of the Veil|ISD
+2 Manamorphose|SHM
+4 Mishra's Bauble|CSP
+1 Overgrown Tomb|RTR
+4 Polluted Delta|KTK
+1 Snapcaster Mage|ISD
+4 Street Wraith|FUT
+2 Stubborn Denial|KTK
+1 Swamp|DOM|1
+4 Tarmogoyf|FUT
+2 Temur Battle Rage|FRF
+4 Thoughtseize|THS
+4 Traverse the Ulvenwald|SOI
+4 Verdant Catacombs|ZEN
+1 Watery Grave|GTC
+[Sideboard]
+2 Ancient Grudge|ISD
+2 Collective Brutality|EMN
+1 Fatal Push|AER
+2 Fulminator Mage|SHM
+1 Grafdigger's Cage|DKA
+1 Hostage Taker|XLN
+1 Kozilek's Return|OGW
+1 Liliana, the Last Hope|EMN
+1 Maelstrom Pulse|ARB
+2 Nihil Spellbomb|SOM
+1 Stubborn Denial|KTK
