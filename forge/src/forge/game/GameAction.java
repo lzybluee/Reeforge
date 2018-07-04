@@ -1620,15 +1620,12 @@ public class GameAction {
             // Where there are none, it should bring up speed controls
             game.fireEvent(new GameEventGameStarted(gameType, first, game.getPlayers()));
 
-            // Emissary's Plot
-            // runPreOpeningHandActions(first);
+            game.getTriggerHandler().setSuppressAllTriggers(true);
+            game.getReplacementHandler().setSuppressAll(true);
 
             game.setAge(GameStage.Mulligan);
             for (final Player p1 : game.getPlayers()) {
                 p1.drawCards(p1.getMaxHandSize());
-
-                // If pl has Backup Plan as a Conspiracy draw that many extra hands
-
             }
 
             // Choose starting hand for each player with multiple hands
@@ -1645,6 +1642,10 @@ public class GameAction {
             }
 
             runOpeningHandActions(first);
+
+            game.getTriggerHandler().setSuppressAllTriggers(false);
+            game.getReplacementHandler().setSuppressAll(false);
+
             checkStateEffects(true); // why?
 
             // Run Trigger beginning of the game

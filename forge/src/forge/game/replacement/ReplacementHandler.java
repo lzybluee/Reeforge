@@ -39,6 +39,7 @@ import java.util.*;
 
 public class ReplacementHandler {
     private final Game game;
+    private boolean suppressAll;
     /**
      * ReplacementHandler.
      * @param gameState
@@ -47,9 +48,15 @@ public class ReplacementHandler {
         game = gameState;
     }
 
-    //private final List<ReplacementEffect> tmpEffects = new ArrayList<ReplacementEffect>();
+    public void setSuppressAll(boolean suppress) {
+    	suppressAll = suppress;
+    }
 
     public ReplacementResult run(final Map<String, Object> runParams) {
+    	if(suppressAll) {
+    		return ReplacementResult.NotReplaced;
+    	}
+
         final Object affected = runParams.get("Affected");
         Player decider = null;
 
@@ -70,7 +77,6 @@ public class ReplacementHandler {
         }
 
         return ReplacementResult.NotReplaced;
-
     }
 
     public List<ReplacementEffect> getReplacementList(final Map<String, Object> runParams, final ReplacementLayer layer) {
