@@ -2913,7 +2913,10 @@ public class Card extends GameEntity implements Comparable<Card> {
     }
 
     public final int getCurrentLoyalty() {
-    	return getCounters(CounterType.LOYALTY);
+    	if(getZone() != null && getZone().is(ZoneType.Battlefield)) {
+    		return getCounters(CounterType.LOYALTY);
+    	}
+    	return currentState.getBaseLoyalty();
     }
 
     // values that are printed on card
