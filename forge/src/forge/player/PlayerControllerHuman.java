@@ -1811,11 +1811,22 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
                 reveal(delayedReveal.getCards(), delayedReveal.getZone(), delayedReveal.getOwner(),
                         delayedReveal.getMessagePrefix());
             }
-            final InputSelectCardsFromList input = new InputSelectCardsFromList(this, isOptional ? 0 : 1, changeNum, optionList, sa);
-            input.setCancelAllowed(isOptional);
-            input.setMessage(MessageUtil.formatMessage(selectPrompt, player, targetedPlayer));
-            input.showAndWait();
-            return new CardCollection(input.getSelected());
+            CardCollection selected = new CardCollection();
+            while(true) {
+	            final InputSelectCardsFromList input = new InputSelectCardsFromList(this, isOptional ? 0 : 1, changeNum, optionList, sa);
+	            input.setCancelAllowed(isOptional);
+	            input.setMessage(MessageUtil.formatMessage(selectPrompt, player, targetedPlayer));
+	            input.showAndWait();
+	            selected = new CardCollection(input.getSelected());
+	            if(selected.size() > 0) {
+	            	break;
+	            } else {
+	            	if(InputConfirm.confirm(this, sa, "Cancel?")) {
+	            		break;
+	            	}
+	            }
+            }
+            return selected;
         }
 
         CardCollection collection = new CardCollection();
