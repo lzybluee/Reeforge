@@ -131,9 +131,17 @@ public class CostExile extends CostPartWithList {
         }
 
         list = CardLists.getValidCards(list, type.split(";"), payer, source, ability);
+        
+        int adjustment = 0;
+        if (source.isInZone(ZoneType.Hand) && payer.equals(source.getOwner())) {
+            // If this card is in my hand, I can't use it to pay for it's own cost
+            if (list.contains(source)) {
+                adjustment = 1;
+            }
+        }
 
         final Integer amount = this.convertAmount();
-        if ((amount != null) && (list.size() < amount)) {
+        if ((amount != null) && (list.size() - adjustment < amount)) {
             return false;
         }
 

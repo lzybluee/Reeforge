@@ -45,6 +45,9 @@ public class CostPayLife extends CostPart {
     @Override
     public int paymentOrder() { return 7; }
 
+    @Override
+    public boolean isUndoable() { return true; }
+
     /*
      * (non-Javadoc)
      * 
@@ -65,7 +68,7 @@ public class CostPayLife extends CostPart {
     @Override
     public final void refund(final Card source) {
         // Really should be activating player
-        source.getController().payLife(this.paidAmount * -1, null);
+        source.getController().refundLife(this.paidAmount);
     }
 
     /*

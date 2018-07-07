@@ -437,6 +437,14 @@ public class Player extends GameEntity implements Comparable<Player> {
         return true;
     }
 
+    public final void refundLife(final int toAdd) {
+    	int oldLife = life;
+        life += toAdd;
+        lifeLostThisTurn -= toAdd;
+        view.updateLife(this);
+        game.fireEvent(new GameEventPlayerLivesChanged(this, oldLife, life));
+    }
+
     public final int loseLife(final int toLose) {
         int lifeLost = 0;
         if (!canLoseLife()) {
