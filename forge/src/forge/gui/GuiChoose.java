@@ -187,7 +187,7 @@ public class GuiChoose {
                                     }
                                 } else {
                                 	Card c = Card.getCardForUi(paper);
-                                	if(c.getCurrentStateName() != null && c.getCurrentStateName() != CardStateName.Original ) {
+                                	if(c.getCurrentStateName() != null && c.getCurrentStateName() != CardStateName.Original) {
                                 		c.setState(CardStateName.Original, true);
                                 	}
                                     matchUI.setCard(c.getView());
