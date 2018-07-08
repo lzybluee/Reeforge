@@ -2,6 +2,7 @@ package forge.match.input;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -194,8 +195,7 @@ public abstract class InputPayMana extends InputSyncronizedBase {
             return false;
         }
 
-        HashMap<SpellAbilityView, SpellAbility> abilitiesMap = new HashMap<>();
-        ArrayList<SpellAbilityView> abilitiesVec = new ArrayList<>();
+        HashMap<SpellAbilityView, SpellAbility> abilitiesMap = new LinkedHashMap<>();
         // you can't remove unneeded abilities inside a for (am:abilities) loop :(
 
         final String typeRes = manaCost.getSourceRestriction();
@@ -239,7 +239,6 @@ public abstract class InputPayMana extends InputSyncronizedBase {
             }
 
             abilitiesMap.put(ma.getView(), ma);
-            abilitiesVec.add(ma.getView());
 
             if(ma.hasParam("Amount") && ma.hasParam("RestrictValid")) {
                 canProduceMoreMana = true;
@@ -318,16 +317,7 @@ public abstract class InputPayMana extends InputSyncronizedBase {
 
         SpellAbility chosen;
         if (chosenAbility == null) {
-            ArrayList<SpellAbilityView> toRemove = new ArrayList<>();
-            for(SpellAbilityView view : abilitiesVec) {
-                if (!abilitiesMap.containsKey(view)) {
-                    toRemove.add(view);
-                }
-            }
-            for(SpellAbilityView view : toRemove) {
-                abilitiesVec.remove(view);
-            }
-            ArrayList<SpellAbilityView> choices = new ArrayList<>(abilitiesVec);
+            ArrayList<SpellAbilityView> choices = new ArrayList<>(abilitiesMap.keySet());
             if(abilitiesMap.size() > 1) {
                 if(choice) {
                     chosen = abilitiesMap.get(getController().getGui().one("Choose mana ability",  choices));
