@@ -186,7 +186,9 @@ public class GuiChoose {
                                         matchUI.setCard(paper);
                                     }
                                 } else {
-                                    matchUI.setCard(paper);
+                                	Card c = Card.getCardForUi(paper);
+                                	c.setState(CardStateName.Original, true);
+                                    matchUI.setCard(c.getView());
                                 }
                                 return;
                             }
