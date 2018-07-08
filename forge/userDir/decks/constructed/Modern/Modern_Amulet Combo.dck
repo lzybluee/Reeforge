@@ -6,22 +6,22 @@ Name=Modern_Amulet Combo
 4 Azusa, Lost but Seeking|CHK
 1 Bojuka Bog|WWK
 1 Boros Garrison|RAV
-1 Cavern of Souls|AVR
+2 Cavern of Souls|AVR
 1 Engineered Explosives|5DN
-3 Forest|DOM|1
-4 Gemstone Mine|TSB
+4 Explore|WWK
+2 Forest|DOM|1
+3 Gemstone Mine|TSB
 1 Ghost Quarter|ISD
-4 Gruul Turf|GPT
-2 Hive Mind|M10
+2 Grove of the Burnwillows|FUT
+3 Gruul Turf|GPT
 1 Khalni Garden|WWK
-4 Lotus Bloom|TSP
-2 Pact of Negation|FUT
+1 Pact of Negation|FUT
 4 Primeval Titan|M12
 1 Radiant Fountain|M15
 1 Reclamation Sage|M15
+4 Sakura-Tribe Scout|SOK
 1 Selesnya Sanctuary|RAV
 4 Simic Growth Chamber|DIS
-1 Slaughter Pact|FUT
 1 Slayers' Stronghold|AVR
 4 Summoner's Pact|FUT
 1 Sunhome, Fortress of the Legion|RAV
@@ -29,11 +29,13 @@ Name=Modern_Amulet Combo
 1 Vesuva|TSP
 1 Walking Ballista|AER
 [Sideboard]
-2 Dismember|NPH
+3 Abrade|HOU
+1 Batterskull|NPH
+1 Engineered Explosives|5DN
 2 Firespout|SHM
+1 Ghost Quarter|ISD
 1 Hornet Queen|M15
-3 Obstinate Baloth|M11
-2 Relic of Progenitus|ALA
+3 Nature's Claim|WWK
+1 Pact of Negation|FUT
 1 Ruric Thar, the Unbowed|DGM
-2 Seal of Primordium|PLC
-2 Swan Song|THS
+1 Tormod's Crypt|M15

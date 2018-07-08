@@ -1,31 +1,33 @@
 [metadata]
 Name=Modern_Eldrazi
 [Main]
-4 Battlefield Forge|ORI
-4 Chalice of the Void|MRD
-4 Dismember|NPH
-4 Eldrazi Displacer|OGW
+4 Ancient Stirrings|ROE
+4 Bloodbraid Elf|ARB
+3 Boreal Druid|CSP
+3 Cavern of Souls|AVR
+2 Dismember|NPH
+4 Eldrazi Obligator|OGW
 4 Eldrazi Temple|ROE
-2 Eternal Scourge|EMN
-2 Gemstone Caverns|TSP
-3 Ghost Quarter|ISD
-4 Horizon Canopy|FUT
+2 Forest|DOM|1
+4 Grove of the Burnwillows|FUT
+4 Karplusan Forest|10E
+1 Kessig Wolf Run|ISD
+4 Lightning Bolt|M11
 4 Matter Reshaper|OGW
-4 Plains|DOM|1
+1 Mountain|DOM|1
+4 Noble Hierarch|CFX
 4 Reality Smasher|OGW
-2 Restoration Angel|AVR
-2 Shefet Dunes|HOU
-4 Simian Spirit Guide|PLC
-4 Thalia, Guardian of Thraben|DKA
+1 Scavenging Ooze|M14
+1 Stomping Ground|GTC
 4 Thought-Knot Seer|OGW
-1 Wastes|OGW|1
+2 Wooded Foothills|KTK
 [Sideboard]
-1 Celestial Purge|M12
-2 Gut Shot|NPH
-1 Journey to Nowhere|ZEN
-1 Karn, Scion of Urza|DOM
-2 Ratchet Bomb|M14
-2 Rest in Peace|RTR
-1 Sorcerous Spyglass|XLN
-3 Stony Silence|ISD
-2 Worship|9ED
+2 Abrade|HOU
+2 Damping Sphere|DOM
+2 Engineered Explosives|5DN
+1 Flame Slash|ROE
+1 Grafdigger's Cage|DKA
+2 Natural State|OGW
+1 Pithing Needle|RTR
+2 Relic of Progenitus|ALA
+2 Warping Wail|OGW
