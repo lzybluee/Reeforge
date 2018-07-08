@@ -546,7 +546,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         getGui().setPaperCard(CardView.get(sa.getHostCard()));
 
         // create a mapping between a spell's view and the spell itself
-        HashMap<SpellAbilityView, SpellAbility> spellViewCache = new HashMap<>();
+        HashMap<SpellAbilityView, SpellAbility> spellViewCache = new LinkedHashMap<>();
         for (SpellAbility spellAbility : spells) {
             spellViewCache.put(spellAbility.getView(), spellAbility);
         }
