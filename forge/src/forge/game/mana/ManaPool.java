@@ -190,7 +190,7 @@ public class ManaPool implements Iterable<Mana> {
     public final void payManaFromAbility(final SpellAbility saPaidFor, ManaCostBeingPaid manaCost, final SpellAbility saPayment) {
         // Mana restriction must be checked before this method is called
         final List<SpellAbility> paidAbs = saPaidFor.getPayingManaAbilities();
-        AbilityManaPart abManaPart = saPayment.getManaPartRecursive();
+        AbilityManaPart abManaPart = saPayment.getManaPartHasLastProduced();
 
         paidAbs.add(saPayment); // assumes some part on the mana produced by the ability will get used
         for (final Mana mana : abManaPart.getLastManaProduced()) {
@@ -198,6 +198,7 @@ public class ManaPool implements Iterable<Mana> {
                 saPaidFor.getPayingMana().add(0, mana);
             }
         }
+        saPayment.clearManaPartRecursiveExpressChoice();
     }
 
     public boolean tryPayCostWithColor(byte colorCode, SpellAbility saPaidFor, ManaCostBeingPaid manaCost) {

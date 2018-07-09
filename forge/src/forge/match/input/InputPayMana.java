@@ -335,7 +335,7 @@ public abstract class InputPayMana extends InputSyncronizedBase {
             chosen = chosenAbility;
         }
         ColorSet colors = ColorSet.fromMask(0 == colorNeeded ? colorCanUse : colorNeeded);
-        chosen.getManaPartRecursive().setExpressChoice(colors);
+        chosen.setManaPartRecursiveExpressChoice(colors);
 
         chosen.setNeedChooseMana(saPaidFor.tracksManaSpent());
         // System.out.println("Chosen sa=" + chosen + " of " + chosen.getHostCard() + " to pay mana");

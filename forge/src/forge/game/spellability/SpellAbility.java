@@ -21,6 +21,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
+import forge.card.ColorSet;
 import forge.card.mana.ManaCost;
 import forge.game.*;
 import forge.game.ability.AbilityFactory;
@@ -249,14 +251,53 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
 
     public final AbilityManaPart getManaPartRecursive() {
         SpellAbility tail = this;
-        AbilityManaPart part = null;
         while (tail != null) {
             if (tail.manaPart != null) {
-            	part = tail.manaPart;
+                return tail.manaPart;
             }
             tail = tail.getSubAbility();
         }
-        return part;
+        return null;
+    }
+
+    public final void setManaPartRecursiveExpressChoice(ColorSet colors) {
+        SpellAbility tail = this;
+        while (tail != null) {
+            if (tail.manaPart != null) {
+            	tail.manaPart.setExpressChoice(colors);
+            }
+            tail = tail.getSubAbility();
+        }
+    }
+
+    public final void clearManaPartRecursiveExpressChoice() {
+        SpellAbility tail = this;
+        while (tail != null) {
+            if (tail.manaPart != null) {
+            	tail.manaPart.clearExpressChoice();
+            }
+            tail = tail.getSubAbility();
+        }
+    }
+
+    public final AbilityManaPart getManaPartHasLastProduced() {
+        SpellAbility tail = this;
+        List<AbilityManaPart> parts = new ArrayList<>();
+        while (tail != null) {
+            if (tail.manaPart != null) {
+            	parts.add(tail.manaPart);
+            }
+            tail = tail.getSubAbility();
+        }
+        if(parts.isEmpty()) {
+        	return null;
+        }
+        for(AbilityManaPart part : parts) {
+        	if(part.getLastManaProduced() != null && part.getLastManaProduced().size() > 0) {
+        		return part;
+        	}
+        }
+        return parts.get(0);
     }
 
     public final boolean isManaAbility() {
