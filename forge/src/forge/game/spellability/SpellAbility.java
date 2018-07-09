@@ -249,13 +249,14 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
 
     public final AbilityManaPart getManaPartRecursive() {
         SpellAbility tail = this;
+        AbilityManaPart part = null;
         while (tail != null) {
             if (tail.manaPart != null) {
-                return tail.manaPart;
+            	part = tail.manaPart;
             }
             tail = tail.getSubAbility();
         }
-        return null;
+        return part;
     }
 
     public final boolean isManaAbility() {
