@@ -24,6 +24,7 @@ import forge.game.ability.AbilityFactory;
 import forge.game.ability.ApiType;
 import forge.game.ability.effects.CharmEffect;
 import forge.game.card.Card;
+import forge.game.card.CardCollection;
 import forge.game.card.CardState;
 import forge.game.phase.PhaseHandler;
 import forge.game.phase.PhaseType;
@@ -339,7 +340,7 @@ public abstract class Trigger extends TriggerReplacementBase {
             }
         }
         
-        if ( !meetsCommonRequirements(this.mapParams))
+        if (!meetsCommonRequirements(this.mapParams))
             return false;
 
         return true;
@@ -586,5 +587,18 @@ public abstract class Trigger extends TriggerReplacementBase {
         } catch (final Exception ex) {
             throw new RuntimeException("Trigger : clone() error, " + ex);
         }
+    }
+
+    public void filterCards(CardCollection list, String filter) {
+    	if(filter != null && filter.equals("NonTriggeringCard")) {
+        	if(triggeredSA != null && list != null && !list.isEmpty()) {
+        		if(triggeredSA.getTriggeringObject("Card") != null && triggeredSA.getTriggeringObject("Card") instanceof Card) {
+                	Card card = (Card) triggeredSA.getTriggeringObject("Card");
+                	if(list.contains(card)) {
+                		list.remove(card);
+                	}
+        		}
+        	}
+    	}
     }
 }

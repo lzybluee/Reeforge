@@ -449,7 +449,16 @@ public class WrappedAbility extends Ability {
 
         if (!(regtrig instanceof TriggerAlways) && !triggerParams.containsKey("NoResolvingCheck")) {
             // Most State triggers don't have "Intervening If"
-            if (!regtrig.requirementsCheck(game)) {
+        	WrappedAbility wa = null;
+        	if(regtrig.getTriggeredSA() != null && regtrig.getTriggeredSA() instanceof WrappedAbility && regtrig.getTriggeredSA() != this) {
+        		wa = (WrappedAbility) regtrig.getTriggeredSA();
+        		regtrig.setTriggeredSA(this);
+        	}
+        	boolean pass = regtrig.requirementsCheck(game);
+        	if(wa != null) {
+        		regtrig.setTriggeredSA(wa);
+        	}
+            if (!pass) {
                 return;
             }
             // Since basic requirements check only cares about whether it's "Activated"

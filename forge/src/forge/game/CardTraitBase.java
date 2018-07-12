@@ -320,7 +320,11 @@ public abstract class CardTraitBase extends GameObject implements IHasCardView {
                 }
             }
             list = CardLists.getValidCards(list, sIsPresent.split(","), this.getHostCard().getController(), this.getHostCard(), null);
-    
+            
+            for(String filter : sIsPresent.split(",")) {
+            	filterCards(list, filter);
+            }
+
             int right = 1;
             final String rightString = presentCompare.substring(2);
             try {
@@ -514,5 +518,8 @@ public abstract class CardTraitBase extends GameObject implements IHasCardView {
 
     public Set<String> getSVars() {
         return sVars.keySet();
+    }
+    
+    public void filterCards(CardCollection list, String filter) {
     }
 }
