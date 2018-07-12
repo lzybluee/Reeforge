@@ -338,11 +338,25 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         }
         builder.append("%d " + message + "(s) to " + action + ".");
 
-        final InputSelectCardsFromList inp = new InputSelectCardsFromList(this, min, max, valid, sa);
-        inp.setMessage(builder.toString());
-        inp.setCancelAllowed(min == 0);
-        inp.showAndWait();
-        return new CardCollection(inp.getSelected());
+        CardCollection selected = new CardCollection();
+
+        while(true) {
+	        final InputSelectCardsFromList inp = new InputSelectCardsFromList(this, min, max, valid, sa);
+	        inp.setMessage(builder.toString());
+	        inp.setCancelAllowed(min == 0);
+	        inp.showAndWait();
+	        
+	        if(inp.getSelected().size() == 0 && max > 0) {
+            	if(InputConfirm.confirm(this, sa, "Cancel " + action + " ?")) {
+            		break;
+            	}
+	        } else {
+	        	selected.addAll(inp.getSelected());
+	        	break;
+	        }
+        }
+
+        return selected;
     }
 
     @Override
