@@ -78,6 +78,16 @@ public abstract class Trigger extends TriggerReplacementBase {
     // used to handle once-per-turn triggers like Crawling Sensation
     private int numberTurnActivations = 0;
 
+    private Card triggeringCard;
+
+    public void setTriggeringCard(Object card) {
+    	if(card != null && card instanceof Card) {
+    		triggeringCard = (Card)card;
+    	} else {
+    		triggeringCard = null;
+    	}
+    }
+
     /**
      * <p>
      * Setter for the field <code>storedTriggeredObjects</code>.
@@ -347,7 +357,7 @@ public abstract class Trigger extends TriggerReplacementBase {
     }
 
 
-    public boolean meetsRequirementsOnTriggeredObjects(Game game,  Map<String, Object> runParams) {
+    public boolean meetsRequirementsOnTriggeredObjects(Game game, Map<String, Object> runParams) {
         if ("True".equals(this.mapParams.get("EvolveCondition"))) {
             final Card moved = (Card) runParams.get("Card");
             if (moved == null) {
@@ -590,14 +600,9 @@ public abstract class Trigger extends TriggerReplacementBase {
     }
 
     public void filterCards(CardCollection list, String filter) {
-    	if(filter != null && filter.equals("NonTriggeringCard")) {
-        	if(triggeredSA != null && list != null && !list.isEmpty()) {
-        		if(triggeredSA.getTriggeringObject("Card") != null && triggeredSA.getTriggeringObject("Card") instanceof Card) {
-                	Card card = (Card) triggeredSA.getTriggeringObject("Card");
-                	if(list.contains(card)) {
-                		list.remove(card);
-                	}
-        		}
+    	if(filter != null && list != null && !list.isEmpty() && filter.equals("NonTriggeringCard")) {
+        	if(list.contains(triggeringCard)) {
+        		list.remove(triggeringCard);
         	}
     	}
     }
