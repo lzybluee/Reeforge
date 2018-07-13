@@ -25,6 +25,8 @@ public class DamageAllEffect extends DamageBaseEffect {
         String desc = "";
         if (sa.hasParam("ValidDescription")) {
             desc = sa.getParam("ValidDescription");
+        } else if(sa.hasParam("SP") && sa.getParam("SP").equals("DamageAll")) {
+        	desc = "each creature";
         }
 
         final String damage = sa.getParam("NumDmg");
