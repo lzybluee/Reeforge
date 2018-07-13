@@ -71,6 +71,7 @@ Druid:Druids
 Dryad:Dryads
 Dwarf:Dwarves
 Efreet:Efreets
+Egg:Eggs
 Elder:Elders
 Eldrazi:Eldrazi
 Elemental:Elementals
