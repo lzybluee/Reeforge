@@ -162,11 +162,12 @@ public class CardFactory {
     public final static SpellAbility copySpellAbilityAndSrcCard(final Card source, final Card original, final SpellAbility sa, final boolean bCopyDetails) {
         //Player originalController = original.getController();
         Player controller = sa.getActivatingPlayer();
-        final Card c = copyCard(original, true);
+        boolean copySpell = sa.isSpell();
+        final Card c = copySpell ? copyCard(original, true) : original;
 
         // change the color of the copy (eg: Fork)
         final SpellAbility sourceSA = source.getFirstSpellAbility();
-        if (null != sourceSA && sourceSA.hasParam("CopyIsColor")) {
+        if (copySpell && null != sourceSA && sourceSA.hasParam("CopyIsColor")) {
             String tmp = "";
             final String newColor = sourceSA.getParam("CopyIsColor");
             if (newColor.equals("ChosenColor")) {
@@ -178,12 +179,12 @@ public class CardFactory {
 
             c.addColor(finalColors, !sourceSA.hasParam("OverwriteColors"), c.getTimestamp());
         }
-        
-        c.clearControllers();
-        c.setOwner(controller);
-        c.setCopiedSpell(true);
-        // set counters (e.g. Yisan, the Wanderer Bard)
-        c.setCounters(original.getCounters());
+
+        if(copySpell) {
+	        c.clearControllers();
+	        c.setOwner(controller);
+	        c.setCopiedSpell(true);
+        }
 
         final SpellAbility copySA;
         if (sa.isTrigger()) {
@@ -191,7 +192,11 @@ public class CardFactory {
         } else {
             copySA = sa.copy(c, false);
         }
-        c.getCurrentState().setNonManaAbilities(copySA);
+
+        if(copySpell) {
+        	c.getCurrentState().setNonManaAbilities(copySA);
+        }
+
         copySA.setCopied(true);
         //remove all costs
         if (!copySA.isTrigger()) {
@@ -204,23 +209,27 @@ public class CardFactory {
         copySA.setActivatingPlayer(controller);
 
         if (bCopyDetails) {
-            c.setXManaCostPaid(original.getXManaCostPaid());
-            c.setXManaCostPaidByColor(original.getXManaCostPaidByColor());
-            c.setKickerMagnitude(original.getKickerMagnitude());
+        	if(copySpell) {
+	            c.setXManaCostPaid(original.getXManaCostPaid());
+	            c.setXManaCostPaidByColor(original.getXManaCostPaidByColor());
+	            c.setKickerMagnitude(original.getKickerMagnitude());
 
-            // Rule 706.10 : Madness is copied
-            if (original.isInZone(ZoneType.Stack)) {
-                c.setMadness(original.isMadness());
-
-                final SpellAbilityStackInstance si = controller.getGame().getStack().getInstanceFromSpellAbility(sa);
-                if (si != null) {
-                    c.setXManaCostPaid(si.getXManaPaid());
-                }
-            }
-
-            for (OptionalCost cost : original.getOptionalCostsPaid()) {
-                c.addOptionalCostPaid(cost);
-            }
+	            // Rule 706.10 : Madness is copied
+	            if (original.isInZone(ZoneType.Stack)) {
+	            	if(copySpell) {
+	            		c.setMadness(original.isMadness());
+	            	}
+	
+	                final SpellAbilityStackInstance si = controller.getGame().getStack().getInstanceFromSpellAbility(sa);
+	                if (si != null) {
+	                    c.setXManaCostPaid(si.getXManaPaid());
+	                }
+	            }
+	
+	            for (OptionalCost cost : original.getOptionalCostsPaid()) {
+	                c.addOptionalCostPaid(cost);
+	            }
+        	}
             copySA.setPaidHash(sa.getPaidHash());
         }
         if(!original.getZone().is(ZoneType.Stack)) {
