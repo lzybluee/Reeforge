@@ -501,9 +501,12 @@ public class TriggerHandler {
             return false; // Not the right mode.
         }
 
+        regtrig.setTriggeringCard(runParams.get("Card"));
         if (!regtrig.requirementsCheck(game)) {
+        	regtrig.setTriggeringCard(null);
             return false; // Conditions aren't right.
         }
+        regtrig.setTriggeringCard(null);
 
         if (!regtrig.meetsRequirementsOnTriggeredObjects(game, runParams)) {
             return false; // Conditions aren't right.

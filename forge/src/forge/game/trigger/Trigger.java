@@ -24,6 +24,7 @@ import forge.game.ability.AbilityFactory;
 import forge.game.ability.ApiType;
 import forge.game.ability.effects.CharmEffect;
 import forge.game.card.Card;
+import forge.game.card.CardCollection;
 import forge.game.card.CardState;
 import forge.game.phase.PhaseHandler;
 import forge.game.phase.PhaseType;
@@ -76,6 +77,16 @@ public abstract class Trigger extends TriggerReplacementBase {
     // number of times this trigger was activated this this turn
     // used to handle once-per-turn triggers like Crawling Sensation
     private int numberTurnActivations = 0;
+
+    private Card triggeringCard;
+
+    public void setTriggeringCard(Object card) {
+    	if(card != null && card instanceof Card) {
+    		triggeringCard = (Card)card;
+    	} else {
+    		triggeringCard = null;
+    	}
+    }
 
     /**
      * <p>
@@ -339,14 +350,14 @@ public abstract class Trigger extends TriggerReplacementBase {
             }
         }
         
-        if ( !meetsCommonRequirements(this.mapParams))
+        if (!meetsCommonRequirements(this.mapParams))
             return false;
 
         return true;
     }
 
 
-    public boolean meetsRequirementsOnTriggeredObjects(Game game,  Map<String, Object> runParams) {
+    public boolean meetsRequirementsOnTriggeredObjects(Game game, Map<String, Object> runParams) {
         if ("True".equals(this.mapParams.get("EvolveCondition"))) {
             final Card moved = (Card) runParams.get("Card");
             if (moved == null) {
@@ -586,5 +597,13 @@ public abstract class Trigger extends TriggerReplacementBase {
         } catch (final Exception ex) {
             throw new RuntimeException("Trigger : clone() error, " + ex);
         }
+    }
+
+    public void filterCards(CardCollection list, String filter) {
+    	if(filter != null && list != null && !list.isEmpty() && filter.equals("NonTriggeringCard")) {
+        	if(list.contains(triggeringCard)) {
+        		list.remove(triggeringCard);
+        	}
+    	}
     }
 }
