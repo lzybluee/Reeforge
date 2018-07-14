@@ -514,6 +514,9 @@ public class GameFormat implements Comparable<GameFormat> {
                     //exclude duplicate formats - only keep first of e.g. Standard historical
                     continue;
                 }
+                if(gf.getFormatSubType() == FormatSubType.Commander && deck.getCommanders().isEmpty()) {
+                	continue;
+                }
                 if (gf.isPoolLegal(allCards)) {
                     result.add(gf);
                     coveredTypes.add(gf.getFormatSubType());
