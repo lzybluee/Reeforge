@@ -1489,6 +1489,10 @@ public class ComputerUtil {
             for (Object o : objects) {
                 if (o instanceof Card) {
                     final Card c = (Card) o;
+                    Card current = c.getGame().getCardState(c);
+                    if (current != null && current.getTimestamp() != c.getTimestamp()) {
+                        continue;
+                    }
                     if (c.canBeTargetedBy(topStack)) {
                         canBeTargeted.add(c);
                     }
