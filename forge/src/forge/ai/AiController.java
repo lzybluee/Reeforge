@@ -620,11 +620,11 @@ public class AiController {
             return AiPlayDecision.CantPlaySa;
         }
 
-        AiPlayDecision op = canPlaySa(sa);
-        if (op != AiPlayDecision.WillPlay) {
-            return op;
+        AiPlayDecision decision = ComputerUtilCost.canPayCost(sa, player) ? AiPlayDecision.WillPlay : AiPlayDecision.CantAfford;
+        if(decision == AiPlayDecision.CantAfford) {
+        	return decision;
         }
-        return ComputerUtilCost.canPayCost(sa, player) ? AiPlayDecision.WillPlay : AiPlayDecision.CantAfford;
+        return canPlaySa(sa);
     }
 
     public AiPlayDecision canPlaySa(SpellAbility sa) {
