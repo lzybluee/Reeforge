@@ -147,27 +147,20 @@ public class CardFactory {
 
     /**
      * <p>
-     * copySpellontoStack.
+     * copySpellHost.
+     * Helper function for copySpellAbilityAndPossiblyHost.
+     * creates a copy of the card hosting the ability we want to copy.
+     * Updates various attributes of the card that the copy needs,
+     * which wouldn't ordinarily get set during a simple Card.copy() call.
      * </p>
-     * 
-     * @param source
-     *            a {@link forge.game.card.Card} object.
-     * @param original
-     *            a {@link forge.game.card.Card} object.
-     * @param sa
-     *            a {@link forge.game.spellability.SpellAbility} object.
-     * @param bCopyDetails
-     *            a boolean.
-     */
-    public final static SpellAbility copySpellAbilityAndSrcCard(final Card source, final Card original, final SpellAbility sa, final boolean bCopyDetails) {
-        //Player originalController = original.getController();
+     * */
+    private final static Card copySpellHost(final Card source, final Card original, final SpellAbility sa, final boolean bCopyDetails){
         Player controller = sa.getActivatingPlayer();
-        boolean copySpell = sa.isSpell();
-        final Card c = copySpell ? copyCard(original, true) : original;
+        final Card c = copyCard(original, true);
 
         // change the color of the copy (eg: Fork)
         final SpellAbility sourceSA = source.getFirstSpellAbility();
-        if (copySpell && null != sourceSA && sourceSA.hasParam("CopyIsColor")) {
+        if (null != sourceSA && sourceSA.hasParam("CopyIsColor")) {
             String tmp = "";
             final String newColor = sourceSA.getParam("CopyIsColor");
             if (newColor.equals("ChosenColor")) {
@@ -180,10 +173,57 @@ public class CardFactory {
             c.addColor(finalColors, !sourceSA.hasParam("OverwriteColors"), c.getTimestamp());
         }
 
-        if(copySpell) {
-	        c.clearControllers();
-	        c.setOwner(controller);
-	        c.setCopiedSpell(true);
+        c.clearControllers();
+        c.setOwner(controller);
+        c.setCopiedSpell(true);
+
+        if (bCopyDetails) {
+            c.setXManaCostPaid(original.getXManaCostPaid());
+            c.setXManaCostPaidByColor(original.getXManaCostPaidByColor());
+            c.setKickerMagnitude(original.getKickerMagnitude());
+
+            // Rule 706.10 : Madness is copied
+            if (original.isInZone(ZoneType.Stack)) {
+                c.setMadness(original.isMadness());
+
+                final SpellAbilityStackInstance si = controller.getGame().getStack().getInstanceFromSpellAbility(sa);
+                if (si != null) {
+                    c.setXManaCostPaid(si.getXManaPaid());
+                }
+            }
+
+            for (OptionalCost cost : original.getOptionalCostsPaid()) {
+                c.addOptionalCostPaid(cost);
+            }
+        }
+        return c;
+    }
+    /**
+     * <p>
+     * copySpellAbilityAndPossiblyHost.
+     * creates a copy of the Spell/ability `sa`, and puts it on the stack.
+     * if sa is a spell, that spell's host is also copied.
+     * </p>
+     * 
+     * @param source
+     *            a {@link forge.game.card.Card} object. The card doing the copying.
+     * @param original
+     *            a {@link forge.game.card.Card} object. The host of the spell or ability being copied.
+     * @param sa
+     *            a {@link forge.game.spellability.SpellAbility} object. The spell or ability being copied.
+     * @param bCopyDetails
+     *            a boolean.
+     */
+    public final static SpellAbility copySpellAbilityAndPossiblyHost(final Card source, final Card original, final SpellAbility sa, final boolean bCopyDetails) {
+        Player controller = sa.getActivatingPlayer();
+
+        //it is only necessary to copy the host card if the SpellAbility is a spell, not an ability
+        final Card c;
+        if (sa.isSpell()){
+            c = copySpellHost(source, original, sa, bCopyDetails);
+        }
+        else {
+            c = original;
         }
 
         final SpellAbility copySA;
@@ -193,8 +233,13 @@ public class CardFactory {
             copySA = sa.copy(c, false);
         }
 
-        if(copySpell) {
-        	c.getCurrentState().setNonManaAbilities(copySA);
+        if (sa.isSpell()){
+            //only update c's abilities if c is a copy.
+            //(it would be nice to move this into `copySpellHost`,
+            // so all the c-mutating code is together in one place.
+            // but copySA doesn't exist until after `copySpellHost` finishes executing,
+            // so it's hard to resolve that dependency.)
+            c.getCurrentState().setNonManaAbilities(copySA);
         }
 
         copySA.setCopied(true);
@@ -209,32 +254,13 @@ public class CardFactory {
         copySA.setActivatingPlayer(controller);
 
         if (bCopyDetails) {
-        	if(copySpell) {
-	            c.setXManaCostPaid(original.getXManaCostPaid());
-	            c.setXManaCostPaidByColor(original.getXManaCostPaidByColor());
-	            c.setKickerMagnitude(original.getKickerMagnitude());
-
-	            // Rule 706.10 : Madness is copied
-	            if (original.isInZone(ZoneType.Stack)) {
-	            	if(copySpell) {
-	            		c.setMadness(original.isMadness());
-	            	}
-	
-	                final SpellAbilityStackInstance si = controller.getGame().getStack().getInstanceFromSpellAbility(sa);
-	                if (si != null) {
-	                    c.setXManaCostPaid(si.getXManaPaid());
-	                }
-	            }
-	
-	            for (OptionalCost cost : original.getOptionalCostsPaid()) {
-	                c.addOptionalCostPaid(cost);
-	            }
-        	}
             copySA.setPaidHash(sa.getPaidHash());
         }
+        
         if(!original.getZone().is(ZoneType.Stack)) {
             copySA.setSVar("CanSelectCharmEffect", "true");
         }
+
         return copySA;
     }
 
