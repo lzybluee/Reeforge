@@ -132,6 +132,7 @@ public class CostPayment {
         final Game game = decisionMaker.getPlayer().getGame();
         CostPart lastPart = null;
 
+        int index = 0;
         for (final CostPart part : costParts) {
             // Wrap the cost and push onto the cost stack
             game.costPaymentStack.push(part, this);
@@ -148,11 +149,16 @@ public class CostPayment {
                 return false;
             }
             this.paidCostParts.add(part);
+            if(index < cost.getCostParts().size()) {
+                cost.getCostParts().get(index).setPaidAmount(part.getPaidAmount());
+            }
 
             part.setMustPay(false);
             game.costPaymentStack.pop(); // cost is resolved
 
             lastPart = part;
+
+            index++;
         }
 
         // this clears lists used for undo. 

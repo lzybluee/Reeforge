@@ -111,4 +111,11 @@ public class CostPayLife extends CostPart {
         return visitor.visit(this);
     }
 
+    public int getPaidAmount() {
+    	return paidAmount;
+    }
+
+    public void setPaidAmount(int amount) {
+    	paidAmount = amount;
+    }
 }

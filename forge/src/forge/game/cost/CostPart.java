@@ -215,4 +215,11 @@ public abstract class CostPart implements Comparable<CostPart>, Cloneable, Seria
     public void setMustPay(boolean pay) {
         mustPay = pay;
     }
+
+    public int getPaidAmount() {
+    	return 0;
+    }
+
+    public void setPaidAmount(int amount) {
+    }
 }
