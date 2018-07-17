@@ -68,7 +68,6 @@ public enum DeckFormat {
             return true;
         }
     }),
-    Pauper      ( Range.is(60),                         Range.between(0, 10), 1),
     Brawl      ( Range.is(59), Range.between(0, 15), 1, null, new Predicate<PaperCard>() {
         private final Set<String> bannedCards = new HashSet<String>(Arrays.asList(
                 "Baral, Chief of Compliance","Smuggler's Copter","Sorcerous Spyglass"));
