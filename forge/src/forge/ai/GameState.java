@@ -578,6 +578,7 @@ public abstract class GameState {
             handleCombat(game, newPlayerTurn, newPlayerTurn.getSingleOpponent(), toDeclareBlockers);
         }
 
+        game.getStack().clear();
         game.getStack().setResolving(false);
 
         // Advance to a certain phase, activating all triggered abilities
