@@ -354,6 +354,10 @@ public class CardProperty {
                     return false;
                 }
             }
+        } else if (property.startsWith("StrictlyOther")) {
+            if (card.equals(source) && card.getTimestamp() == source.getTimestamp()) {
+                return false;
+            }
         } else if (property.startsWith("Other")) {
             if (card.equals(source)) {
                 return false;
