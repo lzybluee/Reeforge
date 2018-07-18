@@ -1095,11 +1095,7 @@ public class HumanCostDecision extends CostDecisionMakerBase {
 
         if (cost.payCostFromSource()) {
             if (source.getController() == ability.getActivatingPlayer() && source.isInPlay()) {
-                if (cost.mustPay()) {
-                    return PaymentDecision.card(source);
-                } else {
-                    return player.getController().confirmPayment(cost, "Sacrifice " + source.getName() + "?",ability) ? PaymentDecision.card(source) : null;
-                }
+                return player.getController().confirmPayment(cost, "Sacrifice " + source.getName() + "?",ability) ? PaymentDecision.card(source) : null;
             }
             else {
                 return null;

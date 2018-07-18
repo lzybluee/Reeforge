@@ -137,7 +137,7 @@ public class CostPayment {
             // Wrap the cost and push onto the cost stack
             game.costPaymentStack.push(part, this);
 
-            if(lastPart != null && lastPart instanceof CostDiscard && part instanceof CostSacrifice) {
+            if(lastPart != null && !lastPart.isUndoable()) {
                 part.setMustPay(true);
             }
 

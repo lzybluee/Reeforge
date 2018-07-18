@@ -1494,6 +1494,9 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
 
     @Override
     public boolean confirmPayment(final CostPart costPart, final String question, SpellAbility sa) {
+    	if(costPart.mustPay()) {
+    		return true;
+    	}
         final InputConfirm inp = new InputConfirm(this, question, sa);
         inp.showAndWait();
         return inp.getResult();
