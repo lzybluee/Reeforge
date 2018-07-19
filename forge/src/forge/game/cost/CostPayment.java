@@ -133,12 +133,16 @@ public class CostPayment {
         CostPart lastPart = null;
 
         int index = 0;
+        boolean mustPay = false;
         for (final CostPart part : costParts) {
             // Wrap the cost and push onto the cost stack
             game.costPaymentStack.push(part, this);
 
-            if(lastPart != null && !lastPart.isUndoable()) {
+            if((lastPart != null && !lastPart.isUndoable()) || mustPay) {
                 part.setMustPay(true);
+                mustPay = true;
+            } else {
+            	part.setMustPay(false);
             }
 
             PaymentDecision pd = part.accept(decisionMaker);
