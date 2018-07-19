@@ -15,39 +15,46 @@ import forge.game.spellability.TargetRestrictions;
 public class IgnoreEffectAi extends SpellAbilityAi {
 	
 	private boolean isSearchAbility(Player aiPlayer, SpellAbility sa, SpellAbility spell) {
-		if(sa == null || sa.getActivatingPlayer() == null) {
+		if(sa == null || spell.getActivatingPlayer() == null) {
 			return false;
 		}
 		if(sa.getApi() != ApiType.ChangeZone && sa.getApi() != ApiType.ChangeZoneAll) {
 			return false;
 		}
-		if(!sa.hasParam("Origin") || !sa.getParam("Origin").equals("Library")) {
+		final String origin = sa.hasParam("Origin") ? sa.getParam("Origin").toLowerCase() : null;
+		if(origin == null || !origin.equals("library")) {
 			return false;
 		}
-		if(sa.getActivatingPlayer().equals(aiPlayer)) {
-			return true;
-		} else {
-			final String definedPlayer = sa.hasParam("DefinedPlayer") ? sa.getParam("DefinedPlayer") : null;
-			if(definedPlayer == null) {
-				return false;
-			}
-			if(definedPlayer.equals("RememberedController") || definedPlayer.equals("TargetedController") || definedPlayer.equals("Player")) {
-				final TargetRestrictions tgt = spell.getTargetRestrictions();
-				if(tgt != null) {
-					List<GameObject> objects = spell.getTargets().getTargets();
-		            for (Object o : objects) {
-		                if (o instanceof Card) {
-		                    Card card = (Card)o;
-		                    if(aiPlayer.equals(card.getController())) {
-		                    	return true;
-		                    }
-		                }
-		            }
-				}
-				return false;
+		final String destination = sa.hasParam("Destination") ? sa.getParam("Destination").toLowerCase() : null;
+		if(destination == null || !(destination.equals("battlefield") || destination.equals("hand"))) {
+			return false;
+		}
+		String definedPlayer = sa.hasParam("DefinedPlayer") ? sa.getParam("DefinedPlayer") : null;
+		if(definedPlayer == null) {
+			definedPlayer = sa.hasParam("DefinedPlayers") ? sa.getParam("DefinedPlayers") : null;
+		}
+		final boolean hasDefined = definedPlayer != null && 
+				(definedPlayer.equals("RememberedController") || definedPlayer.equals("TargetedController") || definedPlayer.equals("Player"));
+		if(hasDefined) {
+			final TargetRestrictions tgt = spell.getTargetRestrictions();
+			if(tgt != null) {
+				List<GameObject> objects = spell.getTargets().getTargets();
+	            for (Object o : objects) {
+	                if (o instanceof Card) {
+	                    Card card = (Card)o;
+	                    if(aiPlayer.equals(card.getController())) {
+	                    	return true;
+	                    }
+	                } else if (o instanceof Player) {
+	                	if(aiPlayer.equals(o)) {
+	                		return true;
+	                	}
+	                }
+	            }
 			}
 			return false;
 		}
+		return aiPlayer.equals(spell.getActivatingPlayer());
 	}
 
     /* (non-Javadoc)
