@@ -62,7 +62,7 @@ public class IgnoreEffectAi extends SpellAbilityAi {
      */
     @Override
     protected boolean canPlayAI(Player aiPlayer, SpellAbility sa) {
-		if(aiPlayer.hasKeyword("CantSearchLibrary")) {
+		if(aiPlayer.hasKeyword("CantSearchLibrary") && sa.getHostCard() != null && sa.getHostCard().getName().equals("Leonin Arbiter")) {
 			Game game = aiPlayer.getGame();
 			boolean search = false;
 			if(!game.getStack().isEmpty()) {
