@@ -1308,12 +1308,22 @@ public class AiController {
     }
 
     private final SpellAbility getSpellAbilityToPlay() {
+        final CardCollection cards = ComputerUtilAbility.getAvailableCards(game, player);
+
+        final List<SpellAbility> abilities = ComputerUtilAbility.getSpellAbilities(cards, player);
+
+        boolean hasIgnoreEffects = false;
+        for(SpellAbility sa : abilities) {
+        	if(sa.getApi() == ApiType.InternalIgnoreEffect) {
+        		hasIgnoreEffects = true;
+        		break;
+        	}
+        }
         // if top of stack is owned by me
-        if (!game.getStack().isEmpty() && game.getStack().peekAbility().getActivatingPlayer().equals(player)) {
+        if (!hasIgnoreEffects && !game.getStack().isEmpty() && game.getStack().peekAbility().getActivatingPlayer().equals(player)) {
             // probably should let my stuff resolve
             return null;
         }
-        final CardCollection cards = ComputerUtilAbility.getAvailableCards(game, player);
 
         if (!game.getStack().isEmpty()) {
             SpellAbility counter = chooseCounterSpell(getPlayableCounters(cards));
@@ -1324,7 +1334,7 @@ public class AiController {
                 return counterETB;
         }
 
-        return chooseSpellAbilityToPlayFromList(ComputerUtilAbility.getSpellAbilities(cards, player), true);
+        return chooseSpellAbilityToPlayFromList(abilities, true);
     }
 
     private SpellAbility chooseSpellAbilityToPlayFromList(final List<SpellAbility> all, boolean skipCounter) {

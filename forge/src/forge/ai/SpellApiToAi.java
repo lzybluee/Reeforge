@@ -160,7 +160,7 @@ public enum SpellApiToAi {
             .put(ApiType.DamageResolve, AlwaysPlayAi.class)
             .put(ApiType.InternalEtbReplacement, CanPlayAsDrawbackAi.class)
             .put(ApiType.InternalLegendaryRule, LegendaryRuleAi.class)
-            .put(ApiType.InternalIgnoreEffect, CannotPlayAi.class)
+            .put(ApiType.InternalIgnoreEffect, IgnoreEffectAi.class)
             .build());
 
     public SpellAbilityAi get(final ApiType api) {
