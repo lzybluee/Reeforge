@@ -223,4 +223,7 @@ public abstract class Spell extends SpellAbility implements java.io.Serializable
         this.castFaceDown = faceDown;
     }
 
+    public boolean meetsCommonRequirements() {
+    	return meetsCommonRequirements(this.mapParams);
+    }
 }
