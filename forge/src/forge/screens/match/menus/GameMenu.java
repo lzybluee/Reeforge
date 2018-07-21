@@ -48,6 +48,7 @@ public final class GameMenu {
         menu.add(getMenuItem_TargetingArcs());
         menu.add(new CardOverlaysMenu(matchUI).getMenu());
         menu.add(getMenuItem_AutoYields());
+        menu.add(getMenuItem_SkipAutoPay());
         menu.add(getMenuItem_SkipRestoreDeck());
         menu.add(getMenuItem_MTGAShuffle());
         menu.add(getMenuItem_StartPlayer());
@@ -325,5 +326,25 @@ public final class GameMenu {
                 prefs.save();
             }
         };
+    }
+
+    private static SkinnedCheckBoxMenuItem getMenuItem_SkipAutoPay() {
+        SkinnedCheckBoxMenuItem menuItem = new SkinnedCheckBoxMenuItem("Skip Auto Pay");
+        menuItem.setState(prefs.getPrefBoolean(FPref.UI_SKIP_AUTO_PAY));
+        menuItem.addActionListener(getSkipAutoPay());
+        return menuItem;
+    }
+    private static ActionListener getSkipAutoPay() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                toggleSkipAutoPay();
+            }
+        };
+    }
+    private static void toggleSkipAutoPay() {
+        final boolean skipAutoPay = !prefs.getPrefBoolean(FPref.UI_SKIP_AUTO_PAY);
+        prefs.setPref(FPref.UI_SKIP_AUTO_PAY, skipAutoPay);
+        prefs.save();
     }
 }

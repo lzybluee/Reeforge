@@ -9,6 +9,7 @@ import java.util.Queue;
 
 import forge.game.GameActionUtil;
 import forge.game.spellability.SpellAbilityView;
+import forge.model.FModel;
 import forge.util.TextUtil;
 import org.apache.commons.lang3.StringUtils;
 
@@ -30,6 +31,7 @@ import forge.game.spellability.AbilityManaPart;
 import forge.game.spellability.SpellAbility;
 import forge.player.HumanPlay;
 import forge.player.PlayerControllerHuman;
+import forge.properties.ForgePreferences.FPref;
 import forge.util.Evaluator;
 import forge.util.ITriggerEvent;
 
@@ -349,7 +351,8 @@ public abstract class InputPayMana extends InputSyncronizedBase {
                 chosen.setUsedToPayMana(null);
                 chosen.setNeedChooseMana(false);
                 if (b) {
-                    player.getManaPool().payManaFromAbility(saPaidFor, InputPayMana.this.manaCost, chosen);
+                    player.getManaPool().payManaFromAbility(saPaidFor, InputPayMana.this.manaCost, chosen,
+                    		!FModel.getPreferences().getPrefBoolean(FPref.UI_SKIP_AUTO_PAY));
 
                     onManaAbilityPaid();
                     onStateChanged();

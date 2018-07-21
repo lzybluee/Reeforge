@@ -187,12 +187,17 @@ public class ManaPool implements Iterable<Mana> {
         }
     }
 
-    public final void payManaFromAbility(final SpellAbility saPaidFor, ManaCostBeingPaid manaCost, final SpellAbility saPayment) {
+    public final void payManaFromAbility(final SpellAbility saPaidFor, ManaCostBeingPaid manaCost, final SpellAbility saPayment, boolean autoPay) {
         // Mana restriction must be checked before this method is called
         final List<SpellAbility> paidAbs = saPaidFor.getPayingManaAbilities();
         AbilityManaPart abManaPart = saPayment.getManaPartHasLastProduced();
 
         paidAbs.add(saPayment); // assumes some part on the mana produced by the ability will get used
+        
+        if(!autoPay) {
+        	return;
+        }
+        
         for (final Mana mana : abManaPart.getLastManaProduced()) {
             if (tryPayCostWithMana(saPaidFor, manaCost, mana, false)) {
                 saPaidFor.getPayingMana().add(0, mana);

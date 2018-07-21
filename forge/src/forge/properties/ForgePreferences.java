@@ -97,6 +97,7 @@ public class ForgePreferences extends PreferencesStore<ForgePreferences.FPref> {
         UI_TARGETING_OVERLAY ("0"),
         UI_TIMED_TARGETING_OVERLAY_UPDATES ("true"),
         UI_SKIP_RESTORE_DECK ("true"),
+        UI_SKIP_AUTO_PAY ("false"),
         UI_START_PLAYER ("Random"),
         UI_ENABLE_SOUNDS ("true"),
         UI_ENABLE_MUSIC ("true"),

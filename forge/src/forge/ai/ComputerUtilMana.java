@@ -499,7 +499,7 @@ public class ComputerUtilMana {
 
                 ai.getGame().getStack().addAndUnfreeze(saPayment);
                 // subtract mana from mana pool
-                manapool.payManaFromAbility(sa, cost, saPayment);
+                manapool.payManaFromAbility(sa, cost, saPayment, true);
 
                 // no need to remove abilities from resource map,
                 // once their costs are paid and consume resources, they can not be used again
