@@ -1691,7 +1691,7 @@ public class AbilityUtils {
                 continue;
             }
             newSA.setActivatingPlayer(controller);
-            if (newSA.hasParam("CheckSVar") && !newSA.meetsCommonRequirements()) {
+            if (!newSA.meetsCommonRequirements()) {
             	continue;
             }
             SpellAbilityRestriction res = new SpellAbilityRestriction();
