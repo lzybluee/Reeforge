@@ -2169,6 +2169,9 @@ public class Player extends GameEntity implements Comparable<Player> {
         landsPlayedThisTurn = 0;
         view.updateLandsPlayedThisTurn(this);
     }
+    public final void setLandsPlayedThisTurn(int num) {
+        landsPlayedThisTurn = num;
+    }
     public final void setLandsPlayedLastTurn(int num) {
         landsPlayedLastTurn = num;
     }

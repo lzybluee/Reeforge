@@ -990,6 +990,8 @@ public abstract class GameState {
         }
 
         if (life >= 0) p.setLife(life, null);
+        p.setLandsPlayedThisTurn(0);
+
         for (Entry<ZoneType, CardCollectionView> kv : playerCards.entrySet()) {
             PlayerZone zone = p.getZone(kv.getKey());
             if (kv.getKey() == ZoneType.Battlefield) {
