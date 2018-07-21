@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<layout>
+	<cell x="0.77441" y="0.37698" w="0.22559" h="0.62302" sel="CARD_PICTURE">
+		<doc>CARD_PICTURE</doc>
+	</cell>
+	<cell x="0.38747" y="0.0" w="0.38695" h="1.0" sel="EDITOR_CURRENTDECK">
+		<doc>EDITOR_CURRENTDECK</doc>
+		<doc>EDITOR_STATISTICS</doc>
+		<doc>EDITOR_PROBABILITIES</doc>
+	</cell>
+	<cell x="0.0" y="0.0" w="0.38747" h="1.0" sel="EDITOR_CATALOG">
+		<doc>EDITOR_CATALOG</doc>
+	</cell>
+	<cell x="0.77441" y="0.0" w="0.22559" h="0.37698" sel="CARD_DETAIL">
+		<doc>CARD_DETAIL</doc>
+	</cell>
+</layout>
