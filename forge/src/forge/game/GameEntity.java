@@ -27,6 +27,8 @@ import forge.game.event.GameEventCardAttachment.AttachMethod;
 import forge.game.keyword.Keyword;
 import forge.game.spellability.SpellAbility;
 import forge.game.trigger.TriggerType;
+import forge.model.FModel;
+import forge.properties.ForgePreferences.FPref;
 import forge.util.collect.FCollection;
 
 import java.util.Map;
@@ -74,8 +76,13 @@ public abstract class GameEntity extends GameObject implements IIdentifiable {
             final CardDamageMap preventMap, final SpellAbility cause) {
         int damageToDo = damage;
 
-        damageToDo = replaceDamage(damageToDo, source, false, true, damageMap, preventMap, cause);
-        damageToDo = preventDamage(damageToDo, source, false, preventMap, cause);
+        if(FModel.getPreferences().getPrefBoolean(FPref.UI_DAMAGE_PREVENTION_FIRST)) {
+        	damageToDo = preventDamage(damageToDo, source, false, preventMap, cause);
+        	damageToDo = replaceDamage(damageToDo, source, false, true, damageMap, preventMap, cause);
+        } else {
+        	damageToDo = replaceDamage(damageToDo, source, false, true, damageMap, preventMap, cause);
+        	damageToDo = preventDamage(damageToDo, source, false, preventMap, cause);
+    	}
 
         return addDamageAfterPrevention(damageToDo, source, false, damageMap);
     }
@@ -84,8 +91,13 @@ public abstract class GameEntity extends GameObject implements IIdentifiable {
             final CardDamageMap preventMap) {
         int damageToDo = damage;
 
-        damageToDo = replaceDamage(damageToDo, source, true, true, damageMap, preventMap, null);
-        damageToDo = preventDamage(damageToDo, source, true, preventMap, null);
+        if(FModel.getPreferences().getPrefBoolean(FPref.UI_DAMAGE_PREVENTION_FIRST)) {
+        	damageToDo = preventDamage(damageToDo, source, true, preventMap, null);
+        	damageToDo = replaceDamage(damageToDo, source, true, true, damageMap, preventMap, null);
+        } else {
+	        damageToDo = replaceDamage(damageToDo, source, true, true, damageMap, preventMap, null);
+	        damageToDo = preventDamage(damageToDo, source, true, preventMap, null);
+        }
 
         if (damageToDo > 0) {
             source.getDamageHistory().registerCombatDamage(this);

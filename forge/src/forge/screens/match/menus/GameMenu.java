@@ -49,6 +49,7 @@ public final class GameMenu {
         menu.add(new CardOverlaysMenu(matchUI).getMenu());
         menu.add(getMenuItem_AutoYields());
         menu.add(getMenuItem_SkipAutoPay());
+        menu.add(getMenuItem_DamagePreventionFirst());
         menu.add(getMenuItem_SkipRestoreDeck());
         menu.add(getMenuItem_MTGAShuffle());
         menu.add(getMenuItem_StartPlayer());
@@ -345,6 +346,26 @@ public final class GameMenu {
     private static void toggleSkipAutoPay() {
         final boolean skipAutoPay = !prefs.getPrefBoolean(FPref.UI_SKIP_AUTO_PAY);
         prefs.setPref(FPref.UI_SKIP_AUTO_PAY, skipAutoPay);
+        prefs.save();
+    }
+
+    private static SkinnedCheckBoxMenuItem getMenuItem_DamagePreventionFirst() {
+        SkinnedCheckBoxMenuItem menuItem = new SkinnedCheckBoxMenuItem("Damage Prevent First");
+        menuItem.setState(prefs.getPrefBoolean(FPref.UI_DAMAGE_PREVENTION_FIRST));
+        menuItem.addActionListener(getDamagePreventionFirst());
+        return menuItem;
+    }
+    private static ActionListener getDamagePreventionFirst() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                toggleDamagePreventionFirst();
+            }
+        };
+    }
+    private static void toggleDamagePreventionFirst() {
+        final boolean damagePreventionFirst = !prefs.getPrefBoolean(FPref.UI_DAMAGE_PREVENTION_FIRST);
+        prefs.setPref(FPref.UI_DAMAGE_PREVENTION_FIRST, damagePreventionFirst);
         prefs.save();
     }
 }
