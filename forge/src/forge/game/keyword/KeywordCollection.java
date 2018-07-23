@@ -90,6 +90,9 @@ public class KeywordCollection implements Iterable<String>, Serializable {
             if (k.getOriginal().startsWith(keyword)) {
                 it.remove();
                 result = true;
+                if(keyword.startsWith("CARDNAME can't")) {
+                	break;
+                }
             }
         }
         
