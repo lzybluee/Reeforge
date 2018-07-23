@@ -59,6 +59,17 @@ public class ChooseCardEffect extends SpellAbilityEffect {
         }
         if (sa.hasParam("DefinedCards")) {
             choices = AbilityUtils.getDefinedCards(host, sa.getParam("DefinedCards"), sa);
+            if(sa.getParam("DefinedCards").equals("TriggeredAttackers") || sa.getParam("DefinedCards").equals("TriggeredBlockers")) {
+            	CardCollection cards = new CardCollection();
+            	for(Card c : choices) {
+            		Card current = c.getGame().getCardState(c);
+                    if (current != null && current.getTimestamp() != c.getTimestamp()) {
+                        continue;
+                    }
+                    cards.add(c);
+            	}
+            	choices = cards;
+            }
         }
 
         final String numericAmount = sa.getParamOrDefault("Amount", "1");
