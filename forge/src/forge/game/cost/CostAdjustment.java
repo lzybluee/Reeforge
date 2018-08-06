@@ -252,6 +252,9 @@ public class CostAdjustment {
     // GetSpellCostChange
 
     private static void adjustCostByConvokeOrImprovise(ManaCostBeingPaid cost, final SpellAbility sa, boolean improvise, boolean test) {
+    	if(cost.getUnpaidShards().isEmpty()) {
+    		return;
+    	}
         CardCollectionView untappedCards = CardLists.filter(sa.getActivatingPlayer().getCardsIn(ZoneType.Battlefield), CardPredicates.Presets.UNTAPPED);
         if (improvise) {
             untappedCards = CardLists.filter(untappedCards, CardPredicates.Presets.ARTIFACTS);
