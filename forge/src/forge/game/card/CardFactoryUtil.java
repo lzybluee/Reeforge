@@ -3292,7 +3292,7 @@ public class CardFactoryUtil {
 
             if (keyword.contains(" ")) {
                 final Cost cost = new Cost(keyword.substring(10), false);
-                sb.append( cost.isOnlyManaCost() ? " " : "—");
+                sb.append(cost.isOnlyManaCost() ? " " : "—");
     
                 sb.append(cost.toSimpleString());
     

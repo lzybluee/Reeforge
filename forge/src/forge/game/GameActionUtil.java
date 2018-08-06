@@ -203,7 +203,11 @@ public final class GameActionUtil {
                 // there is a flashback cost (and not the cards cost)
                 if (!keyword.equals("Flashback")) {
                     flashback.setPayCosts(new Cost(keyword.substring(10), false));
+                    flashback.setDescription(inst.getReminderText());
+                } else {
+                	flashback.setDescription("You may cast this card from your graveyard by paying its mana cost. If you do, exile it as it resolves.");
                 }
+
                 alternatives.add(flashback);
             }
 
