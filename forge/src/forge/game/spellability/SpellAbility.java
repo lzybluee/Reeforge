@@ -1624,7 +1624,7 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
             }
         }
         else if (incR[0].equals("Activated")) {
-            if (!(root instanceof AbilityActivated)) {
+            if (root.isTrigger() || !(root instanceof AbilityActivated)) {
                 return false;
             }
         }
