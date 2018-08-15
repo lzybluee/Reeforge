@@ -208,7 +208,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
     }
 
     @Override
-    public List<PaperCard> sideboard(final Deck deck, final GameType gameType) {
+    public List<PaperCard> sideboard(final Deck deck, final GameRules gameRules) {
         CardPool sideboard = deck.get(DeckSection.Sideboard);
         if (sideboard == null) {
             // Use an empty cardpool instead of null for 75/0 sideboarding
@@ -222,8 +222,20 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         final int sbSize = sideboard.countAll();
         final int combinedDeckSize = mainSize + sbSize;
 
-        final int deckMinSize = Math.min(mainSize, gameType.getDeckFormat().getMainRange().getMinimum());
-        final Range<Integer> sbRange = gameType.getDeckFormat().getSideRange();
+        int deckMinMainSize = 0;
+        if(gameRules.getAppliedVariants() != null) {
+        	for(GameType type : gameRules.getAppliedVariants()) {
+        		int min = type.getDeckFormat().getMainRange().getMinimum();
+        		if(min > deckMinMainSize) {
+        			deckMinMainSize = min;
+        		}
+        	}
+        } else {
+        	deckMinMainSize = gameRules.getGameType().getDeckFormat().getMainRange().getMinimum();
+        }
+
+        final int deckMinSize = Math.min(mainSize, deckMinMainSize);
+        final Range<Integer> sbRange = gameRules.getGameType().getDeckFormat().getSideRange();
         // Limited doesn't have a sideboard max, so let the Main min take care
         // of things.
         final int sbMax = sbRange == null ? combinedDeckSize : sbRange.getMaximum();

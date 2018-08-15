@@ -226,7 +226,7 @@ public class Match {
 
             if (canSideBoard) {
                 Deck toChange = psc.getDeck();
-                List<PaperCard> newMain = player.getController().sideboard(toChange, rules.getGameType());
+                List<PaperCard> newMain = player.getController().sideboard(toChange, rules);
                 if (null != newMain) {
                     CardPool allCards = new CardPool();
                     allCards.addAll(toChange.get(DeckSection.Main));
