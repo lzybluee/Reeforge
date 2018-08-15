@@ -129,9 +129,10 @@ public class CountersPutEffect extends SpellAbilityEffect {
 
         for (final GameObject obj : tgtObjects) {
             // check if the object is still in game or if it was moved
+            Card gameCard = null;
             if (obj instanceof Card) {
                 Card tgtCard = (Card) obj;
-                Card gameCard = game.getCardState(tgtCard, null);
+                gameCard = game.getCardState(tgtCard, null);
                 // gameCard is LKI in that case, the card is not in game anymore
                 // or the timestamp did change
                 // this should check Self too
@@ -158,7 +159,7 @@ public class CountersPutEffect extends SpellAbilityEffect {
                             ((Player) obj).addCounter(ct, counterAmount, card, true);
                         }
                         if (obj instanceof Card) {
-                            ((Card) obj).addCounter(ct, counterAmount, card, true);
+                            gameCard.addCounter(ct, counterAmount, card, true);
                         }
                     }
                     continue;
@@ -179,7 +180,7 @@ public class CountersPutEffect extends SpellAbilityEffect {
             }
 
             if (obj instanceof Card) {
-                Card tgtCard = (Card) obj;
+                Card tgtCard = gameCard;
                 counterAmount = sa.usesTargeting() && sa.hasParam("DividedAsYouChoose") ? sa.getTargetRestrictions().getDividedValue(tgtCard) : counterAmount;
                 if (!sa.usesTargeting() || tgtCard.canBeTargetedBy(sa)) {
                     if (max != -1) {
