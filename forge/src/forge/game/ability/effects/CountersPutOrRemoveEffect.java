@@ -64,16 +64,16 @@ public class CountersPutOrRemoveEffect extends SpellAbilityEffect {
             if (gameCard == null || !tgtCard.equalsWithTimestamp(gameCard)) {
                 continue;
             }
-            if (!sa.usesTargeting() || gameCard.canBeTargetedBy(sa)) {
-                if (gameCard.hasCounters()) {
+            if (!sa.usesTargeting() || tgtCard.canBeTargetedBy(sa)) {
+                if (tgtCard.hasCounters()) {
                     if (sa.hasParam("EachExistingCounter")) {
-                        for (CounterType listType : Lists.newArrayList(gameCard.getCounters().keySet())) {
-                            addOrRemoveCounter(sa, gameCard, listType, counterAmount);
+                        for (CounterType listType : Lists.newArrayList(tgtCard.getCounters().keySet())) {
+                            addOrRemoveCounter(sa, tgtCard, listType, counterAmount);
                         }
                     } else {
-                        addOrRemoveCounter(sa, gameCard, ctype, counterAmount);
+                        addOrRemoveCounter(sa, tgtCard, ctype, counterAmount);
                     }
-                    game.updateLastStateForCard(gameCard);
+                    game.updateLastStateForCard(tgtCard);
                 }
             }
         }

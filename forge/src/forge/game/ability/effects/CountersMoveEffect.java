@@ -100,7 +100,6 @@ public class CountersMoveEffect extends SpellAbilityEffect {
                 // Test to see if the card we're trying to add is in the expected state
                 return;
             }
-            dest = cur;
 
             int csum = 0;
 
@@ -195,15 +194,15 @@ public class CountersMoveEffect extends SpellAbilityEffect {
                 Map<String, Object> params = Maps.newHashMap();
                 params.put("CounterType", cType);
                 params.put("Source", source);
-                params.put("Target", cur);
+                params.put("Target", dest);
                 StringBuilder sb = new StringBuilder();
-                sb.append("Put how many ").append(cType.getName()).append(" counters on ").append(cur).append("?");
+                sb.append("Put how many ").append(cType.getName()).append(" counters on ").append(dest).append("?");
                 int cnum = player.getController().chooseNumber(sa, sb.toString(), 0, source.getCounters(cType), params);
 
                 if (cnum > 0) {
                     source.subtractCounter(cType, cnum);
-                    cur.addCounter(cType, cnum, host, true);
-                    game.updateLastStateForCard(cur);
+                    dest.addCounter(cType, cnum, host, true);
+                    game.updateLastStateForCard(dest);
                     updateSource = true;
                 }
             }
@@ -246,7 +245,7 @@ public class CountersMoveEffect extends SpellAbilityEffect {
                 }
 
                 if (!"Any".matches(counterName)) {
-                    if (!cur.canReceiveCounters(cType)) {
+                    if (!dest.canReceiveCounters(cType)) {
                         continue;
                     }
 
@@ -254,7 +253,7 @@ public class CountersMoveEffect extends SpellAbilityEffect {
                         Map<String, Object> params = Maps.newHashMap();
                         params.put("CounterType", cType);
                         params.put("Source", source);
-                        params.put("Target", cur);
+                        params.put("Target", dest);
                         StringBuilder sb = new StringBuilder();
                         sb.append("Take how many ").append(cType.getName());
                         sb.append(" counters from ").append(source).append("?");
@@ -263,8 +262,8 @@ public class CountersMoveEffect extends SpellAbilityEffect {
 
                     if (source.getCounters(cType) >= cntToMove) {
                         source.subtractCounter(cType, cntToMove);
-                        cur.addCounter(cType, cntToMove, host, true);
-                        game.updateLastStateForCard(cur);
+                        dest.addCounter(cType, cntToMove, host, true);
+                        game.updateLastStateForCard(dest);
                     }
                 } else {
                     // any counterType currently only Leech Bonder

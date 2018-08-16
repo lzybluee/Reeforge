@@ -86,7 +86,7 @@ public class FightEffect extends DamageBaseEffect {
                 defined.addAll(AbilityUtils.getDefinedCards(host, sa.getParam("ExtraDefined"), sa));
             }
 
-            List<Card> newDefined = Lists.newArrayList();
+            List<Card> remove = Lists.newArrayList();
             for (final Card d : defined) {
                 final Card g = game.getCardState(d, null);
                 // 701.12b If a creature instructed to fight is no longer on the battlefield or is no longer a creature,
@@ -94,12 +94,10 @@ public class FightEffect extends DamageBaseEffect {
                 // for a resolving spell or ability that instructs it to fight, no damage is dealt.
                 if (g == null || !g.equalsWithTimestamp(d) || !d.isInPlay() || !d.isCreature()) {
                     // Test to see if the card we're trying to add is in the expected state
-                    continue;
+                    remove.add(d);
                 }
-                newDefined.add(g);
             }
-            // replace with new List using CardState
-            defined = newDefined;
+            defined.removeAll(remove);
 
             if (!defined.isEmpty()) {
                 if (defined.size() > 1 && fighter1 == null) {

@@ -277,8 +277,6 @@ public final class CardUtil {
 
         newCopy.setMeldedWith(in.getMeldedWith());
 
-        newCopy.setTimestamp(in.getTimestamp());
-
         // update keyword cache on all states
         for (CardStateName s : newCopy.getStates()) {
             newCopy.updateKeywordsCache(newCopy.getState(s));

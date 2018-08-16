@@ -4834,7 +4834,7 @@ public class Card extends GameEntity implements Comparable<Card> {
         timestamp = t;
     }
     public boolean equalsWithTimestamp(Card c) {
-        return equals(c) && c.getTimestamp() == timestamp;
+        return c == this && c.getTimestamp() == timestamp;
     }
 
     /**

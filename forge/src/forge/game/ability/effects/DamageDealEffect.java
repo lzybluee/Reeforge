@@ -1,8 +1,6 @@
 package forge.game.ability.effects;
 
 import com.google.common.collect.Iterables;
-
-import forge.game.Game;
 import forge.game.GameObject;
 import forge.game.ability.AbilityUtils;
 import forge.game.card.Card;
@@ -70,7 +68,6 @@ public class DamageDealEffect extends DamageBaseEffect {
     @Override
     public void resolve(SpellAbility sa) {
         final Card hostCard = sa.getHostCard();
-        final Game game = hostCard.getGame();
 
         final String damage = sa.getParam("NumDmg");
         int dmg = AbilityUtils.calculateAmount(hostCard, damage, sa);
@@ -179,12 +176,7 @@ public class DamageDealEffect extends DamageBaseEffect {
                 dmg = (sa.usesTargeting() && sa.hasParam("DividedAsYouChoose")) ? sa.getTargetRestrictions().getDividedValue(o) : dmg;
                 if (o instanceof Card) {
                     final Card c = (Card) o;
-                    final Card gc = game.getCardState(c, null);
-                    if (gc == null || !c.equalsWithTimestamp(gc) || !gc.isInPlay()) {
-                        // timestamp different or not in play
-                        continue;
-                    }
-                    if (!targeted || c.canBeTargetedBy(sa)) {
+                    if (c.isInPlay() && (!targeted || c.canBeTargetedBy(sa))) {
                         if (removeDamage) {
                             c.setDamage(0);
                             c.setHasBeenDealtDeathtouchDamage(false);
