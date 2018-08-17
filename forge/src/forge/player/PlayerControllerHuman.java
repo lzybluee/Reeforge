@@ -379,7 +379,21 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         // one shot
 
         if (max == 1) {
-            final Card singleChosen = chooseSingleEntityForEffect(sourceList, sa, title, isOptional);
+        	if(sourceList.isEmpty()) {
+        		return CardCollection.EMPTY;
+        	}
+
+        	Card singleChosen = null;
+        	while(true) {
+        		singleChosen = chooseSingleEntityForEffect(sourceList, sa, title, isOptional);
+        		if(singleChosen == null) {
+	            	if(InputConfirm.confirm(this, sa, "Cancel?")) {
+	            		break;
+	            	}
+        		} else {
+        			break;
+        		}
+        	}
             return singleChosen == null ? CardCollection.EMPTY : new CardCollection(singleChosen);
         }
 
