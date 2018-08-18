@@ -919,12 +919,6 @@ public class HumanPlay {
             }
         }
         if (ability.getTappedForConvoke() != null) {
-            for (final Card c : ability.getTappedForConvoke()) {
-            	if(c.isUntapped()) {
-	                c.setTapped(false);
-	                c.tap();
-            	}
-            }
             ability.clearTappedForConvoke();
         }
         return handleOfferingConvokeAndDelve(ability, cardsToDelve, false);
