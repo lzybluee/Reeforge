@@ -307,6 +307,9 @@ public abstract class GameEntity extends GameObject implements IIdentifiable {
         }
         getView().updateEnchantedBy(this);
     }
+    public final CardCollection getEnchantedBy() {
+    	return enchantedBy;
+    }
     public final boolean isEnchanted() {
         return FCollection.hasElements(enchantedBy);
     }

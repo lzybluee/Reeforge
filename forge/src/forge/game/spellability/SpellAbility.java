@@ -1211,6 +1211,15 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
                             return false;
                         }
                     }
+                    if(hostCard.getEnchantedBy() != null) {
+                    	for(Card c : hostCard.getEnchantedBy()) {
+                    		for (Trigger t : c.getTriggers()) {
+                                if (t.getMode() ==  TriggerType.Taps) {
+                                    return false;
+                                }
+                            }
+                    	}
+                    }
                 }
             }
             
