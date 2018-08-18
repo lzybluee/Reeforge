@@ -920,8 +920,10 @@ public class HumanPlay {
         }
         if (ability.getTappedForConvoke() != null) {
             for (final Card c : ability.getTappedForConvoke()) {
-                c.setTapped(false);
-                c.tap();
+            	if(c.isUntapped()) {
+	                c.setTapped(false);
+	                c.tap();
+            	}
             }
             ability.clearTappedForConvoke();
         }
