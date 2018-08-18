@@ -476,8 +476,9 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
             thisTurnCast.add(sp.getHostCard());
             sp.getActivatingPlayer().addSpellCastThisTurn();
         }
-        if (sp.isAbility() && sp.getRestrictions().isPwAbility()) {
+        if (sp.isAbility() && sp.getRestrictions().isPwAbility() && !sp.isCopied()) {
             sp.getActivatingPlayer().setActivateLoyaltyAbilityThisTurn(true);
+            sp.getHostCard().increasePwAbilityActivited();
         }
         game.updateStackForView();
         game.fireEvent(new GameEventSpellAbilityCast(sp, si, false));

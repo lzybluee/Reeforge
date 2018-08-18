@@ -61,6 +61,7 @@ public enum TrackableProperty {
     AlternateState(TrackableTypes.CardStateViewType),
     HiddenId(TrackableTypes.IntegerType),
     Exerted(TrackableTypes.PlayerViewCollectionType),
+    PwAbilityActivited(TrackableTypes.IntegerType),
 
     //Card State
     Name(TrackableTypes.StringType),

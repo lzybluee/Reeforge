@@ -253,6 +253,8 @@ public class Card extends GameEntity implements Comparable<Card> {
 
     private SpellAbility[] basicLandAbilities = new SpellAbility[MagicColor.WUBRG.length];
 
+    private int pwAbilityActivated = 0;
+
     // Enumeration for CMC request types
     public enum SplitCMCMode {
         CurrentSideCMC,
@@ -5289,6 +5291,7 @@ public class Card extends GameEntity implements Comparable<Card> {
         clearBlockedThisTurn();
         resetMayPlayTurn();
         resetExtertedThisTurn();
+        resetPwAbilityActivited();
     }
 
     public boolean hasETBTrigger(final boolean drawbackOnly) {
@@ -5840,5 +5843,15 @@ public class Card extends GameEntity implements Comparable<Card> {
         for (final ReplacementEffect rE : getReplacementEffects()) {
             rE.setTemporarilySuppressed(false);
         }
+    }
+
+    public void resetPwAbilityActivited() {
+    	pwAbilityActivated = 0;
+    	view.updatePwAbilityActivited(pwAbilityActivated);
+    }
+
+    public void increasePwAbilityActivited() {
+    	pwAbilityActivated++;
+    	view.updatePwAbilityActivited(pwAbilityActivated);
     }
 }

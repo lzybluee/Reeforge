@@ -197,6 +197,13 @@ public class CardView extends GameEntityView {
         set(TrackableProperty.IsCommander, c.isCommander());
     }
 
+    public int getPwAbilityActivited() {
+        return get(TrackableProperty.PwAbilityActivited);
+    }
+    void updatePwAbilityActivited(int n) {
+        set(TrackableProperty.PwAbilityActivited, n);
+    }
+
     public Map<CounterType, Integer> getCounters() {
         return get(TrackableProperty.Counters);
     }

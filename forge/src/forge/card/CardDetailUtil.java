@@ -293,6 +293,13 @@ public class CardDetailUtil {
 
         area.append(text);
 
+        if(state.isPlaneswalker()) {
+        	if (area.length() != 0) {
+                area.append("\n\n");
+            }
+            area.append("Planeswalker ability activated this turn : " + card.getPwAbilityActivited());
+        }
+
         if (card.isPhasedOut()) {
             if (area.length() != 0) {
                 area.append("\n");
