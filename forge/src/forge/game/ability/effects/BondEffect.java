@@ -15,6 +15,10 @@ public class BondEffect extends SpellAbilityEffect {
         // find card that triggered pairing first
         CardCollectionView trigCards = AbilityUtils.getDefinedCards(sa.getHostCard(), sa.getParam("Defined"), sa);
 
+        if(trigCards == null || trigCards.isEmpty()) {
+        	return;
+        }
+
         // Check that this card hasn't already become paired by an earlier trigger
         if (trigCards.getFirst().isPaired() || !trigCards.getFirst().isInZone(ZoneType.Battlefield)) {
             return;
