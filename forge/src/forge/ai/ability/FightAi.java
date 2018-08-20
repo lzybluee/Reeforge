@@ -48,7 +48,11 @@ public class FightAi extends SpellAbilityAi {
 
         // assumes the triggered card belongs to the ai
         if (sa.hasParam("Defined")) {
-            Card fighter1 = AbilityUtils.getDefinedCards(source, sa.getParam("Defined"), sa).get(0);
+        	final CardCollection definedCards = AbilityUtils.getDefinedCards(source, sa.getParam("Defined"), sa);
+        	if(definedCards.isEmpty()) {
+        		return false;
+        	}
+            Card fighter1 = definedCards.get(0);
             for (Card humanCreature : humCreatures) {
                 if (ComputerUtilCombat.getDamageToKill(humanCreature) <= fighter1.getNetPower()
                         && humanCreature.getNetPower() < ComputerUtilCombat.getDamageToKill(fighter1)) {
@@ -129,7 +133,11 @@ public class FightAi extends SpellAbilityAi {
         }
         //assumes the triggered card belongs to the ai
         if (sa.hasParam("Defined")) {
-            Card aiCreature = AbilityUtils.getDefinedCards(source, sa.getParam("Defined"), sa).get(0);
+        	final CardCollection definedCards = AbilityUtils.getDefinedCards(source, sa.getParam("Defined"), sa);
+        	if(definedCards.isEmpty()) {
+        		return false;
+        	}
+            Card aiCreature = definedCards.get(0);
             for (Card humanCreature : humCreatures) {
                 if (ComputerUtilCombat.getDamageToKill(humanCreature) <= aiCreature.getNetPower()
                         && ComputerUtilCard.evaluateCreature(humanCreature) > ComputerUtilCard.evaluateCreature(aiCreature)) {

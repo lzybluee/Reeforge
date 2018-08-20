@@ -41,7 +41,11 @@ public class ControlExchangeAi extends SpellAbilityAi {
         });
         object1 = ComputerUtilCard.getBestAI(list);
         if (sa.hasParam("Defined")) {
-            object2 = AbilityUtils.getDefinedCards(sa.getHostCard(), sa.getParam("Defined"), sa).get(0);
+        	final CardCollection definedCards = AbilityUtils.getDefinedCards(sa.getHostCard(), sa.getParam("Defined"), sa);
+        	if(definedCards.isEmpty()) {
+        		return false;
+        	}
+            object2 = definedCards.get(0);
         } else if (tgt.getMinTargets(sa.getHostCard(), sa) > 1) {
             CardCollectionView list2 = ai.getCardsIn(ZoneType.Battlefield);
             list2 = CardLists.getValidCards(list2, tgt.getValidTgts(), ai, sa.getHostCard(), sa);
@@ -95,7 +99,11 @@ public class ControlExchangeAi extends SpellAbilityAi {
 
         // if Param has Defined, check if the best Target is better than the Defined
         if (sa.hasParam("Defined")) {
-            final Card object = AbilityUtils.getDefinedCards(sa.getHostCard(), sa.getParam("Defined"), sa).get(0);
+        	final CardCollection definedCards = AbilityUtils.getDefinedCards(sa.getHostCard(), sa.getParam("Defined"), sa);
+        	if(definedCards.isEmpty()) {
+        		return false;
+        	}
+            final Card object = definedCards.get(0);
             // TODO add evaluate Land if able
             final Card realBest = ComputerUtilCard.getBestAI(Lists.newArrayList(best, object));
 
