@@ -948,6 +948,10 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
         return newSA;
     }
 
+    public SpellAbility copyWithDefinedCost(String abCost) {
+        return copyWithDefinedCost(new Cost(abCost, isAbility()));
+    }
+
     public boolean isTrigger() {
         return trigger;
     }
