@@ -358,7 +358,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
 	        inp.setCancelAllowed(min == 0);
 	        inp.showAndWait();
 	        
-	        if(inp.getSelected().size() == 0 && max > 0) {
+	        if(!inp.hasCancelled() && !valid.isEmpty() && inp.getSelected().isEmpty() && min == 0 && max > 0) {
             	if(InputConfirm.confirm(this, sa, "Cancel " + action + " ?")) {
             		break;
             	}
@@ -379,21 +379,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         // one shot
 
         if (max == 1) {
-        	if(sourceList.isEmpty()) {
-        		return CardCollection.EMPTY;
-        	}
-
-        	Card singleChosen = null;
-        	while(true) {
-        		singleChosen = chooseSingleEntityForEffect(sourceList, sa, title, isOptional);
-        		if(singleChosen == null) {
-	            	if(InputConfirm.confirm(this, sa, "Cancel?")) {
-	            		break;
-	            	}
-        		} else {
-        			break;
-        		}
-        	}
+        	final Card singleChosen = chooseSingleEntityForEffect(sourceList, sa, title, isOptional);
             return singleChosen == null ? CardCollection.EMPTY : new CardCollection(singleChosen);
         }
 
@@ -468,11 +454,21 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
                 reveal(delayedReveal.getCards(), delayedReveal.getZone(), delayedReveal.getOwner(),
                         delayedReveal.getMessagePrefix());
             }
-            final InputSelectEntitiesFromList<T> input = new InputSelectEntitiesFromList<T>(this, isOptional ? 0 : 1, 1,
-                    optionList, sa);
-            input.setCancelAllowed(isOptional);
-            input.setMessage(MessageUtil.formatMessage(title, player, targetedPlayer));
-            input.showAndWait();
+            InputSelectEntitiesFromList<T> input = null;
+            while(true) {
+            	input = new InputSelectEntitiesFromList<T>(this, isOptional ? 0 : 1, 1,
+	                    optionList, sa);
+	            input.setCancelAllowed(isOptional);
+	            input.setMessage(MessageUtil.formatMessage(title, player, targetedPlayer));
+	            input.showAndWait();
+	            if(!input.hasCancelled() && isOptional && !optionList.isEmpty() && input.getSelected().isEmpty()) {
+	            	if(InputConfirm.confirm(this, sa, "Cancel?")) {
+	            		break;
+	            	}
+	            } else {
+	            	break;
+	            }
+            }
             return Iterables.getFirst(input.getSelected(), null);
         }
 
@@ -1861,12 +1857,12 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
 	            input.setMessage(MessageUtil.formatMessage(selectPrompt, player, targetedPlayer));
 	            input.showAndWait();
 	            selected = new CardCollection(input.getSelected());
-	            if(selected.size() > 0) {
-	            	break;
-	            } else {
+	            if(!input.hasCancelled() && isOptional && !optionList.isEmpty() && input.getSelected().isEmpty()) {
 	            	if(InputConfirm.confirm(this, sa, "Cancel?")) {
 	            		break;
 	            	}
+	            } else {
+	            	break;
 	            }
             }
             return selected;
