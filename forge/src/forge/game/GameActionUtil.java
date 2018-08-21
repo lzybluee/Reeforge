@@ -187,6 +187,15 @@ public final class GameActionUtil {
             alternatives.add(newSA);
         }
 
+        if (sa.hasParam("Equip") && activator.hasKeyword("EquipInstantSpeed")) {
+            final SpellAbility newSA = sa.copy(activator);
+            SpellAbilityRestriction sar = newSA.getRestrictions();
+            sar.setSorcerySpeed(false);
+            sar.setInstantSpeed(true);
+            newSA.setDescription(sa.getDescription() + " (you may activate any time you could cast an instant )");
+            alternatives.add(newSA);
+        }
+
         for (final KeywordInterface inst : source.getKeywords()) {
             final String keyword = inst.getOriginal();
             if (sa.isSpell() && keyword.startsWith("Flashback")) {
@@ -210,15 +219,6 @@ public final class GameActionUtil {
                 }
 
                 alternatives.add(flashback);
-            }
-
-            if (sa.hasParam("Equip") && sa instanceof AbilityActivated && keyword.equals("EquipInstantSpeed")) {
-                final SpellAbility newSA = sa.copy(activator);
-                SpellAbilityRestriction sar = newSA.getRestrictions();
-                sar.setSorcerySpeed(false);
-                sar.setInstantSpeed(true);
-                newSA.setDescription(sa.getDescription() + " (you may activate any time you could cast an instant )");
-                alternatives.add(newSA);
             }
         }
         return alternatives;
