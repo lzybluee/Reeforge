@@ -31,6 +31,7 @@ import forge.game.GameObject;
 import forge.game.card.Card;
 import forge.game.card.CardUtil;
 import forge.game.card.CardView;
+import forge.game.player.PlayerActionConfirmMode;
 import forge.game.player.PlayerView;
 import forge.game.spellability.SpellAbility;
 import forge.game.spellability.SpellAbilityStackInstance;
@@ -38,6 +39,7 @@ import forge.game.spellability.StackItemView;
 import forge.game.spellability.TargetRestrictions;
 import forge.game.zone.Zone;
 import forge.game.zone.ZoneType;
+import forge.match.input.InputConfirm;
 import forge.match.input.InputSelectTargets;
 import forge.util.Aggregates;
 
@@ -104,7 +106,7 @@ public class TargetSelection {
         final List<ZoneType> zone = tgt.getZone();
         final boolean mandatory = tgt.getMandatory() && hasCandidates;
         
-        final boolean choiceResult;
+        boolean choiceResult;
         final boolean random = tgt.isRandomTarget();
         if (random) {
             final List<GameEntity> candidates = tgt.getAllCandidates(this.ability, true);
@@ -154,11 +156,23 @@ public class TargetSelection {
                 playersWithValidTargets.put(PlayerView.get(card.getController()), null);
             }
             if (controller.getGui().openZones(zone, playersWithValidTargets)) {
-                InputSelectTargets inp = new InputSelectTargets(controller, validTargets, ability, mandatory);
+                InputSelectTargets inp = new InputSelectTargets(controller, validTargets, ability, mandatory, minTargets == 0 && maxTargets > 0);
                 inp.showAndWait();
                 choiceResult = !inp.hasCancelled();
                 bTargetingDone = inp.hasPressedOk();
                 controller.getGui().restoreOldZones(playersWithValidTargets);
+                while(bTargetingDone && choiceResult && minTargets == 0 && maxTargets > 0 && zone.size() == 1 && zone.get(0) == ZoneType.Battlefield
+                		&& !validTargets.isEmpty() && ability.getTargets() != null && ability.getTargets().isEmpty()) {
+                	if(controller.confirmAction(ability, PlayerActionConfirmMode.ChangeZoneGeneral, "Cancel?")) {
+                		break;
+                	}
+                	controller.getGui().openZones(zone, playersWithValidTargets);
+                	InputSelectTargets in = new InputSelectTargets(controller, validTargets, ability, mandatory, minTargets == 0 && maxTargets > 0);
+                    in.showAndWait();
+                    choiceResult = !in.hasCancelled();
+                    bTargetingDone = in.hasPressedOk();
+                    controller.getGui().restoreOldZones(playersWithValidTargets);
+                }
             }
             else {
                 // for every other case an all-purpose GuiChoose

@@ -34,17 +34,19 @@ public final class InputSelectTargets extends InputSyncronizedBase {
     private boolean bCancel = false;
     private boolean bOk = false;
     private final boolean mandatory;
+    private final boolean upTo;
     private static final long serialVersionUID = -1091595663541356356L;
 
     public final boolean hasCancelled() { return bCancel; }
     public final boolean hasPressedOk() { return bOk; }
 
-    public InputSelectTargets(final PlayerControllerHuman controller, final List<Card> choices, final SpellAbility sa, final boolean mandatory) {
+    public InputSelectTargets(final PlayerControllerHuman controller, final List<Card> choices, final SpellAbility sa, final boolean mandatory, final boolean upTo) {
         super(controller);
         this.choices = choices;
         this.tgt = sa.getTargetRestrictions();
         this.sa = sa;
         this.mandatory = mandatory;
+        this.upTo = upTo;
     }
 
     @Override
@@ -350,6 +352,7 @@ public final class InputSelectTargets extends InputSyncronizedBase {
     }
 
     private boolean hasAllTargets() {
-        return tgt.isMaxTargetsChosen(sa.getHostCard(), sa) || ( tgt.getStillToDivide() == 0 && tgt.isDividedAsYouChoose());
+        return (upTo && choices.size() == sa.getTargets().getNumTargeted()) || 
+        		tgt.isMaxTargetsChosen(sa.getHostCard(), sa) || ( tgt.getStillToDivide() == 0 && tgt.isDividedAsYouChoose());
     }
 }
