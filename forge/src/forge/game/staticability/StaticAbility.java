@@ -397,6 +397,10 @@ public class StaticAbility extends CardTraitBase implements Comparable<StaticAbi
             return StaticAbilityCantTarget.applyCantTargetAbility(this, card, spellAbility);
         }
 
+        if (mode.equals("CantPlayLand")) {
+        	return StaticAbilityCantBeCast.applyCantPlayLandAbility(this, card, spellAbility.getActivatingPlayer());
+        }
+
         return false;
     }
 
