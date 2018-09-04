@@ -132,6 +132,9 @@ public final class InputSelectCardsForConvokeOrImprovise extends InputSelectMany
     	if(improvise && remainingCost.getGenericManaAmount() == 0) {
     		return true;
     	}
+    	if(remainingCost.getConvertedManaCost() == 0) {
+    		return true;
+    	}
         return chosenCards.size() == availableCards.size();
     }
 
