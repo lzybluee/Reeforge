@@ -657,6 +657,10 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         if (getGui().shouldAlwaysDeclineTrigger(regtrig.getId())) {
             return false;
         }
+        final String cardName = sa.getHostCard() == null ? null : sa.getHostCard().getName();
+        if (getGui().shouldAutoYieldCard(cardName)) {
+            return true;
+        }
 
         // triggers with costs can always be declined by not paying the cost
         if (sa.hasParam("Cost") && !sa.getParam("Cost").equals("0")) {
@@ -1237,7 +1241,9 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
             }
         } else {
             final SpellAbility ability = stack.peekAbility();
-            if (ability != null && ability.isAbility() && getGui().shouldAutoYield(ability.yieldKey())) {
+            final String cardName = ability.getHostCard() == null ? null : ability.getHostCard().getName();
+            if (ability != null && ability.isAbility() &&
+            		(getGui().shouldAutoYieldCard(cardName) || getGui().shouldAutoYield(ability.yieldKey()))) {
                 // avoid prompt for input if top ability of stack is set to
                 // auto-yield
                 try {
@@ -1427,6 +1433,19 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         final String modeTitle = TextUtil.concatNoSpace(sa.getActivatingPlayer().toString(), " activated ",
                 sa.getHostCard().toString(), " - Choose a mode");
         final List<AbilitySub> chosen = Lists.newArrayListWithCapacity(num);
+
+        final String cardName = sa.getHostCard() == null ? null : sa.getHostCard().getName();
+        if(num == 1 && choices.size() == 2 && getGui().shouldAutoYieldCard(cardName)) {
+        	if(choices.get(0).toString().startsWith("Untap ") && choices.get(1).toString().startsWith("Tap ")) {
+            	chosen.add(choices.get(0));
+            	return chosen;
+        	}
+        	if(choices.get(1).toString().startsWith("Untap ") && choices.get(0).toString().startsWith("Tap ")) {
+            	chosen.add(choices.get(1));
+            	return chosen;
+        	}
+        }
+
         for (int i = 0; i < num; i++) {
             AbilitySub a;
             if (i < min) {

@@ -38,8 +38,14 @@ public class TapOrUntapEffect extends SpellAbilityEffect {
         for (final Card tgtC : tgtCards) {
             if (tgtC.isInPlay() && ((tgt == null) || tgtC.canBeTargetedBy(sa))) {
                 // If the effected card is controlled by the same controller of the SA, default to untap.
-                boolean tap = pc.chooseBinary(sa, "Tap or Untap " + tgtC + "?", PlayerController.BinaryChoiceType.TapOrUntap,
-                        !tgtC.getController().equals(sa.getActivatingPlayer()) );
+            	boolean tap = false;
+            	final String cardName = sa.getHostCard() == null ? null : sa.getHostCard().getName();
+                if (pc.isGuiPlayer() && pc.getGui() != null && pc.getGui().shouldAutoYieldCard(cardName)) {
+                	tap = false;
+                } else {
+                	tap = pc.chooseBinary(sa, "Tap or Untap " + tgtC + "?", PlayerController.BinaryChoiceType.TapOrUntap,
+                            !tgtC.getController().equals(sa.getActivatingPlayer()) );
+                }
 
                 if (tap) {
                     tgtC.tap();

@@ -405,6 +405,25 @@ public abstract class AbstractGuiGame implements IGuiGame, IMayViewCards {
         }
     }
 
+    // Cards to auto-yield to
+    private final Set<String> autoYieldsCards = Sets.newHashSet();
+    public final Iterable<String> getAutoYieldsCards() {
+        return autoYieldsCards;
+    }
+    @Override
+    public final boolean shouldAutoYieldCard(final String card) {
+        return !getDisableAutoYields() && autoYieldsCards.contains(card);
+    }
+    @Override
+    public final void setShouldAutoYieldCard(final String card, final boolean autoYield) {
+        if (autoYield) {
+            autoYieldsCards.add(card);
+        }
+        else {
+        	autoYieldsCards.remove(card);
+        }
+    }
+
     private boolean disableAutoYields;
     public final boolean getDisableAutoYields() {
         return disableAutoYields;
@@ -416,6 +435,7 @@ public abstract class AbstractGuiGame implements IGuiGame, IMayViewCards {
     @Override
     public final void clearAutoYields() {
         autoYields.clear();
+        autoYieldsCards.clear();
         triggersAlwaysAccept.clear();
     }
 

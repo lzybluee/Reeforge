@@ -163,6 +163,8 @@ public interface IGuiGame {
     void updateAutoPassPrompt();
     boolean shouldAutoYield(String key);
     void setShouldAutoYield(String key, boolean autoYield);
+    boolean shouldAutoYieldCard(String card);
+    void setShouldAutoYieldCard(String card, boolean autoYield);
     boolean shouldAlwaysAcceptTrigger(int trigger);
     boolean shouldAlwaysDeclineTrigger(int trigger);
     void setShouldAlwaysAcceptTrigger(int trigger);

@@ -25,6 +25,7 @@ import forge.game.replacement.ReplacementEffect;
 import forge.game.spellability.*;
 import forge.game.trigger.WrappedAbility;
 import forge.game.zone.ZoneType;
+import forge.interfaces.IGuiGame;
 import forge.item.PaperCard;
 import forge.util.ITriggerEvent;
 import forge.util.collect.FCollectionView;
@@ -242,6 +243,10 @@ public abstract class PlayerController {
 
     public boolean isGuiPlayer() {
         return false;
+    }
+
+    public IGuiGame getGui() {
+        return null;
     }
 
     public boolean canPlayUnlimitedLands() {

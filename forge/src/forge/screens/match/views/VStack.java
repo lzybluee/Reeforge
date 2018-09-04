@@ -280,9 +280,11 @@ public class VStack implements IVDoc<CStack> {
     private final class AbilityMenu extends JPopupMenu {
         private static final long serialVersionUID = 1548494191627807962L;
         private final JCheckBoxMenuItem jmiAutoYield;
+        private final JCheckBoxMenuItem jmiAutoYieldCard;
         private final JCheckBoxMenuItem jmiAlwaysYes;
         private final JCheckBoxMenuItem jmiAlwaysNo;
         private StackItemView item;
+        private String cardName = "";
 
         private Integer triggerID = 0;
 
@@ -302,6 +304,20 @@ public class VStack implements IVDoc<CStack> {
             });
             add(jmiAutoYield);
 
+            jmiAutoYieldCard = new JCheckBoxMenuItem("Auto-Yield for all");
+            jmiAutoYieldCard.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(final ActionEvent arg0) {
+                    final boolean autoYieldCard = controller.getMatchUI().shouldAutoYieldCard(cardName);
+                    controller.getMatchUI().setShouldAutoYieldCard(cardName, !autoYieldCard);
+                    if (!autoYieldCard && controller.getMatchUI().getGameView().peekStack() == item) {
+                        //auto-pass priority if ability is on top of stack
+                        controller.getMatchUI().getGameController().passPriority();
+                    }
+                }
+            });
+            add(jmiAutoYieldCard);
+
             jmiAlwaysYes = new JCheckBoxMenuItem("Always Yes");
             jmiAlwaysYes.addActionListener(new ActionListener() {
                 @Override
@@ -311,6 +327,13 @@ public class VStack implements IVDoc<CStack> {
                     }
                     else {
                         controller.getMatchUI().setShouldAlwaysAcceptTrigger(triggerID);
+                        if(!controller.getMatchUI().shouldAutoYield(item.getKey())) {
+                            controller.getMatchUI().setShouldAutoYield(item.getKey(), true);
+                        }
+                        if (controller.getMatchUI().getGameView().peekStack() == item) {
+                            //auto-pass priority if ability is on top of stack
+                            controller.getMatchUI().getGameController().passPriority();
+                        }
                     }
                 }
             });
@@ -325,6 +348,13 @@ public class VStack implements IVDoc<CStack> {
                     }
                     else {
                         controller.getMatchUI().setShouldAlwaysDeclineTrigger(triggerID);
+                        if(!controller.getMatchUI().shouldAutoYield(item.getKey())) {
+                            controller.getMatchUI().setShouldAutoYield(item.getKey(), true);
+                        }
+                        if (controller.getMatchUI().getGameView().peekStack() == item) {
+                            //auto-pass priority if ability is on top of stack
+                            controller.getMatchUI().getGameController().passPriority();
+                        }
                     }
                 }
             });
@@ -336,6 +366,19 @@ public class VStack implements IVDoc<CStack> {
             triggerID = Integer.valueOf(item.getSourceTrigger());
 
             jmiAutoYield.setSelected(controller.getMatchUI().shouldAutoYield(item.getKey()));
+            
+            if(item.getSourceCard() == null || item.getSourceCard().getName() == null || item.getSourceCard().getName().isEmpty()) {
+            	cardName = "";
+            } else {
+            	cardName = item.getSourceCard().getName();
+            }
+
+            if(!cardName.isEmpty()) {
+            	jmiAutoYieldCard.setText("Auto-Yield for all [" + cardName + "]");
+            	jmiAutoYieldCard.setSelected(controller.getMatchUI().shouldAutoYieldCard(cardName));
+            } else {
+            	jmiAutoYieldCard.setVisible(false);
+            }
 
             if (item.isOptionalTrigger() && controller.getMatchUI().isLocalPlayer(item.getActivatingPlayer())) {
                 jmiAlwaysYes.setSelected(controller.getMatchUI().shouldAlwaysAcceptTrigger(triggerID));
