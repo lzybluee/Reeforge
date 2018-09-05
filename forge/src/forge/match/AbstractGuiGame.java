@@ -79,6 +79,7 @@ public abstract class AbstractGuiGame implements IGuiGame, IMayViewCards {
             } else {
                 autoPassUntilEndOfTurn.clear();
                 autoYields.clear();
+                autoYieldsCards.clear();
                 triggersAlwaysAccept.clear();
                 currentPlayer = null;
                 gameControllers.clear();
