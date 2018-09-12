@@ -67,7 +67,7 @@ public enum TrackableProperty {
     Name(TrackableTypes.StringType),
     Colors(TrackableTypes.ColorSetType),
     ImageKey(TrackableTypes.StringType),
-    Type(TrackableTypes.CardTypeViewType),
+    Type(TrackableTypes.CardTypeViewType, FreezeMode.IgnoresFreeze),
     ManaCost(TrackableTypes.ManaCostType),
     SetCode(TrackableTypes.StringType),
     Rarity(TrackableTypes.EnumType(CardRarity.class)),

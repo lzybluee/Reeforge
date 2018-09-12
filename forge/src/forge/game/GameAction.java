@@ -1111,7 +1111,7 @@ public class GameAction {
 
         for(Player p : game.getPlayers()) {
             p.updateFlashbackForView();
-            p.getGame().fireEvent(new GameEventZone(ZoneType.Flashback, p, EventValueChangeType.ComplexUpdate, null));
+            game.fireEvent(new GameEventZone(ZoneType.Flashback, p, EventValueChangeType.ComplexUpdate, null));
         }
     }
 

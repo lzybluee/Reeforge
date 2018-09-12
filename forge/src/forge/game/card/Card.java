@@ -4820,9 +4820,6 @@ public class Card extends GameEntity implements Comparable<Card> {
         removeChangedCardKeywords(bestowTimestamp, updateView);
         removeChangedCardTypes(bestowTimestamp, updateView);
         bestowTimestamp = -1;
-        if(updateView) {
-            game.fireEvent(new GameEventCardStatsChanged(this));
-        }
     }
 
     public final boolean isBestowed() {
