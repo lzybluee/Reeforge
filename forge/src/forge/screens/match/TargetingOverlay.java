@@ -86,6 +86,7 @@ public class TargetingOverlay {
     }
 
     private final Set<CardView> cardsVisualized = new HashSet<CardView>();
+    private final Set<PlayerView> playersVisualized = new HashSet<PlayerView>();
     private CardPanel activePanel = null;
 
     //private long lastUpdated = System.currentTimeMillis(); // TODO: determine if timer is needed (see below)
@@ -125,6 +126,7 @@ public class TargetingOverlay {
         arcsFriend.clear();
         cardPanels.clear();
         cardsVisualized.clear();
+        playersVisualized.clear();
 
         final StackInstanceTextArea activeStackItem = matchUI.getCStack().getView().getHoveredItem();
 
@@ -253,6 +255,7 @@ public class TargetingOverlay {
         arcsFriend.clear();
         cardPanels.clear();
         cardsVisualized.clear();
+        playersVisualized.clear();
 
         switch (matchUI.getCDock().getArcState()) {
             case OFF:
@@ -422,6 +425,7 @@ public class TargetingOverlay {
 
     private void addArcsForCard(final CardView c, final Map<Integer, Point> endpoints, final CombatView combat) {
         final CardView enchanting = c.getEnchantingCard();
+        final PlayerView enchantingPlayer = c.getEnchantingPlayer();
         final CardView equipping = c.getEquipping();
         final CardView fortifying = c.getFortifying();
         final Iterable<CardView> enchantedBy = c.getEnchantedBy();
@@ -434,6 +438,14 @@ public class TargetingOverlay {
                 addArc(endpoints.get(enchanting.getId()), endpoints.get(c.getId()), ArcConnection.Friends);
                 cardsVisualized.add(enchanting);
             }
+        }
+        if (null != enchantingPlayer) {
+        	Point locOnScreen = this.getPanel().getLocationOnScreen();
+        	Point point = getPlayerTargetingArrowPoint(enchantingPlayer, locOnScreen);
+            if(point != null) {
+                addArc(point, endpoints.get(c.getId()), ArcConnection.Friends);
+            }
+            playersVisualized.add(enchantingPlayer);
         }
         if (null != equipping) {
             if (equipping.getController() != null && !equipping.getController().equals(c.getController())) {
