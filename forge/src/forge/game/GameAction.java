@@ -1143,6 +1143,7 @@ public class GameAction {
         // Check if Card Aura is attached to is a legal target
         final GameEntity entity = c.getEnchanting();
         SpellAbility sa = c.getFirstAttachSpell();
+        boolean isBestow = false;
 
         TargetRestrictions tgt = null;
         if (sa != null) {
@@ -1154,8 +1155,10 @@ public class GameAction {
             final ZoneType tgtZone = tgt.getZone().get(0);
 
             if (!perm.isInZone(tgtZone) || !perm.canBeEnchantedBy(c, true) || (perm.isPhasedOut() && !c.isPhasedOut())) {
-                c.unEnchantEntity(perm);
-                moveToGraveyard(c, null, null);
+            	isBestow = c.unEnchantEntity(perm);
+                if(!isBestow) {
+                	moveToGraveyard(c, null, null);
+                }
                 checkAgain = true;
             }
         } else if (entity instanceof Player) {
@@ -1178,7 +1181,7 @@ public class GameAction {
             }
         }
 
-        if (c.isInPlay() && !c.isEnchanting()) {
+        if (c.isInPlay() && !c.isEnchanting() && !isBestow) {
             moveToGraveyard(c, null, null);
             checkAgain = true;
         }

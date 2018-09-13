@@ -2766,17 +2766,19 @@ public class Card extends GameEntity implements Comparable<Card> {
         getController().getGame().getTriggerHandler().runTrigger(TriggerType.Attached, runParams, false);
     }
 
-    public final void unEnchantEntity(final GameEntity entity) {
+    public final boolean unEnchantEntity(final GameEntity entity) {
         if (enchanting == null || !enchanting.equals(entity)) {
-            return;
+            return false;
         }
 
         setEnchanting(null);
         entity.removeEnchantedBy(this);
         if (isBestowed()) {
             unanimateBestow();
+            return true;
         }
         getGame().fireEvent(new GameEventCardAttachment(this, entity, null, AttachMethod.Enchant));
+        return false;
     }
 
     public final void setType(final CardType type0) {
