@@ -271,6 +271,9 @@ public abstract class GameState {
                     newText.append(":Manifested");
                 }
             }
+            if (c.isBestowed()) {
+                newText.append("|Bestowed");
+            }
             if (c.getCurrentStateName().equals(CardStateName.Transformed)) {
                 newText.append("|Transformed");
             } else if (c.getCurrentStateName().equals(CardStateName.Flipped)) {
@@ -1098,6 +1101,8 @@ public abstract class GameState {
                     if (info.endsWith("Manifested")) {
                         c.setManifested(true);
                     }
+                } else if (info.startsWith("Bestowed")) {
+                    c.animateBestow();
                 } else if (info.startsWith("Transformed")) {
                     c.setState(CardStateName.Transformed, true);
                 } else if (info.startsWith("Flipped")) {
