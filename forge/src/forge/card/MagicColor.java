@@ -24,7 +24,7 @@ public final class MagicColor {
     public static final int NUMBER_OR_COLORS = 5;
 
     public static final byte[] WUBRG  = new byte[] { WHITE, BLUE, BLACK, RED, GREEN };
-    public static final byte[] WUBRGC = new byte[] { WHITE, BLUE, BLACK, RED, GREEN, COLORLESS };
+    public static final byte[] WUBRGC = new byte[] { WHITE, BLUE, BLACK, RED, GREEN, 1 << 5 };
 
     /**
      * Private constructor to prevent instantiation.
