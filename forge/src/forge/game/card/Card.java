@@ -1748,13 +1748,13 @@ public class Card extends GameEntity implements Comparable<Card> {
         }
 
         if (monstrous) {
-            sb.append("Monstrous\r\n");
+            sb.append("==Monstrous==\r\n");
         }
         if (renowned) {
-            sb.append("Renowned\r\n");
+            sb.append("==Renowned==\r\n");
         }
         if (manifested) {
-            sb.append("Manifested\r\n");
+            sb.append("==Manifested==\r\n");
         }
         sb.append(keywordsToText(getUnhiddenKeywords(state)));
 
@@ -4781,6 +4781,7 @@ public class Card extends GameEntity implements Comparable<Card> {
     }
     public final void setMonstrous(final boolean monstrous0) {
         monstrous = monstrous0;
+        updateAbilityText();
     }
 
     public final boolean isRenowned() {
@@ -4788,6 +4789,7 @@ public class Card extends GameEntity implements Comparable<Card> {
     }
     public final void setRenowned(final boolean renowned0) {
         renowned = renowned0;
+        updateAbilityText();
     }
 
     public final boolean isManifested() {
@@ -4799,6 +4801,7 @@ public class Card extends GameEntity implements Comparable<Card> {
         // Note: This should only be called after state has been set to CardStateName.FaceDown,
         // so the below call should be valid since the state should have been created already.
         getState(CardStateName.FaceDown).setImageKey(ImageKeys.getTokenKey(image));
+        updateAbilityText();
     }
 
     public final void animateBestow() {
