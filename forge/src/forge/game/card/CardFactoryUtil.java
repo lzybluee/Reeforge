@@ -1264,6 +1264,10 @@ public class CardFactoryUtil {
             return doXMath(cc.getAttackersDeclaredThisTurn(), m, c);
         }
 
+        if (sq[0].contains("AttackersActivePlayerDeclared") && game.getPhaseHandler().getPlayerTurn() != null) {
+            return doXMath(game.getPhaseHandler().getPlayerTurn().getAttackersDeclaredThisTurn(), m, c);
+        }
+
         // Count$ThisTurnCast <Valid>
         // Count$LastTurnCast <Valid>
         if (sq[0].contains("ThisTurnCast") || sq[0].contains("LastTurnCast")) {
