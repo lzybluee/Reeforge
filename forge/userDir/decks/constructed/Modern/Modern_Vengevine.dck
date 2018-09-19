@@ -1,22 +1,32 @@
 [metadata]
 Name=Modern_Vengevine
 [Main]
+4 Blackcleave Cliffs|SOM
+2 Blood Crypt|RTR
+4 Bloodghast|ZEN
+4 Bloodstained Mire|KTK
 4 Bridge from Below|FUT
-4 Burning-Tree Emissary|GTC
-4 Cathartic Reunion|KLD
-4 Endless One|BFZ
+2 Collective Brutality|EMN
 4 Faithless Looting|DKA
-4 Hangarback Walker|ORI
-4 Hollow One|HOU
+3 Goblin Bushwhacker|ZEN
+4 Gravecrawler|DKA
+1 Greater Gargadon|TSP
 4 Insolent Neonate|SOI
-13 Mountain|DOM|1
-4 Ramunap Ruins|HOU
-3 Reckless Bushwhacker|OGW
-4 Street Wraith|FUT
+1 Mountain|DOM|1
+1 Overgrown Tomb|RTR
+4 Stitcher's Supplier|M19
+1 Stomping Ground|GTC
+1 Swamp|DOM|1
 4 Vengevine|ROE
+4 Verdant Catacombs|ZEN
+4 Viscera Seer|M11
+4 Walking Ballista|AER
 [Sideboard]
-1 Aura Barbs|BOK
+1 Blasphemous Act|ISD
+1 Darkblast|RAV
+3 Destructive Revelry|THS
+2 Fatal Push|AER
+1 Golgari Charm|RTR
 4 Leyline of the Void|M11
-2 Roast|DTK
-4 Shattering Spree|GPT
-4 Sulfur Elemental|PLC
+1 Lightning Axe|SOI
+2 Thoughtseize|THS
