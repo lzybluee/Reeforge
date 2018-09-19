@@ -71,8 +71,17 @@ public class CloneEffect extends SpellAbilityEffect {
             CardCollectionView choices = game.getCardsIn(choiceZone);
             choices = CardLists.getValidCards(choices, sa.getParam("Choices"), activator, host);
             
+            CardCollection collection = new CardCollection();
+            CardCollection etbCards = game.getAction().getSimultaneousEtbCards();
+
+            for(Card c : choices) {
+                if(!etbCards.contains(c)) {
+                    collection.add(c);
+                }
+            }
+
             String title = sa.hasParam("ChoiceTitle") ? sa.getParam("ChoiceTitle") : "Choose a card ";
-            cardToCopy = activator.getController().chooseSingleEntityForEffect(choices, sa, title, false);
+            cardToCopy = activator.getController().chooseSingleEntityForEffect(collection, sa, title, false);
         } else if (sa.hasParam("Defined")) {
             List<Card> cloneSources = AbilityUtils.getDefinedCards(host, sa.getParam("Defined"), sa);
             if (!cloneSources.isEmpty()) {
