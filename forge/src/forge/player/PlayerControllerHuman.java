@@ -2271,6 +2271,9 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
             if(player) {
                 final Player p = game.getPlayer(getGui().oneOrNone("Add counters to which player?",
                         PlayerView.getCollection(game.getPlayers())));
+                if(p == null) {
+                	return;
+                }
                 final CounterType counter = getGui().oneOrNone("Which type of counter?",
                         subtract ? ImmutableList.copyOf(p.getCounters().keySet()) :
                             Lists.newArrayList(CounterType.ENERGY, CounterType.EXPERIENCE, CounterType.POISON));
