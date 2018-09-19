@@ -75,7 +75,7 @@ public class CloneEffect extends SpellAbilityEffect {
             CardCollection etbCards = game.getAction().getSimultaneousEtbCards();
 
             for(Card c : choices) {
-                if(!etbCards.contains(c)) {
+                if(etbCards == null || !etbCards.contains(c)) {
                     collection.add(c);
                 }
             }
