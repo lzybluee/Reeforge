@@ -100,6 +100,12 @@ public class CountersRemoveEffect extends SpellAbilityEffect {
         for (final Player tgtPlayer : getTargetPlayers(sa)) {
             // Removing energy
             if (!sa.usesTargeting() || tgtPlayer.canBeTargetedBy(sa)) {
+            	if (type.equals("All")) {
+                    for (Map.Entry<CounterType, Integer> e : tgtPlayer.getCounters().entrySet()) {
+                    	tgtPlayer.subtractCounter(e.getKey(), e.getValue());
+                    }
+                    continue;
+                }
                 if (num.equals("All")) {
                     cntToRemove = tgtPlayer.getCounters(counterType);
                 }
