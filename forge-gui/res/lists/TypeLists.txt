@@ -308,5 +308,6 @@ Tezzeret
 Tibalt
 Ugin
 Venser
+Vivien
 Vraska
 Xenagos

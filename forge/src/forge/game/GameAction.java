@@ -158,6 +158,7 @@ public class GameAction {
         // up on the wrong card state etc.).
         if (c.isFaceDown() && (fromBattlefield || (toHand && zoneFrom.is(ZoneType.Exile)))) {
             c.setState(CardStateName.Original, true);
+            c.runFaceupCommands();
         }
 
         // Clean up the temporary Dash SVar when the Dashed card leaves the battlefield
@@ -394,6 +395,7 @@ public class GameAction {
 
         final Map<String, Object> runParams = Maps.newHashMap();
         runParams.put("Card", lastKnownInfo);
+        runParams.put("Cause", cause);
         runParams.put("Origin", zoneFrom != null ? zoneFrom.getZoneType().name() : null);
         runParams.put("Destination", zoneTo.getZoneType().name());
         runParams.put("SpellAbilityStackInstance", game.stack.peek());
@@ -907,6 +909,7 @@ public class GameAction {
 
         final Map<String, Object> runParams = Maps.newHashMap();
         game.getTriggerHandler().runTrigger(TriggerType.Always, runParams, false);
+        game.getTriggerHandler().runTrigger(TriggerType.Immediate, runParams, false);
 
         // Update P/T and type in the view only once after all the cards have been processed, to avoid flickering
         for (Card c : affectedCards) {
