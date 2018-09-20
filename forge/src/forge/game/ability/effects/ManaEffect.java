@@ -143,6 +143,12 @@ public class ManaEffect extends SpellAbilityEffect {
             }
         }
         else if (abMana.isAnyMana()) {
+        	if(sa.hasParam("Amount") && sa.getParam("Amount").equals("X")) {
+        		int n = AbilityUtils.calculateAmount(card, "X", sa);
+        		if(n == 0) {
+        			return;
+        		}
+        	}
             for (Player p : tgtPlayers) {
                 if (tgt == null || p.canBeTargetedBy(sa)) {
                     Player act = sa.getActivatingPlayer();
