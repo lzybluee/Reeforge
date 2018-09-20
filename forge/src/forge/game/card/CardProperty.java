@@ -1214,6 +1214,8 @@ public class CardProperty {
             if (card.getTotalDamageDoneBy() == 0) {
                 return false;
             }
+        } else if (property.startsWith("dealtDamageThisGame")) {
+            return card.dealtDamageThisGame();
         } else if (property.startsWith("attackedThisTurn")) {
             if (!card.getDamageHistory().getCreatureAttackedThisTurn()) {
                 return false;
