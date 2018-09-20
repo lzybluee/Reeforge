@@ -40,7 +40,7 @@ public abstract class AchievementCollection implements Iterable<Achievement> {
 
     public static void updateAll(final PlayerControllerHuman controller) {
         //don't update achievements if player cheated during game
-        if (controller.hasCheated()) {
+        if (controller.hasCheated() || (controller.isConcede() && controller.getGame().getPhaseHandler().getTurn() <= 1)) {
             return;
         }
 

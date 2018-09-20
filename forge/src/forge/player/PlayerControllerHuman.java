@@ -86,6 +86,8 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
     protected final InputQueue inputQueue;
     protected final InputProxy inputProxy;
 
+    private boolean isConcede;
+    
     public PlayerControllerHuman(final Game game0, final Player p, final LobbyPlayer lp) {
         super(game0, p, lp);
         inputProxy = new InputProxy(this);
@@ -2967,7 +2969,12 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         if (player != null) {
             player.concede();
             getGame().getAction().checkGameOverCondition();
+            isConcede = true;
         }
+    }
+
+    public boolean isConcede() {
+    	return isConcede;
     }
 
     public boolean mayAutoPass() {
