@@ -102,6 +102,7 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
     private boolean cycling = false;
     private boolean dash = false;
     private boolean evoke = false;
+    private boolean surge = false;
     private boolean offering = false;
     private boolean emerge = false;
     private boolean morphup = false;
@@ -556,10 +557,6 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
     public boolean isKicked() {
         return isOptionalCostPaid(OptionalCost.Kicker1) || isOptionalCostPaid(OptionalCost.Kicker2) ||
             getMultiKickerManaCost() != null;
-    }
-
-    public boolean isSurged() {
-        return isOptionalCostPaid(OptionalCost.Surge);
     }
 
     public boolean isEntwine() {
@@ -1118,6 +1115,14 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
 
     public final void setEvoke(final boolean isEvoke) {
         evoke = isEvoke;
+    }
+
+    public final boolean isSurged() {
+        return surge;
+    }
+
+    public final void setSurged(final boolean isSurge) {
+        surge = isSurge;
     }
 
     public CardCollection getTappedForConvoke() {
