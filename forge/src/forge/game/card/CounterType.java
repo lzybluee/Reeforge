@@ -34,6 +34,8 @@ public enum CounterType {
 
     LOYALTY("LOYAL", 198, 198, 198),
 
+    CHARGE("CHARG", 246, 192, 0),
+
     AGE("AGE", 255, 137, 57),
 
     AIM("AIM", 255, 180, 0),
@@ -57,8 +59,6 @@ public enum CounterType {
     CAGE("CAGE", 155, 155, 155),
 
     CARRION("CRRON", 255, 163, 222),
-
-    CHARGE("CHARG", 246, 192, 0),
 
     CORPSE("CRPSE", 230, 186, 209),
 
