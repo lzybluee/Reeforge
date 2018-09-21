@@ -25,6 +25,7 @@ import forge.game.card.CardView;
 import forge.game.card.CardView.CardStateView;
 import forge.game.replacement.ReplacementEffect;
 import forge.game.spellability.SpellAbilityView;
+import forge.game.spellability.StackItemView;
 import forge.game.trigger.WrappedAbility;
 import forge.item.IPaperCard;
 import forge.item.InventoryItem;
@@ -211,10 +212,16 @@ public class GuiChoose {
                                 card = Card.getCardForUi((IPaperCard) sel).getView();
                             } else if (sel instanceof ReplacementEffect) {
                                 card = ((ReplacementEffect) sel).getCardView();
+                            } else if (sel instanceof StackItemView) {
+                                card = ((StackItemView) sel).getSourceCard();
                             } else {
                                 card = null;
                             }
 
+                            if(card == null) {
+                            	return;
+                            }
+                            
                             matchUI.setCard(card);
                             matchUI.clearPanelSelections();
                             matchUI.setPanelSelection(card);
