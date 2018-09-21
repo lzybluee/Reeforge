@@ -693,7 +693,8 @@ public final class StaticAbilityContinuous {
             }
             
             // add Types
-            if ((addTypes != null) || (removeTypes != null)) {
+            if (addTypes != null || removeTypes != null || removeSuperTypes || removeCardTypes || removeSubTypes
+            		|| removeLandTypes || removeCreatureTypes || removeArtifactTypes || removeEnchantmentTypes) {
                 affectedCard.addChangedCardTypes(addTypes, removeTypes, removeSuperTypes, removeCardTypes,
                         removeSubTypes, removeLandTypes, removeCreatureTypes, removeArtifactTypes,
                         removeEnchantmentTypes, hostCard.getTimestamp());

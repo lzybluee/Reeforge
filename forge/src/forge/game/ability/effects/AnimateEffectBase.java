@@ -79,7 +79,7 @@ public abstract class AnimateEffectBase extends SpellAbilityEffect {
         }
 
         if (sa.hasParam("RemoveLandTypes")) {
-            removeCreatureTypes = true;
+            removeLandTypes = true;
         }
         if (sa.hasParam("RemoveCreatureTypes")) {
             removeCreatureTypes = true;
@@ -95,7 +95,8 @@ public abstract class AnimateEffectBase extends SpellAbilityEffect {
             c.addNewPT(power, toughness, timestamp);
         }
 
-        if (!addType.isEmpty() || !removeType.isEmpty() || removeCreatureTypes) {
+        if (!addType.isEmpty() || !removeType.isEmpty() || removeSuperTypes || removeCardTypes || removeSubTypes ||
+        		removeLandTypes || removeCreatureTypes || removeArtifactTypes || removeEnchantmentTypes) {
             c.addChangedCardTypes(addType, removeType, removeSuperTypes, removeCardTypes, removeSubTypes,
                     removeLandTypes, removeCreatureTypes, removeArtifactTypes, removeEnchantmentTypes, timestamp);
         }
