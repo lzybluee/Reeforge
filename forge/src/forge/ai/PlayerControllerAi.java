@@ -36,6 +36,8 @@ import forge.game.spellability.*;
 import forge.game.trigger.WrappedAbility;
 import forge.game.zone.ZoneType;
 import forge.item.PaperCard;
+import forge.model.CardCollections;
+import forge.model.FModel;
 import forge.util.Aggregates;
 import forge.util.ITriggerEvent;
 import forge.util.MyRandom;
@@ -971,10 +973,30 @@ public class PlayerControllerAi extends PlayerController {
                 return SpecialCardAi.CursedScroll.chooseCard(player, sa);
             }
         } else {
-            CardCollectionView list = CardLists.filterControlledBy(game.getCardsInGame(), player.getOpponents());
-            list = CardLists.filter(list, Predicates.not(Presets.LANDS));
-            if (!list.isEmpty()) {
-                return list.get(0).getName();
+            final Iterable<ICardFace> cardsFromDb = FModel.getMagicDb().getCommonCards().getAllFaces();
+            final List<ICardFace> cards = Lists.newArrayList(Iterables.filter(cardsFromDb, cpp));
+            
+            CardCollection list = new CardCollection();
+            for(Player opponent : player.getOpponents()) {
+            	list.addAll(opponent.getCardsIn(ZoneType.Battlefield));
+            }
+            CardLists.shuffle(list);
+            for(Card c : list) {
+            	for(ICardFace face : cards) {
+            		if(c.getName().equals(face.getName())) {
+            			return c.getName();
+            		}
+            	}
+            }
+
+            list = CardLists.filterControlledBy(game.getCardsInGame(), player.getOpponents());
+            CardLists.shuffle(list);
+            for(Card c : list) {
+            	for(ICardFace face : cards) {
+            		if(c.getName().equals(face.getName())) {
+            			return c.getName();
+            		}
+            	}
             }
         }
         return "Morphling";
