@@ -382,7 +382,7 @@ public class AbilityUtils {
         }
         if (StringUtils.isBlank(svarval)) {
             if ((ability != null) && (ability instanceof SpellAbility) && !(ability instanceof SpellPermanent)) {
-                System.err.printf("SVar '%s' not found in ability, fallback to Card (%s). Ability is (%s)%n", amount, card.getName(), ability);
+                //System.err.printf("SVar '%s' not found in ability, fallback to Card (%s). Ability is (%s)%n", amount, card.getName(), ability);
             }
             svarval = card.getSVar(amount);
         }
@@ -399,7 +399,7 @@ public class AbilityUtils {
                 return 0;
             }
             // Nothing to do here if value is missing or blank
-            System.err.printf("SVar '%s' not defined in Card (%s)%n", amount, card.getName());
+            System.err.printf("SVar '%s' not found in ability and Card (%s). Ability is (%s)%n", amount, card.getName(), ability);
             return 0;
         }
 
@@ -437,6 +437,18 @@ public class AbilityUtils {
             final FCollection<Player> players = new FCollection<Player>();
             if (hType.equals("Players") || hType.equals("")) {
                 players.addAll(game.getPlayers());
+                val = CardFactoryUtil.playerXCount(players, calcX[1], card);
+            }
+            if (hType.equals("HasPermanentPlayers") || hType.equals("")) {
+                for(Player p : game.getPlayers()) {
+                	CardCollectionView cards = p.getCardsIn(ZoneType.Battlefield);
+                	for(Card c : cards) {
+                		if(c.isPermanent() && c.canBeTargetedBy(((SpellAbility)ability))) {
+                			players.add(p);
+                			break;
+                		}
+                	}
+                }
                 val = CardFactoryUtil.playerXCount(players, calcX[1], card);
             }
             else if (hType.equals("YourTeam")) {
