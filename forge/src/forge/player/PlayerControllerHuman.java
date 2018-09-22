@@ -2296,7 +2296,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
                 }  
             } else {
                 final String titleMsg = subtract ? "Remove counters from which card?" : "Add counters to which card?";
-                final CardCollectionView cards = game.getCardsIn(ZoneType.Battlefield);
+                final CardCollectionView cards = game.getCardsIn(ZoneType.listValueOf("Battlefield,Exile,Stack"));
                 final Card card = game
                         .getCard(getGui().oneOrNone(titleMsg, CardView.getCollection(cards)));
                 if (card == null) {
