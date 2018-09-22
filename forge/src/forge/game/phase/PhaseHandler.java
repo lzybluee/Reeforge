@@ -818,6 +818,9 @@ public class PhaseHandler implements java.io.Serializable {
         if (extraTurn != null) {
             // The bottom of the extra turn stack is the normal turn
             nextPlayer.setExtraTurn(!extraTurns.isEmpty());
+            if(!extraTurns.isEmpty()) {
+            	nextPlayer.useExtraTurn();
+            }
             if (nextPlayer.hasKeyword("If you would begin an extra turn, skip that turn instead.")) {
                 return getNextActivePlayer();
             }
@@ -888,6 +891,7 @@ public class PhaseHandler implements java.io.Serializable {
         if (extraTurns.isEmpty()) {
             extraTurns.push(new ExtraTurn(game.getNextPlayerAfter(playerTurn)));
         }
+        player.addExtraTurn();
         return extraTurns.push(new ExtraTurn(player));
     }
 

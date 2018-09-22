@@ -151,6 +151,8 @@ public class Player extends GameEntity implements Comparable<Player> {
     private Card monarchEffect = null;
     private Card blessingEffect = null;
 
+    private int extraTurnNum = 0;
+
     private final AchievementTracker achievementTracker = new AchievementTracker();
     private final PlayerView view;
 
@@ -2711,6 +2713,20 @@ public class Player extends GameEntity implements Comparable<Player> {
     }
     public void setExtraTurn(boolean b) {
         isPlayingExtraTrun  = b;
+    }
+
+    public void addExtraTurn() {
+    	extraTurnNum++;
+    	view.updateExtraTurn(this);
+    }
+
+    public void useExtraTurn() {
+    	extraTurnNum--;
+    	view.updateExtraTurn(this);
+    }
+
+    public int getExtraTurn() {
+    	return extraTurnNum;
     }
 
     public void initVariantsZones(RegisteredPlayer registeredPlayer) {

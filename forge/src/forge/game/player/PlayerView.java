@@ -232,8 +232,17 @@ public class PlayerView extends GameEntityView {
     public int getNumDrawnThisTurn() {
         return get(TrackableProperty.NumDrawnThisTurn);
     }
+
     void updateNumDrawnThisTurn(Player p) {
         set(TrackableProperty.NumDrawnThisTurn, p.getNumDrawnThisTurn());
+    }
+
+    public int getExtraTurn() {
+        return get(TrackableProperty.ExtraTurn);
+    }
+
+    void updateExtraTurn(Player p) {
+        set(TrackableProperty.ExtraTurn, p.getExtraTurn());
     }
 
     public ImmutableMultiset<String> getKeywords() {
@@ -464,6 +473,9 @@ public class PlayerView extends GameEntityView {
         details.add(TextUtil.concatWithSpace("Spells cast this turn:", String.valueOf(getSpellsCastThisTurn())));
         details.add(TextUtil.concatWithSpace("Cards drawn this turn:", String.valueOf(getNumDrawnThisTurn())));
         details.add(TextUtil.concatWithSpace("Damage prevention:", String.valueOf(getPreventNextDamage())));
+        if(getExtraTurn() > 0) {
+        	details.add(TextUtil.concatWithSpace("Extra turn:", String.valueOf(getExtraTurn())));
+        }
         final String keywords = Lang.joinHomogenous(getDisplayableKeywords());
         if (!keywords.isEmpty()) {
             details.add(keywords);
