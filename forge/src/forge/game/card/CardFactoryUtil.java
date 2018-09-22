@@ -3787,10 +3787,10 @@ public class CardFactoryUtil {
             
         } else if (keyword.startsWith("Evoke")) {
             final String[] k = keyword.split(":");
+            final Cost evokedCost = new Cost(k[1], false);
             final SpellAbility sa = card.getFirstSpellAbility();
 
-            final SpellAbility newSA = sa.copy();
-            final Cost evokedCost = new Cost(k[1], false);
+            final SpellAbility newSA = sa.copyWithDefinedCost(evokedCost);
 
             final StringBuilder desc = new StringBuilder();
             desc.append("Evoke ").append(evokedCost.toSimpleString()).append(" (");
@@ -3803,14 +3803,12 @@ public class CardFactoryUtil {
             sb.append(card.getName()).append(" (Evoked)");
             newSA.setStackDescription(sb.toString());
             newSA.setBasicSpell(false);
-            newSA.setPayCosts(evokedCost);
             newSA.setEvoke(true);
             newSA.setIntrinsic(intrinsic);
 
             newSA.setTemporary(!intrinsic);
             inst.addSpellAbility(newSA);
 
-            
         } else if (keyword.startsWith("Fortify")) {
         	String[] k = keyword.split(":");
             // Get cost string
@@ -3834,7 +3832,6 @@ public class CardFactoryUtil {
             sa.setTemporary(!intrinsic);
             inst.addSpellAbility(sa);
 
-            
         } else if (keyword.startsWith("Fuse") && card.getCurrentStateName().equals(CardStateName.Original)) {
             final SpellAbility sa = AbilityFactory.buildFusedAbility(card);
 
@@ -3875,7 +3872,6 @@ public class CardFactoryUtil {
             sa.setTemporary(!intrinsic);
             inst.addSpellAbility(sa);
 
-            
         } else if (keyword.startsWith("Monstrosity")) {
             final String[] k = keyword.split(":");
             final String magnitude = k[1];
@@ -3984,7 +3980,29 @@ public class CardFactoryUtil {
 
             sa.setTemporary(!intrinsic);
             inst.addSpellAbility(sa);
+        } else if (keyword.startsWith("Prowl")) {
+            final String[] k = keyword.split(":");
+            final Cost prowlCost = new Cost(k[1], false);
+            final SpellAbility newSA = card.getFirstSpellAbility().copyWithDefinedCost(prowlCost);
+
+            if (card.isInstant() || card.isSorcery()) {
+                newSA.getMapParams().put("Secondary", "True");
+            }
+            newSA.getMapParams().put("PrecostDesc", "Prowl");
+            newSA.getMapParams().put("CostDesc", ManaCostParser.parse(k[1]));
+
+            // makes new SpellDescription
+            final StringBuilder sb = new StringBuilder();
+            sb.append(newSA.getCostDescription());
+            sb.append("(" + inst.getReminderText() + ")");
+            newSA.setDescription(sb.toString());
             
+            newSA.setBasicSpell(false);
+            newSA.setProwl(true);
+
+            newSA.setIntrinsic(intrinsic);
+            newSA.setTemporary(!intrinsic);
+            inst.addSpellAbility(newSA);
         } else if (keyword.startsWith("Reinforce")) {
             final String[] k = keyword.split(":");
             final String n = k[1];
@@ -4138,7 +4156,6 @@ public class CardFactoryUtil {
             sa.setTemporary(!intrinsic);
             inst.addSpellAbility(sa);
 
-            
         } else if (keyword.startsWith("Unearth")) {
             final String[] k = keyword.split(":");
             final String manacost = k[1];
