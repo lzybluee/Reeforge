@@ -53,6 +53,9 @@ public class ManaReflectedEffect extends SpellAbilityEffect {
      * @return a {@link java.lang.String} object.
      */
     private static String generatedReflectedMana(final SpellAbility sa, final Collection<String> colors, final Player player) {
+        if (colors.isEmpty()) {
+            return "0";
+        }
         // Calculate generated mana here for stack description and resolving
         final int amount = sa.hasParam("Amount") ? AbilityUtils.calculateAmount(sa.getHostCard(), sa.getParam("Amount"), sa) : 1;
 
@@ -73,9 +76,7 @@ public class ManaReflectedEffect extends SpellAbilityEffect {
         } else {
             // Nothing set previously so ask player if needed
             if (mask == 0) {
-                if (colors.isEmpty()) {
-                    return "0";
-                } else if (sa.getNeedChooseMana()) {
+                if (sa.getNeedChooseMana()) {
                     baseMana = MagicColor.toShortString(player.getController().chooseColor("Select Mana to Produce", sa, ColorSet.fromNames(colors)));
                 } else if (colors.size() == 1) {
                     baseMana = MagicColor.toShortString(colors.iterator().next());
