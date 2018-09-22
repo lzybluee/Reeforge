@@ -1,30 +1,28 @@
 [metadata]
 Name=Standard_BG Constrictor
 [Main]
-4 Adventurous Impulse|DOM
 4 Aether Hub|KLD
 4 Blooming Marsh|KLD
-1 Blossoming Defense|KLD
-1 Fatal Push|AER
-7 Forest|DOM|1
+8 Forest|M19|1
 4 Glint-Sleeve Siphoner|AER
-2 Ifnir Deadlands|HOU
-4 Jadelight Ranger|RIX
-4 Llanowar Elves|DOM
-3 Ravenous Chupacabra|RIX
-2 Rishkar, Peema Renegade|AER
-2 Swamp|DOM|1
+4 Llanowar Elves|M19
+4 Ravenous Chupacabra|RIX
+3 Rishkar, Peema Renegade|AER
+4 Swamp|M19|1
+2 Thorn Lieutenant|M19
+4 Thrashing Brontodon|RIX
 4 Verdurous Gearhulk|KLD
+1 Vivien Reid|M19
 2 Vraska's Contempt|XLN
 4 Walking Ballista|AER
 4 Winding Constrictor|AER
 4 Woodland Cemetery|DOM
 [Sideboard]
-2 Doomfall|HOU
-4 Duress|XLN
-1 Fatal Push|AER
+1 Cast Down|DOM
+4 Duress|M19
+2 Fatal Push|AER
 2 Lifecrafter's Bestiary|AER
-1 Nissa, Vital Force|KLD
-1 Skysovereign, Consul Flagship|KLD
-3 Thrashing Brontodon|RIX
-1 Vraska, Relic Seeker|XLN
+2 Shapers' Sanctuary|XLN
+1 Vivien Reid|M19
+1 Vraska's Contempt|XLN
+2 Vraska, Relic Seeker|XLN
