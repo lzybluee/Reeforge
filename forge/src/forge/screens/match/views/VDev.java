@@ -87,7 +87,6 @@ public class VDev implements IVDoc<CDev>, IDevListener {
     public VDev(final CDev controller) {
         this.controller = controller;
 
-        final String constraints = "w 95%!, gap 0 0 4px 0";
         final String halfConstraints = "w 47%!, gap 0 0 4px 0";
         final String halfConstraintsLeft = halfConstraints + ", split 2";
         viewport.setOpaque(false);
@@ -96,23 +95,23 @@ public class VDev implements IVDoc<CDev>, IDevListener {
         viewport.add(this.lblViewAll, halfConstraintsLeft);
         viewport.add(this.lblUnlimited, halfConstraints);
         viewport.add(this.lblCastSpell, halfConstraintsLeft);
-        viewport.add(this.lblCardToHand, halfConstraints);
-        viewport.add(this.lblCardToLibrary, halfConstraintsLeft);
-        viewport.add(this.lblCardToGraveyard, halfConstraints);
-        viewport.add(this.lblCardToExile, halfConstraintsLeft);
         viewport.add(this.lblCardToBattlefield, halfConstraints);
-        viewport.add(this.lblRemoveFromGame, halfConstraintsLeft);
+        viewport.add(this.lblCardToHand, halfConstraintsLeft);
         viewport.add(this.lblRepeatAddCard, halfConstraints);
-        viewport.add(this.lblExileFromHand, halfConstraintsLeft);
-        viewport.add(this.lblExileFromPlay, halfConstraints);
+        viewport.add(this.lblDumpGame, halfConstraintsLeft);
+        viewport.add(this.lblSetupGame, halfConstraints);
         viewport.add(this.lblSetLife, halfConstraintsLeft);
         viewport.add(this.lblWinGame, halfConstraints);
         viewport.add(this.lblAddCounterPermanent, halfConstraintsLeft);
         viewport.add(this.lblSubCounterPermanent, halfConstraints);
-        viewport.add(this.lblSetupGame, halfConstraintsLeft);
-        viewport.add(this.lblDumpGame, halfConstraints);
         viewport.add(this.lblTapPermanent, halfConstraintsLeft);
         viewport.add(this.lblUntapPermanent, halfConstraints);
+        viewport.add(this.lblCardToLibrary, halfConstraintsLeft);
+        viewport.add(this.lblCardToGraveyard, halfConstraints);
+        viewport.add(this.lblCardToExile, halfConstraintsLeft);
+        viewport.add(this.lblRemoveFromGame, halfConstraints);
+        viewport.add(this.lblExileFromPlay, halfConstraintsLeft);
+        viewport.add(this.lblExileFromHand, halfConstraints);
         viewport.add(this.lblRiggedRoll, halfConstraintsLeft);
         viewport.add(this.lblWalkTo, halfConstraints);
     }
