@@ -503,6 +503,10 @@ public class SpellAbilityRestriction extends SpellAbilityVariables {
                 return false;
             }
 
+            if(activator.getController().canPlayUnlimited()) {
+            	return true;
+            }
+
             final int initialLimit = c.hasKeyword("CARDNAME's loyalty abilities can be activated twice each turn rather than only once") ? 1 : 0;
             final int limits = c.getAmountOfKeyword("May activate CARDNAME's loyalty abilities once") + initialLimit;
 

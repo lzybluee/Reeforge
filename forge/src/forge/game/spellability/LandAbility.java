@@ -68,7 +68,7 @@ public class LandAbility extends Ability {
 
         // **** Check for land play limit per turn ****
         // Dev Mode
-        if (p.getController().canPlayUnlimitedLands() || p.hasKeyword("You may play any number of additional lands on each of your turns.")) {
+        if (p.getController().canPlayUnlimited() || p.hasKeyword("You may play any number of additional lands on each of your turns.")) {
             return true;
         }
 

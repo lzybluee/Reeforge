@@ -12,7 +12,7 @@ public interface IGameController {
 
     boolean mayLookAtAllCards();
 
-    boolean canPlayUnlimitedLands();
+    boolean canPlayUnlimited();
 
     void concede();
 

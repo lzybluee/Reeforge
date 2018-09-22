@@ -28,7 +28,7 @@ public final class CDev implements ICDoc {
         this.view = new VDev(this);
         addListener(view);
 
-        view.getLblUnlimitedLands().addMouseListener(madUnlimited);
+        view.getLblUnlimited().addMouseListener(madUnlimited);
         view.getLblViewAll().addMouseListener(madViewAll);
         view.getLblGenerateMana().addMouseListener(madMana);
         view.getLblSetupGame().addMouseListener(madSetup);
@@ -68,12 +68,12 @@ public final class CDev implements ICDoc {
     private final MouseListener madUnlimited = new MouseAdapter() {
         @Override
         public void mousePressed(final MouseEvent e) {
-            togglePlayManyLandsPerTurn();
+            togglePlayUnlimited();
         }
     };
-    public void togglePlayManyLandsPerTurn() {
-        final boolean newValue = !view.getLblUnlimitedLands().getToggled();
-        getController().cheat().setCanPlayUnlimitedLands(newValue);
+    public void togglePlayUnlimited() {
+        final boolean newValue = !view.getLblUnlimited().getToggled();
+        getController().cheat().setCanPlayUnlimited(newValue);
         update();
     }
 
@@ -329,10 +329,10 @@ public final class CDev implements ICDoc {
     public void update() {
         final IGameController controller = getController();
         if (controller != null) {
-            final boolean canPlayUnlimitedLands = controller.canPlayUnlimitedLands();
+            final boolean canPlayUnlimited = controller.canPlayUnlimited();
             final boolean mayLookAtAllCards = controller.mayLookAtAllCards();
             for (final IDevListener listener : listeners) {
-                listener.update(canPlayUnlimitedLands, mayLookAtAllCards);
+                listener.update(canPlayUnlimited, mayLookAtAllCards);
             }
         }
     }

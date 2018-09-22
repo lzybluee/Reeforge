@@ -249,7 +249,7 @@ public abstract class PlayerController {
         return null;
     }
 
-    public boolean canPlayUnlimitedLands() {
+    public boolean canPlayUnlimited() {
         return false;
     }
 

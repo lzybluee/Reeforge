@@ -2,7 +2,7 @@ package forge.interfaces;
 
 public interface IDevModeCheats {
 
-    void setCanPlayUnlimitedLands(boolean canPlayUnlimitedLands0);
+    void setCanPlayUnlimited(boolean canPlayUnlimited0);
 
     void setViewAllCards(boolean canViewAll);
 
@@ -84,7 +84,7 @@ public interface IDevModeCheats {
         public void setPlayerLife(boolean maxlife) {
         }
         @Override
-        public void setCanPlayUnlimitedLands(final boolean canPlayUnlimitedLands0) {
+        public void setCanPlayUnlimited(final boolean canPlayUnlimited0) {
         }
         @Override
         public void riggedPlanarRoll() {

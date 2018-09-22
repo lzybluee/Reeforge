@@ -2051,11 +2051,11 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
     }
 
     // Dev Mode cheat functions
-    private boolean canPlayUnlimitedLands;
+    private boolean canPlayUnlimited;
 
     @Override
-    public boolean canPlayUnlimitedLands() {
-        return canPlayUnlimitedLands;
+    public boolean canPlayUnlimited() {
+        return canPlayUnlimited;
     }
 
     private IDevModeCheats cheats;
@@ -2088,11 +2088,11 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         /*
          * (non-Javadoc)
          * 
-         * @see forge.player.IDevModeCheats#setCanPlayUnlimitedLands(boolean)
+         * @see forge.player.IDevModeCheats#setCanPlayUnlimited(boolean)
          */
         @Override
-        public void setCanPlayUnlimitedLands(final boolean canPlayUnlimitedLands0) {
-            canPlayUnlimitedLands = canPlayUnlimitedLands0;
+        public void setCanPlayUnlimited(final boolean canPlayUnlimited0) {
+            canPlayUnlimited = canPlayUnlimited0;
         }
 
         /*

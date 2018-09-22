@@ -105,7 +105,7 @@ public class NetGameController implements IGameController {
     }
 
     @Override
-    public boolean canPlayUnlimitedLands() {
+    public boolean canPlayUnlimited() {
         // Don't do this over network
         return false;
     }

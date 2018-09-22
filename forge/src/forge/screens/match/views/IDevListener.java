@@ -1,5 +1,5 @@
 package forge.screens.match.views;
 
 public interface IDevListener {
-    void update(boolean playUnlimitedLands, boolean mayViewAllCards);
+    void update(boolean playUnlimited, boolean mayViewAllCards);
 }

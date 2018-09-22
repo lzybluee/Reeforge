@@ -95,7 +95,7 @@ public class WatchLocalGame extends PlayerControllerHuman {
     }
 
     @Override
-    public boolean canPlayUnlimitedLands() {
+    public boolean canPlayUnlimited() {
         return false;
     }
 

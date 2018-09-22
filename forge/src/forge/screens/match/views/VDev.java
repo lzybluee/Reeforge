@@ -54,7 +54,7 @@ public class VDev implements IVDoc<CDev>, IDevListener {
             ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
     // Dev labels
-    private final DevLabel lblUnlimitedLands = new DevLabel("Play Unlimited Lands");
+    private final DevLabel lblUnlimited = new DevLabel("Play Unlimited");
     private final DevLabel lblViewAll = new DevLabel("View All Cards");
     private final DevLabel lblGenerateMana = new DevLabel("Generate Mana");
     private final DevLabel lblSetupGame = new DevLabel("Setup Game State");
@@ -94,7 +94,7 @@ public class VDev implements IVDoc<CDev>, IDevListener {
         viewport.add(this.lblGenerateMana, halfConstraintsLeft);
         viewport.add(this.lblTutor, halfConstraints);
         viewport.add(this.lblViewAll, halfConstraintsLeft);
-        viewport.add(this.lblUnlimitedLands, halfConstraints);
+        viewport.add(this.lblUnlimited, halfConstraints);
         viewport.add(this.lblCastSpell, halfConstraintsLeft);
         viewport.add(this.lblCardToHand, halfConstraints);
         viewport.add(this.lblCardToLibrary, halfConstraintsLeft);
@@ -129,8 +129,8 @@ public class VDev implements IVDoc<CDev>, IDevListener {
     }
 
     @Override
-    public void update(final boolean playUnlimitedLands, final boolean mayViewAllCards) {
-        getLblUnlimitedLands().setToggled(playUnlimitedLands);
+    public void update(final boolean playUnlimited, final boolean mayViewAllCards) {
+        getLblUnlimited().setToggled(playUnlimited);
         getLblViewAll().setToggled(mayViewAllCards);
     }
 
@@ -266,8 +266,8 @@ public class VDev implements IVDoc<CDev>, IDevListener {
     }
 
     /** @return {@link forge.screens.match.views.VDev.DevLabel} */
-    public DevLabel getLblUnlimitedLands() {
-        return this.lblUnlimitedLands;
+    public DevLabel getLblUnlimited() {
+        return this.lblUnlimited;
     }
 
     /** @return {@link forge.screens.match.views.VDev.DevLabel} */

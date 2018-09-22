@@ -1819,7 +1819,7 @@ public class Player extends GameEntity implements Comparable<Player> {
 
         // **** Check for land play limit per turn ****
         // Dev Mode
-        if (getController().canPlayUnlimitedLands() || hasKeyword("You may play any number of additional lands on each of your turns.")) {
+        if (getController().canPlayUnlimited() || hasKeyword("You may play any number of additional lands on each of your turns.")) {
             return true;
         }
 
