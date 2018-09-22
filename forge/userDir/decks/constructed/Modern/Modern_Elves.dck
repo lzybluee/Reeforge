@@ -1,28 +1,32 @@
 [metadata]
 Name=Modern_Elves
 [Main]
-4 Cavern of Souls|AVR
-3 Chord of Calling|M15
+2 Cavern of Souls|AVR
+1 Chord of Calling|M15
 4 Collected Company|DTK
-4 Dwynen's Elite|ORI
+1 Craterhoof Behemoth|AVR
+3 Dwynen's Elite|ORI
 4 Elvish Archdruid|M13
+4 Elvish Clancaller|M19
 4 Elvish Mystic|M15
-4 Elvish Visionary|ORI
+3 Elvish Visionary|ORI
 3 Ezuri, Renegade Leader|SOM
-4 Gilt-Leaf Palace|LRW
+5 Forest|M19|1
 4 Heritage Druid|MOR
-4 Horizon Canopy|FUT
-4 Llanowar Elves|DOM
+1 Horizon Canopy|FUT
+4 Llanowar Elves|M19
 4 Nettle Sentinel|EVE
-1 Nykthos, Shrine to Nyx|THS
-1 Pendelhaven|TSB
-4 Shaman of the Pack|ORI
-4 Snow-Covered Forest|CSP
+4 Overgrown Tomb|RTR
+2 Shaman of the Pack|ORI
+3 Steel Leaf Champion|DOM
+4 Windswept Heath|KTK
 [Sideboard]
-1 Chameleon Colossus|MOR
+2 Abrupt Decay|RTR
+2 Elvish Champion|10E
 2 Fracturing Gust|SHM
-3 Leyline of the Void|M11
-3 Obstinate Baloth|M11
-1 Phyrexian Revoker|M15
-2 Reclamation Sage|M15
-3 Shapers' Sanctuary|XLN
+3 Heroic Intervention|AER
+1 Jagged-Scar Archers|LRW
+2 Scavenging Ooze|M14
+1 Sword of Fire and Ice|DST
+1 Sword of Light and Shadow|DST
+1 Thrun, the Last Troll|MBS
