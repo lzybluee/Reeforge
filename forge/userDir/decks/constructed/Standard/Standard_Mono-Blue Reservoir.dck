@@ -1,0 +1,30 @@
+[metadata]
+Name=Standard_Mono-Blue Reservoir
+[Main]
+2 Aetherflux Reservoir|KLD
+2 Baral's Expertise|AER
+2 Commit // Memory|AKH
+4 Inspiring Statuary|AER
+1 Inventors' Fair|KLD
+13 Island|M19|1
+2 Karn, Scion of Urza|DOM
+1 Metallic Rebuke|AER
+2 Mox Amber|DOM
+4 Navigator's Compass|DOM
+4 Ornithopter|AER
+4 Paradoxical Outcome|KLD
+4 Prophetic Prism|KLD
+4 Renegade Map|AER
+3 Reverse Engineer|AER
+4 Sai, Master Thopterist|M19
+4 Zhalfirin Void|DOM
+[Sideboard]
+2 Fireforger's Puzzleknot|KLD
+1 Glint-Nest Crane|KLD
+2 Jace's Defeat|HOU
+2 Karn, Scion of Urza|DOM
+1 Metallic Rebuke|AER
+3 Negate|RIX
+1 River's Rebuke|XLN
+2 Sorcerous Spyglass|XLN
+1 Treasure Map|XLN
