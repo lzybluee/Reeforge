@@ -1,25 +1,25 @@
 [metadata]
-Name=Standard_Mono-Blue Aggro
+Name=Standard_Mono Blue
 [Main]
 2 Baral, Chief of Compliance|AER
-3 Chart a Course|XLN
+2 Chart a Course|XLN
 4 Curious Obsession|RIX
 2 Dive Down|XLN
 3 Essence Scatter|M19
-21 Island|M19|1
+21 Island|DOM|1
 4 Merfolk Trickster|DOM
 2 Nimble Obstructionist|HOU
+2 Opt|DOM
 4 Siren Stormtamer|XLN
 4 Slither Blade|AKH
 2 Spell Pierce|XLN
 4 Tempest Djinn|DOM
-1 Unsummon|HOU
 4 Wizard's Retort|DOM
 [Sideboard]
-1 Aethersphere Harvester|AER
-4 Diamond Mare|M19
+2 Diamond Mare|M19
 1 Essence Scatter|M19
-1 Jace's Defeat|HOU
+2 Jace's Defeat|HOU
 3 Negate|RIX
-2 Sleep|M19
+1 Nimble Obstructionist|HOU
 3 Syncopate|DOM
+3 Walking Ballista|AER

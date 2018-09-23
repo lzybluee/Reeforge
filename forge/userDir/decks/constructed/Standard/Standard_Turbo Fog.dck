@@ -1,33 +1,26 @@
 [metadata]
 Name=Standard_Turbo Fog
 [Main]
+1 Anticipate|M19
 4 Chart a Course|XLN
-1 Field of Ruin|XLN
-4 Forest|M19|1
+4 Forest|DOM|1
 4 Gift of Paradise|M19
-3 Glacial Fortress|XLN
-2 Glimmer of Genius|KLD
+2 Glacial Fortress|XLN
+3 Glimmer of Genius|KLD
 4 Haze of Pollen|AKH
 4 Hinterland Harbor|DOM
 4 Irrigated Farmland|AKH
-4 Island|M19|1
-1 Karn's Temporal Sundering|DOM
+6 Island|DOM|1
 1 Karn, Scion of Urza|DOM
 4 Nexus of Fate|M19
-1 Nissa, Steward of Elements|AKH
-3 Root Snare|M19
+4 Root Snare|M19
 4 Scattered Groves|AKH
-3 Search for Azcanta|XLN
-2 Settle the Wreckage|XLN
-2 Sunpetal Grove|XLN
-1 Supreme Will|HOU
+4 Search for Azcanta|XLN
+3 Sunpetal Grove|XLN
 4 Teferi, Hero of Dominaria|DOM
 [Sideboard]
 3 Baral, Chief of Compliance|AER
-1 Cleansing Nova|M19
-1 Dissenter's Deliverance|AKH
-2 Jace's Defeat|HOU
-1 Lyra Dawnbringer|DOM
-2 Manglehorn|AKH
+2 Dissenter's Deliverance|AKH
+3 Jace's Defeat|HOU
 4 Negate|RIX
-1 Nezahal, Primal Tide|RIX
+3 Walking Ballista|AER

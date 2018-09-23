@@ -1,6 +1,7 @@
 [metadata]
 Name=Standard_UW Gift
 [Main]
+2 Aether Hub|KLD
 4 Angel of Invention|KLD
 2 Cast Out|AKH
 4 Champion of Wits|HOU
@@ -9,22 +10,20 @@ Name=Standard_UW Gift
 1 Fumigate|KLD
 4 Glacial Fortress|XLN
 4 God-Pharaoh's Gift|HOU
-2 Ipnu Rivulet|HOU
+1 Ipnu Rivulet|HOU
 4 Irrigated Farmland|AKH
-6 Island|DOM|1
+8 Island|DOM|1
+2 Lyra Dawnbringer|DOM
 4 Minister of Inquiries|KLD
-6 Plains|DOM|1
+5 Plains|DOM|1
 4 Refurbish|KLD
-2 Search for Azcanta|XLN
 4 Strategic Planning|HOU
 2 Sunscourge Champion|HOU
-2 Walking Ballista|AER
 [Sideboard]
-2 Authority of the Consuls|KLD
-2 Fairgrounds Warden|KLD
-1 Fumigate|KLD
-2 Jace's Defeat|HOU
-2 Lyra Dawnbringer|DOM
-3 Negate|RIX
+2 Baffling End|RIX
+2 Disallow|AER
+4 History of Benalia|DOM
+2 Negate|RIX
 1 Search for Azcanta|XLN
 2 Teferi, Hero of Dominaria|DOM
+2 Thopter Arrest|AER

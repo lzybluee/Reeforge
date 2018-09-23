@@ -7,27 +7,28 @@ Name=Standard_RB Aggro
 4 Canyon Slough|AKH
 2 Chandra, Torch of Defiance|KLD
 1 Cut // Ribbons|AKH
+2 Doomfall|HOU
 4 Dragonskull Summit|XLN
-1 Glorybringer|AKH
+2 Glorybringer|AKH
 4 Goblin Chainwhirler|DOM
+2 Hazoret the Fervent|AKH
 2 Heart of Kiran|AER
 2 Kari Zev, Skyship Raider|AER
-13 Mountain|DOM|1
+1 Karn, Scion of Urza|DOM
+2 Magma Spray|AKH
+14 Mountain|DOM|1
 2 Pia Nalaar|KLD
-4 Rekindling Phoenix|RIX
+2 Rekindling Phoenix|RIX
 4 Scrapheap Scrounger|KLD
-1 Shock|AER
-3 Soul-Scar Mage|AKH
-1 Spire of Industry|AER
-3 Unlicensed Disintegration|KLD
-[Sideboard]
-1 Abrade|HOU
-1 Aethersphere Harvester|AER
-1 Angrath, the Flame-Chained|RIX
-2 Chandra's Defeat|HOU
-1 Cut // Ribbons|AKH
-2 Doomfall|HOU
-2 Duress|XLN
-2 Glorybringer|AKH
-2 Siege-Gang Commander|DOM
 1 Swamp|DOM|1
+[Sideboard]
+3 Chandra's Defeat|HOU
+1 Chandra, Torch of Defiance|KLD
+2 Doomfall|HOU
+2 Duress|M19
+2 Karn, Scion of Urza|DOM
+1 Magma Spray|AKH
+1 Pia Nalaar|KLD
+1 Siege-Gang Commander|DOM
+1 Sorcerous Spyglass|XLN
+1 The Eldest Reborn|DOM
