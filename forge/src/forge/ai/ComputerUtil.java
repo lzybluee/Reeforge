@@ -1540,11 +1540,31 @@ public class ComputerUtil {
 
         // Determine if Defined Objects are "threatened" will be destroyed
         // due to this SA
+        
+        int fightDmg = 0;
+        boolean fightDeathtouch = false;
+        if(threatApi == ApiType.Fight && topStack.hasParam("Defined")) {
+        	final CardCollection definedCards = AbilityUtils.getDefinedCards(source, topStack.getParam("Defined"), topStack);
+        	if(!definedCards.isEmpty()) {
+                Card c = definedCards.get(0);
+                Card current = c.getGame().getCardState(c);
+                if (current != null && current.getTimestamp() == c.getTimestamp()) {
+                    if(topStack.hasParam("FightWithToughness")) {
+                    	fightDmg = c.getCurrentToughness();
+                    } else {
+                    	fightDmg = c.getCurrentPower();
+                    }
+                    if(fightDmg > 0 && current.hasKeyword(Keyword.DEATHTOUCH)) {
+                    	fightDeathtouch = true;
+                    }
+                }
+        	}
+        }
 
         // Lethal Damage => prevent damage/regeneration/bounce/shroud
-        if (threatApi == ApiType.DealDamage || threatApi == ApiType.DamageAll) {
+        if (threatApi == ApiType.DealDamage || threatApi == ApiType.DamageAll || fightDmg > 0) {
             // If PredictDamage is >= Lethal Damage
-            final int dmg = AbilityUtils.calculateAmount(topStack.getHostCard(),
+            final int dmg = fightDmg > 0 ? fightDmg : AbilityUtils.calculateAmount(topStack.getHostCard(),
                     topStack.getParam("NumDmg"), topStack);
             final SpellAbility sub = topStack.getSubAbility();
             boolean noRegen = false;
@@ -1602,8 +1622,14 @@ public class ComputerUtil {
                     if (saviourApi == ApiType.ChangeZone && (c.getOwner().isOpponentOf(aiPlayer) || c.isToken())) {
                         continue;
                     }
+
+                    boolean hasDeathtouch = false;
+                    final int predictDamage = ComputerUtilCombat.predictDamageTo(c, dmg, source, false);
+                    if(predictDamage > 0 && (source.hasKeyword(Keyword.DEATHTOUCH) || fightDeathtouch)) {
+                    	hasDeathtouch = true;
+                    }
                     
-                    if (ComputerUtilCombat.predictDamageTo(c, dmg, source, false) >= ComputerUtilCombat.getDamageToKill(c)) {
+                    if (predictDamage >= ComputerUtilCombat.getDamageToKill(c) || hasDeathtouch) {
                         threatened.add(c);
                     }
                 } else if (o instanceof Player) {
