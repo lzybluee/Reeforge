@@ -4,6 +4,7 @@ import forge.game.Game;
 import forge.game.ability.SpellAbilityEffect;
 import forge.game.card.Card;
 import forge.game.event.GameEventCardRegenerated;
+import forge.game.event.GameEventCardStatsChanged;
 import forge.game.spellability.SpellAbility;
 import forge.game.trigger.TriggerType;
 
@@ -26,10 +27,19 @@ public class RegenerationEffect extends SpellAbilityEffect {
                 continue;
             }
 
+            boolean frozen = game.getTracker().isFrozen();
+            if(frozen) {
+            	game.getTracker().unfreeze();
+            }
+
             c.setDamage(0);
             c.setHasBeenDealtDeathtouchDamage(false);
             c.tap();
             c.addRegeneratedThisTurn();
+
+            if(frozen) {
+            	game.getTracker().freeze();
+            }
 
             if (game.getCombat() != null) {
                 game.getCombat().removeFromCombat(c);
