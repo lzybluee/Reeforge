@@ -1550,9 +1550,9 @@ public class ComputerUtil {
                 Card current = c.getGame().getCardState(c);
                 if (current != null && current.getTimestamp() == c.getTimestamp()) {
                     if(topStack.hasParam("FightWithToughness")) {
-                    	fightDmg = c.getCurrentToughness();
+                    	fightDmg = c.getNetToughness();
                     } else {
-                    	fightDmg = c.getCurrentPower();
+                    	fightDmg = c.getNetPower();
                     }
                     if(fightDmg > 0 && current.hasKeyword(Keyword.DEATHTOUCH)) {
                     	fightDeathtouch = true;
