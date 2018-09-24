@@ -1439,6 +1439,7 @@ public class ComputerUtil {
             // that does not match "sa"
             SpellAbility spell = si.getSpellAbility(true), sub = spell.getSubAbility();
             while (sub != null && sub != sa) {
+            	Iterables.addAll(objects, ComputerUtil.predictThreatenedObjects(ai, sa, sub));
                 sub = sub.getSubAbility();
             }
             if (sa == null || (sa != spell && sa != sub)) {
