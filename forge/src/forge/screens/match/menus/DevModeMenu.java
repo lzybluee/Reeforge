@@ -130,8 +130,8 @@ public class DevModeMenu implements ActionListener, IDevListener {
         case EXILE_FROM_HAND:	   { controller.exileCardsFromHand(); break; }
         case SET_PLAYER_LIFE:      { controller.setPlayerLife(false); break; }
         case WIN_GAME:             { controller.winGame(false); break; }
-        case SETUP_GAME_STATE:     { controller.setupGameState(); break; }
-        case DUMP_GAME_STATE:      { controller.dumpGameState(); break; }
+        case SETUP_GAME_STATE:     { controller.setupGameState(false); break; }
+        case DUMP_GAME_STATE:      { controller.dumpGameState(false); break; }
         case PLAY_UNLIMITED:       { controller.togglePlayUnlimited(); break; }
         case VIEW_ALL:             { controller.toggleViewAllCards(); break; }
         case ADD_COUNTER:          { controller.addCounterToPermanent(false); break; }

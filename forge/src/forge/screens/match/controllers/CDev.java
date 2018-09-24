@@ -102,21 +102,21 @@ public final class CDev implements ICDoc {
     private final MouseListener madSetup = new MouseAdapter() {
         @Override
         public void mousePressed(final MouseEvent e) {
-            setupGameState();
+            setupGameState(e.getButton() == MouseEvent.BUTTON3);
         }
     };
-    public void setupGameState() {
-        getController().cheat().setupGameState();
+    public void setupGameState(boolean lastState) {
+        getController().cheat().setupGameState(lastState);
     }
 
     private final MouseListener madDump = new MouseAdapter() {
         @Override
         public void mousePressed(final MouseEvent e) {
-            dumpGameState();
+            dumpGameState(e.getButton() == MouseEvent.BUTTON3);
         }
     };
-    public void dumpGameState() {
-        getController().cheat().dumpGameState();
+    public void dumpGameState(boolean quick) {
+        getController().cheat().dumpGameState(quick);
     }
 
     private final MouseListener madTutor = new MouseAdapter() {

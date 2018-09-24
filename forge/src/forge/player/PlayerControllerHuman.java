@@ -87,6 +87,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
     protected final InputProxy inputProxy;
 
     private boolean isConcede;
+    private static String lastStateFileName;
     
     public PlayerControllerHuman(final Game game0, final Player p, final LobbyPlayer lp) {
         super(game0, p, lp);
@@ -2153,7 +2154,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
          * @see forge.player.IDevModeCheats#dumpGameState()
          */
         @Override
-        public void dumpGameState() {
+        public void dumpGameState(boolean quick) {
             final GameState state = createGameStateObject();
             try {
                 state.initFromGame(game);
@@ -2161,9 +2162,17 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
                 if(!dir.exists()) {
                     dir.mkdirs();
                 }
-                final File f = GuiBase.getInterface().getSaveFile(new File(ForgeConstants.USER_GAMES_DIR, "state.txt"));
-                if (f != null
-                        && (!f.exists() || getGui().showConfirmDialog("Overwrite existing file?", "File exists!"))) {
+                File f = null;
+                if(quick) {
+                	f = new File(dir + File.separator + "state_quick.txt");
+                } else {
+                	f = GuiBase.getInterface().getSaveFile(new File(ForgeConstants.USER_GAMES_DIR, "state.txt"));
+                	if(f == null) {
+                		return;
+                	}
+                }
+                if (quick || (f != null
+                        && (!f.exists() || getGui().showConfirmDialog("Overwrite existing file?", "File exists!")))) {
                     final BufferedWriter bw = new BufferedWriter(new FileWriter(f));
                     bw.write(state.toString());
                     bw.close();
@@ -2181,21 +2190,39 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         /*
          * (non-Javadoc)
          * 
-         * @see forge.player.IDevModeCheats#setupGameState()
+         * @see forge.player.IDevModeCheats#setupGameState(boolean lastState)
          */
         @Override
-        public void setupGameState() {
+        public void setupGameState(boolean lastState) {
             final File gamesDir = new File(ForgeConstants.USER_GAMES_DIR);
             if (!gamesDir.exists()) {
                 // if the directory does not exist, try to create it
                 gamesDir.mkdir();
             }
 
-            final String filename = GuiBase.getInterface().showFileDialog("Select Game State File",
-                    ForgeConstants.USER_GAMES_DIR);
+            String filename = null;
+            if(lastState) {
+                if(lastStateFileName == null) {
+                	String name = gamesDir + File.separator + "state_quick.txt";
+            		File file = new File(name);
+            		if(file.exists()) {
+            			filename = name;
+            		}
+                } else {
+                	File file = new File(lastStateFileName);
+                	if(file.exists()) {
+                		filename = lastStateFileName;
+                	}
+                }
+            }
+        	if(filename == null) {
+        		filename = GuiBase.getInterface().showFileDialog("Select Game State File",
+                        ForgeConstants.USER_GAMES_DIR);
+        	}
             if (filename == null) {
                 return;
             }
+            lastStateFileName = filename;
 
             final GameState state = createGameStateObject();
             try {
