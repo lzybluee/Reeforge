@@ -1597,8 +1597,14 @@ public class ComputerUtil {
                         continue;
                     }
 
+                    boolean hasDeathtouch = false;
+                    final int predictDamage = ComputerUtilCombat.predictDamageTo(c, dmg, source, false);
+                    if(predictDamage > 0 && (source.hasKeyword(Keyword.DEATHTOUCH) || fightDeathtouch)) {
+                    	hasDeathtouch = true;
+                    }
+
                     if (saviourApi == ApiType.Pump || saviourApi == ApiType.PumpAll) {
-                        boolean canSave = ComputerUtilCombat.predictDamageTo(c, dmg - toughness, source, false) < ComputerUtilCombat.getDamageToKill(c);
+                        boolean canSave = ComputerUtilCombat.predictDamageTo(c, dmg - toughness, source, false) < ComputerUtilCombat.getDamageToKill(c) && !hasDeathtouch;
                         if ((tgt == null && !grantIndestructible && !canSave)
                                 || (!grantIndestructible && !grantShroud && !canSave)) {
                             continue;
@@ -1606,7 +1612,7 @@ public class ComputerUtil {
                     }
                     
                     if (saviourApi == ApiType.PutCounter || saviourApi == ApiType.PutCounterAll) {
-                        boolean canSave = ComputerUtilCombat.predictDamageTo(c, dmg - toughness, source, false) < ComputerUtilCombat.getDamageToKill(c);
+                        boolean canSave = ComputerUtilCombat.predictDamageTo(c, dmg - toughness, source, false) < ComputerUtilCombat.getDamageToKill(c) && !hasDeathtouch;
                         if (!canSave && !grantShroud) {
                             continue;
                         }
@@ -1621,12 +1627,6 @@ public class ComputerUtil {
                     // player owns or is a token
                     if (saviourApi == ApiType.ChangeZone && (c.getOwner().isOpponentOf(aiPlayer) || c.isToken())) {
                         continue;
-                    }
-
-                    boolean hasDeathtouch = false;
-                    final int predictDamage = ComputerUtilCombat.predictDamageTo(c, dmg, source, false);
-                    if(predictDamage > 0 && (source.hasKeyword(Keyword.DEATHTOUCH) || fightDeathtouch)) {
-                    	hasDeathtouch = true;
                     }
                     
                     if (predictDamage >= ComputerUtilCombat.getDamageToKill(c) || hasDeathtouch) {
