@@ -1439,7 +1439,6 @@ public class ComputerUtil {
             // that does not match "sa"
             SpellAbility spell = si.getSpellAbility(true), sub = spell.getSubAbility();
             while (sub != null && sub != sa) {
-            	Iterables.addAll(objects, ComputerUtil.predictThreatenedObjects(ai, sa, sub));
                 sub = sub.getSubAbility();
             }
             if (sa == null || (sa != spell && sa != sub)) {
@@ -1471,6 +1470,7 @@ public class ComputerUtil {
     
         // Can only Predict things from AFs
         if (threatApi == null) {
+        	Iterables.addAll(threatened, ComputerUtil.predictThreatenedObjects(aiPlayer, saviour, topStack.getSubAbility()));
             return threatened;
         }
         final TargetRestrictions tgt = topStack.getTargetRestrictions();
@@ -1482,6 +1482,7 @@ public class ComputerUtil {
                 CardCollectionView battleField = aiPlayer.getCardsIn(ZoneType.Battlefield);
                 objects = CardLists.getValidCards(battleField, topStack.getParam("ValidCards").split(","), source.getController(), source, topStack);
             } else {
+            	Iterables.addAll(threatened, ComputerUtil.predictThreatenedObjects(aiPlayer, saviour, topStack.getSubAbility()));
             	return threatened;
             }
         } else {
@@ -1500,6 +1501,7 @@ public class ComputerUtil {
                 }
             }
             if (canBeTargeted.isEmpty()) {
+            	Iterables.addAll(threatened, ComputerUtil.predictThreatenedObjects(aiPlayer, saviour, topStack.getSubAbility()));
             	return threatened;
             }
             objects = canBeTargeted;
@@ -1531,6 +1533,7 @@ public class ComputerUtil {
             if (saviour.getParam("CounterType").equals("P1P1")) {
                 toughness = AbilityUtils.calculateAmount(saviour.getHostCard(), saviour.getParam("CounterNum"), saviour);
             } else {
+            	Iterables.addAll(threatened, ComputerUtil.predictThreatenedObjects(aiPlayer, saviour, topStack.getSubAbility()));
                 return threatened;
             }
         }
