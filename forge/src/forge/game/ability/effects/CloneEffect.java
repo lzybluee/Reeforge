@@ -137,6 +137,8 @@ public class CloneEffect extends SpellAbilityEffect {
             tgtCard.addAlternateState(CardStateName.Cloner, false);
             tgtCard.switchStates(origState, CardStateName.Cloner, false);
             tgtCard.setState(origState, false);
+
+            CardFactory.copyCopiableCharacteristics(cardToCopy, tgtCard);
         } else {
             //copy Original state to Cloned
             tgtCard.addAlternateState(CardStateName.Cloned, false);
@@ -144,9 +146,9 @@ public class CloneEffect extends SpellAbilityEffect {
             if (tgtCard.isFlipCard()) {
                 tgtCard.setState(CardStateName.Original, false);
             }
-        }
 
-        CardFactory.copyCopiableCharacteristics(cardToCopy, tgtCard);
+            CardFactory.copyState(cardToCopy, CardStateName.Cloned, tgtCard, origState);
+        }
 
         // add extra abilities as granted by the copy effect
         addExtraCharacteristics(tgtCard, sa, origSVars);
@@ -182,8 +184,8 @@ public class CloneEffect extends SpellAbilityEffect {
         }
 
         //Clean up copy of cloned state
-        if (copyingSelf) {
-            tgtCard.clearStates(CardStateName.Cloned, false);
+        if (copyingSelf && !sa.hasParam("Duration")) {
+           tgtCard.clearStates(CardStateName.Cloned, false);
         }
 
         //game.getTriggerHandler().registerActiveTrigger(tgtCard, false);
@@ -219,15 +221,31 @@ public class CloneEffect extends SpellAbilityEffect {
                 }
             };
 
+            final GameCommand uncloneSelf = new GameCommand() {
+                private static final long serialVersionUID = -78375985476256279L;
+
+                @Override
+                public void run() {
+                    if(cloneCard.isCopyingSelf()) {
+                        cloneCard.setState(CardStateName.Cloned, false);
+                        cloneCard.switchStates(CardStateName.Cloned, origState, false);
+                        cloneCard.clearStates(CardStateName.Cloned, false);
+                        cloneCard.updateStateForView();
+                        game.fireEvent(new GameEventCardStatsChanged(cloneCard));
+                    }
+                }
+            };
+
+
             final String duration = sa.getParam("Duration");
             if (duration.equals("UntilEndOfTurn")) {
-                game.getEndOfTurn().addUntil(unclone);
+                game.getEndOfTurn().addUntil(copyingSelf ? uncloneSelf : unclone);
             }
             else if (duration.equals("UntilYourNextTurn")) {
-                game.getCleanup().addUntil(host.getController(), unclone);
+                game.getCleanup().addUntil(host.getController(), copyingSelf ? uncloneSelf : unclone);
             }
             else if (duration.equals("UntilUnattached")) {
-                sa.getHostCard().addUnattachCommand(unclone);
+                sa.getHostCard().addUnattachCommand(copyingSelf ? uncloneSelf : unclone);
             }
         }
         game.fireEvent(new GameEventCardStatsChanged(tgtCard));

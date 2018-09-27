@@ -712,6 +712,10 @@ public class Card extends GameEntity implements Comparable<Card> {
         return states.containsKey(CardStateName.Cloner);
     }
 
+    public boolean isCopyingSelf() {
+        return states.containsKey(CardStateName.Cloned);
+    }
+
     public static List<String> getStorableSVars() {
         return Card.storableSVars;
     }
