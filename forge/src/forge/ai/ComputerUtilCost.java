@@ -7,6 +7,7 @@ import forge.ai.ability.AnimateAi;
 import forge.card.ColorSet;
 import forge.game.GameActionUtil;
 import forge.game.ability.AbilityUtils;
+import forge.game.ability.ApiType;
 import forge.game.card.Card;
 import forge.game.card.CardCollection;
 import forge.game.card.CardFactoryUtil;
@@ -590,6 +591,17 @@ public class ComputerUtilCost {
         // AI will only pay when it's not already payed and only opponents abilities
         if (alreadyPaid || (payers.size() > 1 && (isMine && !payForOwnOnly))) {
             return false;
+        }
+
+        if(sa.getApi() == ApiType.LoseLife && sa.hasParam("LifeAmount")) {
+            for (final CostPart part : cost.getCostParts()) {
+            	if(part instanceof CostDiscard || part instanceof CostSacrifice) {
+                	int loss = AbilityUtils.calculateAmount(sa.getHostCard(), sa.getParam("LifeAmount"), sa);
+                	if(payer.getLife() - loss >= 10 || !payer.canLoseLife()) {
+                		return false;
+                	}
+            	}
+            }
         }
 
         // AI was crashing because the blank ability used to pay costs
