@@ -594,10 +594,13 @@ public class ComputerUtilCost {
         }
 
         if(sa.getApi() == ApiType.LoseLife && sa.hasParam("LifeAmount")) {
+        	if(!payer.canLoseLife()) {
+        		return false;
+        	}
             for (final CostPart part : cost.getCostParts()) {
             	if(part instanceof CostDiscard || part instanceof CostSacrifice) {
                 	int loss = AbilityUtils.calculateAmount(sa.getHostCard(), sa.getParam("LifeAmount"), sa);
-                	if(payer.getLife() - loss >= 10 || !payer.canLoseLife()) {
+                	if(payer.getLife() - loss >= 10) {
                 		return false;
                 	}
             	}
