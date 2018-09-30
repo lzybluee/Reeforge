@@ -449,7 +449,11 @@ public class AbilityUtils {
                 		}
                 	}
                 }
-                val = CardFactoryUtil.playerXCount(players, calcX[1], card);
+                if(players.size() == game.getPlayers().size()) {
+                	val = CardFactoryUtil.playerXCount(players, calcX[1], card);
+                } else {
+                	val = 0;
+                }
             }
             else if (hType.equals("YourTeam")) {
                 players.addAll(player.getYourTeam());
