@@ -1,0 +1,23 @@
+[metadata]
+Name=Standard_Red Deck Wins
+[Main]
+2 Ahn-Crop Crasher|AKH
+4 Bomat Courier|KLD
+4 Earthshaker Khenra|HOU
+4 Ghitu Lavarunner|DOM
+4 Goblin Chainwhirler|DOM
+4 Lightning Strike|M19
+19 Mountain|M19|1
+4 Shock|M19
+4 Soul-Scar Mage|AKH
+3 The Flame of Keld|DOM
+4 Viashino Pyromancer|M19
+4 Wizard's Lightning|DOM
+[Sideboard]
+2 Abrade|HOU
+3 Chandra's Defeat|HOU
+1 Chandra, Torch of Defiance|KLD
+3 Cut // Ribbons|AKH
+3 Hazoret the Fervent|AKH
+2 Insult // Injury|AKH
+1 Mountain|M19|1
