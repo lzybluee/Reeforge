@@ -202,7 +202,11 @@ public class PumpEffect extends SpellAbilityEffect {
             }
 
             for (int i = 0; i < keywords.size(); i++) {
-                sb.append(keywords.get(i)).append(" ");
+            	String str = keywords.get(i).replaceAll("CARDNAME", "").replaceAll("HIDDEN", "").replaceAll(" +", " ");
+            	if(str.endsWith(".")) {
+            		str = str.substring(0, str.length() - 1);
+            	}
+                sb.append(str).append(" ");
             }
 
             if (!sa.hasParam("Permanent")) {
