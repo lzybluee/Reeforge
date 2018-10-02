@@ -2173,6 +2173,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
                 }
                 if (quick || (f != null
                         && (!f.exists() || getGui().showConfirmDialog("Overwrite existing file?", "File exists!")))) {
+                	lastStateFileName = f.getAbsolutePath();
                     final BufferedWriter bw = new BufferedWriter(new FileWriter(f));
                     bw.write(state.toString());
                     bw.close();
