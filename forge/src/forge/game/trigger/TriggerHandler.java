@@ -622,10 +622,6 @@ public class TriggerHandler {
             sa.setActivatingPlayer(p);
         }
 
-        if (triggerParams.containsKey("RememberController")) {
-            host.addRemembered(sa.getActivatingPlayer());
-        }
-
         if (regtrig.isIntrinsic() && regtrig.getOverridingAbility() == null) {
             sa.setIntrinsic(true);
             sa.changeText();
@@ -634,6 +630,14 @@ public class TriggerHandler {
         sa.setStackDescription(sa.toString());
         if (sa.getApi() == ApiType.Charm && !sa.isWrapper()) {
             CharmEffect.makeChoices(sa);
+        }
+
+        if(!sa.getConditions().areMet(sa)) {
+        	return;
+        }
+
+        if (triggerParams.containsKey("RememberController")) {
+            host.addRemembered(sa.getActivatingPlayer());
         }
 
         Player decider = null;
