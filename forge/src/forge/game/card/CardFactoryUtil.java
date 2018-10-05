@@ -2568,7 +2568,9 @@ public class CardFactoryUtil {
             final Trigger changeZoneTrigger = TriggerHandler.parseTrigger("Mode$ ChangesZone | ValidCard$ Card.IsRemembered | Origin$ Exile | Destination$ Any | TriggerZone$ Command | Execute$ DBHideawayCleanup | Static$ True", card, intrinsic);
             triggers.add(changeZoneTrigger);
             card.setSVar("DBHideawayRemember", "DB$ Animate | Defined$ Imprinted | RememberObjects$ Remembered | Permanent$ True");
-            card.setSVar("DBHideawayCleanup", "DB$ Cleanup | ClearRemembered$ True");
+            card.setSVar("DBHideawayCleanup", "DB$ Cleanup | ClearRemembered$ True | ClearImprinted$ True");
+            final Trigger selfChangeZoneTrigger = TriggerHandler.parseTrigger("Mode$ ChangesZone | ValidCard$ Card.Self | Origin$ Battlefield | Destination$ Any | TriggerZone$ Battlefield | Execute$ DBHideawayCleanup | Static$ True", card, intrinsic);
+            triggers.add(selfChangeZoneTrigger);
             
             for (final Trigger trigger : triggers) {
                 inst.addTrigger(trigger);
