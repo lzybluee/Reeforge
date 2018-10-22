@@ -1,40 +1,39 @@
 [metadata]
 Name=Modern_GWx Vizier
 [Main]
-4 Birds of Paradise|M12
-2 Breeding Pool|GTC
+3 Birds of Paradise|M12
 4 Chord of Calling|M15
 4 Collected Company|DTK
 1 Courser of Kruphix|BNG
 4 Devoted Druid|SHM
-2 Duskwatch Recruiter|SOI
-4 Eternal Witness|5DN
+3 Duskwatch Recruiter|SOI
+1 Eternal Witness|5DN
+2 Field of Ruin|XLN
 4 Forest|DOM|1
-1 Gavony Township|ISD
-3 Horizon Canopy|FUT
-1 Judge's Familiar|RTR
-1 Kitchen Finks|SHM
-1 Misty Rainforest|ZEN
+2 Ghost Quarter|ISD
+1 Horizon Canopy|FUT
+4 Knight of the Reliquary|CFX
 4 Noble Hierarch|CFX
 1 Plains|DOM|1
-1 Reflector Mage|OGW
-2 Selfless Spirit|EMN
-2 Temple Garden|RTR
-2 Tireless Tracker|SOI
-2 Verdant Catacombs|ZEN
-4 Vizier of Remedies|AKH
-1 Walking Ballista|AER
-4 Windswept Heath|KTK
-1 Wooded Foothills|KTK
-[Sideboard]
-1 Aven Mindcensor|AKH
-2 Disdainful Stroke|KTK
-2 Dispel|BFZ
-1 Phyrexian Revoker|M15
-1 Qasali Pridemage|ARB
-1 Reclamation Sage|M15
-2 Reflector Mage|OGW
+3 Renegade Rallier|AER
 1 Scavenging Ooze|M14
-1 Selfless Spirit|EMN
-1 Shalai, Voice of Plenty|DOM
+1 Tectonic Edge|WWK
+2 Temple Garden|RTR
+1 Tireless Tracker|SOI
+4 Vizier of Remedies|AKH
+2 Walking Ballista|AER
+4 Windswept Heath|KTK
+4 Wooded Foothills|KTK
+[Sideboard]
+1 Bojuka Bog|WWK
+1 Burrenton Forge-Tender|LRW
+1 Eidolon of Rhetoric|JOU
+1 Kataki, War's Wage|SOK
+3 Path to Exile|CFX
+1 Qasali Pridemage|ARB
+1 Remorseful Cleric|M19
+1 Scavenging Ooze|M14
+1 Sigarda, Host of Herons|AVR
+1 Spellskite|NPH
+1 Tireless Tracker|SOI
 2 Worship|9ED
