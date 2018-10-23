@@ -1582,7 +1582,35 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
     private final Map<String, Long> orderedSALookupTimestamp = Maps.newHashMap();
 
     @Override
-    public void orderAndPlaySimultaneousSa(final List<SpellAbility> activePlayerSAs) {
+    public void orderAndPlaySimultaneousSa(final List<SpellAbility> sas) {
+    	List<SpellAbility> perCardList = Lists.newArrayList();
+    	HashMap<Card, List<SpellAbility>> perCardmap = Maps.newHashMap();
+    	List<SpellAbility> noHostList = Lists.newArrayList();
+    	for(SpellAbility sa : sas) {
+    		Card host = sa.getHostCard();
+    		if(host != null) {
+    			if(!perCardmap.containsKey(host)) {
+    				perCardmap.put(host, Lists.newArrayList());
+    			}
+    			perCardmap.get(host).add(sa);
+    		} else {
+    			noHostList.add(sa);
+    		}
+    	}
+    	for(Map.Entry<Card, List<SpellAbility>> entry : perCardmap.entrySet()) {
+    		perCardList.addAll(entry.getValue());
+    	}
+    	perCardList.addAll(noHostList);
+
+    	List<SpellAbility> activePlayerSAs = Lists.newArrayList();
+    	for(SpellAbility sa : perCardList) {
+    		if(sa.getApi() != null && (sa.getApi() == ApiType.Untap || sa.getApi() == ApiType.Token)) {
+    			activePlayerSAs.add(sa);
+    		}
+    	}
+    	perCardList.removeAll(activePlayerSAs);
+    	activePlayerSAs.addAll(perCardList);
+
         List<SpellAbility> orderedSAs = activePlayerSAs;
         if (activePlayerSAs.size() > 1) {
             final String firstStr = activePlayerSAs.get(0).toString();
