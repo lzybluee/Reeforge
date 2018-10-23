@@ -219,8 +219,8 @@ public class CardView extends GameEntityView {
     }
     public boolean hasSameCounters(CardView otherCard) {
         Map<CounterType, Integer> counters = getCounters();
-        if (counters == null) {
-            return otherCard.getCounters() == null;
+        if (counters == null || counters.isEmpty()) {
+            return otherCard.getCounters() == null || otherCard.getCounters().isEmpty();
         }
         return counters.equals(otherCard.getCounters());
     }
