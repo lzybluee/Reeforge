@@ -238,15 +238,19 @@ public abstract class GameEntity extends GameObject implements IIdentifiable {
     }
     public void setPreventNextDamage(final int n) {
         preventNextDamage = n;
+        getView().updatePreventNextDamage(this);
     }
     public void addPreventNextDamage(final int n) {
         preventNextDamage += n;
+        getView().updatePreventNextDamage(this);
     }
     public void subtractPreventNextDamage(final int n) {
         preventNextDamage -= n;
+        getView().updatePreventNextDamage(this);
     }
     public void resetPreventNextDamage() {
         preventNextDamage = 0;
+        getView().updatePreventNextDamage(this);
     }
 
     // PreventNextDamageWithEffect
@@ -274,6 +278,7 @@ public abstract class GameEntity extends GameObject implements IIdentifiable {
         } else {
             preventionShieldsWithEffects.put(shieldSource, effectMap);
         }
+        getView().updatePreventNextDamage(this);
     }
     public void subtractPreventNextDamageWithEffect(final Card shieldSource, final int n) {
         int currentShields = Integer.valueOf(preventionShieldsWithEffects.get(shieldSource).get("ShieldAmount"));
@@ -282,9 +287,11 @@ public abstract class GameEntity extends GameObject implements IIdentifiable {
         } else {
             preventionShieldsWithEffects.remove(shieldSource);
         }
+        getView().updatePreventNextDamage(this);
     }
     public void resetPreventNextDamageWithEffect() {
         preventionShieldsWithEffects.clear();
+        getView().updatePreventNextDamage(this);
     }
 
     public abstract boolean hasKeyword(final String keyword);

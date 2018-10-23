@@ -11,7 +11,6 @@ import forge.util.TextUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableMultiset;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -472,9 +471,11 @@ public class PlayerView extends GameEntityView {
         details.add(TextUtil.concatWithSpace("Lands played this turn:", String.valueOf(getLandsPlayedThisTurn())));
         details.add(TextUtil.concatWithSpace("Spells cast this turn:", String.valueOf(getSpellsCastThisTurn())));
         details.add(TextUtil.concatWithSpace("Cards drawn this turn:", String.valueOf(getNumDrawnThisTurn())));
-        details.add(TextUtil.concatWithSpace("Damage prevention:", String.valueOf(getPreventNextDamage())));
+        if(getPreventNextDamage() > 0) {
+        	details.add(TextUtil.concatWithSpace("Damage prevention:", String.valueOf(getPreventNextDamage())));
+        }
         if(getExtraTurn() > 0) {
-        	details.add(TextUtil.concatWithSpace("Extra turn:", String.valueOf(getExtraTurn())));
+        	details.add(TextUtil.concatWithSpace("Extra turns:", String.valueOf(getExtraTurn())));
         }
         final String keywords = Lang.joinHomogenous(getDisplayableKeywords());
         if (!keywords.isEmpty()) {

@@ -266,11 +266,13 @@ public class CardDetailUtil {
         // Token
         if (card.isToken()) {
             if(card.getCurrentState().getType().hasSubtype("Effect"))
-                area.append("Effect");
+                area.append("[Effect]");
             else if(card.getCurrentState().getType().isEmblem())
-                area.append("Emblem");
+                area.append("[Emblem]");
             else
-                area.append("Token");
+                area.append("[Token]");
+
+            area.append("\n");
         }
 
         // card text
@@ -293,9 +295,13 @@ public class CardDetailUtil {
 
         area.append(text);
 
+        if (area.length() != 0) {
+            area.append("\n");
+        }
+
         if(state.isPlaneswalker()) {
         	if (area.length() != 0) {
-                area.append("\n\n");
+                area.append("\n");
             }
             area.append("Planeswalker ability activated this turn : " + card.getPwAbilityActivited());
         }
@@ -384,7 +390,9 @@ public class CardDetailUtil {
         // Damage Prevention
         final int preventNextDamage = card.getPreventNextDamage();
         if (preventNextDamage > 0) {
-            area.append("\n");
+            if (area.length() != 0) {
+                area.append("\n");
+            }
             area.append("Prevent the next ").append(preventNextDamage).append(" damage that would be dealt to ");
             area.append(state.getName()).append(" this turn.");
         }
@@ -559,7 +567,7 @@ public class CardDetailUtil {
         // exerted
         if (card.getExerted() != null) {
             if (area.length() != 0) {
-                area.append("\n\n");
+                area.append("\n");
             }
             area.append("Exerted by: ");
             area.append(StringUtils.join(card.getExerted(), ", "));
@@ -569,7 +577,7 @@ public class CardDetailUtil {
         String curCardColors = formatCurrentCardColors(state);
         if (!curCardColors.isEmpty() && !card.isFaceDown()) {
             if (area.length() != 0) {
-                area.append("\n\n");
+                area.append("\n");
             }
             area.append("Current Card Colors: ");
             area.append(curCardColors);
@@ -579,7 +587,7 @@ public class CardDetailUtil {
         if (state.hasStorm()) {
             if (gameView != null) {
                 if (area.length() != 0) {
-                    area.append("\n\n");
+                    area.append("\n");
                 }
                 area.append("Current Storm Count: " + gameView.getStormCount());
             }

@@ -139,7 +139,7 @@ public class ComputerUtilCost {
                 final CostDiscard disc = (CostDiscard) part;
     
                 final String type = disc.getType();
-                if (type.equals("CARDNAME") && source.getAbilityText().contains("Bloodrush")) {
+                if (type.equals("CARDNAME") && source.getAbilityText().contains("Bloodrush —")) {
                     continue;
                 }
                 final CardCollection typeList = CardLists.getValidCards(hand, type.split(","), source.getController(), source, null);
@@ -600,7 +600,7 @@ public class ComputerUtilCost {
             for (final CostPart part : cost.getCostParts()) {
             	if(part instanceof CostDiscard || part instanceof CostSacrifice) {
                 	int loss = AbilityUtils.calculateAmount(sa.getHostCard(), sa.getParam("LifeAmount"), sa);
-                	if(payer.getLife() - loss >= 10) {
+                	if(payer.getLife() - loss >= 6) {
                 		return false;
                 	}
             	}
