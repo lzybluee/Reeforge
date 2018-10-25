@@ -2667,15 +2667,16 @@ public class CardFactoryUtil {
                     " | Destination$ Any | TriggerZones$ Command | Static$ True | Execute$ MiracleSelfExile";
 
             //SVar:DBExileSelf:
-            final String abExile = "DB$ ChangeZone | Defined$ Self | Origin$ Command | Destination$ Exile | SubAbility$ DBCleanup";
-            final String abClean = "DB$ Cleanup | ClearRemembered$ True";
+            final String abExile = "DB$ ChangeZone | Defined$ Self | Origin$ Command | Destination$ Exile"; 
 
+            final ManaCost cost = new ManaCost(new ManaCostParser(manacost));
             final String trigStrDrawn = "Mode$ Drawn | ValidCard$ Card.Self | Miracle$ True | Secondary$ True"
-                + " | OptionalDecider$ You | Static$ True | TriggerDescription$ CARDNAME - Miracle";
+                + " | OptionalDecider$ You | Static$ True | TriggerDescription$ CARDNAME - Miracle " + cost
+                + " (You may cast this card for its miracle cost when you draw it if it's the first card you drew this turn.)";
 
             final String trigStrRevealed = "Mode$ Revealed | ValidCard$ Card.Self | Miracle$ True"
                 + " | IsPresent$ Card.StrictlySelf | PresentZone$ Hand | Secondary$ True"
-                + " | TriggerDescription$ CARDNAME - Miracle " + new ManaCost(new ManaCostParser(manacost))
+                + " | TriggerDescription$ CARDNAME - Miracle " + cost
                 + " (You may cast this card for its miracle cost when you draw it if it's the first card you drew this turn.)";
 
             final Trigger triggerDrawn = TriggerHandler.parseTrigger(trigStrDrawn, card, intrinsic);
@@ -2686,7 +2687,6 @@ public class CardFactoryUtil {
             effectSA.setSVar("SMayLookAt", abStrLook);
             effectSA.setSVar("TrigCleanup", trigExile);
             effectSA.setSVar("MiracleSelfExile", abExile);
-            effectSA.setSVar("DBCleanup", abClean);
             revealSA.setSubAbility(effectSA);
 
             triggerDrawn.setOverridingAbility(revealSA);
