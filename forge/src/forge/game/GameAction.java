@@ -1805,7 +1805,7 @@ public class GameAction {
                             e.printStackTrace();
                         }
                         p.shuffle(null);
-                        p.drawCards(handSize[i] - mulliganDelta);
+                        p.drawCards(handSize[i] - (p.getController().canPlayUnlimited() ? 0 : mulliganDelta));
                     } else {
                         List<Card> toExile = Lists.newArrayList(toMulligan);
                         for (Card c : toExile) {
