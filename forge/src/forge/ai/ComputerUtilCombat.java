@@ -1697,7 +1697,7 @@ public class ComputerUtilCombat {
         if (blocker.isEquippedBy("Godsend")) {
            return true;
         }
-        if (attacker.hasKeyword(Keyword.INDESTRUCTIBLE) || ComputerUtil.canRegenerate(attacker.getController(), attacker)) {
+        if (attacker.hasKeyword(Keyword.INDESTRUCTIBLE) || ComputerUtil.canRegenerate(attacker.getController(), attacker, true)) {
             return false;
         }
         
@@ -1762,7 +1762,7 @@ public class ComputerUtilCombat {
      */
     public static boolean attackerCantBeDestroyedInCombat(Player ai, final Card attacker) {
         // attacker is either indestructible or may regenerate
-        if (attacker.hasKeyword(Keyword.INDESTRUCTIBLE) || (ComputerUtil.canRegenerate(ai, attacker))) {
+        if (attacker.hasKeyword(Keyword.INDESTRUCTIBLE) || (ComputerUtil.canRegenerate(ai, attacker, true))) {
             return true;
         }
 
@@ -1829,7 +1829,7 @@ public class ComputerUtilCombat {
             }
         } // flanking
 
-        if (((attacker.hasKeyword(Keyword.INDESTRUCTIBLE) || (ComputerUtil.canRegenerate(ai, attacker) && !withoutAbilities))
+        if (((attacker.hasKeyword(Keyword.INDESTRUCTIBLE) || (ComputerUtil.canRegenerate(ai, attacker, true) && !withoutAbilities))
                 && !(blocker.hasKeyword(Keyword.WITHER) || blocker.hasKeyword(Keyword.INFECT)))
                 || (attacker.hasKeyword(Keyword.PERSIST) && !attacker.canReceiveCounters(CounterType.M1M1) && (attacker
                         .getCounters(CounterType.M1M1) == 0))
@@ -1982,7 +1982,7 @@ public class ComputerUtilCombat {
         } // flanking
         
         if (blocker.hasKeyword(Keyword.INDESTRUCTIBLE) || dontTestRegen
-                || ComputerUtil.canRegenerate(blocker.getController(), blocker)) {
+                || ComputerUtil.canRegenerate(blocker.getController(), blocker, true)) {
             return false;
         }
 
@@ -2067,7 +2067,7 @@ public class ComputerUtilCombat {
     		return true;
     	}
 
-        if (((blocker.hasKeyword(Keyword.INDESTRUCTIBLE) || (ComputerUtil.canRegenerate(ai, blocker) && !withoutAbilities)) && !(attacker
+        if (((blocker.hasKeyword(Keyword.INDESTRUCTIBLE) || (ComputerUtil.canRegenerate(ai, blocker, true) && !withoutAbilities)) && !(attacker
                 .hasKeyword(Keyword.WITHER) || attacker.hasKeyword(Keyword.INFECT)))
                 || (blocker.hasKeyword(Keyword.PERSIST) && !blocker.canReceiveCounters(CounterType.M1M1) && (blocker
                         .getCounters(CounterType.M1M1) == 0))

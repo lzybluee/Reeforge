@@ -833,6 +833,10 @@ public class ComputerUtil {
     }
 
     public static boolean canRegenerate(Player ai, final Card card) {
+    	return canRegenerate(ai, card, false);
+    }
+
+    public static boolean canRegenerate(Player ai, final Card card, final boolean checkCost) {
         if (!card.canBeShielded()) {
             return false;
         }
@@ -870,6 +874,18 @@ public class ComputerUtil {
                             if (!ComputerUtilCost.checkCreatureSacrificeCost(controller, abCost, c, sa)) {
                                 continue; // Won't play ability
                             }
+                        }
+                    } else if(checkCost) {
+                    	final Cost abCost = sa.getPayCosts();
+                        boolean sacrifice = false;
+                        for (final CostPart part : abCost.getCostParts()) {
+                            if (part instanceof CostSacrifice) {
+                            	sacrifice = true;
+                            	break;
+                            }
+                        }
+                        if(sacrifice) {
+                        	continue;
                         }
                     }
 
