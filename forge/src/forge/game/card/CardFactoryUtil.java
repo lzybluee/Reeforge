@@ -1129,6 +1129,9 @@ public class CardFactoryUtil {
         if (sq[0].contains("CardToughness")) {
             return doXMath(c.getNetToughness(), m, c);
         }
+        if (sq[0].contains("CardLoyalty")) {
+            return doXMath(c.getCurrentLoyalty(), m, c);
+        }
         if (sq[0].contains("CardSumPT")) {
             return doXMath((c.getNetPower() + c.getNetToughness()), m, c);
         }
