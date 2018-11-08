@@ -607,6 +607,12 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
      */
     @Override
     public boolean confirmAction(final SpellAbility sa, final PlayerActionConfirmMode mode, final String message) {
+    	if (sa != null && sa.getApi() == ApiType.SetState) {
+    		final String cardName = sa.getHostCard() == null ? null : sa.getHostCard().getName();
+            if (getGui().shouldAutoYieldCard(cardName)) {
+        		return false;
+            }
+    	}
         if (sa != null && sa.getHostCard() != null && sa.hasParam("ShowCardInPrompt")) {
             // The card wants another thing displayed in the prompt on mouse over rather than itself
             Card show = null;
