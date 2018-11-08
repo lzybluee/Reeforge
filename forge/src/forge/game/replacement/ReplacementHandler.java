@@ -145,6 +145,17 @@ public class ReplacementHandler {
 
         chosenRE.setHasRun(true);
         ReplacementResult res = this.executeReplacement(runParams, chosenRE, decider, game);
+
+        if (res == ReplacementResult.NotReplaced && chosenRE.hasParam("CheckSVar") && chosenRE.getParam("CheckSVar").equals("DredgeCheckLib")) {
+        	List<ReplacementEffect> removeDredge = Lists.newArrayList();
+        	for(ReplacementEffect re : possibleReplacers) {
+        		if(re.hasParam("CheckSVar") && re.getParam("CheckSVar").equals("DredgeCheckLib")) {
+        			removeDredge.add(re);
+        		}
+        	}
+        	possibleReplacers.removeAll(removeDredge);
+        }
+
         if (res == ReplacementResult.NotReplaced) {
             if (!possibleReplacers.isEmpty()) {
                 res = run(runParams);
