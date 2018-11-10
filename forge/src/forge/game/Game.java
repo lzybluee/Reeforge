@@ -447,6 +447,10 @@ public class Game {
 
     public synchronized void setGameOver(GameEndReason reason) {
         age = GameStage.GameOver;
+        for(Player p : ingamePlayers) {
+        	revealFaceDownCards(p);
+        }
+
         for (Player p : allPlayers) {
             p.setMindSlaveMaster(null); // for correct totals
         }
@@ -669,10 +673,36 @@ public class Game {
         return myPosition - startPosition + 1;
     }
 
+    public void revealFaceDownCards(Player p) {
+    	CardCollection battlefieldCards = new CardCollection();
+    	CardCollection stackCards = new CardCollection();
+        for(Card c : this.getCardsInGame()) {
+            if (c.getOwner().equals(p)) {
+            	if(c.isFaceDown() && !c.isToken()) {
+            		if(c.getZone().is(ZoneType.Battlefield)) {
+            			c.setState(CardStateName.Original, true);
+            			battlefieldCards.add(c);
+            		} else if (c.getZone().is(ZoneType.Stack)) {
+            			c.setState(CardStateName.Original, true);
+            			stackCards.add(c);
+            		}
+            	}
+            }
+        }
+        if(!battlefieldCards.isEmpty()) {
+        	getAction().revealToAll(new CardCollection(battlefieldCards), ZoneType.Battlefield, p, true, "Face-down cards in ");
+        }
+        if(!stackCards.isEmpty()) {
+        	getAction().revealToAll(new CardCollection(stackCards), ZoneType.Stack, p, true, "Face-down cards in ");
+        }
+    }
+
     public void onPlayerLost(Player p) {
         // Rule 800.4 Losing a Multiplayer game
         CardCollectionView cards = this.getCardsInGame();
         boolean planarControllerLost = false;
+
+        revealFaceDownCards(p);
 
         for(Card c : cards) {
             if (c.getController().equals(p) && (c.isPlane() || c.isPhenomenon())) {
@@ -687,7 +717,6 @@ public class Game {
                     this.getAction().exile(c, null);
                 }
             }
-
         }
 
         // 901.6: If the current planar controller would leave the game, instead the next player

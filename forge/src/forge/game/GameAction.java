@@ -110,6 +110,7 @@ public class GameAction {
         boolean toBattlefield = zoneTo.is(ZoneType.Battlefield);
         boolean fromBattlefield = zoneFrom != null && zoneFrom.is(ZoneType.Battlefield);
         boolean toHand = zoneTo.is(ZoneType.Hand);
+        boolean isFaceDown = c.isFaceDown() && !c.isToken();
 
         //Rule 110.5g: A token that has left the battlefield can't move to another zone
         if (c.isToken() && zoneFrom != null && !fromBattlefield && !zoneFrom.is(ZoneType.Command)) {
@@ -156,7 +157,7 @@ public class GameAction {
         // Cards returned from exile face-down must be reset to their original state, otherwise
         // all sort of funky shenanigans may happen later (e.g. their ETB replacement effects are set
         // up on the wrong card state etc.).
-        if (c.isFaceDown() && (fromBattlefield || (toHand && zoneFrom.is(ZoneType.Exile)))) {
+        if (c.isFaceDown() && (fromBattlefield || (toHand && zoneFrom.is(ZoneType.Exile)) || (!toBattlefield && zoneFrom.is(ZoneType.Stack)))) {
             c.setState(CardStateName.Original, true);
             c.runFaceupCommands();
         }
@@ -437,11 +438,10 @@ public class GameAction {
             copied.clearDelved();
         }
 
-        // rule 504.6: reveal a face-down card leaving the stack 
-        if (zoneFrom != null && zoneTo != null && zoneFrom.is(ZoneType.Stack) && !zoneTo.is(ZoneType.Battlefield) && c.isFaceDown()) {
-            c.setState(CardStateName.Original, true);
-            reveal(new CardCollection(c), c.getOwner(), true, "Face-down card moves from the stack: ");
-            c.setState(CardStateName.FaceDown, true);
+        // rule 707.9: reveal a face-down card
+        if ((zoneFrom != null && zoneTo != null && zoneFrom.is(ZoneType.Stack) && !zoneTo.is(ZoneType.Battlefield)
+        		|| (zoneFrom != null && zoneFrom.is(ZoneType.Battlefield))) && isFaceDown) {
+            reveal(new CardCollection(c), c.getOwner(), true, "Face-down card moves to ");
         }
 
         if (fromBattlefield) {
@@ -1590,6 +1590,15 @@ public class GameAction {
 
     public void reveal(CardCollectionView cards, ZoneType zt, Player cardOwner, boolean dontRevealToOwner, String messagePrefix) {
         for (Player p : game.getPlayers()) {
+            if (dontRevealToOwner && cardOwner == p) {
+                continue;
+            }
+            p.getController().reveal(cards, zt, cardOwner, messagePrefix);
+        }
+    }
+
+    public void revealToAll(CardCollectionView cards, ZoneType zt, Player cardOwner, boolean dontRevealToOwner, String messagePrefix) {
+        for (Player p : game.getRegisteredPlayers()) {
             if (dontRevealToOwner && cardOwner == p) {
                 continue;
             }
