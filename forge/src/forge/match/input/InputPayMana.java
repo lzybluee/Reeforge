@@ -347,7 +347,7 @@ public abstract class InputPayMana extends InputSyncronizedBase {
             @Override
             public void run() {
                 chosen.setUsedToPayMana(InputPayMana.this.manaCost);
-                boolean b = HumanPlay.playSpellAbility(getController(), chosen.getActivatingPlayer(), chosen);
+                boolean b = HumanPlay.playSpellAbility(getController(), chosen.getActivatingPlayer(), chosen, false);
                 chosen.setUsedToPayMana(null);
                 chosen.setNeedChooseMana(false);
                 if (b) {

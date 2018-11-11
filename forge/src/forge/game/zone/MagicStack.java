@@ -192,8 +192,12 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
         }
         return true;
     }
+
     public final void clearUndoStack() {
         if (undoStackOwner == null) { return; }
+        for(SpellAbility sa : undoStack) {
+        	AbilityUtils.clearPayingManaAbilities(sa);
+        }
         undoStack.clear();
         undoStackOwner = null;
     }
@@ -216,6 +220,11 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
             if (undoStackOwner != activator) {
                 clearUndoStack(); //clear if undo stack owner changes
                 undoStackOwner = activator;
+            }
+            for(SpellAbility sa : sp.getPayingManaAbilities()) {
+            	if(undoStack.contains(sa)) {
+            		undoStack.remove(sa);
+            	}
             }
             undoStack.push(sp);
         }

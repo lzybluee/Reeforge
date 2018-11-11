@@ -64,7 +64,7 @@ public class HumanPlay {
      * @param sa
      *            a {@link forge.game.spellability.SpellAbility} object.
      */
-    public final static boolean playSpellAbility(final PlayerControllerHuman controller, final Player p, SpellAbility sa) {
+    public final static boolean playSpellAbility(final PlayerControllerHuman controller, final Player p, SpellAbility sa, boolean topAbility) {
         FThreads.assertExecutedByEdt(false);
 
         if (sa instanceof LandAbility) {
@@ -129,6 +129,9 @@ public class HumanPlay {
                     source.turnFaceDown(true);
                 }
                 return false;
+            }
+            if(topAbility && !sa.isUndoable()) {
+            	AbilityUtils.clearPayingManaAbilities(sa);
             }
         } else if (payManaCostIfNeeded(controller, p, sa)) {
             if (sa.isSpell() && !source.isCopiedSpell()) {

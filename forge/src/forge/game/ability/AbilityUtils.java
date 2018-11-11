@@ -1908,4 +1908,15 @@ public class AbilityUtils {
         sa.setDescription(sa.getDescription() + " (Splicing " + c + " onto it)");
         sa.addSplicedCards(c);
     }
+
+    public static void clearPayingManaAbilities(SpellAbility sa) {
+        for (final SpellAbility am : sa.getPayingManaAbilities()) {
+        	clearPayingManaAbilities(am);
+        }
+        if(sa.getManaPart() != null && sa.getManaPart().getLastManaProduced() != null) {
+            sa.getManaPart().getLastManaProduced().clear();
+        }
+        sa.getPayingManaAbilities().clear();
+        sa.clearManaPaid();
+    }
 }
