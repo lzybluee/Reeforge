@@ -1,7 +1,7 @@
 Name:Knowledge Vault
 ManaCost:4
 Types:Artifact
-A:AB$ ChangeZone | Cost$ 2 T | Defined$ TopOfLibrary | Origin$ Library | Destination$ Exile | ExileFaceDown$ True | RememberChanged$ True | SpellDescription$ Exile the top card of your library face down.
+A:AB$ ChangeZone | Cost$ 2 T | Defined$ TopOfLibrary | Origin$ Library | Destination$ Exile | ExileFaceDown$ True | RememberChanged$ True | ForgetOtherRemembered$ True | SpellDescription$ Exile the top card of your library face down.
 A:AB$ SacrificeAll | Cost$ 0 | ValidCards$ Card.Self | RememberSacrificed$ True | SubAbility$ DBDiscardHand | SpellDescription$ Sacrifice CARDNAME. If you do, discard your hand, then put all cards exiled with CARDNAME into their owner's hand.
 SVar:DBDiscardHand:DB$ Discard | Mode$ Hand | SubAbility$ DBChangeZoneAll | ConditionCheckSVar$ VaultX | ConditionSVarCompare$ GT0 | References$ VaultX
 SVar:DBChangeZoneAll:DB$ ChangeZoneAll | ChangeType$ Remembered | Origin$ Exile | Destination$ Hand | ConditionCheckSVar$ VaultX | ConditionSVarCompare$ GT0 | References$ VaultX

@@ -2,7 +2,8 @@ Name:Honor the Fallen
 ManaCost:1 W
 Types:Instant
 A:SP$ ChangeZoneAll | Cost$ 1 W | ChangeType$ Creature | Origin$ Graveyard | Destination$ Exile | RememberChanged$ True | ForgetOtherRemembered$ True | SubAbility$ DBGainLife | SpellDescription$ Exile all creature cards from all graveyards. You gain 1 life for each card exiled this way.
-SVar:DBGainLife:DB$GainLife | Defined$ You | LifeAmount$ X | References$ X
+SVar:DBGainLife:DB$GainLife | Defined$ You | LifeAmount$ X | References$ X | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
 SVar:X:Remembered$Amount
 SVar:NeedsToPlayVar:Z GE2
 SVar:Count$ValidGraveyard Creature

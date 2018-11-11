@@ -874,6 +874,10 @@ public class ChangeZoneEffect extends SpellAbilityEffect {
         final String totalcmc = sa.getParam("WithTotalCMC");
         int totcmc = AbilityUtils.calculateAmount(source, totalcmc, sa);
 
+        if (sa.hasParam("ForgetOtherRemembered")) {
+        	source.clearRemembered();
+        }
+        
         fetchList.sort();
 
         CardCollection chosenCards = new CardCollection();
