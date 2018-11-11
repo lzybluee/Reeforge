@@ -113,7 +113,7 @@ Ugin, the Spirit Dragon|Ugin's Anti-Ultimatum|A ragtag band of misfits, brought 
 Venser, the Sojourner|Venser's Oblivion|Let's just clean this up a bit...
 Vivien of the Arkbow|Vivien's Overrun|No, never heard of a 'Garruk' -- why do you ask?
 Vivien Reid|Vivien's Utter Pandemonium|They're so cute when they're stampeding.
-Vraska, Scheming Gorgon|Vraska's Stone Gaze|I think we could use a new figurehead!
 Vraska the Unseen|Vraska's Crew|Say hello to my little friends!
 Vraska, Relic Seeker|Vraska's Mark|Never play hide and seek with a Gorgon.
+Vraska, Scheming Gorgon|Vraska's Stone Gaze|I think we could use a new figurehead!
 Xenagos, the Reveler|Xenagos's Reveal|Mwahahaha! Now I'm a god!
