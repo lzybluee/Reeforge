@@ -131,7 +131,6 @@ public class AbilityUtils {
             if (parent != null) {
                 Iterables.addAll(cards, parent.getTargets().getTargetCards());
             }
-
         }
         else if (defined.startsWith("Triggered") && (sa != null)) {
             final SpellAbility root = sa.getRootAbility();

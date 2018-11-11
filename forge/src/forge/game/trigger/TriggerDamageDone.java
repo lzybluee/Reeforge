@@ -118,7 +118,7 @@ public class TriggerDamageDone extends Trigger {
     /** {@inheritDoc} */
     @Override
     public final void setTriggeringObjects(final SpellAbility sa) {
-        sa.setTriggeringObject("Source", CardUtil.getLKICopy((Card)this.getRunParams().get("DamageSource")));
+        sa.setTriggeringObject("Source", (Card)this.getRunParams().get("DamageSource"));
         sa.setTriggeringObject("Target", this.getRunParams().get("DamageTarget"));
         sa.setTriggeringObject("DamageAmount", this.getRunParams().get("DamageAmount"));
         // This parameter is here because LKI information related to combat doesn't work properly
