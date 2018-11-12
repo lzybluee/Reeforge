@@ -6,7 +6,8 @@ SVar:DBRepeat:DB$ Repeat | RepeatSubAbility$ DBChooseAgain | ConditionCheckSVar$
 SVar:DBChooseAgain:DB$ ChooseCard | Defined$ ParentTarget | ChoiceZone$ Graveyard | Choices$ Card.YouOwn+IsNotRemembered | Mandatory$ True | AILogic$ WorstCard | RememberChosen$ True | UnlessCost$ B | UnlessPayer$ You | UnlessSwitched$ True | UnlessResolveSubs$ WhenNotPaid | SubAbility$ DBStoreSVar | ShowCurrentCard$ ChosenCard
 SVar:DBStoreSVar:DB$ StoreSVar | SVar$ CheckNotPaid | Type$ Number | Expression$ 0 | References$ CheckNotPaid
 SVar:DBMoveChosen:DB$ ChangeZone | Defined$ ChosenCard | Origin$ Graveyard | Destination$ Hand | SubAbility$ DBReset
-SVar:DBReset:DB$ StoreSVar | SVar$ CheckNotPaid | Type$ Number | Expression$ 1 | References$ CheckNotPaid
+SVar:DBReset:DB$ StoreSVar | SVar$ CheckNotPaid | Type$ Number | Expression$ 1 | References$ CheckNotPaid | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
 SVar:ChoiceNum:Count$ValidGraveyard Card.YouOwn+IsNotRemembered
 SVar:CheckNotPaid:Number$1
 SVar:CheckRepeat:SVar$ChoiceNum/Times.CheckNotPaid

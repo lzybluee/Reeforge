@@ -143,6 +143,9 @@ public class ChooseSourceEffect extends SpellAbilityEffect {
                     sourcesToChooseFrom.remove(o);
                 }
                 host.setChosenCards(chosen);
+                if (sa.hasParam("ForgetOtherRemembered")) {
+                	host.clearRemembered();
+                }
                 if (sa.hasParam("RememberChosen")) {
                     for (final Card rem : chosen) {
                         host.addRemembered(rem);

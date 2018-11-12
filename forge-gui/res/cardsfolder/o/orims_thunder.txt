@@ -3,7 +3,8 @@ ManaCost:2 W
 Types:Instant
 K:Kicker:R
 A:SP$ Destroy | Cost$ 2 W | ValidTgts$ Artifact,Enchantment | TgtPrompt$ Select target artifact or enchantment | RememberTargets$ True | ForgetOtherTargets$ True | SubAbility$ DBDamage | SpellDescription$ Destroy target artifact or enchantment.
-SVar:DBDamage:DB$DealDamage | Condition$ Kicked | ValidTgts$ Creature | TgtPrompt$ Select target creature | NumDmg$ X | References$ X | SpellDescription$ If CARDNAME was kicked, it deals damage equal to that permanent's converted mana cost to target creature.
+SVar:DBDamage:DB$DealDamage | Condition$ Kicked | ValidTgts$ Creature | TgtPrompt$ Select target creature | NumDmg$ X | References$ X | SpellDescription$ If CARDNAME was kicked, it deals damage equal to that permanent's converted mana cost to target creature. | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
 SVar:X:Remembered$CardManaCost
 DeckHints:Color$Red
 SVar:Picture:http://www.wizards.com/global/images/magic/general/orims_thunder.jpg

@@ -1469,7 +1469,7 @@ public class AbilityUtils {
         Card host = sa.getHostCard();
 
         if (sa.hasParam("RememberTargets") && sa.getTargetRestrictions() != null) {
-            if (sa.hasParam("ForgetOtherTargets")) {
+            if (sa.hasParam("ForgetOtherTargets") || sa.hasParam("ForgetOtherRemembered")) {
                 host.clearRemembered();
             }
             for (final GameObject o : sa.getTargets().getTargets()) {

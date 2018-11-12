@@ -7,7 +7,8 @@ T:Mode$ Attacks | ValidCard$ Card.Self | Execute$ TrigPayCost | TriggerZones$ Ba
 SVar:TrigPayCost:AB$ ImmediateTrigger | Cost$ X | Reference$ X | Execute$ TrigChange | RememberXPaid$ True | TriggerDescription$ When you do, return target creature card with converted mana cost X from your graveyard to the battlefield with a corpse counter on it. If that creature would leave the battlefield, exile it instead of putting it anywhere else.
 SVar:TrigChange:DB$ ChangeZone | Origin$ Graveyard | Destination$ Battlefield | ValidTgts$ Creature.YouOwn+cmcEQChosenX | TgtPromp$ Choose target creature with CMC equal to X. | RememberTargets$ True | AILogic$ BeforeCombat | SubAbility$ DBPutCounter | SpellDescription$ Return target creature card with converted mana cost X from your graveyard to the battlefield.
 SVar:DBPutCounter:DB$ PutCounter | Defined$ Remembered | CounterType$ CORPSE | CounterNum$ 1 | SubAbility$ DBPump
-SVar:DBPump:DB$ Pump | Defined$ Remembered | LeaveBattlefield$ Exile
+SVar:DBPump:DB$ Pump | Defined$ Remembered | LeaveBattlefield$ Exile | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
 SVar:X:Count$xPaid
 SVar:HasAttackEffect:TRUE
 Oracle:Deathtouch\nWhenever Isareth the Awakener attacks, you may pay {X}. When you do, return target creature card with converted mana cost X from your graveyard to the battlefield with a corpse counter on it. If that creature would leave the battlefield, exile it instead of putting it anywhere else.

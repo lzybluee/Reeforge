@@ -2,7 +2,8 @@ Name:Inquisition
 ManaCost:2 B
 Types:Sorcery
 A:SP$ RevealHand | Cost$ 2 B | ValidTgts$ Player | TgtPrompt$ Select target player | RememberRevealed$ True | SubAbility$ Damage | SpellDescription$ Target player reveals their hand. CARDNAME deals damage to that player equal to the number of white cards in their hand.
-SVar:Damage:DB$ DealDamage | Defined$ Targeted | NumDmg$ X | References$ X
+SVar:Damage:DB$ DealDamage | Defined$ Targeted | NumDmg$ X | References$ X | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
 SVar:X:Remembered$Valid Card.White
 SVar:RemRandomDeck:True
 SVar:Picture:http://www.wizards.com/global/images/magic/general/inquisition.jpg

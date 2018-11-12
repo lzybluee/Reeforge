@@ -106,6 +106,10 @@ public class DigUntilEffect extends SpellAbilityEffect {
         boolean shuffle = sa.hasParam("Shuffle");
         final boolean optional = sa.hasParam("Optional");
 
+        if(remember && sa.hasParam("ForgetOtherRemembered")) {
+        	host.clearRemembered();
+        }
+
         for (final Player p : getTargetPlayers(sa)) {
             if (p == null) {
                 continue;
