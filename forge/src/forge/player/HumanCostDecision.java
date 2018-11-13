@@ -173,7 +173,9 @@ public class HumanCostDecision extends CostDecisionMakerBase {
                 c = AbilityUtils.calculateAmount(source, amount, ability);
             }
         }
-
+        if (c == 0) {
+            return PaymentDecision.card(new CardCollection());
+        }
         final InputSelectCardsFromList inp = new InputSelectCardsFromList(controller, c, c, hand, ability);
         inp.setMessage("Select %d more " + cost.getDescriptiveType() + " to discard.");
         inp.setCancelAllowed(true);
@@ -270,6 +272,9 @@ public class HumanCostDecision extends CostDecisionMakerBase {
         }
 
         if (cost.from == ZoneType.Battlefield || cost.from == ZoneType.Hand) {
+            if (c == 0) {
+                return PaymentDecision.card(new CardCollection());
+            }
             final InputSelectCardsFromList inp = new InputSelectCardsFromList(controller, c, c, list, ability);
             inp.setMessage("Exile %d card(s) from your" + cost.from);
             inp.setCancelAllowed(true);
@@ -518,6 +523,9 @@ public class HumanCostDecision extends CostDecisionMakerBase {
         final CardCollectionView list = player.getCardsIn(ZoneType.Battlefield);
         final CardCollectionView validCards = CardLists.getValidCards(list, cost.getType().split(";"), player, source, ability);
 
+        if (c == 0) {
+            return PaymentDecision.card(new CardCollection());
+        }
         final InputSelectCardsFromList inp = new InputSelectCardsFromList(controller, c, validCards, ability);
         final String desc = cost.getTypeDescription() == null ? cost.getType() : cost.getTypeDescription();
         inp.setMessage("Gain control of %d " + desc);
@@ -668,6 +676,9 @@ public class HumanCostDecision extends CostDecisionMakerBase {
         }
 
         if (cost.from == ZoneType.Hand) {
+            if (c == 0) {
+                return PaymentDecision.card(new CardCollection());
+            }
             final InputSelectCardsFromList inp = new InputSelectCardsFromList(controller, c, c, list, ability);
             inp.setMessage("Put %d card(s) from your " + cost.from);
             inp.setCancelAllowed(true);
@@ -783,6 +794,10 @@ public class HumanCostDecision extends CostDecisionMakerBase {
             }
         }
         else {
+            if (c == 0) {
+                return PaymentDecision.card(new CardCollection());
+            }
+
             final CardCollectionView validCards = CardLists.getValidCards(ability.getActivatingPlayer().getCardsIn(ZoneType.Battlefield),
                     cost.getType().split(";"), player, source, ability);
 
@@ -1237,7 +1252,9 @@ public class HumanCostDecision extends CostDecisionMakerBase {
             controller.getGui().message("Not enough valid cards left to tap to pay the cost.", "Cost payment invalid");
             return null; // not enough targets anymore (e.g. Crackleburr + Smokebraider tapped to get mana)
         }
-
+        if (c == 0) {
+            return PaymentDecision.card(new CardCollection());
+        }
         final InputSelectCardsFromList inp = new InputSelectCardsFromList(controller, c, c, typeList, ability);
         inp.setCancelAllowed(true);
         inp.setMessage("Select a " + cost.getDescriptiveType() + " to tap (%d left)");
@@ -1268,6 +1285,9 @@ public class HumanCostDecision extends CostDecisionMakerBase {
             } else {
                 c = AbilityUtils.calculateAmount(source, amount, ability);
             }
+        }
+        if (c == 0) {
+            return PaymentDecision.card(new CardCollection());
         }
         final InputSelectCardsFromList inp = new InputSelectCardsFromList(controller, c, c, typeList, ability);
         inp.setCancelAllowed(true);
