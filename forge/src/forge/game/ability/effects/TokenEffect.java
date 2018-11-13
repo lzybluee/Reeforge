@@ -17,6 +17,7 @@
  */
 package forge.game.ability.effects;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,6 +43,7 @@ import forge.game.player.Player;
 import forge.game.spellability.SpellAbility;
 import forge.game.trigger.Trigger;
 import forge.game.trigger.TriggerHandler;
+import forge.game.zone.ZoneType;
 import forge.item.PaperToken;
 import forge.util.collect.FCollectionView;
 import forge.util.MyRandom;
@@ -229,6 +231,21 @@ public class TokenEffect extends SpellAbilityEffect {
         final boolean remember = sa.hasParam("RememberTokens");
         final boolean imprint = sa.hasParam("ImprintTokens");
         final List<Card> allTokens = Lists.newArrayList();
+        
+        if (sa.hasParam("ClearUnexistRememberedTokens")) {
+        	ArrayList<Object> toClear = Lists.newArrayList();
+        	for (Object obj : game.getCardState(sa.getHostCard()).getRemembered()) {
+                if (obj instanceof Card) {
+                    Card card = (Card)obj;
+                    if(!card.getZone().is(ZoneType.Battlefield)) {
+                    	toClear.add(card);
+                    }
+                }
+        	}
+        	for(Object obj : toClear) {
+        		game.getCardState(sa.getHostCard()).removeRemembered(obj);
+        	}
+        }
 
         boolean combatChanged = false;
         boolean inCombat = game.getPhaseHandler().inCombat();

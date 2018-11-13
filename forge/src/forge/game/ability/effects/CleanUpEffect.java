@@ -1,17 +1,12 @@
 package forge.game.ability.effects;
 
 
-import java.util.ArrayList;
-
-import com.google.common.collect.Lists;
-
 import forge.game.Game;
 import forge.game.ability.AbilityUtils;
 import forge.game.ability.SpellAbilityEffect;
 import forge.game.card.Card;
 import forge.game.player.Player;
 import forge.game.spellability.SpellAbility;
-import forge.game.zone.ZoneType;
 
 public class CleanUpEffect extends SpellAbilityEffect {
 
@@ -61,20 +56,6 @@ public class CleanUpEffect extends SpellAbilityEffect {
         }
         if (sa.hasParam("ClearChosenColor")) {
             source.setChosenColors(null);
-        }
-        if (sa.hasParam("ClearRememberedTokens")) {
-        	ArrayList<Object> toClear = Lists.newArrayList();
-        	for (Object obj : source.getRemembered()) {
-                if (obj instanceof Card) {
-                    Card card = (Card)obj;
-                    if(!card.getZone().is(ZoneType.Battlefield)) {
-                    	toClear.add(card);
-                    }
-                }
-        	}
-        	for(Object obj : toClear) {
-        		source.removeRemembered(obj);
-        	}
         }
     }
 }
