@@ -85,7 +85,17 @@ public abstract class SpellAbilityEffect {
                             "CARDNAME", sa.getHostCard().getName()));
                 }
                 if (sa.getTargets() != null && !sa.getTargets().getTargets().isEmpty()) {
-                    sb.append(" (Targeting: " + sa.getTargets().getTargets() + ")");
+                	sb.append(" (Targeting ");
+                    for (final GameObject o : sa.getTargets().getTargets()) {
+                        sb.append(o.toString());
+                        if(sa.getTargetRestrictions() != null && sa.getTargetRestrictions().getDividedMap().containsKey(o)) {
+                        	sb.append("->[assign " + sa.getTargetRestrictions().getDividedValue(o) + "]");
+                        }
+                        sb.append(", ");
+                    }
+                    if (sb.toString().endsWith(", ")) {
+                        sb.setLength(sb.length() - 2);
+                    }
                 }
             } else if (!"None".equalsIgnoreCase(stackDesc)) { // by typing "none" they want to suppress output
                 makeSpellDescription(sa, sb, stackDesc);

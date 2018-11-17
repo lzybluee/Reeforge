@@ -46,7 +46,21 @@ public class DamageDealEffect extends DamageBaseEffect {
         } else if (sa.hasParam("DividedAsYouChoose")) {
             sb.append("divided as you choose ");
         }
-        sb.append("to ").append(Lang.joinHomogenous(tgts));
+
+        int remaining = tgts.size();
+        for (final GameObject obj : tgts) {
+        	remaining--;
+            sb.append(obj);
+            if(sa.getTargetRestrictions() != null && sa.getTargetRestrictions().getDividedMap().containsKey(obj)) {
+            	sb.append("->[assign " + sa.getTargetRestrictions().getDividedValue(obj) + "]");
+            }
+            if (remaining > 1) {
+                sb.append(", ");
+            }
+            else if (remaining == 1) {
+                sb.append(" and ");
+            }
+        }
 
         if (sa.hasParam("Radiance")) {
             sb.append(" and each other ").append(sa.getParam("ValidTgts"))

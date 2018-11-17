@@ -223,6 +223,9 @@ public class WrappedAbility extends Ability {
             sb.append(" (Targeting ");
             for (final GameObject o : this.getTargets().getTargets()) {
                 sb.append(o.toString());
+                if(sa.getTargetRestrictions() != null && sa.getTargetRestrictions().getDividedMap().containsKey(o)) {
+                	sb.append("->[assign " + sa.getTargetRestrictions().getDividedValue(o) + "]");
+                }
                 sb.append(", ");
             }
             if (sb.toString().endsWith(", ")) {

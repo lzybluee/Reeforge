@@ -543,7 +543,7 @@ public class TargetRestrictions {
         final Game game = sa.getActivatingPlayer().getGame();
         final List<GameEntity> candidates = Lists.newArrayList();
         for (Player player : game.getPlayers()) {
-            if (sa.canTarget(player)) {
+            if (sa.canTarget(player) && !sa.getTargets().isTargeting(player)) {
                 candidates.add(player);
             }
         }

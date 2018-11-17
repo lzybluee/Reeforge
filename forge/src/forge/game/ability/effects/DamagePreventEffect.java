@@ -45,6 +45,13 @@ public class DamagePreventEffect extends SpellAbilityEffect {
             } else if (o instanceof Player) {
                 sb.append(o.toString());
             }
+            if(sa.getTargetRestrictions() != null && sa.getTargetRestrictions().getDividedMap().containsKey(o)) {
+            	sb.append("->[assign " + sa.getTargetRestrictions().getDividedValue(o) + "]");
+            }
+            sb.append(", ");
+        }
+        if (sb.toString().endsWith(", ")) {
+            sb.setLength(sb.length() - 2);
         }
 
         if (sa.hasParam("Radiance") && (sa.usesTargeting())) {
