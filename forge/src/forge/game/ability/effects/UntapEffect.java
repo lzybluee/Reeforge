@@ -3,10 +3,12 @@ package forge.game.ability.effects;
 import forge.game.ability.AbilityUtils;
 import forge.game.ability.SpellAbilityEffect;
 import forge.game.card.Card;
+import forge.game.card.CardCollection;
 import forge.game.card.CardCollectionView;
 import forge.game.card.CardLists;
 import forge.game.card.CardPredicates.Presets;
 import forge.game.player.Player;
+import forge.game.player.PlayerActionConfirmMode;
 import forge.game.spellability.SpellAbility;
 import forge.game.spellability.TargetRestrictions;
 import forge.game.zone.ZoneType;
@@ -85,7 +87,20 @@ public class UntapEffect extends SpellAbilityEffect {
                 return;
             }
 
-            final CardCollectionView selected = p.getController().chooseCardsForEffect(list, sa, "Select cards to untap", mandatory ? num : 0, num, !mandatory);
+            CardCollectionView controlledList = CardLists.filterControlledBy(list, p);
+            
+            CardCollectionView selected = new CardCollection();
+            while(true) {
+            	selected = p.getController().chooseCardsForEffect(list, sa, "Select cards to untap", mandatory ? num : 0, num, !mandatory);
+                if(selected != null && selected.isEmpty() && controlledList.size() > 0) {
+                	if (p.getController().confirmAction(sa, PlayerActionConfirmMode.OptionalChoose, "Cancel Untap?")) {
+                        break;
+                    }
+                } else {
+                	break;
+                }
+            }
+
             if (selected != null) {
                 for (final Card c : selected) { 
                     c.untap();
