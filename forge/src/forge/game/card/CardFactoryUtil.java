@@ -3924,7 +3924,9 @@ public class CardFactoryUtil {
 
             CardState state = card.getState(CardStateName.FaceDown);
             state.setSVars(card.getSVars());
-            state.addSpellAbility(abilityMorphUp(card, k[1], false));
+            KeywordInterface facedownKeyword = Keyword.getInstance("");
+            facedownKeyword.addSpellAbility(abilityMorphUp(card, k[1], false));
+            state.addIntrinsicKeywords(Lists.newArrayList(facedownKeyword));
         } else if (keyword.startsWith("Megamorph")){
             final String[] k = keyword.split(":");
 
@@ -3932,7 +3934,9 @@ public class CardFactoryUtil {
 
             CardState state = card.getState(CardStateName.FaceDown);
             state.setSVars(card.getSVars());
-            state.addSpellAbility(abilityMorphUp(card, k[1], false));
+            KeywordInterface facedownKeyword = Keyword.getInstance("");
+            facedownKeyword.addSpellAbility(abilityMorphUp(card, k[1], true));
+            state.addIntrinsicKeywords(Lists.newArrayList(facedownKeyword));
         } else if (keyword.startsWith("Multikicker")) {
             final String[] n = keyword.split(":");
             final SpellAbility sa = card.getFirstSpellAbility();

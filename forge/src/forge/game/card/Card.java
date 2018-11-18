@@ -5532,6 +5532,9 @@ public class Card extends GameEntity implements Comparable<Card> {
                     && player.getGame().getZoneOf(this).getZoneType() != ZoneType.Hand) {
                 continue;
             }
+            if(sa.isMorphUp() && !this.isFaceDown()) {
+            	continue;
+            }
             //add alternative costs as additional spell abilities
             abilities.add(sa);
             abilities.addAll(GameActionUtil.getAlternativeCosts(sa, player));
