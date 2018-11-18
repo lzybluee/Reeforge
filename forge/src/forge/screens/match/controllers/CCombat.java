@@ -139,7 +139,7 @@ public class CCombat implements ICDoc {
             }
 
             final FCollection<CardView> blockers = localCombat.getBlockers(band);
-            final boolean blocked = blockers != null && !blockers.isEmpty();
+            final boolean blocked = (blockers != null && !blockers.isEmpty()) || localCombat.isBlocked(band);
             final boolean isBand = bandSize > 1;
             if (isBand) {
                 // Only print Band data if it's actually a band

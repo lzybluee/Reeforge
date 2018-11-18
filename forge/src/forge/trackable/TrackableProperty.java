@@ -143,6 +143,7 @@ public enum TrackableProperty {
     BandsWithBlockers(TrackableTypes.GenericMapType, FreezeMode.IgnoresFreeze),
     AttackersWithPlannedBlockers(TrackableTypes.GenericMapType, FreezeMode.IgnoresFreeze),
     BandsWithPlannedBlockers(TrackableTypes.GenericMapType, FreezeMode.IgnoresFreeze),
+    AttackersAreBlocked(TrackableTypes.GenericMapType, FreezeMode.IgnoresFreeze),
 
     //Game
     Players(TrackableTypes.PlayerViewCollectionType),

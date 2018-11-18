@@ -157,7 +157,7 @@ public class GameView extends TrackableObject {
                     CardView.getCollection(b.getAttackers()),
                     GameEntityView.get(defender),
                     isBlocked ? CardView.getCollection(blockers) : null,
-                    CardView.getCollection(blockers));
+                    CardView.getCollection(blockers), isBlocked);
         }
     }
 
