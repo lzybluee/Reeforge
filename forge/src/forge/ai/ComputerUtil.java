@@ -1468,6 +1468,37 @@ public class ComputerUtil {
         return objects;
     }
 
+    private static final boolean isCloudshift(final SpellAbility ability) {
+    	if(ability.getApi() == ApiType.ChangeZone && ability.hasParam("Origin") && ability.getParam("Origin").equals("Battlefield")
+    			&& ability.hasParam("Destination") && ability.getParam("Destination").equals("Exile")) {
+    		AbilitySub sub = ability.getSubAbility();
+    		if(sub != null && sub.getApi() == ApiType.ChangeZone
+    				&& sub.hasParam("Origin") && sub.getParam("Origin").equals("Exile")
+        			&& sub.hasParam("Destination") && sub.getParam("Destination").equals("Battlefield")) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    private static final List<GameObject> getTargetsList(final SpellAbility ability) {
+    	final List<GameObject> objects = ability.getTargets().getTargets();
+        final List<GameObject> canBeTargeted = new ArrayList<GameObject>();
+        for (Object o : objects) {
+            if (o instanceof Card) {
+                final Card c = (Card) o;
+                Card current = c.getGame().getCardState(c);
+                if (current != null && current.getTimestamp() != c.getTimestamp()) {
+                    continue;
+                }
+                if (c.canBeTargetedBy(ability)) {
+                    canBeTargeted.add(c);
+                }
+            }
+        }
+        return canBeTargeted;
+    }
+    
     private static Iterable<? extends GameObject> predictThreatenedObjects(final Player aiPlayer, final SpellAbility saviour,
             final SpellAbility topStack) {
         Iterable<? extends GameObject> objects = new ArrayList<GameObject>();
@@ -1483,7 +1514,8 @@ public class ComputerUtil {
     
         final Card source = topStack.getHostCard();
         final ApiType threatApi = topStack.getApi();
-    
+
+        boolean useParentTargets = false;
         // Can only Predict things from AFs
         if (threatApi == null) {
         	Iterables.addAll(threatened, ComputerUtil.predictThreatenedObjects(aiPlayer, saviour, topStack.getSubAbility()));
@@ -1497,25 +1529,21 @@ public class ComputerUtil {
             } else if (topStack.hasParam("ValidCards")) {
                 CardCollectionView battleField = aiPlayer.getCardsIn(ZoneType.Battlefield);
                 objects = CardLists.getValidCards(battleField, topStack.getParam("ValidCards").split(","), source.getController(), source, topStack);
+            } else if (topStack.hasParam("ChangeType") && topStack.getParam("ChangeType").contains("Card.IsRemembered")) {
+            	SpellAbility parent = topStack.getParent();
+            	if(parent != null && parent.hasParam("RememberTargets")) {
+            		objects = getTargetsList(parent);
+            		useParentTargets = true;
+            	} else {
+                	Iterables.addAll(threatened, ComputerUtil.predictThreatenedObjects(aiPlayer, saviour, topStack.getSubAbility()));
+                	return threatened;
+            	}
             } else {
             	Iterables.addAll(threatened, ComputerUtil.predictThreatenedObjects(aiPlayer, saviour, topStack.getSubAbility()));
             	return threatened;
             }
         } else {
-            objects = topStack.getTargets().getTargets();
-            final List<GameObject> canBeTargeted = new ArrayList<GameObject>();
-            for (Object o : objects) {
-                if (o instanceof Card) {
-                    final Card c = (Card) o;
-                    Card current = c.getGame().getCardState(c);
-                    if (current != null && current.getTimestamp() != c.getTimestamp()) {
-                        continue;
-                    }
-                    if (c.canBeTargetedBy(topStack)) {
-                        canBeTargeted.add(c);
-                    }
-                }
-            }
+            final List<GameObject> canBeTargeted = getTargetsList(topStack);
             if (canBeTargeted.isEmpty()) {
             	Iterables.addAll(threatened, ComputerUtil.predictThreatenedObjects(aiPlayer, saviour, topStack.getSubAbility()));
             	return threatened;
@@ -1644,7 +1672,11 @@ public class ComputerUtil {
                     if (saviourApi == ApiType.ChangeZone && (c.getOwner().isOpponentOf(aiPlayer) || c.isToken())) {
                         continue;
                     }
-                    
+
+                    if (saviourApi == ApiType.ChangeZone && threatApi == ApiType.DamageAll && isCloudshift(saviour) && !useParentTargets) {
+                        continue;
+                    }
+
                     if (predictDamage >= ComputerUtilCombat.getDamageToKill(c) || hasDeathtouch) {
                         threatened.add(c);
                     }
@@ -1704,6 +1736,11 @@ public class ComputerUtil {
                     if (saviourApi == ApiType.ChangeZone && (c.getOwner().isOpponentOf(aiPlayer) || c.isToken())) {
                         continue;
                     }
+
+                    if (saviourApi == ApiType.ChangeZone && threatApi == ApiType.PumpAll && isCloudshift(saviour) && !useParentTargets) {
+                        continue;
+                    }
+
                     threatened.add(c);
                 }
             }
@@ -1749,6 +1786,10 @@ public class ComputerUtil {
                         continue;
                     }
 
+                    if (saviourApi == ApiType.ChangeZone && threatApi == ApiType.DestroyAll && isCloudshift(saviour) && !useParentTargets) {
+                        continue;
+                    }
+
                     // don't use it on creatures that can't be regenerated
                     if (saviourApi == ApiType.Regenerate && !c.canBeShielded()) {
                         continue;
@@ -1784,6 +1825,10 @@ public class ComputerUtil {
                     // don't bounce or blink a permanent that the human
                     // player owns or is a token
                     if (saviourApi == ApiType.ChangeZone && (c.getOwner().isOpponentOf(aiPlayer) || c.isToken())) {
+                        continue;
+                    }
+
+                    if (saviourApi == ApiType.ChangeZone && threatApi == ApiType.ChangeZoneAll && isCloudshift(saviour) && !useParentTargets) {
                         continue;
                     }
 
