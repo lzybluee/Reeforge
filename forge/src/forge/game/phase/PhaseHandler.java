@@ -507,6 +507,10 @@ public class PhaseHandler implements java.io.Serializable {
                 }
 
                 whoDeclares.getController().declareAttackers(playerTurn, combat);
+
+                if(combat == null) {
+                	return;
+                }
                 combat.removeAbsentCombatants();
 
                 success = CombatUtil.validateAttackers(combat);
