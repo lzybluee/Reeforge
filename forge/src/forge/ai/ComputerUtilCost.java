@@ -461,7 +461,7 @@ public class ComputerUtilCost {
                         continue;
 
                     try {
-                        extraManaNeeded += Integer.parseInt(snem);
+                        extraManaNeeded += Integer.parseInt(parts.length > 1 ? parts[0] : snem);
                     } catch (final NumberFormatException e) {
                         System.out.println("wrong SpellsNeedExtraMana SVar format on " + c);
                     }
