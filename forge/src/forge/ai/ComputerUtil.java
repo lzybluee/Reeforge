@@ -1467,19 +1467,6 @@ public class ComputerUtil {
     
         return objects;
     }
-
-    private static final boolean isCloudshift(final SpellAbility ability) {
-    	if(ability.getApi() == ApiType.ChangeZone && ability.hasParam("Origin") && ability.getParam("Origin").equals("Battlefield")
-    			&& ability.hasParam("Destination") && ability.getParam("Destination").equals("Exile")) {
-    		AbilitySub sub = ability.getSubAbility();
-    		if(sub != null && sub.getApi() == ApiType.ChangeZone
-    				&& sub.hasParam("Origin") && sub.getParam("Origin").equals("Exile")
-        			&& sub.hasParam("Destination") && sub.getParam("Destination").equals("Battlefield")) {
-    			return true;
-    		}
-    	}
-    	return false;
-    }
     
     private static final List<GameObject> getTargetsList(final SpellAbility ability) {
     	final List<GameObject> objects = ability.getTargets().getTargets();
@@ -1673,7 +1660,7 @@ public class ComputerUtil {
                         continue;
                     }
 
-                    if (saviourApi == ApiType.ChangeZone && threatApi == ApiType.DamageAll && isCloudshift(saviour) && !useParentTargets) {
+                    if (saviourApi == ApiType.ChangeZone && threatApi == ApiType.DamageAll && saviour.hasParam("IsCloudshift") && !useParentTargets) {
                         continue;
                     }
 
@@ -1737,7 +1724,7 @@ public class ComputerUtil {
                         continue;
                     }
 
-                    if (saviourApi == ApiType.ChangeZone && threatApi == ApiType.PumpAll && isCloudshift(saviour) && !useParentTargets) {
+                    if (saviourApi == ApiType.ChangeZone && threatApi == ApiType.PumpAll && saviour.hasParam("IsCloudshift") && !useParentTargets) {
                         continue;
                     }
 
@@ -1786,7 +1773,7 @@ public class ComputerUtil {
                         continue;
                     }
 
-                    if (saviourApi == ApiType.ChangeZone && threatApi == ApiType.DestroyAll && isCloudshift(saviour) && !useParentTargets) {
+                    if (saviourApi == ApiType.ChangeZone && threatApi == ApiType.DestroyAll && saviour.hasParam("IsCloudshift") && !useParentTargets) {
                         continue;
                     }
 
@@ -1828,7 +1815,7 @@ public class ComputerUtil {
                         continue;
                     }
 
-                    if (saviourApi == ApiType.ChangeZone && threatApi == ApiType.ChangeZoneAll && isCloudshift(saviour) && !useParentTargets) {
+                    if (saviourApi == ApiType.ChangeZone && threatApi == ApiType.ChangeZoneAll && saviour.hasParam("IsCloudshift") && !useParentTargets) {
                         continue;
                     }
 

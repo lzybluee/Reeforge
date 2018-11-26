@@ -3,7 +3,7 @@ ManaCost:2 W
 Types:Creature Eldrazi
 PT:3/3
 K:Devoid
-A:AB$ ChangeZone | Cost$ 2 C | TargetMin$ 1 | ValidTgts$ Creature.Other | TgtPrompt$ Select another target creature | RememberTargets$ True | ForgetOtherTargets$ True | Origin$ Battlefield | Destination$ Exile | SubAbility$ DBReturn | SpellDescription$ Exile another target creature, then return it to the battlefield tapped under its owner's control.
+A:AB$ ChangeZone | Cost$ 2 C | TargetMin$ 1 | ValidTgts$ Creature.Other | TgtPrompt$ Select another target creature | RememberTargets$ True | ForgetOtherTargets$ True | Origin$ Battlefield | Destination$ Exile | IsCloudshift$ True | SubAbility$ DBReturn | SpellDescription$ Exile another target creature, then return it to the battlefield tapped under its owner's control.
 SVar:DBReturn:DB$ ChangeZone | Defined$ Remembered | Origin$ Exile | Tapped$ True | Destination$ Battlefield | SubAbility$ DBCleanup
 SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
 DeckHints:Ability$Mana.Colorless
