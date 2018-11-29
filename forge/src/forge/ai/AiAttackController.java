@@ -544,22 +544,34 @@ public class AiAttackController {
             maxBlockersAfterCrew--;
         }
         unblockedAttackers.addAll(remainingAttackers);
-        
+
         int trampleDamage = 0;
         for (Card attacker : blockedAttackers) {
             if (attacker.hasKeyword(Keyword.TRAMPLE)) {
                 int damage = ComputerUtilCombat.getAttack(attacker);
-                for (Card blocker : this.blockers) {
-                    if (CombatUtil.canBlock(attacker, blocker)) {
-                        damage -= ComputerUtilCombat.shieldDamage(attacker, blocker);
-                    }
-                }
                 if (damage > 0) {
                     trampleDamage += damage;
                 }
             }
         }
-
+        int totalBlockedDamage = 0;
+        for (Card blocker : this.blockers) {
+        	int blockedDamage = 0;
+        	for (Card attacker : blockedAttackers) {
+        		if (CombatUtil.canBlock(attacker, blocker)) {
+	        		int damage = ComputerUtilCombat.shieldDamage(attacker, blocker);
+	        		if(damage > blockedDamage) {
+	        			blockedDamage = damage;
+	        		}
+        		}
+        	}
+        	totalBlockedDamage += blockedDamage;
+        }
+        trampleDamage -= totalBlockedDamage;
+        if(trampleDamage < 0) {
+        	trampleDamage = 0;
+        }
+        
         int totalCombatDamage = ComputerUtilCombat.sumDamageIfUnblocked(unblockedAttackers, opp) + trampleDamage;
         int totalPoisonDamage = ComputerUtilCombat.sumPoisonIfUnblocked(unblockedAttackers, opp);
 
