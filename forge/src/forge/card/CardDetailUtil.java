@@ -592,6 +592,10 @@ public class CardDetailUtil {
                 area.append("Current Storm Count: " + gameView.getStormCount());
             }
         }
-        return area.toString();
+        String ret = area.toString();
+        while(ret.contains("\n\n\n")) {
+        	ret = ret.replace("\n\n\n", "\n\n");
+        }
+        return ret;
     }
 }
