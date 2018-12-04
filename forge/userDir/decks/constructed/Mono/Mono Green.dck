@@ -1,17 +1,16 @@
 [metadata]
 Name=Mono Green
 [Main]
-1 Arbor Colossus|THS
-4 Boon Satyr|THS
+2 Arbor Colossus|THS
+3 Boon Satyr|THS
 2 Bow of Nylea|THS
 4 Courser of Kruphix|BNG
-24 Forest|THS|1
-1 Hydra Broodmaster|JOU
-2 Karametra's Acolyte|THS
+23 Forest|THS|1
+3 Karametra's Acolyte|THS
 2 Mistcutter Hydra|THS
 2 Nylea, God of the Hunt|THS
 2 Polukranos, World Eater|THS
-3 Reverent Hunter|THS
+4 Reverent Hunter|THS
 4 Sedge Scorpion|THS
 3 Setessan Tactics|JOU
 4 Sylvan Caryatid|THS
@@ -103,7 +102,7 @@ Name=Mono Green
 4 Swordwise Centaur|BNG
 4 Sylvan Caryatid|THS
 4 Time to Feed|THS
-4 Unravel the AEther|BNG
+4 Unravel the Aether|BNG
 4 Voyaging Satyr|THS
 4 Vulpine Goliath|THS
 4 Warriors' Lesson|THS

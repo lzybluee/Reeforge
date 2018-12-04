@@ -1,13 +1,12 @@
 [metadata]
 Name=Mono Red
 [Main]
-1 Anger of the Gods|THS
 2 Ember Swallower|THS
 2 Everflame Eidolon|BNG
-1 Fated Conflagration|BNG
+2 Fated Conflagration|BNG
 2 Firedrinker Satyr|THS
 1 Flame-Wreathed Phoenix|BNG
-2 Hammer of Purphoros|THS
+1 Hammer of Purphoros|THS
 4 Lightning Strike|THS
 4 Magma Jet|THS
 2 Magma Spray|JOU
@@ -15,7 +14,7 @@ Name=Mono Red
 4 Prophetic Flamespeaker|JOU
 2 Purphoros, God of the Forge|THS
 4 Satyr Firedancer|BNG
-3 Searing Blood|BNG
+4 Searing Blood|BNG
 1 Stormbreath Dragon|THS
 1 Titan's Strength|THS
 [Sideboard]

@@ -173,7 +173,7 @@ public abstract class InputPayMana extends InputSyncronizedBase {
     }
     protected boolean activateManaAbility(final Card card, ManaCostBeingPaid manaCost, SpellAbility chosenAbility) {
         if (locked) {
-            System.err.print("Should wait till previous call to playAbility finishes.");
+            System.err.println("Should wait till previous call to playAbility finishes.");
             return false;
         }
         
