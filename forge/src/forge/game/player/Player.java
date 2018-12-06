@@ -1657,50 +1657,56 @@ public class Player extends GameEntity implements Comparable<Player> {
     }
 
     public final void MTGAShuffle(final SpellAbility sa) {
-        if (getCardsIn(ZoneType.Library).size() <= 1) {
+        if (getCardsIn(ZoneType.Library).size() < getMaxHandSize() * 2) {
             return;
         }
-        
-        final CardCollection listA = new CardCollection(getCardsIn(ZoneType.Library));
-        final CardCollection listB = new CardCollection(getCardsIn(ZoneType.Library));
-
-        shuffleCards(listA);
-        shuffleCards(listB);
 
         int lands = 0;
-        int cards = listA.size();
-        for(Card c : listA) {
+        for(Card c : getCardsIn(ZoneType.Library)) {
             if(c.isLand()) {
                 lands++;
             }
         }
-        float deckLandRadio = (float)lands / cards;
+        float deckRadio = (float)lands / getCardsIn(ZoneType.Library).size();
 
-        int landsA = 0;
-        for(int i = 0; i < getMaxHandSize(); i++) {
-            if(listA.get(i).isLand()) {
-                landsA++;
+        final CardCollection[] lists = new CardCollection[3];
+        float[] ratios = new float[3];
+
+        for(int i = 0; i < lists.length; i++) {
+        	lists[i] = new CardCollection(getCardsIn(ZoneType.Library));
+        	shuffleCards(lists[i]);
+
+            lands = 0;
+            for(int j = 0; j < getMaxHandSize(); j++) {
+                if(lists[i].get(j).isLand()) {
+                	lands++;
+                }
             }
-        }
-        float listALandRadio = (float)landsA / getMaxHandSize();
+            float handRatios = (float)lands / getMaxHandSize();
 
-        int landsB = 0;
-        for(int i = 0; i < getMaxHandSize(); i++) {
-            if(listB.get(i).isLand()) {
-                landsB++;
+            lands = 0;
+            for(int j = 0; j < getMaxHandSize(); j++) {
+                if(lists[i].get(j + getMaxHandSize()).isLand()) {
+                	lands++;
+                }
             }
-        }
-        float listBLandRadio = (float)landsB / getMaxHandSize();
+            float nextHandRatios = (float)lands / getMaxHandSize();
 
-        System.err.println("landsA:" + landsA + " landsB:" + landsB + " deck:" + deckLandRadio * 100.0f + "%");
-
-        if(Math.abs(listALandRadio - deckLandRadio) <= Math.abs(listBLandRadio - deckLandRadio)) {
-            System.err.println("Choose listA");
-            getZone(ZoneType.Library).setCards(listA);
-        } else {
-            System.err.println("Choose listB");
-            getZone(ZoneType.Library).setCards(listB);
+            ratios[i] = (handRatios * 3.0f + nextHandRatios) / 4.0f;
+            System.err.print(String.format("[%d] %.02f/%.02f=%.02f ", i + 1, handRatios * 100.0f, nextHandRatios * 100.0f, ratios[i] * 100.0f));
         }
+
+        int index = 0;
+        float min = 1.0f;
+        for(int i = 0; i < lists.length; i++) {
+        	if(Math.abs(ratios[i] - deckRadio) < min) {
+        		min = Math.abs(ratios[i] - deckRadio);
+        		index = i;
+        	}
+        }
+
+        System.err.println(String.format("[Deck] %.02f -> Choose [%d]", deckRadio * 100.0f, index + 1));
+        getZone(ZoneType.Library).setCards(lists[index]);
 
         // Run triggers
         final Map<String, Object> runParams = Maps.newHashMap();
