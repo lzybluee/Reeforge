@@ -380,7 +380,7 @@ public class GameAction {
 
         // Need to apply any static effects to produce correct triggers
         checkStaticAbilities();
-        game.getTriggerHandler().clearInstrinsicActiveTriggers(c, zoneFrom);
+        game.getTriggerHandler().clearInstrinsicActiveTriggers(lastKnownInfo == null ? c : lastKnownInfo, zoneFrom);
         game.getTriggerHandler().registerActiveTrigger(c, false);
 
         // do ETB counters after StaticAbilities check
