@@ -1657,7 +1657,7 @@ public class Player extends GameEntity implements Comparable<Player> {
     }
 
     public final void MTGAShuffle(final SpellAbility sa) {
-        if (getCardsIn(ZoneType.Library).size() < getMaxHandSize() * 2) {
+        if (getCardsIn(ZoneType.Library).size() < getMaxHandSize() * 2 || getMaxHandSize() == 0) {
             return;
         }
 
