@@ -1683,6 +1683,7 @@ public class Player extends GameEntity implements Comparable<Player> {
                 }
             }
             float handRatios = (float)lands / getMaxHandSize();
+            System.err.print(String.format("[%d] %.02f(%d)", i + 1, handRatios * 100.0f, lands));
 
             lands = 0;
             for(int j = 0; j < getMaxHandSize(); j++) {
@@ -1693,7 +1694,7 @@ public class Player extends GameEntity implements Comparable<Player> {
             float nextHandRatios = (float)lands / getMaxHandSize();
 
             ratios[i] = (handRatios * 3.0f + nextHandRatios) / 4.0f;
-            System.err.print(String.format("[%d] %.02f/%.02f=%.02f ", i + 1, handRatios * 100.0f, nextHandRatios * 100.0f, ratios[i] * 100.0f));
+            System.err.print(String.format("/%.02f(%d)=%.02f ", nextHandRatios * 100.0f, lands, ratios[i] * 100.0f));
         }
 
         int index = 0;
