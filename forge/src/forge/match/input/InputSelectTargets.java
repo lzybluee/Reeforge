@@ -35,18 +35,24 @@ public final class InputSelectTargets extends InputSyncronizedBase {
     private boolean bOk = false;
     private final boolean mandatory;
     private final boolean upTo;
+    private final int targetNum;
     private static final long serialVersionUID = -1091595663541356356L;
 
     public final boolean hasCancelled() { return bCancel; }
     public final boolean hasPressedOk() { return bOk; }
 
-    public InputSelectTargets(final PlayerControllerHuman controller, final List<Card> choices, final SpellAbility sa, final boolean mandatory, final boolean upTo) {
+    public InputSelectTargets(final PlayerControllerHuman controller, final List<Card> choices, final SpellAbility sa, final boolean mandatory, final boolean upTo, final int targets) {
         super(controller);
         this.choices = choices;
         this.tgt = sa.getTargetRestrictions();
         this.sa = sa;
         this.mandatory = mandatory;
         this.upTo = upTo;
+        this.targetNum = targets;
+    }
+
+    public InputSelectTargets(final PlayerControllerHuman controller, final List<Card> choices, final SpellAbility sa, final boolean mandatory, final boolean upTo) {
+        this(controller, choices, sa, mandatory, upTo, -1);
     }
 
     @Override
@@ -352,7 +358,7 @@ public final class InputSelectTargets extends InputSyncronizedBase {
     }
 
     private boolean hasAllTargets() {
-        return (upTo && choices.size() == sa.getTargets().getNumTargeted()) || 
+        return (upTo && choices.size() == sa.getTargets().getNumTargeted()) || (targetNum > 0 && sa.getTargets().getNumTargeted() == targetNum) ||
         		tgt.isMaxTargetsChosen(sa.getHostCard(), sa) || ( tgt.getStillToDivide() == 0 && tgt.isDividedAsYouChoose());
     }
 }

@@ -955,7 +955,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         final TargetChoices oldTarget = sa.getTargets();
         final TargetSelection select = new TargetSelection(this, sa);
         sa.resetTargets();
-        if (select.chooseTargets(oldTarget.getNumTargeted())) {
+        if (select.chooseTargets(oldTarget.getNumTargeted(), true)) {
             return sa.getTargets();
         } else {
             // Return old target, since we had to reset them above

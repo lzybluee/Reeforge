@@ -67,12 +67,16 @@ public class TargetSelection {
     private boolean bTargetingDone = false;
 
     public final boolean chooseTargets(Integer numTargets) {
+    	return chooseTargets(numTargets, false);
+    }
+
+    public final boolean chooseTargets(Integer numTargets, boolean changeTargets) {
         final TargetRestrictions tgt = getTgt();
         final boolean canTarget = tgt != null && tgt.doesTarget();
         if (!canTarget) {
             throw new RuntimeException("TargetSelection.chooseTargets called for ability that does not target - " + ability);
         }
-        
+
         // Number of targets is explicitly set only if spell is being redirected (ex. Swerve or Redirect) 
         final int minTargets = numTargets != null ? numTargets.intValue() : tgt.getMinTargets(ability.getHostCard(), ability);
         final int maxTargets = numTargets != null ? numTargets.intValue() : tgt.getMaxTargets(ability.getHostCard(), ability);
@@ -156,7 +160,8 @@ public class TargetSelection {
                 playersWithValidTargets.put(PlayerView.get(card.getController()), null);
             }
             if (controller.getGui().openZones(zone, playersWithValidTargets)) {
-                InputSelectTargets inp = new InputSelectTargets(controller, validTargets, ability, mandatory, minTargets == 0 && maxTargets > 0);
+                InputSelectTargets inp = new InputSelectTargets(controller, validTargets, ability, mandatory,
+                		minTargets == 0 && maxTargets > 0, changeTargets ? numTargets : -1);
                 inp.showAndWait();
                 choiceResult = !inp.hasCancelled();
                 bTargetingDone = inp.hasPressedOk();
