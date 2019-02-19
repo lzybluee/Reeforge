@@ -2206,13 +2206,18 @@ public class ComputerUtilCombat {
 
             // trample
             if (hasTrample) {
-    
+
                 int dmgToKill = ComputerUtilCombat.getEnoughDamageToKill(blocker, dmgCanDeal, attacker, true);
-    
+
+                int lethalDamage = blocker.getLethalDamage();
+                if(attacker.hasKeyword(Keyword.DEATHTOUCH)) {
+                	lethalDamage = 1;
+                }
+
                 if (dmgCanDeal < dmgToKill) {
-                    dmgToKill = Math.min(blocker.getLethalDamage(), dmgCanDeal);
+                    dmgToKill = Math.min(lethalDamage, dmgCanDeal);
                 } else {
-                    dmgToKill = Math.max(blocker.getLethalDamage(), dmgToKill);
+                    dmgToKill = Math.max(lethalDamage, dmgToKill);
                 }
                 
                 if (!isAttacking) { // no entity to deliver damage via trample
