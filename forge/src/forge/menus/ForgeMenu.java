@@ -76,7 +76,8 @@ public final class ForgeMenu {
         addSeparator();
         add(OnlineMenu.getMenu());
         addSeparator();
-        add(getMenuItem_Reload());
+        add(getMenuItem_ReloadSeed());
+        add(getMenuItem_DeleteSeed());
         add(getMenuItem_Restart());
         add(getMenuItem_Exit());
     }
@@ -124,18 +125,37 @@ public final class ForgeMenu {
         return false;
     }
 
-    private static JMenuItem getMenuItem_Reload() {
+    private static JMenuItem getMenuItem_ReloadSeed() {
         JMenuItem menuItem = new JMenuItem("Reload Seed");
         menuItem.setMnemonic(KeyEvent.VK_S);
-        menuItem.addActionListener(getReloadAction());
+        menuItem.addActionListener(getReloadSeedAction());
         return menuItem;
     }
 
-    private static ActionListener getReloadAction() {
+    private static ActionListener getReloadSeedAction() {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MyRandom.reloadSeed();
+            }
+        };
+    }
+
+    private static JMenuItem getMenuItem_DeleteSeed() {
+        JMenuItem menuItem = new JMenuItem("Delete Seed");
+        menuItem.setMnemonic(KeyEvent.VK_D);
+        menuItem.addActionListener(getDeleteSeedAction());
+        if(!MyRandom.hasSeed()) {
+        	menuItem.setEnabled(false);
+        }
+        return menuItem;
+    }
+
+    private static ActionListener getDeleteSeedAction() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MyRandom.deleteSeed();
             }
         };
     }

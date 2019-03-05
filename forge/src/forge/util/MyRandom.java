@@ -117,6 +117,18 @@ public class MyRandom {
     	}
     }
 
+    public static boolean hasSeed() {
+    	File file = new File("load.txt");
+    	return file.exists();
+    }
+
+    public static void deleteSeed() {
+    	File file = new File("load.txt");
+    	if(file.exists()) {
+    		file.delete();
+        }
+    }
+
     public static void updateSeed(List<RegisteredPlayer> players, int match) {
         byte[] loadSeed = loadSeed();
         if(loadSeed == null) {
