@@ -445,14 +445,15 @@ public class PlayerControllerAi extends PlayerController {
     }
     
     @Override
-    public void playChosenSpellAbility(SpellAbility sa) {
+    public boolean playChosenSpellAbility(SpellAbility sa) {
         // System.out.println("Playing sa: " + sa);
         if (sa instanceof LandAbility) {
             if (sa.canPlay()) {
                 sa.resolve();
             }
+            return true;
         } else {
-            ComputerUtil.handlePlayingSpellAbility(player, sa, game);
+            return ComputerUtil.handlePlayingSpellAbility(player, sa, game);
         }
     }    
 
