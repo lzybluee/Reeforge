@@ -16,6 +16,7 @@ import javax.swing.event.PopupMenuListener;
 import forge.Singletons;
 import forge.gui.GuiUtils;
 import forge.screens.home.online.OnlineMenu;
+import forge.util.MyRandom;
 import forge.util.ReflectionUtil;
 
 public final class ForgeMenu {
@@ -75,6 +76,7 @@ public final class ForgeMenu {
         addSeparator();
         add(OnlineMenu.getMenu());
         addSeparator();
+        add(getMenuItem_Reload());
         add(getMenuItem_Restart());
         add(getMenuItem_Exit());
     }
@@ -120,6 +122,22 @@ public final class ForgeMenu {
             }
         }
         return false;
+    }
+
+    private static JMenuItem getMenuItem_Reload() {
+        JMenuItem menuItem = new JMenuItem("Reload Seed");
+        menuItem.setMnemonic(KeyEvent.VK_S);
+        menuItem.addActionListener(getReloadAction());
+        return menuItem;
+    }
+
+    private static ActionListener getReloadAction() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MyRandom.reloadSeed();
+            }
+        };
     }
 
     private static JMenuItem getMenuItem_Restart() {

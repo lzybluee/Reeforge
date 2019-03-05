@@ -110,6 +110,13 @@ public class MyRandom {
         return null;
     }
 
+    public static void reloadSeed() {
+    	if(loadedSeeds != null) {
+    		loadedSeeds.clear();
+    		loadedSeeds = null;
+    	}
+    }
+
     public static void updateSeed(List<RegisteredPlayer> players, int match) {
         byte[] loadSeed = loadSeed();
         if(loadSeed == null) {
