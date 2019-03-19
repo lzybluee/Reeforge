@@ -331,7 +331,7 @@ public class DiscardEffect extends SpellAbilityEffect {
 
         for(Player p : discarders) {
             if(revealCards.containsKey(p)) {
-                p.getGame().getAction().reveal(revealCards.get(p), p, true);
+                p.getGame().getAction().reveal(revealCards.get(p), p, !mode.equals("Random"));
             }
         }
     } // discardResolve()
