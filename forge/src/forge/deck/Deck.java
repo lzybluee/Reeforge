@@ -25,6 +25,7 @@ import forge.card.CardDb;
 import forge.item.IPaperCard;
 import forge.item.PaperCard;
 
+import java.security.SecureRandom;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -44,6 +45,7 @@ public class Deck extends DeckBase implements Iterable<Entry<DeckSection, CardPo
     // Supports deferring loading a deck until we actually need its contents. This works in conjunction with
     // the lazy card load feature to ensure we don't need to load all cards on start up.
     private Map<String, List<String>> deferredSections;
+    private String randomId = "";
 
     // gameType is from Constant.GameType, like GameType.Regular
     /**
@@ -63,6 +65,10 @@ public class Deck extends DeckBase implements Iterable<Entry<DeckSection, CardPo
     public Deck(final String name0) {
         super(name0);
         getOrCreate(DeckSection.Main);
+        byte[] seed = SecureRandom.getSeed(4);
+        for(byte b : seed) {
+        	randomId += String.format("%02x", b);
+        }
     }
 
     /**
@@ -92,6 +98,10 @@ public class Deck extends DeckBase implements Iterable<Entry<DeckSection, CardPo
         tags.addAll(other.getTags());
     }
 
+    String getRandomId() {
+    	return randomId;
+    }
+    
     @Override
     public String getItemType() {
         return "Deck";

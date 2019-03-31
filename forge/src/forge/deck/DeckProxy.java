@@ -98,6 +98,14 @@ public class DeckProxy implements InventoryItem {
         return deck instanceof Deck && fnGetDeck == null ? (Deck) deck : fnGetDeck.apply(deck);
     }
 
+    public String getRandomId() {
+        Deck deck = getDeck();
+        if(deck != null) {
+        	return deck.getRandomId();
+        }
+        return "00000000";
+    }
+
     public String getPath() {
         return path;
     }

@@ -327,11 +327,13 @@ public enum ItemManagerConfig {
                     if (colConfig.getPreferredWidth() != colConfig.getDefaults().getPreferredWidth()) {
                         colEl.setAttribute("width", String.valueOf(colConfig.getPreferredWidth()));
                     }
-                    if (colConfig.getSortPriority() != colConfig.getDefaults().getSortPriority()) {
-                        colEl.setAttribute("sortPriority", String.valueOf(colConfig.getSortPriority()));
-                    }
-                    if (colConfig.getSortState() != colConfig.getDefaults().getSortState()) {
-                        colEl.setAttribute("sortState", String.valueOf(colConfig.getSortState()));
+                    if(!"Random".equals(colConfig.getLongName())) {
+	                    if (colConfig.getSortPriority() != colConfig.getDefaults().getSortPriority()) {
+	                        colEl.setAttribute("sortPriority", String.valueOf(colConfig.getSortPriority()));
+	                    }
+	                    if (colConfig.getSortState() != colConfig.getDefaults().getSortState()) {
+	                        colEl.setAttribute("sortState", String.valueOf(colConfig.getSortState()));
+	                    }
                     }
                     if (colConfig.getIndex() != colConfig.getDefaults().getIndex()) {
                         colEl.setAttribute("index", String.valueOf(colConfig.getIndex()));

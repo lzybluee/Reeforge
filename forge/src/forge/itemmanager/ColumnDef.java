@@ -392,6 +392,19 @@ public enum ColumnDef {
                 public Object apply(final Entry<? extends InventoryItem, Integer> from) {
                     return toDeck(from.getKey()).getSideSize();
                 }
+            }),
+    DECK_RANDOM("Random", "Random", 30, true, SortState.ASC,
+            new Function<Entry<InventoryItem, Integer>, Comparable<?>>() {
+                @Override
+                public Comparable<?> apply(final Entry<InventoryItem, Integer> from) {
+                	return toDeck(from.getKey()).getRandomId();
+                }
+            },
+            new Function<Entry<? extends InventoryItem, Integer>, Object>() {
+                @Override
+                public Object apply(final Entry<? extends InventoryItem, Integer> from) {
+                	return toDeck(from.getKey()).getRandomId();
+                }
             });
 
     ColumnDef(String shortName0, String longName0, int preferredWidth0, boolean isWidthFixed0, SortState sortState0,
