@@ -7,4 +7,4 @@ SVar:TrigToken:DB$ Token | TokenOwner$ You | TokenName$ Dinosaur | TokenColors$ 
 SVar:HasCombatEffect:TRUE
 SVar:Picture:http://www.wizards.com/global/images/magic/general/raptor_hatchling.jpg
 DeckHas:Ability$Token
-Oracle:Enrage — Whenever Ripjaw Raptor is dealt damage, Whenever Raptor Hatchling is dealt damage, create a 3/3 green Dinosaur creature token with trample.
+Oracle:Enrage — Whenever Raptor Hatchling is dealt damage, create a 3/3 green Dinosaur creature token with trample.

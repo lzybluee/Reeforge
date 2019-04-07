@@ -3,7 +3,7 @@ ManaCost:no cost
 Types:Land
 A:AB$ Mana | Cost$ T | Produced$ C | SpellDescription$ Add {C}.
 A:AB$ PutCounter | Cost$ 1 T | CounterType$ STORAGE | CounterNum$ 1 | SpellDescription$ Put a storage counter on CARDNAME.
-A:AB$ Mana | Cost$ T SubCounter<X/STORAGE> | Produced$ C | Amount$ ChosenX | CostDesc$ {T}, Remove X storage counters from CARDNAME: | References$ X | SpellDescription$ Add {C} equal to the amount of counters removed.
+A:AB$ Mana | Cost$ T SubCounter<X/STORAGE> | Produced$ C | Amount$ ChosenX | CostDesc$ {T}, Remove X storage counters from CARDNAME: | References$ X | AINoRecursiveCheck$ True | SpellDescription$ Add {C} equal to the amount of counters removed.
 SVar:X:XChoice
 SVar:RemAIDeck:True
 SVar:Picture:http://www.wizards.com/global/images/magic/general/mage_ring_network.jpg
