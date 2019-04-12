@@ -309,6 +309,10 @@ public class CountersPutAi extends SpellAbilityAi {
             return false;
         }
 
+        if (sa.hasParam("Adapt") && source.getCounters(CounterType.P1P1) > 0) {
+            return false;
+        }
+
         // TODO handle proper calculation of X values based on Cost
         int amount = AbilityUtils.calculateAmount(source, amountStr, sa);
 
@@ -715,6 +719,7 @@ public class CountersPutAi extends SpellAbilityAi {
 
             int totalTargets = list.size();
 
+            sa.resetTargets();
             while (sa.canAddMoreTarget()) {
                 if (mandatory) {
                     // When things are mandatory, gotta handle a little differently

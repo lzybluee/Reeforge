@@ -264,6 +264,11 @@ public final class GameActionUtil {
                     final Cost cost = new Cost("Discard<1/Land>", false);
                     costs.add(new OptionalCostValue(OptionalCost.Retrace, cost));
                 }
+            } else if (keyword.equals("Jump-start")) {
+                if (source.getZone().is(ZoneType.Graveyard)) {
+                    final Cost cost = new Cost("Discard<1/Card>", false);
+                    costs.add(new OptionalCostValue(OptionalCost.Jumpstart, cost));
+                }
             } else if (keyword.startsWith("MayFlashCost")) {
                 String[] k = keyword.split(":");
                 final Cost cost = new Cost(k[1], false);
@@ -291,6 +296,7 @@ public final class GameActionUtil {
                 result.addConspireInstance();
                 break;
             case Retrace:
+            case Jumpstart:
                 result.getRestrictions().setZone(ZoneType.Graveyard);
                 break;
             case Flash:
@@ -454,6 +460,23 @@ public final class GameActionUtil {
                 }
             }
         }
+
+        if (source.hasKeyword(Keyword.JUMP_START)) {
+            for (int i = 0; i < abilities.size(); i++) {
+                final SpellAbility newSA = abilities.get(i).copy();
+                newSA.setBasicSpell(false);
+                final String jumpstartCost = "Discard<1/Card>";
+                newSA.setPayCosts(new Cost(jumpstartCost, false).add(newSA.getPayCosts()));
+                newSA.getRestrictions().setZone(ZoneType.Graveyard);
+                newSA.setDescription(newSA.getDescription() + " (Jump-start)");
+                newSA.addOptionalCost(OptionalCost.Jumpstart);
+                if (newSA.canPlay()) {
+                    abilities.add(i, newSA);
+                    i++;
+                }
+            }
+        }
+
         return abilities;
     }
 

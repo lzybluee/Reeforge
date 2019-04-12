@@ -20,8 +20,6 @@ package forge.game.spellability;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Lists;
-
 import forge.game.Game;
 import forge.game.ability.AbilityUtils;
 import forge.game.card.Card;
@@ -426,6 +424,11 @@ public class SpellAbilityRestriction extends SpellAbilityVariables {
         }
         if (sa.isSurged()) {
             if (!activator.hasSurge()) {
+                return false;
+            }
+        }
+        if (sa.isSpectacle()) {
+            if (activator.getOpponentLostLifeThisTurn() <= 0) {
                 return false;
             }
         }

@@ -20,48 +20,38 @@ package forge.game.trigger;
 import forge.game.card.Card;
 import forge.game.spellability.SpellAbility;
 
+import java.util.Map;
+
 /**
  * <p>
- * Trigger_Unequip class.
+ * Trigger_LifeGained class.
  * </p>
  * 
  * @author Forge
- * @version $Id$
  */
-public class TriggerUnequip extends Trigger {
+public class TriggerPayLife extends Trigger {
 
     /**
      * <p>
-     * Constructor for Trigger_Unequip.
+     * Constructor for TriggerPayLife.
      * </p>
      * 
      * @param params
-     *            a {@link java.util.HashMap} object.
+     *            a {@link java.util.Map} object.
      * @param host
      *            a {@link forge.game.card.Card} object.
      * @param intrinsic
      *            the intrinsic
      */
-    public TriggerUnequip(final java.util.Map<String, String> params, final Card host, final boolean intrinsic) {
+    public TriggerPayLife(final Map<String, String> params, final Card host, final boolean intrinsic) {
         super(params, host, intrinsic);
     }
 
     /** {@inheritDoc} */
     @Override
-    public final boolean performTest(final java.util.Map<String, Object> runParams2) {
-        final Card equipped = (Card) runParams2.get("Card");
-        final Card equipment = (Card) runParams2.get("Equipment");
-
-        if (this.mapParams.containsKey("ValidCard")) {
-            if (!equipped.isValid(this.mapParams.get("ValidCard").split(","), this.getHostCard().getController(),
-                    this.getHostCard(), null)) {
-                return false;
-            }
-        }
-
-        if (this.mapParams.containsKey("ValidEquipment")) {
-            if (!equipment.isValid(this.mapParams.get("ValidEquipment").split(","), this.getHostCard()
-                    .getController(), this.getHostCard(), null)) {
+    public final boolean performTest(final Map<String, Object> runParams2) {
+        if (hasParam("ValidPlayer")) {
+            if (!matchesValid(runParams2.get("Player"), getParam("ValidPlayer").split(","), getHostCard())) {
                 return false;
             }
         }
@@ -72,16 +62,15 @@ public class TriggerUnequip extends Trigger {
     /** {@inheritDoc} */
     @Override
     public final void setTriggeringObjects(final SpellAbility sa) {
-        sa.setTriggeringObject("Card", this.getRunParams().get("Card"));
-        sa.setTriggeringObject("Equipment", this.getRunParams().get("Equipment"));
+        sa.setTriggeringObject("LifeAmount", getRunParams().get("LifeAmount"));
+        sa.setTriggeringObject("Player", getRunParams().get("Player"));
     }
 
     @Override
     public String getImportantStackObjects(SpellAbility sa) {
         StringBuilder sb = new StringBuilder();
-        sb.append("Equippee: ").append(sa.getTriggeringObject("Card")).append(", ");
-        sb.append("Equipment: ").append(sa.getTriggeringObject("Equipment"));
+        sb.append("Player: ").append(sa.getTriggeringObject("Player")).append(", ");
+        sb.append("paid Amount: ").append(sa.getTriggeringObject("LifeAmount"));
         return sb.toString();
     }
-
 }

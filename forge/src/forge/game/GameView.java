@@ -127,7 +127,9 @@ public class GameView extends TrackableObject {
     void updateGameOver(final Game game) {
         set(TrackableProperty.GameOver, game.isGameOver());
         set(TrackableProperty.MatchOver, game.getMatch().isMatchOver());
-        set(TrackableProperty.WinningPlayerName, game.getOutcome().getWinningLobbyPlayer().getName());
+        if (game.getOutcome() != null && game.getOutcome().getWinningLobbyPlayer() != null) {
+            set(TrackableProperty.WinningPlayerName, game.getOutcome().getWinningLobbyPlayer().getName());
+        }
         set(TrackableProperty.WinningTeam, game.getOutcome() == null ? -1 : game.getOutcome().getWinningTeam());
     }
 

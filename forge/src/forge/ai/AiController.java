@@ -413,7 +413,7 @@ public class AiController {
                         }
                     }
                 }
-                return true;
+                return player.canPlayLand(c);
             }
         });
         return landList;
@@ -584,16 +584,19 @@ public class AiController {
         return null;
     }
 
-    public void reserveManaSources(SpellAbility sa) {
-        reserveManaSources(sa, PhaseType.MAIN2, false);
+    public boolean reserveManaSources(SpellAbility sa) {
+        return reserveManaSources(sa, PhaseType.MAIN2, false);
     }
 
-    public void reserveManaSources(SpellAbility sa, PhaseType phaseType, boolean enemy) {
+    public boolean reserveManaSources(SpellAbility sa, PhaseType phaseType, boolean enemy) {
         ManaCostBeingPaid cost = ComputerUtilMana.calculateManaCost(sa, true, 0);
         CardCollection manaSources = ComputerUtilMana.getManaSourcesToPayCost(cost, sa, player);
 
-        AiCardMemory.MemorySet memSet;
+        if (manaSources.isEmpty()) {
+            return false;
+        }
 
+        AiCardMemory.MemorySet memSet;
         switch (phaseType) {
             case MAIN2:
                 memSet = AiCardMemory.MemorySet.HELD_MANA_SOURCES_FOR_MAIN2;
@@ -609,9 +612,16 @@ public class AiController {
                 break;
         }
 
-        for (Card c : manaSources) {
-            AiCardMemory.rememberCard(player, c, memSet);
+        // This is a simplification, since one mana source can produce more than one mana,
+        // but should work in most circumstances to ensure safety in whatever the AI is using this for.
+        if (manaSources.size() >= cost.getConvertedManaCost()) {
+            for (Card c : manaSources) {
+                AiCardMemory.rememberCard(player, c, memSet);
+            }
+            return true;
         }
+
+        return false;
     }
 
     // This is for playing spells regularly (no Cascade/Ripple etc.)
@@ -1165,7 +1175,7 @@ public class AiController {
         if (landsWannaPlay != null) {
             landsWannaPlay = filterLandsToPlay(landsWannaPlay);
             Log.debug("Computer " + game.getPhaseHandler().getPhase().nameForUi);
-            if (landsWannaPlay != null && !landsWannaPlay.isEmpty() && player.canPlayLand(null)) {
+            if (landsWannaPlay != null && !landsWannaPlay.isEmpty()) {
                 // TODO search for other land it might want to play?
                 Card land = chooseBestLandToPlay(landsWannaPlay);
                 if (ComputerUtil.getDamageFromETB(player, land) < player.getLife() || !player.canLoseLife() 
@@ -1488,21 +1498,23 @@ public class AiController {
         boolean hasLeyline1 = false;
         SpellAbility saGemstones = null;
         
-        for(int i = 0; i < result.size(); i++) {
-            SpellAbility sa = result.get(i);
-            
+        List<SpellAbility> toRemove = Lists.newArrayList();
+        for(SpellAbility sa : result) {
             String srcName = sa.getHostCard().getName();
             if ("Gemstone Caverns".equals(srcName)) {
                 if (saGemstones == null)
                     saGemstones = sa;
                 else
-                    result.remove(i--);
+                    toRemove.add(sa);
             } else if ("Leyline of Singularity".equals(srcName)) {
                 if (!hasLeyline1)
                     hasLeyline1 = true;
                 else
-                    result.remove(i--);
+                    toRemove.add(sa);
             }
+        }
+        for(SpellAbility sa : toRemove) {
+            result.remove(sa);
         }
         
         // Play them last

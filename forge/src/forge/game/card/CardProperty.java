@@ -971,6 +971,19 @@ public class CardProperty {
                 if (restriction.startsWith("Remembered") || restriction.startsWith("Imprinted")) {
                     CardCollection list = AbilityUtils.getDefinedCards(source, restriction, spellAbility);
                     return CardLists.filter(list, CardPredicates.sharesNameWith(card)).isEmpty();
+                } else if (restriction.equals("YourGraveyard")) {
+                    return CardLists.filter(sourceController.getCardsIn(ZoneType.Graveyard), CardPredicates.sharesNameWith(card)).isEmpty();
+                } else if (restriction.equals("OtherYourBattlefield")) {
+                    // Obviously it's going to share a name with itself, so consider that in the
+                    CardCollection list = CardLists.filter(sourceController.getCardsIn(ZoneType.Battlefield), CardPredicates.sharesNameWith(card));
+
+                    if (list.size() == 1) {
+                        Card c = list.getFirst();
+                        if (c.getTimestamp() == card.getTimestamp() && c.getId() == card.getId()) {
+                            list.remove(card);
+                        }
+                    }
+                    return list.isEmpty();
                 }
             }
         } else if (property.startsWith("sharesControllerWith")) {
@@ -1247,7 +1260,7 @@ public class CardProperty {
         } else if (property.startsWith("greatestPower")) {
             CardCollectionView cards = CardLists.filter(game.getCardsIn(ZoneType.Battlefield), Presets.CREATURES);
             if (property.contains("ControlledBy")) {
-                FCollectionView<Player> p = AbilityUtils.getDefinedPlayers(source, property.split("ControlledBy")[1], null);
+            	FCollectionView<Player> p = AbilityUtils.getDefinedPlayers(source, property.split("ControlledBy")[1], spellAbility);
                 cards = CardLists.filterControlledBy(cards, p);
                 if (!cards.contains(card)) {
                     return false;
@@ -1287,7 +1300,11 @@ public class CardProperty {
                 FCollectionView<Player> p = AbilityUtils.getDefinedPlayers(source, property.split("ControlledBy")[1], null);
                 cards = CardLists.filterControlledBy(cards, p);
             }
-            cards = CardLists.getType(cards, prop);
+            if ("NonLandPermanent".equals(prop)) {
+                cards = CardLists.filter(cards, CardPredicates.Presets.NONLAND_PERMANENTS);
+            } else {
+                cards = CardLists.getType(cards, prop);
+            }
             cards = CardLists.getCardsWithHighestCMC(cards);
             if (!cards.contains(card)) {
                 return false;
@@ -1378,6 +1395,10 @@ public class CardProperty {
             }
         } else if (property.startsWith("delved")) {
             if (!source.getDelved().contains(card)) {
+                return false;
+            }
+        } else if (property.startsWith("convoked")) {
+            if (!source.getConvoked().contains(card)) {
                 return false;
             }
         } else if (property.startsWith("unequalPT")) {
@@ -1631,6 +1652,11 @@ public class CardProperty {
                 return false;
             }
             return card.getCastSA().isProwl();
+        } else if (property.startsWith("spectacle")) {
+            if (card.getCastSA() == null) {
+                return false;
+            }
+            return card.getCastSA().isSpectacle();
         } else if (property.equals("HasDevoured")) {
             if (card.getDevouredCards().isEmpty()) {
                 return false;

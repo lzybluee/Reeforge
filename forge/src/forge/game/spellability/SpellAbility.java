@@ -42,6 +42,7 @@ import forge.game.keyword.Keyword;
 import forge.game.mana.Mana;
 import forge.game.mana.ManaCostBeingPaid;
 import forge.game.player.Player;
+import forge.game.replacement.ReplacementEffect;
 import forge.game.staticability.StaticAbility;
 import forge.game.trigger.Trigger;
 import forge.game.trigger.TriggerType;
@@ -92,8 +93,10 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
 
     private boolean basicSpell = true;
     private boolean trigger = false;
+    private Trigger triggerObj = null;
     private boolean optionalTrigger = false;
     private boolean replacementAbility = false;
+    private ReplacementEffect replacementEffect = null;
     private int sourceTrigger = -1;
     private List<Object> triggerRemembered = Lists.newArrayList();
 
@@ -104,6 +107,7 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
     private boolean evoke = false;
     private boolean prowl = false;
     private boolean surge = false;
+    private boolean spectacle = false;
     private boolean offering = false;
     private boolean emerge = false;
     private boolean morphup = false;
@@ -444,6 +448,17 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
     }
     public void setOriginalHost(final Card c) {
         grantorCard = c;
+        if (subAbility != null) {
+            subAbility.setOriginalHost(c);
+        }
+        for (AbilitySub sa : additionalAbilities.values()) {
+            sa.setOriginalHost(c);
+        }
+        for (List<AbilitySub> list : additionalAbilityLists.values()) {
+            for (AbilitySub sa : list) {
+                sa.setOriginalHost(c);
+            }
+        }
     }
 
 
@@ -562,6 +577,10 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
 
     public boolean isEntwine() {
         return isOptionalCostPaid(OptionalCost.Entwine);
+    }
+
+    public boolean isJumpstart() {
+        return isOptionalCostPaid(OptionalCost.Jumpstart);
     }
 
     public boolean isOptionalCostPaid(OptionalCost cost) {
@@ -911,6 +930,14 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
                 clone.manaPart = new AbilityManaPart(host, mapParams);
             }
 
+            // need to copy the damage tables
+            if (damageMap != null) {
+                clone.damageMap = new CardDamageMap(damageMap);
+            }
+            if (preventMap != null) {
+                clone.preventMap = new CardDamageMap(preventMap);
+            }
+
             // clear maps for copy, the values will be added later
             clone.additionalAbilities = Maps.newHashMap();
             clone.additionalAbilityLists = Maps.newHashMap();
@@ -957,6 +984,14 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
         trigger = trigger0;
     }
 
+    public Trigger getTrigger() {
+        return triggerObj;
+    }
+
+    public void setTrigger(final Trigger t) {
+        triggerObj = t;
+    }
+
     public boolean isOptionalTrigger() {
         return optionalTrigger;
     }
@@ -976,6 +1011,14 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
     }
     public void setReplacementAbility(boolean replacement) {
         replacementAbility = replacement;
+    }
+
+    public ReplacementEffect getReplacementEffect() {
+        return replacementEffect;
+    }
+
+    public void setReplacementEffect(final ReplacementEffect re) {
+        this.replacementEffect = re;
     }
 
     public boolean isMandatory() {
@@ -1127,11 +1170,26 @@ public abstract class SpellAbility extends CardTraitBase implements ISpellAbilit
     }
 
     public final boolean isSurged() {
-        return surge;
+    	if (surge) {
+            return true;
+    	}
+        SpellAbility parent = getParent();
+        if (parent != null) {
+            return parent.isSurged();
+        }
+        return false;
     }
 
     public final void setSurged(final boolean isSurge) {
         surge = isSurge;
+    }
+
+    public final boolean isSpectacle() {
+        return spectacle;
+    }
+
+    public final void setSpectacle(final boolean isSpectacle) {
+        spectacle = isSpectacle;
     }
 
     public CardCollection getTappedForConvoke() {

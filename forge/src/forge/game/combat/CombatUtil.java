@@ -531,6 +531,7 @@ public class CombatUtil {
 
         List<String> walkTypes = Lists.newArrayList();
 
+        // handle basic landwalk and snow basic landwalk
         for (int i = 0; i < LANDWALK_KEYWORDS.length; i++) {
             final String basic = MagicColor.Constant.BASIC_LANDS.get(i);
             final String landwalk = LANDWALK_KEYWORDS[i];
@@ -550,19 +551,24 @@ public class CombatUtil {
             String keyword = inst.getOriginal();
             if (keyword.equals("Legendary landwalk")) {
                 walkTypes.add("Land.Legendary");
-            } else if (keyword.equals("Desertwalk")) {
-                walkTypes.add("Desert");
             } else if (keyword.equals("Nonbasic landwalk")) {
                 walkTypes.add("Land.nonBasic");
             } else if (keyword.equals("Snow landwalk")) {
                 walkTypes.add("Land.Snow");
             } else if (keyword.endsWith("walk")) {
-                final String landtype = TextUtil.fastReplace(keyword, "walk", "");
+                String landtype = TextUtil.fastReplace(keyword, "walk", "");
+                String valid = landtype;
+
+                // substract Snow type
                 if (landtype.startsWith("Snow ")) {
-                    walkTypes.add(landtype.substring(5) + ".Snow");
-                } else if (CardType.isALandType(landtype)) {
+                    landtype = landtype.substring(5);
+                    valid = landtype + ".Snow";
+                }
+
+                // basic land types are handled before
+                if (CardType.isALandType(landtype) && !CardType.isABasicLandType(landtype)) {
                     if (!walkTypes.contains(landtype)) {
-                        walkTypes.add(landtype);
+                        walkTypes.add(valid);
                     }
                 }
             }
@@ -572,10 +578,10 @@ public class CombatUtil {
             return false;
         }
 
-        final String valid = StringUtils.join(walkTypes, ",");
+        final String[] valid = walkTypes.toArray(new String[0]);
         final CardCollectionView defendingLands = defendingPlayer.getCardsIn(ZoneType.Battlefield);
         for (final Card c : defendingLands) {
-            if (c.isValid(valid.split(","), defendingPlayer, attacker, null)) {
+            if (c.isValid(valid, defendingPlayer, attacker, null)) {
                 return true;
             }
         }

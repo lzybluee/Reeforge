@@ -1492,7 +1492,7 @@ public class ComputerUtilCard {
             }
         }
 
-        boolean wantToHoldTrick = holdCombatTricks;
+        boolean wantToHoldTrick = holdCombatTricks && !ai.getCardsIn(ZoneType.Hand).isEmpty();
         if (chanceToHoldCombatTricks >= 0) {
             // Obey the chance specified in the AI profile for holding combat tricks
             wantToHoldTrick &= MyRandom.percentTrue(chanceToHoldCombatTricks);
@@ -1508,14 +1508,18 @@ public class ComputerUtilCard {
                // Attempt to hold combat tricks until blockers are declared, and try to lure the opponent into blocking
                // (The AI will only do it for one attacker at the moment, otherwise it risks running his attackers into
                // an army of opposing blockers with only one combat trick in hand)
-               AiCardMemory.rememberCard(ai, c, AiCardMemory.MemorySet.MANDATORY_ATTACKERS);
-               AiCardMemory.rememberCard(ai, c, AiCardMemory.MemorySet.TRICK_ATTACKERS);
                // Reserve the mana until Declare Blockers such that the AI doesn't tap out before having a chance to use
                // the combat trick
+        	   boolean reserved = false;
                if (ai.getController().isAI()) {
-                   ((PlayerControllerAi) ai.getController()).getAi().reserveManaSources(sa, PhaseType.COMBAT_DECLARE_BLOCKERS, false);
+                   reserved = ((PlayerControllerAi) ai.getController()).getAi().reserveManaSources(sa, PhaseType.COMBAT_DECLARE_BLOCKERS, false);
+                   // Only proceed with this if we could actually reserve mana
+                   if (reserved) {
+                       AiCardMemory.rememberCard(ai, c, AiCardMemory.MemorySet.MANDATORY_ATTACKERS);
+                       AiCardMemory.rememberCard(ai, c, AiCardMemory.MemorySet.TRICK_ATTACKERS);
+                       return false;
+                   }
                }
-               return false;
            } else {
                // Don't try to mix "lure" and "precast" paradigms for combat tricks, since that creates issues with
                // the AI overextending the attack
@@ -1616,6 +1620,7 @@ public class ComputerUtilCard {
         if (exclude != null) {
             list.removeAll(exclude);
         }
+        list.add(vCard); // account for the static abilities that may be present on the card itself
         for (final Card c : list) {
             for (final StaticAbility stAb : c.getStaticAbilities()) {
                 final Map<String, String> params = stAb.getMapParams();
@@ -1785,15 +1790,20 @@ public class ComputerUtilCard {
 
         CardCollection priorityCards = new CardCollection();
         for (Card atk : oppCards) {
+            boolean canBeBlocked = false;
             if (isUselessCreature(atk.getController(), atk)) {
                 continue;
             }
             for (Card blk : aiCreats) {
-                if (!CombatUtil.canBlock(atk, blk, true)) {
-                    boolean threat = atk.getNetCombatDamage() >= ai.getLife() - lifeInDanger;
-                    if (!priorityRemovalOnlyInDanger || threat) {
-                        priorityCards.add(atk);
-                    }
+                if (CombatUtil.canBlock(atk, blk, true)) {
+                    canBeBlocked = true;
+                    break;
+                }
+            }
+            if (!canBeBlocked) {
+                boolean threat = atk.getNetCombatDamage() >= ai.getLife() - lifeInDanger;
+                if (!priorityRemovalOnlyInDanger || threat) {
+                    priorityCards.add(atk);
                 }
             }
         }

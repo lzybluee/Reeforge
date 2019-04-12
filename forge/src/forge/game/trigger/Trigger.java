@@ -220,15 +220,20 @@ public abstract class Trigger extends TriggerReplacementBase {
             } else {
                 saDesc = sa.getDescription();
             }
+            // string might have leading whitespace
+            saDesc = saDesc.trim();
             if (!saDesc.isEmpty()) {
-                // string might have leading whitespace
-                saDesc = saDesc.trim();
-                saDesc = saDesc.substring(0, 1).toLowerCase() + saDesc.substring(1);
+                // in case sa starts with CARDNAME, dont lowercase it
+                if (!saDesc.startsWith(sa.getHostCard().getName())) {
+                    saDesc = saDesc.substring(0, 1).toLowerCase() + saDesc.substring(1);
+                }
                 if (saDesc.contains("ORIGINALHOST") && sa.getOriginalHost() != null) {
                     saDesc = TextUtil.fastReplace(saDesc, "ORIGINALHOST", sa.getOriginalHost().getName());
                 }
-                result = TextUtil.fastReplace(result, "ABILITY", saDesc);
+            } else {
+                saDesc = "<take no action>"; // printed in case nothing is chosen for the ability (e.g. Charm with Up to X)
             }
+            result = TextUtil.fastReplace(result, "ABILITY", saDesc);
         }
 
         return result;
@@ -349,7 +354,22 @@ public abstract class Trigger extends TriggerReplacementBase {
                 return false;
             }
         }
-        
+
+        if (this.mapParams.containsKey("TriggerRememberedInZone")) {
+            // check delayed trigger remembered objects (Mnemonic Betrayal)
+            // make this check more general if possible
+            boolean bFlag = true;
+            for (Object o : getTriggerRemembered()) {
+                if (o instanceof Card && ((Card) o).isInZone(ZoneType.smartValueOf(this.mapParams.get("TriggerRememberedInZone")))) {
+                    bFlag = false;
+                    break;
+                }
+            }
+            if (bFlag) {
+                return false;
+            }
+        }
+
         if (!meetsCommonRequirements(this.mapParams))
             return false;
 

@@ -18,7 +18,6 @@
 package forge.game.cost;
 
 import forge.game.ability.AbilityUtils;
-import forge.game.card.Card;
 import forge.game.player.Player;
 import forge.game.spellability.SpellAbility;
 
@@ -58,17 +57,6 @@ public class CostPayLife extends CostPart {
         final StringBuilder sb = new StringBuilder();
         sb.append("Pay ").append(this.getAmount()).append(" Life");
         return sb.toString();
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see forge.card.cost.CostPart#refund(forge.Card)
-     */
-    @Override
-    public final void refund(final Card source) {
-        // Really should be activating player
-        source.getController().refundLife(this.paidAmount);
     }
 
     /*

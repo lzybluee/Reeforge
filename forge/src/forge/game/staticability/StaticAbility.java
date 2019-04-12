@@ -258,6 +258,9 @@ public class StaticAbility extends CardTraitBase implements Comparable<StaticAbi
         this.layers = this.generateLayer();
         this.hostCard = host;
         this.intrinsic = stAb.intrinsic;
+        // Copy old sVars
+        this.sVars.putAll(stAb.sVars);
+        // but if they are References use this ones
         buildCommonAttributes(host);
     }
 

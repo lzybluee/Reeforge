@@ -277,6 +277,9 @@ public class CostAdjustment {
             cost.decreaseShard(conv.getValue(), 1);
             if (!test) {
                 conv.getKey().tap();
+                if (!improvise) {
+                    sa.getHostCard().addConvoked(conv.getKey());
+                }
             }
         }
     }
@@ -373,14 +376,13 @@ public class CostAdjustment {
      *            a ManaCost
      */
     private static int applyReduceCostAbility(final StaticAbility staticAbility, final SpellAbility sa, final ManaCostBeingPaid manaCost) {
-        //Can't reduce zero cost
+    	//Can't reduce zero cost
         if (manaCost.toString().equals("{0}")) {
             return 0;
         }
-        final Map<String, String> params = staticAbility.getMapParams();
         final Card hostCard = staticAbility.getHostCard();
         final Card card = sa.getHostCard();
-        final String amount = params.get("Amount");
+        final String amount = staticAbility.getParam("Amount");
 
         if (!checkRequirement(sa, staticAbility)) {
             return 0;
@@ -391,16 +393,16 @@ public class CostAdjustment {
             value = CardFactoryUtil.xCount(card, hostCard.getSVar(amount));
         } else if ("Undaunted".equals(amount)) {
             value = card.getController().getOpponents().size();
-        } else if ("X".equals(amount)){
-            value = CardFactoryUtil.xCount(hostCard, hostCard.getSVar(amount));
-        } else {
+        } else if (staticAbility.hasParam("Relative")) {
             value = AbilityUtils.calculateAmount(hostCard, amount, sa);
+        } else {
+            value = AbilityUtils.calculateAmount(hostCard, amount, staticAbility);
         }
 
-        if (!params.containsKey("Cost") && ! params.containsKey("Color")) {
+        if (!staticAbility.hasParam("Cost") && ! staticAbility.hasParam("Color")) {
             int minMana = 0;
-            if (params.containsKey("MinMana")) {
-                minMana = Integer.valueOf(params.get("MinMana"));
+            if (staticAbility.hasParam("MinMana")) {
+                minMana = Integer.valueOf(staticAbility.getParam("MinMana"));
             }
 
             final int maxReduction = Math.max(0, manaCost.getConvertedManaCost() - minMana);
@@ -408,7 +410,7 @@ public class CostAdjustment {
                 return Math.min(value, maxReduction);
             }
         } else {
-            final String color = params.containsKey("Cost") ? params.get("Cost") : params.get("Color");
+            final String color = staticAbility.getParamOrDefault("Cost",  staticAbility.getParam("Color"));
             int sumGeneric = 0;
             // might be problematic for wierd hybrid combinations
             for (final String cost : color.split(" ")) {

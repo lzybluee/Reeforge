@@ -390,7 +390,6 @@ public class PhaseHandler implements java.io.Serializable {
                     }
 
                     playerTurn.removeKeyword("Skip all combat phases of this turn.");
-                    game.getCleanup().executeUntil(getNextTurn());
                     nUpkeepsThisTurn = 0;
 
                     // Rule 514.3
@@ -398,6 +397,9 @@ public class PhaseHandler implements java.io.Serializable {
 
                     // Rule 514.3a - state-based actions
                     game.getAction().checkStateEffects(true);
+
+                    // done this after check state effects, so it only has effect next check
+                    game.getCleanup().executeUntil(getNextTurn());
                     break;
 
                 default:
@@ -531,7 +533,7 @@ public class PhaseHandler implements java.io.Serializable {
 
                     if (canAttack) {
                         if (shouldTapForAttack) {
-                            attacker.tap();
+                        	attacker.tap(true);
                         }
                     } else {
                         combat.removeFromCombat(attacker);
@@ -731,6 +733,7 @@ public class PhaseHandler implements java.io.Serializable {
             runParams.put("Attacker", a);
             runParams.put("Blockers", blockers);
             runParams.put("NumBlockers", blockers.size());
+            runParams.put("Defender", combat.getDefenderByAttacker(a));
             runParams.put("DefendingPlayer", combat.getDefenderPlayerByAttacker(a));
             game.getTriggerHandler().runTrigger(TriggerType.AttackerBlocked, runParams, false);
             

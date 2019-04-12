@@ -55,6 +55,7 @@ import forge.trackable.TrackableObject;
 import forge.util.ITriggerEvent;
 import forge.util.Lang;
 import forge.util.MessageUtil;
+import forge.util.MyRandom;
 import forge.util.TextUtil;
 import forge.util.collect.FCollection;
 import forge.util.collect.FCollectionView;
@@ -531,7 +532,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
             input.setCancelAllowed(true);
             input.setMessage(MessageUtil.formatMessage(title, player, targetedPlayer));
             input.showAndWait();
-            return (List<T>) Iterables.getFirst(input.getSelected(), null);
+            return (List<T>) input.getSelected();
         }
 
         tempShow(optionList);
@@ -818,18 +819,47 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
     }
 
     @Override
-    public boolean willPutCardOnTop(final Card c) {
-        final CardView view = CardView.get(c);
+    public ImmutablePair<CardCollection, CardCollection> arrangeForSurveil(final CardCollection topN) {
+        CardCollection toGrave = null;
+        CardCollection toTop = null;
 
-        tempShowCard(c);
-        getGui().setCard(c.getView());
+        tempShowCards(topN);
+        if (topN.size() == 1) {
+            final Card c = topN.getFirst();
+            final CardView view = CardView.get(c);
 
-        boolean result = false;
-        result = InputConfirm.confirm(this, view, TextUtil.concatNoSpace("Put ", view.toString(), " on the top or bottom of your library?"),
-                true, ImmutableList.of("Top", "Bottom"));
-
+            tempShowCard(c);
+            getGui().setCard(view);
+            boolean result = false;
+            result = InputConfirm.confirm(this, view, TextUtil.concatNoSpace("Put ", view.toString(), " on the top of library or graveyard?"),
+                    true, ImmutableList.of("Library", "Graveyard"));
+            if (result) {
+                toTop = topN;
+            } else {
+                toGrave = topN;
+            }
+        } else {
+            toGrave = game.getCardList(getGui().many("Select cards to be put into the graveyard",
+                    "Cards to put in the graveyard", -1, CardView.getCollection(topN), null));
+            topN.removeAll((Collection<?>) toGrave);
+            if (topN.isEmpty()) {
+                toTop = null;
+            } else if (topN.size() == 1) {
+                toTop = topN;
+            } else {
+                toTop = game.getCardList(getGui().order("Arrange cards to be put on top of your library",
+                        "Top of Library", CardView.getCollection(topN), null));
+            }
+        }
         endTempShowCards();
-        return result;
+        return ImmutablePair.of(toTop, toGrave);
+    }
+
+    @Override
+    public boolean willPutCardOnTop(Card c) {
+        // TODO add Logic there similar to Scry. this is used for Clash
+
+        return true; // AI does not know what will happen next (another clash or that would become his topdeck)
     }
 
     @Override

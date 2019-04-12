@@ -87,6 +87,7 @@ public class Player extends GameEntity implements Comparable<Player> {
     private int landsPlayedThisTurn = 0;
     private int landsPlayedLastTurn = 0;
     private int investigatedThisTurn = 0;
+    private int surveilThisTurn = 0;
     private int lifeLostThisTurn = 0;
     private int lifeLostLastTurn = 0;
     private int lifeGainedThisTurn = 0;
@@ -258,6 +259,10 @@ public class Player extends GameEntity implements Comparable<Player> {
      */
     public final PlayerCollection getOpponents() {
         return game.getPlayers().filter(PlayerPredicates.isOpponentOf(this));
+    }
+
+    public final PlayerCollection getRegisteredOpponents() {
+        return game.getRegisteredPlayers().filter(PlayerPredicates.isOpponentOf(this));
     }
 
     public void updateOpponentsForView() {
@@ -505,14 +510,15 @@ public class Player extends GameEntity implements Comparable<Player> {
             return false;
         }
         
-        if (lifePayment <= 0) 
-            return true;
-        
-        // rule 118.8
-        if (life >= lifePayment) {
-            return (loseLife(lifePayment) > 0);
-        }
-        return false;
+        loseLife(lifePayment);
+
+        // Run triggers
+        final Map<String, Object> runParams = Maps.newHashMap();
+        runParams.put("Player", this);
+        runParams.put("LifeAmount", lifePayment);
+        game.getTriggerHandler().runTrigger(TriggerType.PayLife, runParams, false);
+
+        return true;
     }
 
     public final boolean canPayEnergy(final int energyPayment) {
@@ -1242,15 +1248,11 @@ public class Player extends GameEntity implements Comparable<Player> {
         return drawCards(1);
     }
 
-    public void scry(final int numScry, boolean shouldTrigger) {
-        final CardCollection topN = new CardCollection();
-        final PlayerZone library = getZone(ZoneType.Library);
-        final int actualNumScry = Math.min(numScry, library.size());
+    public void scry(final int numScry, SpellAbility cause) {
+        final CardCollection topN = new CardCollection(this.getCardsIn(ZoneType.Library, numScry));
 
-        if (actualNumScry == 0) { return; }
-
-        for (int i = 0; i < actualNumScry; i++) {
-            topN.add(library.get(i));
+        if (topN.isEmpty()) {
+            return;
         }
 
         final ImmutablePair<CardCollection, CardCollection> lists = getController().arrangeForScry(topN);
@@ -1262,7 +1264,7 @@ public class Player extends GameEntity implements Comparable<Player> {
 
         if (toBottom != null) {
             for(Card c : toBottom) {
-                getGame().getAction().moveToBottomOfLibrary(c, null, null);
+                getGame().getAction().moveToBottomOfLibrary(c, cause, null);
                 numToBottom++;
             }
         }
@@ -1270,18 +1272,82 @@ public class Player extends GameEntity implements Comparable<Player> {
         if (toTop != null) {
             Collections.reverse(toTop); // the last card in list will become topmost in library, have to revert thus.
             for(Card c : toTop) {
-                getGame().getAction().moveToLibrary(c, null, null);
+                getGame().getAction().moveToLibrary(c, cause, null);
                 numToTop++;
             }
         }
 
         getGame().fireEvent(new GameEventScry(this, numToTop, numToBottom));
 
-        if (shouldTrigger) {
-            final Map<String, Object> runParams = Maps.newHashMap();
-            runParams.put("Player", this);
-            getGame().getTriggerHandler().runTrigger(TriggerType.Scry, runParams, false);
+        if(cause != null) {
+	        final Map<String, Object> runParams = Maps.newHashMap();
+	        runParams.put("Player", this);
+	        getGame().getTriggerHandler().runTrigger(TriggerType.Scry, runParams, false);
         }
+    }
+
+    public void surveil(int num, SpellAbility cause) {
+
+        final Map<String, Object> repParams = Maps.newHashMap();
+        repParams.put("Event", "Surveil");
+        repParams.put("Affected", this);
+        repParams.put("Source", cause);
+        repParams.put("SurveilNum", num);
+
+        switch (getGame().getReplacementHandler().run(repParams)) {
+        case NotReplaced:
+            break;
+        case Updated: {
+            num = (int) repParams.get("SurveilNum");
+            break;
+        }
+        default:
+            return;
+        }
+
+        final CardCollection topN = new CardCollection(this.getCardsIn(ZoneType.Library, num));
+
+        if (topN.isEmpty()) {
+            return;
+        }
+
+        final ImmutablePair<CardCollection, CardCollection> lists = getController().arrangeForSurveil(topN);
+        final CardCollection toTop = lists.getLeft();
+        final CardCollection toGrave = lists.getRight();
+
+        int numToGrave = 0;
+        int numToTop = 0;
+
+        if (toGrave != null) {
+            for(Card c : toGrave) {
+                getGame().getAction().moveToGraveyard(c, cause, null);
+                numToGrave++;
+            }
+        }
+
+        if (toTop != null) {
+            Collections.reverse(toTop); // the last card in list will become topmost in library, have to revert thus.
+            for(Card c : toTop) {
+                getGame().getAction().moveToLibrary(c, cause, null);
+                numToTop++;
+            }
+        }
+
+        getGame().fireEvent(new GameEventSurveil(this, numToTop, numToGrave));
+
+        surveilThisTurn++;
+        final Map<String, Object> runParams = Maps.newHashMap();
+        runParams.put("Player", this);
+        runParams.put("NumThisTurn", surveilThisTurn);
+        getGame().getTriggerHandler().runTrigger(TriggerType.Surveil, runParams, false);
+    }
+
+    public int getSurveilThisTurn() {
+        return surveilThisTurn;
+    }
+
+    public void resetSurveilThisTurn() {
+        surveilThisTurn = 0;
     }
 
     public boolean canMulligan() {
@@ -1773,6 +1839,9 @@ public class Player extends GameEntity implements Comparable<Player> {
         return canPlayLand(land, false);
     }
     public final boolean canPlayLand(final Card land, final boolean ignoreZoneAndTiming) {
+        return canPlayLand(land, ignoreZoneAndTiming, null);
+    }
+    public final boolean canPlayLand(final Card land, final boolean ignoreZoneAndTiming, SpellAbility landSa) {
         if (!ignoreZoneAndTiming && !canCastSorcery()) {
             return false;
         }
@@ -1792,7 +1861,7 @@ public class Player extends GameEntity implements Comparable<Player> {
         }
 
         if (land != null && !ignoreZoneAndTiming) {
-            final boolean mayPlay = !land.mayPlay(this).isEmpty();
+        	final boolean mayPlay = landSa == null ? !land.mayPlay(this).isEmpty() : landSa.getMayPlay() != null;
             if (land.getOwner() != this && !mayPlay) {
                 return false;
             }
@@ -2048,14 +2117,21 @@ public class Player extends GameEntity implements Comparable<Player> {
     }
 
     public final int getBloodthirstAmount() {
-        return Aggregates.sum(Iterables.filter(
-                game.getRegisteredPlayers(), PlayerPredicates.isOpponentOf(this)), Accessors.FN_GET_ASSIGNED_DAMAGE);
+        return Aggregates.sum(getRegisteredOpponents(), Accessors.FN_GET_ASSIGNED_DAMAGE);
     }
 
     public final boolean hasSurge() {
         PlayerCollection list = getAllies();
         list.add(this);
         return !CardLists.filterControlledBy(game.getStack().getSpellsCastThisTurn(), list).isEmpty();
+    }
+
+    public final int getOpponentLostLifeThisTurn() {
+        int lost = 0;
+        for (Player opp : getRegisteredOpponents()) {
+            lost += opp.getLifeLostThisTurn();
+        }
+        return lost;
     }
 
     public final boolean hasProwl(final String type) {
@@ -2433,6 +2509,7 @@ public class Player extends GameEntity implements Comparable<Player> {
         setLandsPlayedLastTurn(getLandsPlayedThisTurn());
         resetLandsPlayedThisTurn();
         resetInvestigatedThisTurn();
+        resetSurveilThisTurn();
         resetSacrificedThisTurn();
         resetCounterToPermThisTurn();
         clearAssignedDamage();

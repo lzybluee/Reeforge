@@ -408,6 +408,8 @@ public class CopyPermanentEffect extends SpellAbilityEffect {
                         } else {
                             continue;
                         }
+                        // need to be done otherwise the token has no State in Details
+                        copyInPlay.updateStateForView();
                     }
 
                 }

@@ -177,6 +177,9 @@ public class DamageDealEffect extends DamageBaseEffect {
                     preventMap.triggerPreventDamage(false);
                     // non combat damage cause lifegain there
                     damageMap.triggerDamageDoneOnce(false, sa);
+
+                    preventMap.clear();
+                    damageMap.clear();
                 }
                 replaceDying(sa);
                 return;
@@ -216,6 +219,9 @@ public class DamageDealEffect extends DamageBaseEffect {
             preventMap.triggerPreventDamage(false);
             // non combat damage cause lifegain there
             damageMap.triggerDamageDoneOnce(false, sa);
+
+            preventMap.clear();
+            damageMap.clear();
         }
         replaceDying(sa);
     }

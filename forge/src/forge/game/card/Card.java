@@ -98,7 +98,7 @@ public class Card extends GameEntity implements Comparable<Card> {
     private final KeywordCollection hiddenExtrinsicKeyword = new KeywordCollection();
 
     // cards attached or otherwise linked to this card
-    private CardCollection equippedBy, fortifiedBy, hauntedBy, devouredCards, delvedCards, imprintedCards, encodedCards;
+    private CardCollection equippedBy, fortifiedBy, hauntedBy, devouredCards, delvedCards, convokedCards, imprintedCards, encodedCards;
     private CardCollection mustBlockCards, clones, gainControlTargets, chosenCards, blockedThisTurn, blockedByThisTurn;
 
     // if this card is attached or linked to something, what card is it currently attached to
@@ -746,6 +746,19 @@ public class Card extends GameEntity implements Comparable<Card> {
 
     public final void clearDelved() {
         delvedCards = null;
+    }
+
+    public final CardCollectionView getConvoked() {
+        return CardCollection.getView(convokedCards);
+    }
+    public final void addConvoked(final Card c) {
+        if (convokedCards == null) {
+            convokedCards = new CardCollection();
+        }
+        convokedCards.add(c);
+    }
+    public final void clearConvoked() {
+        convokedCards = null;
     }
 
     public MapOfLists<GameEntity, Object> getRememberMap() {
@@ -1482,7 +1495,8 @@ public class Card extends GameEntity implements Comparable<Card> {
                     }
                 }
             }
-            if (keyword.startsWith("CantBeCounteredBy")) {
+            if (keyword.startsWith("CantBeCounteredBy") || keyword.startsWith("Panharmonicon")
+                    || keyword.startsWith("Dieharmonicon")) {
                 final String[] p = keyword.split(":");
                 sbLong.append(p[2]).append("\r\n");
             } else if (keyword.startsWith("etbCounter")) {
@@ -1605,6 +1619,7 @@ public class Card extends GameEntity implements Comparable<Card> {
             } else if (keyword.startsWith("Strive") || keyword.startsWith("Escalate")
                     || keyword.startsWith("ETBReplacement")
                     || keyword.startsWith("CantBeBlockedBy ")
+                    || keyword.startsWith("Affinity")
                     || keyword.equals("CARDNAME enters the battlefield tapped.")
                     || keyword.startsWith("UpkeepCost")) {
             } else if (keyword.equals("Provoke") || keyword.equals("Ingest") || keyword.equals("Unleash")
@@ -1615,7 +1630,7 @@ public class Card extends GameEntity implements Comparable<Card> {
                     || keyword.equals("Suspend") // for the ones without amounnt
                     || keyword.equals("Hideaway") || keyword.equals("Ascend")
                     || keyword.equals("Totem armor") || keyword.equals("Battle cry")
-                    || keyword.equals("Devoid")){
+                    || keyword.equals("Devoid") || keyword.equals("Riot")){
                 sbLong.append(keyword + " (" + inst.getReminderText() + ")");
             } else if (keyword.startsWith("Partner:")) {
                 final String[] k = keyword.split(":");
@@ -1624,7 +1639,8 @@ public class Card extends GameEntity implements Comparable<Card> {
                     || keyword.startsWith("Fabricate") || keyword.startsWith("Soulshift") || keyword.startsWith("Bushido")
                     || keyword.startsWith("Crew") || keyword.startsWith("Tribute") || keyword.startsWith("Absorb")
                     || keyword.startsWith("Graft") || keyword.startsWith("Fading") || keyword.startsWith("Vanishing")
-                    || keyword.startsWith ("Afflict") || keyword.startsWith("Poisonous") || keyword.startsWith("Rampage")
+                    || keyword.startsWith("Afterlife")
+                    || keyword.startsWith("Afflict") || keyword.startsWith ("Poisonous") || keyword.startsWith("Rampage")
                     || keyword.startsWith("Renown") || keyword.startsWith("Annihilator") || keyword.startsWith("Devour")) {
                 final String[] k = keyword.split(":");
                 sbLong.append(k[0] + " " + k[1] + " (" + inst.getReminderText() + ")");
@@ -1643,7 +1659,8 @@ public class Card extends GameEntity implements Comparable<Card> {
                      || keyword.equals("Exalted") || keyword.equals("Extort")|| keyword.equals("Flanking")
                      || keyword.equals("Horsemanship") || keyword.equals("Infect")|| keyword.equals("Persist")
                      || keyword.equals("Phasing") || keyword.equals("Shadow") || keyword.equals("Skulk")
-                     || keyword.equals("Undying") || keyword.equals("Wither") || keyword.equals("Cascade")) {
+                     || keyword.equals("Undying") || keyword.equals("Wither") || keyword.equals("Cascade")
+                     || keyword.equals("Mentor")) {
                 if (sb.length() != 0) {
                     sb.append("\r\n");
                 }
@@ -1656,13 +1673,14 @@ public class Card extends GameEntity implements Comparable<Card> {
                 sbLong.append(keyword);
                 sbLong.append(" (" + Keyword.getInstance("Offering:"+ offeringType).getReminderText() + ")");
             } else if (keyword.startsWith("Equip") || keyword.startsWith("Fortify") || keyword.startsWith("Outlast")
-                    || keyword.startsWith("Unearth") || keyword.startsWith("Scavenge")
+                    || keyword.startsWith("Unearth") || keyword.startsWith("Scavenge") || keyword.startsWith("Spectacle")
                     || keyword.startsWith("Evoke") || keyword.startsWith("Bestow") || keyword.startsWith("Dash")
                     || keyword.startsWith("Surge") || keyword.startsWith("Transmute") || keyword.startsWith("Suspend")
                     || keyword.equals("Undaunted") || keyword.startsWith("Monstrosity") || keyword.startsWith("Embalm")
                     || keyword.startsWith("Level up") || keyword.equals("Prowess") || keyword.startsWith("Eternalize")
-                    || keyword.startsWith("Reinforce") || keyword.startsWith("Champion")
-                    || keyword.startsWith("Amplify")  || keyword.startsWith("Ninjutsu")
+                    || keyword.startsWith("Reinforce") || keyword.startsWith("Champion") || keyword.startsWith("Prowl")
+                    || keyword.startsWith("Amplify") || keyword.startsWith("Ninjutsu") || keyword.startsWith("Adapt")
+                    || keyword.startsWith("Transfigure") || keyword.startsWith("Aura swap")
                     || keyword.startsWith("Cycling") || keyword.startsWith("TypeCycling")) {
                 // keyword parsing takes care of adding a proper description
             } else if (keyword.startsWith("CantBeBlockedByAmount")) {
@@ -1976,7 +1994,7 @@ public class Card extends GameEntity implements Comparable<Card> {
                 sbBefore.append(keyword + " (" + inst.getReminderText() + ")");
                 sbBefore.append("\r\n");
             } else if(keyword.equals("Conspire") || keyword.equals("Epic")
-                    || keyword.equals("Suspend")) {
+            		|| keyword.equals("Suspend") || keyword.equals("Jump-start")) {
                 sbAfter.append(keyword + " (" + inst.getReminderText() + ")");
                 sbAfter.append("\r\n");
             } else if (keyword.startsWith("Ripple")) {
@@ -1985,7 +2003,8 @@ public class Card extends GameEntity implements Comparable<Card> {
             } else if (keyword.startsWith("Dredge")) {
                 sbAfter.append(TextUtil.fastReplace(keyword, ":", " ") + " (" + inst.getReminderText() + ")");
                 sbAfter.append("\r\n");
-            } else if (keyword.startsWith("Escalate") || keyword.startsWith("Buyback")) {
+            } else if (keyword.startsWith("Escalate") || keyword.startsWith("Buyback")
+                    || keyword.startsWith("Prowl")) {
                 final String[] k = keyword.split(":");
                 final String manacost = k[1];
                 final Cost cost = new Cost(manacost, false);
@@ -2725,7 +2744,7 @@ public class Card extends GameEntity implements Comparable<Card> {
         final Map<String, Object> runParams = Maps.newTreeMap();
         runParams.put("Equipment", this);
         runParams.put("Card", c);
-        getGame().getTriggerHandler().runTrigger(TriggerType.Unequip, runParams, false);
+        getGame().getTriggerHandler().runTrigger(TriggerType.Unattach, runParams, false);
         runUnattachCommands();
     }
 
@@ -3284,11 +3303,15 @@ public class Card extends GameEntity implements Comparable<Card> {
     }
 
     public final void tap() {
+        tap(false);
+    }
+    public final void tap(boolean attacker) {
         if (tapped) { return; }
 
         // Run triggers
         final Map<String, Object> runParams = Maps.newTreeMap();
         runParams.put("Card", this);
+        runParams.put("Attacker", attacker);
         getGame().getTriggerHandler().runTrigger(TriggerType.Taps, runParams, false);
 
         setTapped(true);
@@ -3689,10 +3712,8 @@ public class Card extends GameEntity implements Comparable<Card> {
         if (s.startsWith("HIDDEN")) {
             removeHiddenExtrinsicKeyword(s);
         }
-        else {
-            if (extrinsicKeyword.remove(s)) {
-                currentState.getView().updateKeywords(this, currentState);
-            }
+        else if (extrinsicKeyword.remove(s)) {
+            currentState.getView().updateKeywords(this, currentState);
         }
     }
 
@@ -5002,6 +5023,11 @@ public class Card extends GameEntity implements Comparable<Card> {
 
         if (isImmutable()) {
             return true;
+        }
+
+        // Protection only works on the Battlefield
+        if (!isInZone(ZoneType.Battlefield)) {
+            return false;
         }
 
         final boolean colorlessDamage = damageSource && source.hasKeyword("Colorless Damage Source");
