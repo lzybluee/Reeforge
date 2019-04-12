@@ -20,6 +20,8 @@ package forge.deck;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
+
 import forge.StaticData;
 import forge.card.CardRules;
 import forge.card.CardRulesPredicates;
@@ -139,13 +141,6 @@ public enum DeckFormat {
     private final Predicate<PaperCard> paperCardPoolFilter;
     private final static String ADVPROCLAMATION = "Advantageous Proclamation";
     private final static String SOVREALM = "Sovereign's Realm";
-
-    private static final List<String> limitExceptions = Arrays.asList(
-            new String[]{"Relentless Rats", "Shadowborn Apostle", "Rat Colony"});
-
-    public static List<String> getLimitExceptions(){
-        return limitExceptions;
-    }
 
     private DeckFormat(Range<Integer> mainRange0, Range<Integer> sideRange0, int maxCardCopies0, Predicate<CardRules> cardPoolFilter0, Predicate<PaperCard> paperCardPoolFilter0) {
         mainRange = mainRange0;
@@ -341,7 +336,6 @@ public enum DeckFormat {
             //basic lands, Shadowborn Apostle, Relentless Rats and Rat Colony
 
             final CardPool allCards = deck.getAllCardsInASinglePool(hasCommander());
-            final ImmutableSet<String> limitExceptions = ImmutableSet.of("Relentless Rats", "Shadowborn Apostle", "Rat Colony");
 
             // should group all cards by name, so that different editions of same card are really counted as the same card
             for (final Entry<String, Integer> cp : Aggregates.groupSumBy(allCards, PaperCard.FN_GET_NAME)) {
@@ -350,8 +344,7 @@ public enum DeckFormat {
                     return TextUtil.concatWithSpace("contains the nonexisting card", cp.getKey());
                 }
 
-                final boolean canHaveMultiple = simpleCard.getRules().getType().isBasicLand() || limitExceptions.contains(cp.getKey());
-                if (!canHaveMultiple && cp.getValue() > maxCopies) {
+                if (!canHaveAnyNumberOf(simpleCard) && cp.getValue() > maxCopies) {
                     return TextUtil.concatWithSpace("must not contain more than", String.valueOf(maxCopies), "copies of the card", cp.getKey());
                 }
             }
@@ -367,6 +360,12 @@ public enum DeckFormat {
         }
 
         return null;
+    }
+
+    public static boolean canHaveAnyNumberOf(final IPaperCard icard) {
+        return icard.getRules().getType().isBasicLand()
+            || Iterables.contains(icard.getRules().getMainPart().getKeywords(),
+                "A deck can have any number of cards named CARDNAME.");
     }
 
     public static String getPlaneSectionConformanceProblem(final CardPool planes) {
