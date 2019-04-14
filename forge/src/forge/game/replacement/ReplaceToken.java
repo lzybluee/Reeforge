@@ -44,7 +44,8 @@ public class ReplaceToken extends ReplacementEffect {
         }
 
         if (hasParam("ValidToken")) {
-            if (runParams.containsKey("Token")) {
+            if (runParams.containsKey("Token") && runParams.get("Token") != null) {
+                getHostCard().setSVar("CreatedAmount", (int) runParams.get("TokenNum") + "");
                 if (!matchesValid(runParams.get("Token"), getParam("ValidToken").split(","), getHostCard())) {
                     return false;
                 }

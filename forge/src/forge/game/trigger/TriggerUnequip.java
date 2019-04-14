@@ -17,18 +17,18 @@
  */
 package forge.game.trigger;
 
-import forge.game.GameEntity;
 import forge.game.card.Card;
 import forge.game.spellability.SpellAbility;
 
 /**
  * <p>
- * Trigger_Unattach class.
+ * Trigger_Unequip class.
  * </p>
  * 
  * @author Forge
+ * @version $Id$
  */
-public class TriggerUnattach extends Trigger {
+public class TriggerUnequip extends Trigger {
 
     /**
      * <p>
@@ -42,26 +42,26 @@ public class TriggerUnattach extends Trigger {
      * @param intrinsic
      *            the intrinsic
      */
-    public TriggerUnattach(final java.util.Map<String, String> params, final Card host, final boolean intrinsic) {
+    public TriggerUnequip(final java.util.Map<String, String> params, final Card host, final boolean intrinsic) {
         super(params, host, intrinsic);
     }
 
     /** {@inheritDoc} */
     @Override
     public final boolean performTest(final java.util.Map<String, Object> runParams2) {
-        final GameEntity object = (GameEntity) runParams2.get("Object");
-        final Card attach = (Card) runParams2.get("Attach");
+        final Card equipped = (Card) runParams2.get("Card");
+        final Card equipment = (Card) runParams2.get("Equipment");
 
-        if (hasParam("ValidObject")) {
-            if (!object.isValid(getParam("ValidObject").split(","), getHostCard().getController(),
-                    getHostCard(), null)) {
+        if (this.mapParams.containsKey("ValidCard")) {
+            if (!equipped.isValid(this.mapParams.get("ValidCard").split(","), this.getHostCard().getController(),
+                    this.getHostCard(), null)) {
                 return false;
             }
         }
 
-        if (hasParam("ValidAttachment")) {
-            if (!attach.isValid(getParam("ValidAttachment").split(","), getHostCard()
-                    .getController(), getHostCard(), null)) {
+        if (this.mapParams.containsKey("ValidEquipment")) {
+            if (!equipment.isValid(this.mapParams.get("ValidEquipment").split(","), this.getHostCard()
+                    .getController(), this.getHostCard(), null)) {
                 return false;
             }
         }
@@ -72,15 +72,15 @@ public class TriggerUnattach extends Trigger {
     /** {@inheritDoc} */
     @Override
     public final void setTriggeringObjects(final SpellAbility sa) {
-        sa.setTriggeringObject("Object", getRunParams().get("Object"));
-        sa.setTriggeringObject("Attach", getRunParams().get("Attach"));
+        sa.setTriggeringObject("Card", this.getRunParams().get("Card"));
+        sa.setTriggeringObject("Equipment", this.getRunParams().get("Equipment"));
     }
 
     @Override
     public String getImportantStackObjects(SpellAbility sa) {
         StringBuilder sb = new StringBuilder();
-        sb.append("Object: ").append(sa.getTriggeringObject("Object")).append(", ");
-        sb.append("Attachment: ").append(sa.getTriggeringObject("Attach"));
+        sb.append("Equippee: ").append(sa.getTriggeringObject("Card")).append(", ");
+        sb.append("Equipment: ").append(sa.getTriggeringObject("Equipment"));
         return sb.toString();
     }
 

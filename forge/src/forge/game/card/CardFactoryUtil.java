@@ -2134,7 +2134,9 @@ public class CardFactoryUtil {
             sb.append("Mode$ ChangesZone | Origin$ Battlefield | Destination$ Graveyard | ValidCard$ Card.Self ");
             sb.append("| Secondary$ True | TriggerDescription$ ").append(name);
             sb.append(" (").append(inst.getReminderText()).append(")");
-            final String effect = "DB$ Token | TokenAmount$ " + k[1] +  " | TokenScript$ wb_1_1_spirit_flying";
+            final String effect = "DB$ Token | TokenAmount$ " + k[1] +  " | TokenName$ Spirit"
+            		+ " | TokenImage$ wb 1 1 spirit RNA | TokenTypes$ Creature,Spirit | TokenColors$ White,Black"
+            		+ " | TokenPower$ 1 | TokenToughness$ 1 | TokenKeywords$ Flying | TokenOwner$ You";
 
             final Trigger trigger = TriggerHandler.parseTrigger(sb.toString(), card, intrinsic);
 

@@ -85,7 +85,7 @@ public enum TriggerType {
     Transformed(TriggerTransformed.class),
     TurnBegin(TriggerTurnBegin.class),
     TurnFaceUp(TriggerTurnFaceUp.class),
-    Unattach(TriggerUnattach.class),
+    Unequip(TriggerUnequip.class),
     Untaps(TriggerUntaps.class),
     Vote(TriggerVote.class);
 

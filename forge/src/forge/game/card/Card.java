@@ -2745,7 +2745,7 @@ public class Card extends GameEntity implements Comparable<Card> {
         final Map<String, Object> runParams = Maps.newTreeMap();
         runParams.put("Equipment", this);
         runParams.put("Card", c);
-        getGame().getTriggerHandler().runTrigger(TriggerType.Unattach, runParams, false);
+        getGame().getTriggerHandler().runTrigger(TriggerType.Unequip, runParams, false);
         runUnattachCommands();
     }
 

@@ -131,6 +131,22 @@ public class TokenInfo {
         return c;
     }
 
+    public Card toTokenCard(Game game) {
+        final Card c = new Card(0, game);
+        c.setName(name);
+
+        c.setColor(color.isEmpty() ? manaCost : color);
+        c.setToken(true);
+
+        for (final String t : types) {
+            c.addType(t);
+        }
+
+        c.setBasePower(basePower);
+        c.setBaseToughness(baseToughness);
+        return c;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -147,6 +163,11 @@ public class TokenInfo {
 
     public static Pair<Player, Integer> calculateMultiplier(final Game game, final Player controller,
             final boolean applyMultiplier, final int num) {
+    	return calculateMultiplier(game, controller, applyMultiplier, num, null);
+    }
+            
+    public static Pair<Player, Integer> calculateMultiplier(final Game game, final Player controller,
+            final boolean applyMultiplier, final int num, final Card tokenCard) {
         int multiplier = num;
         Player player = controller;
 
@@ -155,6 +176,7 @@ public class TokenInfo {
         repParams.put("Affected", player);
         repParams.put("TokenNum", multiplier);
         repParams.put("EffectOnly", applyMultiplier);
+        repParams.put("Token", tokenCard);
 
         switch (game.getReplacementHandler().run(repParams)) {
             case NotReplaced:
@@ -175,7 +197,7 @@ public class TokenInfo {
         final List<Card> list = Lists.newArrayList();
         final Game game = controller.getGame();
 
-        Pair<Player, Integer> result = calculateMultiplier(game, controller, applyMultiplier, amount);
+        Pair<Player, Integer> result = calculateMultiplier(game, controller, applyMultiplier, amount, this.toTokenCard(game));
 
         for (int i = 0; i < result.getRight(); i++) {
             list.add(makeOneToken(result.getLeft()));

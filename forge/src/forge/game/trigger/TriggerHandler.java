@@ -708,7 +708,7 @@ public class TriggerHandler {
         }
 
         // not a Permanent you control
-        if (!host.isPermanent() || !host.isInZone(ZoneType.Battlefield)) {
+        if (!host.isPermanent()) {
             return 0;
         }
 
