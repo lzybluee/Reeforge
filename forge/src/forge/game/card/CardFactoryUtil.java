@@ -3485,7 +3485,7 @@ public class CardFactoryUtil {
 
             inst.addReplacement(re);
         } else if (keyword.startsWith("Riot")) {
-            final String choose = "DB$ GenericChoice | AILogic$ Riot | SpellDescription$ Riot";
+            final String choose = "DB$ GenericChoice | AILogic$ Riot | SpellDescription$ Riot (This creature enters the battlefield with your choice of a +1/+1 counter or haste.)";
 
             final String counter = "DB$ PutCounter | Defined$ Self | CounterType$ P1P1 | ETB$ True | CounterNum$ 1" +
                                 " | SpellDescription$ Put a +1/+1 counter on it.";
