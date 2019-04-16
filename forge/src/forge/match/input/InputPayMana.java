@@ -231,9 +231,18 @@ public abstract class InputPayMana extends InputSyncronizedBase {
             if(saPaidFor.getHostCard() != null && !saPaidFor.getHostCard().getConvoked().isEmpty())	{
             	boolean isConvoked = false;
             	for(Card c : saPaidFor.getHostCard().getConvoked()) {
-            		if(c.getId() == card.getId()) {
-            			isConvoked = true;
-                    	break;
+            		if(c.getId() == card.getId() && ma.getPayCosts() != null && ma.getPayCosts().getCostParts() != null) {
+            			for(CostPart part : ma.getPayCosts().getCostParts()) {
+    	            		if(part instanceof CostSacrifice) {
+    	            			if(part.payCostFromSource()) {
+    	            				isConvoked = true;
+    	                        	break;
+    	            			}
+    	            		}
+    	            	}
+            			if(isConvoked) {
+            				break;
+            			}
             		}
             	}
             	if(!isConvoked && ma.getPayCosts() != null && ma.getPayCosts().getCostParts() != null) {
