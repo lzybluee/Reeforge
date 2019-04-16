@@ -114,6 +114,7 @@ public class ManaCostBeingPaid {
     private final String sourceRestriction;
     private byte sunburstMap = 0;
     private int cntX = 0;
+    private int phyxianPaidShards = 0;
 
     /**
      * Copy constructor
@@ -192,6 +193,7 @@ public class ManaCostBeingPaid {
             return false;
         }
 
+        phyxianPaidShards++;
         decreaseShard(phy, 1);
         return true;
     }
@@ -704,5 +706,17 @@ public class ManaCostBeingPaid {
             result |= s.getColorMask();
         }
         return result;
+    }
+
+    public final int getUnpaidShardsSize() {
+        int result = 0;
+        for (ManaCostShard s : unpaidShards.keySet()) {
+            result += unpaidShards.get(s).totalCount;
+        }
+        return result;
+    }
+
+    public final int getPhyxianPaidShards() {
+    	return phyxianPaidShards;
     }
 }

@@ -362,6 +362,7 @@ public class ComputerUtilMana {
         List<Mana> manaSpentToPay = test ? new ArrayList<Mana>() : sa.getPayingMana();
         boolean purePhyrexian = cost.containsOnlyPhyrexianMana();
         int testEnergyPool = ai.getCounters(CounterType.ENERGY);
+        int totalShards = cost.getUnpaidShardsSize();
 
         List<SpellAbility> paymentList = Lists.newArrayList();
 
@@ -551,6 +552,9 @@ public class ComputerUtilMana {
         // on the SpellAbility in order for effects that check mana spent cost to work.
 
         sa.getHostCard().setColorsPaid(cost.getColorsPaid());
+        if(!checkPlayable && (cost.getPhyxianPaidShards() == 0 || totalShards != cost.getPhyxianPaidShards())) {
+        	sa.getHostCard().setManaPaid();
+        }
         // if (sa instanceof Spell_Permanent) // should probably add this
         sa.getHostCard().setSunburstValue(cost.getSunburst());
 

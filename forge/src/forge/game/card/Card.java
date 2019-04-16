@@ -208,6 +208,7 @@ public class Card extends GameEntity implements Comparable<Card> {
 
     private int sunburstValue = 0;
     private byte colorsPaid = 0;
+    private boolean manaPaid = false;
 
     private Player owner = null;
     private Player controller = null;
@@ -956,6 +957,13 @@ public class Card extends GameEntity implements Comparable<Card> {
     }
     public final void setColorsPaid(final byte s) {
         colorsPaid |= s;
+    }
+
+    public final boolean isManaPaid() {
+        return manaPaid;
+    }
+    public final void setManaPaid() {
+    	manaPaid = true;
     }
 
     public final int getXManaCostPaid() {

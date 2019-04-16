@@ -886,6 +886,7 @@ public class HumanPlay {
         }
         if (!toPay.isPaid()) {
             // Input is somehow clearing out the offering card?
+        	int totalShards = toPay.getUnpaidShardsSize();
             inpPayment = new InputPayManaOfCostPayment(controller, toPay, ability, activator);
             inpPayment.setMessagePrefix(prompt);
             inpPayment.showAndWait();
@@ -895,6 +896,9 @@ public class HumanPlay {
 
             source.setXManaCostPaidByColor(toPay.getXManaCostPaidByColor());
             source.setColorsPaid(toPay.getColorsPaid());
+            if(toPay.getPhyxianPaidShards() == 0 || totalShards != toPay.getPhyxianPaidShards()) {
+            	source.setManaPaid();
+            }
             source.setSunburstValue(toPay.getSunburst());
         }
 
