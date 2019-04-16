@@ -133,7 +133,7 @@ public class PlayerZone extends Zone {
         return CardLists.filter(cl, filterPredicate);
     }
 
-    public CardCollectionView getCardsRetrace(Player who, CardCollectionView hand) {
+    public CardCollectionView getCardsCanCast(Player who, CardCollectionView hand) {
         boolean checkingForOwner = who == player;
 
         CardCollection cards = new CardCollection();
@@ -149,16 +149,18 @@ public class PlayerZone extends Zone {
                 break;
             }
         }
-        if (!hasLand) {
-            return cards;
-        }
 
         if (checkingForOwner) {
             CardCollectionView cl = getCards(false);
             for(Card c : cl) {
                 for (KeywordInterface keyword : c.getKeywords()) {
-                    if (keyword.getKeyword() != null && keyword.getOriginal().startsWith("Retrace")) {
-                        cards.add(c);
+                    if (keyword.getKeyword() != null) {
+                    	if(hasLand && keyword.getOriginal().startsWith("Retrace")) {
+                    		cards.add(c);
+                    	}
+                        if(hand.size() > 0 && keyword.getOriginal().startsWith("Jump-start")) {
+                        	cards.add(c);
+                        }
                     }
                 }
             }
