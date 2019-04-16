@@ -163,10 +163,10 @@ public class CountersRemoveEffect extends SpellAbilityEffect {
                         Map<String, Object> params = Maps.newHashMap();
                         params.put("Target", tgtCard);
                         
-                        String prompt = "Select type of counters to remove";
+                        String prompt = "Select type of counters to remove from " + tgtCard;
                         CounterType chosenType = pc.chooseCounterType(
                                 ImmutableList.copyOf(tgtCounters.keySet()), sa, prompt, params);
-                        prompt = "Select the number of " + chosenType.getName() + " counters to remove";
+                        prompt = "Select the number of " + chosenType.getName() + " counters to remove from " + tgtCard;
                         int max = Math.min(cntToRemove, tgtCounters.get(chosenType));
                         params = Maps.newHashMap();
                         params.put("Target", tgtCard);
@@ -192,7 +192,7 @@ public class CountersRemoveEffect extends SpellAbilityEffect {
                             Map<String, Object> params = Maps.newHashMap();
                             params.put("Target", tgtCard);
                             params.put("CounterType", type);
-                            String title = "Select the number of " + type + " counters to remove";
+                            String title = "Select the number of " + type + " counters to remove from " + tgtCard;
                             cntToRemove = pc.chooseNumber(sa, title, 0, cntToRemove, params);
                         }
                             
