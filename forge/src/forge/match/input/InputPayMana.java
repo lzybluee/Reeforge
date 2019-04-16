@@ -226,6 +226,19 @@ public abstract class InputPayMana extends InputSyncronizedBase {
             if (ma.isAbility() && ma.getRestrictions().isInstantSpeed())            { continue; }
             if (!m.meetsManaRestrictions(saPaidFor))                                { continue; }
 
+            if(saPaidFor.getHostCard() != null && !saPaidFor.getHostCard().getConvoked().isEmpty())	{
+            	boolean isConvoked = false;
+            	for(Card c : saPaidFor.getHostCard().getConvoked()) {
+            		if(c.getId() == card.getId()) {
+            			isConvoked = true;
+                    	break;
+            		}
+            	}
+            	if(isConvoked) {
+            		continue;
+            	}
+            }
+
             // If Mana Abilities produce differing amounts of mana, let the player choose
             int maAmount = GameActionUtil.amountOfManaGenerated(ma, true);
             if (amountOfMana == -1) {
