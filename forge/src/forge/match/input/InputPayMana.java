@@ -23,6 +23,8 @@ import forge.game.Game;
 import forge.game.ability.ApiType;
 import forge.game.card.Card;
 import forge.game.card.CardUtil;
+import forge.game.cost.CostPart;
+import forge.game.cost.CostSacrifice;
 import forge.game.mana.ManaCostBeingPaid;
 import forge.game.player.Player;
 import forge.game.player.PlayerView;
@@ -233,6 +235,16 @@ public abstract class InputPayMana extends InputSyncronizedBase {
             			isConvoked = true;
                     	break;
             		}
+            	}
+            	if(!isConvoked && ma.getPayCosts() != null && ma.getPayCosts().getCostParts() != null) {
+	            	for(CostPart part : ma.getPayCosts().getCostParts()) {
+	            		if(part instanceof CostSacrifice) {
+	            			if(!part.payCostFromSource()) {
+	            				isConvoked = true;
+	                        	break;
+	            			}
+	            		}
+	            	}
             	}
             	if(isConvoked) {
             		continue;
