@@ -1998,7 +1998,7 @@ public class Card extends GameEntity implements Comparable<Card> {
                     || keyword.equals("Convoke") || keyword.equals("Delve")
                     || keyword.equals("Improvise") || keyword.equals("Retrace")
                     || keyword.equals("Undaunted") || keyword.equals("Cascade")
-                    || keyword.equals("Devoid") ||  keyword.equals("Lifelink")
+                    || keyword.equals("Devoid") || keyword.equals("Lifelink") || keyword.equals("Deathtouch")
                     || keyword.equals("Split second")) {
                 sbBefore.append(keyword + " (" + inst.getReminderText() + ")");
                 sbBefore.append("\r\n");
