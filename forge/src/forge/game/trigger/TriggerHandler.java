@@ -629,7 +629,9 @@ public class TriggerHandler {
 
         sa.setStackDescription(sa.toString());
         if (sa.getApi() == ApiType.Charm && !sa.isWrapper()) {
-            CharmEffect.makeChoices(sa);
+            if(!CharmEffect.makeChoices(sa)) {
+            	return;
+            }
         }
 
         if(!sa.getConditions().areMet(sa)) {
