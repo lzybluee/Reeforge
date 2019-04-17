@@ -487,10 +487,6 @@ public class GameAction {
             unattachCardLeavingBattlefield(copied);
             // Remove all changed keywords
             copied.removeAllChangedText(game.getNextTimestamp());
-            // reset activations
-            for (SpellAbility ab : copied.getSpellAbilities()) {
-                ab.getRestrictions().resetTurnActivations();
-            }
         } else if (toBattlefield) {
             // reset timestamp in changezone effects so they have same timestamp if ETB simutaneously 
             copied.setTimestamp(game.getNextTimestamp());

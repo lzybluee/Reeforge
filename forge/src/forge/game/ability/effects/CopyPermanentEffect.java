@@ -74,7 +74,6 @@ public class CopyPermanentEffect extends SpellAbilityEffect {
         final List<String> triggers = Lists.newArrayList();
         final List<String> pumpKeywords = Lists.newArrayList();
         boolean asNonLegendary = false;
-        boolean resetActivations = false;
 
         final long timestamp = game.getNextTimestamp();
 
@@ -94,9 +93,6 @@ public class CopyPermanentEffect extends SpellAbilityEffect {
         }
         if (sa.hasParam("NonLegendary")) {
             asNonLegendary = true;
-        }
-        if (sa.hasParam("ResetAbilityActivations")) {
-            resetActivations = true;
         }
         if (sa.hasParam("AddSVars")) {
             svars.addAll(Arrays.asList(sa.getParam("AddSVars").split(" & ")));
@@ -319,11 +315,6 @@ public class CopyPermanentEffect extends SpellAbilityEffect {
                         copy.removeIntrinsicKeyword("Devoid");
                     }
 
-                    if (resetActivations) {
-                        for (SpellAbility ab : copy.getSpellAbilities()) {
-                            ab.getRestrictions().resetTurnActivations();
-                        }
-                    }
                     // set the controller before move to play: Crafty Cutpurse
                     copy.setController(result.getLeft(), 0);
                     copy.updateStateForView();
