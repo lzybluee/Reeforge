@@ -1,14 +1,9 @@
 Name:Rhythm of the Wild
 ManaCost:1 R G
 Types:Enchantment
+K:ETBReplacement:Other:AddRiot:Mandatory:Battlefield:Creature.YouCtrl+nonToken
 S:Mode$ Continuous | Affected$ Creature.YouCtrl | AffectedZone$ Stack | AddHiddenKeyword$ CARDNAME can't be countered. | Description$ Creature spells you control can't be countered.
-S:Mode$ Continuous | Affected$ Creature.nonToken+YouCtrl | AddKeyword$ Riot | Description$ Nontoken creatures you control have riot. (They enter the battlefield with your choice of a +1/+1 counter or haste.)
-R:Event$ Moved | Destination$ Battlefield | ValidCard$ Creature.YouCtrl+nonToken | ReplaceWith$ ETBRiot | Description$ Nontoken creatures you control have riot. (They enter the battlefield with your choice of a +1/+1 counter or haste.)
-SVar:ETBRiot:DB$ ChangeZone | Origin$ All | Destination$ Battlefield | Defined$ ReplacedCard | SubAbility$ RiotChoose | RememberChanged$ True
-SVar:RiotChoose:DB$ GenericChoice | Choices$ RiotCounter,RioaHaste | Defined$ You
-SVar:RiotCounter:DB$ PutCounter | Defined$ Remembered | CounterType$ P1P1 | CounterNum$ 1 | SpellDescription$ Put a +1/+1 counter on it. | SubAbility$ DBCleanup
-SVar:RioaHaste:DB$ Animate | Defined$ Remembered | Keywords$ Haste | Permanent$ True | SpellDescription$ Haste | SubAbility$ DBCleanup
-SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+SVar:AddRiot:DB$ Animate | Defined$ ReplacedCard | Keywords$ Riot | Permanent$ True | SpellDescription$ Nontoken creatures you control have riot. (They enter the battlefield with your choice of a +1/+1 counter or haste.)
 SVar:PlayMain1:TRUE
 DeckHas:Ability$Counters
 Oracle:Creature spells you control can't be countered.\nNontoken creatures you control have riot. (They enter the battlefield with your choice of a +1/+1 counter or haste.)
