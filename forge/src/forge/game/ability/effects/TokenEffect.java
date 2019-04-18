@@ -253,11 +253,7 @@ public class TokenEffect extends SpellAbilityEffect {
         Card prototype = loadTokenPrototype(sa);
 
         readParameters(sa, prototype);
-        int finalAmount = AbilityUtils.calculateAmount(host, this.tokenAmount, sa);
-        
-        if(sa.hasParam("TokenAmount") && sa.getParam("TokenAmount").equals("CreatedAmount")) {
-        	finalAmount = Integer.parseInt(sa.getHostCard().getSVar("CreatedAmount"));
-        }
+        final int finalAmount = AbilityUtils.calculateAmount(host, this.tokenAmount, sa);
 
         TokenInfo tokenInfo;
 
