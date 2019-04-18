@@ -889,25 +889,11 @@ public class ChangeZoneEffect extends SpellAbilityEffect {
 
         CardCollection chosenCards = new CardCollection();
         if(!sa.hasParam("DifferentNames") && !sa.hasParam("ShareLandType") && !sa.hasParam("AtRandom") && totalcmc == null && !defined) {
-        	List<Card> selectedCards;
-            if (! sa.hasParam("SelectPrompt")) {
-                // new default messaging for multi select
-                if (fetchList.size() > changeNum) {
-                    selectPrompt = MessageUtil.formatMessage("Select up to " + changeNum + " cards from {player's} " + Lang.joinHomogenous(origin).toLowerCase(), decider, player);
-                } else {
-                    selectPrompt = MessageUtil.formatMessage("Select cards from {player's} " + Lang.joinHomogenous(origin).toLowerCase(), decider, player);
-                }
+        	selectPrompt = sa.hasParam("SelectPrompt") ? sa.getParam("SelectPrompt") : MessageUtil.formatMessage("Select " + changeNum + " card(s) from {player's} " + Lang.joinHomogenous(origin).toLowerCase(), decider, player);
+            CardCollection cards = decider.getController().chooseCardsForZoneChange(destination, origin, sa, fetchList, delayedReveal, selectPrompt, !sa.hasParam("Mandatory"), decider, changeNum);
+            if(cards != null) {
+                chosenCards = cards;
             }
-            // ensure that selection is within maximum allowed changeNum
-            do {
-                selectedCards = decider.getController().chooseCardsForZoneChange(destination, origin, sa, fetchList, delayedReveal, selectPrompt, decider);
-            } while (selectedCards != null && selectedCards.size() > changeNum);
-            if (selectedCards != null) {
-                for (Card card : selectedCards) {
-                    chosenCards.add(card);
-                }
-            }
-            // maybe prompt the user if they selected fewer than the maximum possible?
         } else {
             // only multi-select if player can select more than one
             if (changeNum > 1 && allowMultiSelect(decider, sa)) {
