@@ -6,7 +6,7 @@ Code2=GRN
 MciCode=grn
 Type=Expansion
 BoosterCovers=5
-Booster=10 Common, 3 Uncommon, 1 RareMythic, 1 BasicLand
+Booster=10 Common:!fromSheet("GRN Secret Cards"), 3 Uncommon:!fromSheet("GRN Secret Cards"), 1 RareMythic:!fromSheet("GRN Secret Cards"), 1 fromSheet("GRN Lands")
 
 [cards]
 1 C Blade Instructor

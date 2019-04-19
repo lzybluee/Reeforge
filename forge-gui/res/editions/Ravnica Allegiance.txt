@@ -6,7 +6,7 @@ Code2=RNA
 MciCode=rna
 Type=Expansion
 BoosterCovers=5
-Booster=10 Common, 3 Uncommon, 1 RareMythic, 1 BasicLand
+Booster=10 Common:!fromSheet("RNA Secret Cards"), 3 Uncommon:!fromSheet("RNA Secret Cards"), 1 RareMythic:!fromSheet("RNA Secret Cards"), 1 fromSheet("RNA Lands")
 
 [cards]
 1 M Angel of Grace

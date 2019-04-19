@@ -1314,3 +1314,49 @@ Woodland Stream
 14 Mountain|M19
 14 Plains|M19
 14 Swamp|M19
+
+[GRN Lands]
+10 Golgari Guildgate|GRN
+10 Izzet Guildgate|GRN
+10 Selesnya Guildgate|GRN
+10 Dimir Guildgate|GRN
+10 Boros Guildgate|GRN
+
+[GRN Secret Cards]
+Ral, Caller of Storms
+Ral's Dispersal
+Ral's Staticaster
+Vraska, Regal Gorgon
+Attendant of Vraska
+Vraska's Stoneglare
+Impervious Greatwurm
+Precision Bolt
+Kraul Raider
+Golgari Guildgate|GRN
+Izzet Guildgate|GRN
+Selesnya Guildgate|GRN
+Dimir Guildgate|GRN
+Boros Guildgate|GRN
+
+[RNA Lands]
+10 Azorius Guildgate|RNA
+10 Gruul Guildgate|RNA
+10 Orzhov Guildgate|RNA
+10 Rakdos Guildgate|RNA
+10 Simic Guildgate|RNA
+
+[RNA Secret Cards]
+Dovin, Architect of Law
+Elite Arrester
+Dovin's Dismissal
+Dovin's Automaton
+Domri, City Smasher
+Ragefire
+Charging War Boar
+Domri's Nodorog
+The Haunt of Hightower
+Azorius Guildgate|RNA
+Gruul Guildgate|RNA
+Orzhov Guildgate|RNA
+Rakdos Guildgate|RNA
+Simic Guildgate|RNA
