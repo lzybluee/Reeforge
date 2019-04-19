@@ -246,7 +246,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         List<PaperCard> newMain = null;
 
         // Skip sideboard loop if there are no sideboarding opportunities
-        if (sbSize == 0 && mainSize == deckMinSize) {
+        if (sbSize == 0 && (mainSize == deckMinSize || (deckMinSize == 0 && (mainSize == 60 || mainSize == 40)))) {
             return null;
         }
 
