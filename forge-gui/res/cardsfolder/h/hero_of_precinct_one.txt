@@ -4,7 +4,7 @@ Types:Creature Human Warrior
 PT:2/2
 T:Mode$ SpellCast | ValidCard$ Card.MultiColor | ValidActivatingPlayer$ You | Execute$ TrigToken | TriggerZones$ Battlefield | TriggerDescription$ Whenever you cast a multicolored spell, create a 1/1 white Human creature token.
 SVar:TrigToken:DB$ Token | TokenAmount$ 1 | TokenOwner$ You | TokenName$ Human | TokenImage$ w 1 1 human RNA | TokenTypes$ Creature,Human | TokenColors$ White | TokenPower$ 1 | TokenToughness$ 1
-AI:RemoveDeck:Random
+SVar:RemAIDeck:True
 SVar:BuffedBy:Card.MultiColor
 DeckHas:Ability$Token
 Oracle:Whenever you cast a multicolored spell, create a 1/1 white Human creature token.
