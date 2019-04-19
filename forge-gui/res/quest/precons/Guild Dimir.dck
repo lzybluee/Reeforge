@@ -1,5 +1,11 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
 [metadata]
 Name=Guild Dimir
+Set=GRN
 [Main]
 1 Barrier of Bones|GRN
 1 Blood Operative|GRN

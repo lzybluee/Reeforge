@@ -1,5 +1,11 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
 [metadata]
 Name=Guild Golgari
+Set=GRN
 [Main]
 1 Abrupt Decay|RTR
 1 Charnel Troll|GRN

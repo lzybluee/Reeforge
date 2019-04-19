@@ -364,7 +364,8 @@ public enum ColumnDef {
             new Function<Entry<? extends InventoryItem, Integer>, Object>() {
                 @Override
                 public Object apply(final Entry<? extends InventoryItem, Integer> from) {
-                    return toDeck(from.getKey()).getEdition().getCode();
+                	CardEdition edition = toDeck(from.getKey()).getEdition();
+                    return edition == null ? "" : edition.getCode();
                 }
             }),
     DECK_MAIN("Main", "Main Deck", 30, true, SortState.ASC,

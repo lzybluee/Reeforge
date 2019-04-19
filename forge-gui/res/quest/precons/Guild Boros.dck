@@ -1,5 +1,11 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
 [metadata]
 Name=Guild Boros
+Set=GRN
 [Main]
 1 Agrus Kos, Wojek Veteran|RAV
 1 Aurelia, the Warleader|GTC

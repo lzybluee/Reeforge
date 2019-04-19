@@ -1,5 +1,11 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
 [metadata]
 Name=Guild Izzet
+Set=GRN
 [Main]
 1 Beacon Bolt|GRN
 1 Cerebral Vortex|GPT

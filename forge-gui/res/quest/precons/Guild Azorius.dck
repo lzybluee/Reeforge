@@ -1,5 +1,11 @@
+[shop]
+WinsToUnlock=0
+Credits=1200
+MinDifficulty=0
+MaxDifficulty=5
 [metadata]
 Name=Guild Azorius
+Set=RNA
 [Main]
 1 Archon of the Triumvirate|RTR
 4 Azorius Chancery|DIS
