@@ -278,6 +278,7 @@ public class PlayArea extends CardPanelContainer implements CardPanelMouseListen
                             || (card.isSick() != firstCard.isSick())
                             || (state.getPower() != firstState.getPower())
                             || (state.getToughness() != firstState.getToughness())
+                            || (state.getColors().getColor() != firstState.getColors().getColor())
                             || !(card.getText().equals(firstCard.getText()))
                             || (stack.size() == tokenStackMax)) {
                         // If this token has attachments or the stack is full,
