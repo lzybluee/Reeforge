@@ -867,9 +867,17 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
 
     @Override
     public boolean willPutCardOnTop(Card c) {
-        // TODO add Logic there similar to Scry. this is used for Clash
+        final CardView view = CardView.get(c);
 
-        return true; // AI does not know what will happen next (another clash or that would become his topdeck)
+        tempShowCard(c);
+        getGui().setCard(c.getView());
+
+        boolean result = false;
+        result = InputConfirm.confirm(this, view, TextUtil.concatNoSpace("Put ", view.toString(), " on the top or bottom of your library?"),
+                true, ImmutableList.of("Top", "Bottom"));
+
+        endTempShowCards();
+        return result;
     }
 
     @Override
