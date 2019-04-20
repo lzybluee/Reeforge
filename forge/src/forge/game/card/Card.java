@@ -3253,12 +3253,14 @@ public class Card extends GameEntity implements Comparable<Card> {
         if (n == 0) { return; }
         tempPowerBoost += n;
         currentState.getView().updatePower(this);
+        currentState.getView().updateToughness(this);
     }
 
     public final void addTempToughnessBoost(final int n) {
         if (n == 0) { return; }
         tempToughnessBoost += n;
         currentState.getView().updateToughness(this);
+        currentState.getView().updatePower(this);
     }
 
     // for cards like Glorious Anthem, etc.
@@ -3275,6 +3277,7 @@ public class Card extends GameEntity implements Comparable<Card> {
         semiPermanentPowerBoost += n;
         if (updateViewImmediately) {
             currentState.getView().updatePower(this);
+            currentState.getView().updateToughness(this);
         }
     }
 
@@ -3283,6 +3286,7 @@ public class Card extends GameEntity implements Comparable<Card> {
         semiPermanentToughnessBoost += n;
         if (updateViewImmediately) {
             currentState.getView().updateToughness(this);
+            currentState.getView().updatePower(this);
         }
     }
 
@@ -3290,12 +3294,14 @@ public class Card extends GameEntity implements Comparable<Card> {
         if (semiPermanentPowerBoost == n) { return; }
         semiPermanentPowerBoost = n;
         currentState.getView().updatePower(this);
+        currentState.getView().updateToughness(this);
     }
 
     public final void setSemiPermanentToughnessBoost(final int n) {
         if (semiPermanentToughnessBoost == n) { return; }
         semiPermanentToughnessBoost = n;
         currentState.getView().updateToughness(this);
+        currentState.getView().updatePower(this);
     }
 
     public final boolean isUntapped() {
