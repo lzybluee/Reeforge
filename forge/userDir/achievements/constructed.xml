@@ -1,13 +1,15 @@
 <achievements>
-    <a best="5" current="5" name="GameWinStreak" time="1527692093590"/>
-    <a best="2" current="2" name="MatchWinStreak" time="1527692093590"/>
-    <a best="6" name="TotalGameWins" time="1527692093590"/>
-    <a best="2" name="TotalMatchWins" time="1527692093590"/>
-    <a best="9" name="NeedForSpeed" time="1503294611317"/>
-    <a best="-10" name="Overkill" time="1503375993454"/>
-    <a best="7" name="ArcaneMaster" time="1503294611317"/>
+    <a best="11" current="3" name="GameWinStreak" time="1555692559790"/>
+    <a best="6" current="6" name="MatchWinStreak" time="1555730390510"/>
+    <a best="27" name="TotalGameWins" time="1555730593133"/>
+    <a best="6" name="TotalMatchWins" time="1555730390510"/>
+    <a best="6" name="NeedForSpeed" time="1555690813368"/>
+    <a best="-12" name="Overkill" time="1555694105716"/>
+    <a best="17" name="LifeToSpare" time="1555720747635"/>
+    <a best="1" name="Hellbent" time="1555693826267"/>
+    <a best="5" name="ArcaneMaster" time="1555692559790"/>
     <a best="3" name="StormChaser" time="1503293550777"/>
-    <a best="7" name="ManaScrewed" time="1503294611317"/>
+    <a best="4" name="ManaScrewed" time="1555694276714"/>
     <a best="11" name="ManaFlooded" time="1527692093590"/>
     <a best="1" name="Commander" time="1503293556237"/>
     <a best="24" name="Blackjack" time="1503293557605"/>
