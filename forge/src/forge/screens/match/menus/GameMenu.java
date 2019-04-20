@@ -330,7 +330,7 @@ public final class GameMenu {
     }
 
     private static SkinnedCheckBoxMenuItem getMenuItem_SkipAutoPay() {
-        SkinnedCheckBoxMenuItem menuItem = new SkinnedCheckBoxMenuItem("Skip Auto Pay");
+        SkinnedCheckBoxMenuItem menuItem = new SkinnedCheckBoxMenuItem("No Auto Pay/Confirm");
         menuItem.setState(prefs.getPrefBoolean(FPref.UI_SKIP_AUTO_PAY));
         menuItem.addActionListener(getSkipAutoPay());
         return menuItem;

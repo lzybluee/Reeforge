@@ -670,6 +670,17 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         if (getGui().shouldAutoYieldCard(cardName)) {
             return true;
         }
+        if(!FModel.getPreferences().getPrefBoolean(FPref.UI_SKIP_AUTO_PAY)) {
+        	if (sa != null && sa.hasParam("Graft") && !sa.getTriggeringObjects().isEmpty()) {
+        		final Map<String, Object> objs = sa.getTriggeringObjects();
+        		if (objs.containsKey("Card")) {
+                    final Card card = (Card) objs.get("Card");
+                    if(sa.getActivatingPlayer() != card.getController()) {
+                    	return false;
+                    }
+        		}
+        	}
+        }
 
         // triggers with costs can always be declined by not paying the cost
         if (sa.hasParam("Cost") && !sa.getParam("Cost").equals("0")) {
@@ -1280,8 +1291,19 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         } else {
             final SpellAbility ability = stack.peekAbility();
             final String cardName = ability.getHostCard() == null ? null : ability.getHostCard().getName();
-            if (ability != null && ability.isAbility() &&
-            		(getGui().shouldAutoYieldCard(cardName) || getGui().shouldAutoYield(ability.yieldKey()))) {
+            boolean shouldAutoYield = getGui().shouldAutoYieldCard(cardName)  || getGui().shouldAutoYield(ability.yieldKey());
+            if(!shouldAutoYield && !FModel.getPreferences().getPrefBoolean(FPref.UI_SKIP_AUTO_PAY)) {
+            	if (ability != null && ability.hasParam("Graft") && !ability.getTriggeringObjects().isEmpty()) {
+            		final Map<String, Object> objs = ability.getTriggeringObjects();
+            		if (objs.containsKey("Card")) {
+                        final Card card = (Card) objs.get("Card");
+                        if(ability.getActivatingPlayer() != card.getController()) {
+                        	shouldAutoYield = true;
+                        }
+            		}
+            	}
+            }
+            if (ability != null && ability.isAbility() && shouldAutoYield) {
                 // avoid prompt for input if top ability of stack is set to
                 // auto-yield
                 try {
