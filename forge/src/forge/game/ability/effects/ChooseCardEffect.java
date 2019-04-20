@@ -128,6 +128,7 @@ public class ChooseCardEffect extends SpellAbilityEffect {
             } else if ((tgt == null) || p.canBeTargetedBy(sa)) {
                 if (sa.hasParam("AtRandom") && !choices.isEmpty()) {
                     Aggregates.random(choices, validAmount, chosen);
+                    p.getGame().getAction().reveal(chosen, p, false);
                 } else {
                     CardCollection collection = new CardCollection();
                     CardCollection etbCards = game.getAction().getSimultaneousEtbCards();
