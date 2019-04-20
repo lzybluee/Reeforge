@@ -2563,7 +2563,7 @@ public class CardFactoryUtil {
             sbHaunter.append("Mode$ ChangesZone | Origin$ ");
             sbHaunter.append(card.isCreature() ? "Battlefield" : "Stack");
             sbHaunter.append(" | Destination$ Graveyard | ValidCard$ Card.Self");
-            sbHaunter.append(" | Static$ True | Secondary$ True | TriggerDescription$ Blank");
+            sbHaunter.append(" | Secondary$ True | TriggerDescription$ When this creature dies, exile it haunting target creature.");
 
             final Trigger haunterDies = TriggerHandler.parseTrigger(sbHaunter.toString(), card, intrinsic);
 
