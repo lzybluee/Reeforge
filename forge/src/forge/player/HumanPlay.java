@@ -125,6 +125,9 @@ public class HumanPlay {
 
             final HumanPlaySpellAbility req = new HumanPlaySpellAbility(controller, sa, payment);
             if (!req.playAbility(true, false, false)) {
+            	if(topAbility) {
+            		p.getGame().getStack().clearUndoStack();
+            	}
                 if (flippedToCast && !castFaceDown) {
                     source.turnFaceDown(true);
                 }
