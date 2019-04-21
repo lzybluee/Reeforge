@@ -362,7 +362,7 @@ public class ComputerUtilCard {
         }
     
         List<Card> lands = CardLists.filter(list, CardPredicates.Presets.LANDS);
-        if (lands.size() > 6) {
+        if (lands.size() > 3) {
             return ComputerUtilCard.getWorstLand(lands);
         }
     
