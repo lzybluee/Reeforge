@@ -2479,7 +2479,7 @@ public class CardFactoryUtil {
                 + "| Origin$ Any | Destination$ Battlefield "
                 + "| TriggerZones$ Battlefield | OptionalDecider$ You "
                 + "| IsPresent$ Card.Self+counters_GE1_P1P1"
-                + "| Secondary$ True | TriggerDescription$"
+                + "| Secondary$ True | TriggerDescription$ "
                 + "Whenever another creature enters the battlefield, you "
                 + "may move a +1/+1 counter from this creature onto it.";
             final Trigger trigger = TriggerHandler.parseTrigger(trigStr, card, intrinsic);
