@@ -4,10 +4,12 @@ import forge.game.Game;
 import forge.game.ability.AbilityUtils;
 import forge.game.ability.SpellAbilityEffect;
 import forge.game.card.Card;
+import forge.game.card.CardCollection;
 import forge.game.card.CardCollectionView;
 import forge.game.card.CardLists;
 import forge.game.card.CounterType;
 import forge.game.player.Player;
+import forge.game.player.PlayerActionConfirmMode;
 import forge.game.player.PlayerController;
 import forge.game.spellability.SpellAbility;
 import forge.game.zone.Zone;
@@ -123,11 +125,20 @@ public class CountersRemoveEffect extends SpellAbilityEffect {
         if (sa.hasParam("ValidSource")) {
             srcCards = game.getCardsIn(ZoneType.Battlefield);
             srcCards = CardLists.getValidCards(srcCards, sa.getParam("ValidSource"), player, card, sa);
-            if (num.equals("Any")) {
+            if (num.equals("Any") && !srcCards.isEmpty()) {
                 StringBuilder sb = new StringBuilder();
                 sb.append("Choose cards to take ").append(counterType.getName()).append(" counters from");
-
-                srcCards = player.getController().chooseCardsForEffect(srcCards, sa, sb.toString(), 0, srcCards.size(), true);
+                CardCollectionView chosen = new CardCollection();
+                while(true) {
+                	chosen = player.getController().chooseCardsForEffect(srcCards, sa, sb.toString(), 0, srcCards.size(), true);
+                	if(chosen != null && chosen.isEmpty() && srcCards.size() > 0) {
+                    	if (player.getController().confirmAction(sa, PlayerActionConfirmMode.OptionalChoose, "Cancel Choose?")) {
+                            break;
+                        }
+                    } else {
+                    	break;
+                    }
+                }
             }
         } else {
             srcCards = getTargetCards(sa);
