@@ -362,8 +362,12 @@ public class ComputerUtilCard {
         }
     
         List<Card> lands = CardLists.filter(list, CardPredicates.Presets.LANDS);
-        if (lands.size() > 3) {
-            return ComputerUtilCard.getWorstLand(lands);
+        if (!lands.isEmpty()) {
+        	int landNum = lands.size();
+        	int handNum = lands.get(0).getController().getCardsIn(ZoneType.Hand).size();
+        	if(landNum - handNum > 1) {
+                return ComputerUtilCard.getWorstLand(lands);
+        	}
         }
     
         if (hasEnchantmants || hasArtifacts) {
