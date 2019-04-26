@@ -1619,6 +1619,11 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         if (possibleReplacers.size() == 1) {
             return first;
         }
+        for(ReplacementEffect re : possibleReplacers) {
+        	if(re.getOverridingAbility() != null && re.getOverridingAbility().hasParam("ChooseFirst")) {
+        		return re;
+        	}
+        }
         final String firstStr = first.toString();
         for (int i = 1; i < possibleReplacers.size(); i++) {
             // prompt user if there are multiple different options

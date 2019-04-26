@@ -3,7 +3,7 @@ ManaCost:1 R G
 Types:Enchantment
 K:ETBReplacement:Other:AddRiot:Mandatory:Battlefield:Creature.YouCtrl+nonToken
 S:Mode$ Continuous | Affected$ Creature.YouCtrl | AffectedZone$ Stack | AddHiddenKeyword$ CARDNAME can't be countered. | Description$ Creature spells you control can't be countered.
-SVar:AddRiot:DB$ Animate | Defined$ ReplacedCard | Keywords$ Riot | Permanent$ True | SpellDescription$ Nontoken creatures you control have riot. (They enter the battlefield with your choice of a +1/+1 counter or haste.)
+SVar:AddRiot:DB$ Animate | Defined$ ReplacedCard | Keywords$ Riot | Permanent$ True | ChooseFirst$ True | SpellDescription$ Nontoken creatures you control have riot. (They enter the battlefield with your choice of a +1/+1 counter or haste.)
 SVar:PlayMain1:TRUE
 DeckHas:Ability$Counters
 Oracle:Creature spells you control can't be countered.\nNontoken creatures you control have riot. (They enter the battlefield with your choice of a +1/+1 counter or haste.)
