@@ -7,4 +7,4 @@ SVar:DBChangeZone:DB$ ChangeZone | Origin$ Graveyard | Destination$ Hand | Defin
 DeckHints:Ability$Delirium
 DeckHas:Ability$Graveyard
 SVar:Picture:http://www.wizards.com/global/images/magic/general/grapple_with_the_past.jpg
-Oracle:Put the top three cards of your library into your graveyard, then you may return a creature or land card from your graveyard to your hand. 
+Oracle:Put the top three cards of your library into your graveyard, then you may return a creature or land card from your graveyard to your hand.

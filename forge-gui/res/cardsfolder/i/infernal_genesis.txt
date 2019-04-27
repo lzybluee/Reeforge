@@ -8,4 +8,4 @@ SVar:DBCleanup:DB$Cleanup | ClearRemembered$ True
 SVar:X:Remembered$CardManaCost
 SVar:RemRandomDeck:True
 SVar:Picture:http://www.wizards.com/global/images/magic/general/infernal_genesis.jpg
-Oracle:At the beginning of each player's upkeep, that player puts the top card of their library into their graveyard. Then they create X 1/1 black Minion creature tokens, where X is that card's converted mana cost. 
+Oracle:At the beginning of each player's upkeep, that player puts the top card of their library into their graveyard. Then they create X 1/1 black Minion creature tokens, where X is that card's converted mana cost.

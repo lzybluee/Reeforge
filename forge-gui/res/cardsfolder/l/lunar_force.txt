@@ -5,4 +5,4 @@ T:Mode$ SpellCast | ValidCard$ Card | ValidActivatingPlayer$ Opponent | Execute$
 SVar:TrigCounter:DB$ Counter | Defined$ TriggeredSpellAbility | SubAbility$ DBSacrifice
 SVar:DBSacrifice:DB$ Sacrifice
 SVar:Picture:http://www.wizards.com/global/images/magic/general/lunar_force.jpg
-Oracle:Whenever an opponent casts a spell, sacrifice Lunar Force and counter that spell. 
+Oracle:Whenever an opponent casts a spell, sacrifice Lunar Force and counter that spell.
