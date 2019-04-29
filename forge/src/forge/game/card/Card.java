@@ -956,7 +956,7 @@ public class Card extends GameEntity implements Comparable<Card> {
         return colorsPaid;
     }
     public final void setColorsPaid(final byte s) {
-        colorsPaid |= s;
+        colorsPaid = s;
     }
 
     public final boolean isManaPaid() {
