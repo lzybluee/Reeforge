@@ -363,11 +363,11 @@ public class ComputerUtilCard {
     
         List<Card> lands = CardLists.filter(list, CardPredicates.Presets.LANDS);
         if (!lands.isEmpty()) {
-        	if (lands.size() > 6) {
+        	if (lands.size() > 3) {
                 return ComputerUtilCard.getWorstLand(lands);
         	}
         }
-    
+
         if (hasEnchantmants || hasArtifacts) {
             final List<Card> ae = CardLists.filter(list, Predicates.and(Predicates.<Card>or(CardPredicates.Presets.ARTIFACTS, CardPredicates.Presets.ENCHANTMENTS), new Predicate<Card>() {
                 @Override
