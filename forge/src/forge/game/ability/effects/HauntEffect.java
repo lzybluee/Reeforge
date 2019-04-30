@@ -12,7 +12,7 @@ public class HauntEffect extends SpellAbilityEffect {
     	Card card = sa.getHostCard();
         final Game game = card.getGame();
         card = game.getCardState(card, null);
-        if (card == null) {
+        if (card == null || card.getTimestamp() != sa.getHostCard().getTimestamp()) {
             return;
         } else if (sa.usesTargeting() && !card.isToken()) {
             // haunt target but only if card is no token
