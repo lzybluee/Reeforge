@@ -68,20 +68,21 @@ public class CloneEffect extends SpellAbilityEffect {
             if (sa.hasParam("ChoiceZone")) {
                 choiceZone = ZoneType.smartValueOf(sa.getParam("ChoiceZone"));
             }
-            CardCollectionView choices = game.getCardsIn(choiceZone);
-            choices = CardLists.getValidCards(choices, sa.getParam("Choices"), activator, host);
-            
-            CardCollection collection = new CardCollection();
-            CardCollection etbCards = game.getAction().getSimultaneousEtbCards();
+            CardCollection choices = new CardCollection(game.getCardsIn(choiceZone));
 
-            for(Card c : choices) {
-                if(etbCards == null || !etbCards.contains(c)) {
-                    collection.add(c);
-                }
+            // choices need to be filtered by LastState Battlefield or Graveyard
+            // if a Clone enters the field as other cards it could clone,
+            // the clone should not be able to clone them
+            if (choiceZone.equals(ZoneType.Battlefield)) {
+                choices.retainAll(sa.getLastStateBattlefield());
+            } else if (choiceZone.equals(ZoneType.Graveyard)) {
+                choices.retainAll(sa.getLastStateGraveyard());
             }
 
+            choices = CardLists.getValidCards(choices, sa.getParam("Choices"), activator, host);
+
             String title = sa.hasParam("ChoiceTitle") ? sa.getParam("ChoiceTitle") : "Choose a card ";
-            cardToCopy = activator.getController().chooseSingleEntityForEffect(collection, sa, title, false);
+            cardToCopy = activator.getController().chooseSingleEntityForEffect(choices, sa, title, false);
         } else if (sa.hasParam("Defined")) {
             List<Card> cloneSources = AbilityUtils.getDefinedCards(host, sa.getParam("Defined"), sa);
             if (!cloneSources.isEmpty()) {
