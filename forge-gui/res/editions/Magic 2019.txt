@@ -325,6 +325,6 @@ Booster=10 Common:!fromSheet("M19 Secret Cards"), 3 Uncommon:!fromSheet("M19 Sec
 314 C Llanowar Elves
 315 R Angelic Guardian
 316 R Angler Turtle
-317 R Vengeant Vampire
-318 R Immortal Phoenix
-319 R Rampaging Brontodon
+317 R Immortal Phoenix
+318 R Rampaging Brontodon
+319 R Vengeant Vampire
