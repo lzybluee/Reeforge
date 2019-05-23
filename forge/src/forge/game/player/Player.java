@@ -1533,7 +1533,6 @@ public class Player extends GameEntity implements Comparable<Player> {
         final CardCollection cl = new CardCollection();
 
         cl.addAll(getZone(ZoneType.Graveyard).getCardsPlayerCanActivate(this));
-        cl.addAll(getZone(ZoneType.Graveyard).getCardsCanCast(this, getZone(ZoneType.Hand).getCards()));
         cl.addAll(getZone(ZoneType.Exile).getCardsPlayerCanActivate(this));
         cl.addAll(getZone(ZoneType.Exile).getCardsSuspended(this));
         cl.addAll(getZone(ZoneType.Library).getCardsPlayerCanActivate(this));

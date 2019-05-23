@@ -25,7 +25,6 @@ import forge.game.card.CardCollectionView;
 import forge.game.card.CardLists;
 import forge.game.card.CounterType;
 import forge.game.keyword.Keyword;
-import forge.game.keyword.KeywordInterface;
 import forge.game.player.Player;
 import forge.game.spellability.SpellAbility;
 import forge.util.Lang;
@@ -131,42 +130,6 @@ public class PlayerZone extends Zone {
 
         final Predicate<Card> filterPredicate = checkingForOwner ? new OwnCardsActivationFilter() : alienCardsActivationFilter(who);
         return CardLists.filter(cl, filterPredicate);
-    }
-
-    public CardCollectionView getCardsCanCast(Player who, CardCollectionView hand) {
-        boolean checkingForOwner = who == player;
-
-        CardCollection cards = new CardCollection();
-        
-        if (hand == null || hand.size() == 0) {
-            return cards;
-        }
-
-        boolean hasLand = false;
-        for (Card c : hand) {
-            if (c.isLand()) {
-                hasLand = true;
-                break;
-            }
-        }
-
-        if (checkingForOwner) {
-            CardCollectionView cl = getCards(false);
-            for(Card c : cl) {
-                for (KeywordInterface keyword : c.getKeywords()) {
-                    if (keyword.getKeyword() != null) {
-                    	if(hasLand && keyword.getOriginal().startsWith("Retrace")) {
-                    		cards.add(c);
-                    	}
-                        if(hand.size() > 0 && keyword.getOriginal().startsWith("Jump-start")) {
-                        	cards.add(c);
-                        }
-                    }
-                }
-            }
-        }
-
-        return cards;
     }
 
     public CardCollectionView getCardsSuspended(Player who) {
