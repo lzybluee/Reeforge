@@ -21,7 +21,7 @@ import forge.util.ITriggerEvent;
 
 public final class InputProliferate extends InputSelectManyBase<GameEntity> {
     private static final long serialVersionUID = -1779224307654698954L;
-    private final Map<GameEntity, CounterType> chosenCounters = new HashMap<GameEntity, CounterType>();
+    private final List<GameEntity> chosenObjects = new ArrayList<>();
     private SpellAbility sa;
 
     private int maxChosen = 0;
@@ -39,14 +39,14 @@ public final class InputProliferate extends InputSelectManyBase<GameEntity> {
 	     sa != null ) {
 	    sb.append(sa.getStackDescription()).append("\n");
     	}
-    	sb.append("Choose permanents and/or players with counters on them to add one more counter of that type.");
+    	sb.append("Choose permanents and/or players with counters on them to add one more counter of each type.");
         sb.append("\n\nYou've selected so far:\n");
-        if (chosenCounters.isEmpty()) {
+        if (chosenObjects.isEmpty()) {
             sb.append("(none)");
         }
         else {
-            for (final Entry<GameEntity, CounterType> ge : chosenCounters.entrySet()) {
-                sb.append("* ").append(ge.getKey()).append(" -> ").append(ge.getValue()).append("counter\n");
+            for (final GameEntity ge : chosenObjects) {
+                sb.append("* ").append(ge).append("\n");
             }
         }
 
@@ -59,21 +59,13 @@ public final class InputProliferate extends InputSelectManyBase<GameEntity> {
             return false;
         }
 
-        final boolean entityWasSelected = chosenCounters.containsKey(card);
+        final boolean entityWasSelected = chosenObjects.contains(card);
         if (entityWasSelected) {
-            this.chosenCounters.remove(card);
+            this.chosenObjects.remove(card);
             getController().getGui().setUsedToPay(CardView.get(card), false);
         }
         else {
-            final List<CounterType> choices = new ArrayList<CounterType>();
-            for (final CounterType ct : CounterType.values()) {
-                if (card.getCounters(ct) > 0) {
-                    choices.add(ct);
-                }
-            }
-
-            final CounterType toAdd = choices.size() == 1 ? choices.get(0) : getController().getGui().one("Select counter type", choices);
-            chosenCounters.put(card, toAdd);
+        	this.chosenObjects.add(card);
             getController().getGui().setUsedToPay(CardView.get(card), true);
         }
 
@@ -83,7 +75,7 @@ public final class InputProliferate extends InputSelectManyBase<GameEntity> {
 
     @Override
     public String getActivateAction(final Card card) {
-        if (card.hasCounters() && !chosenCounters.containsKey(card)) {
+        if (card.hasCounters() && !chosenObjects.contains(card)) {
             return "add counter to card";
         }
         return null;
@@ -96,32 +88,20 @@ public final class InputProliferate extends InputSelectManyBase<GameEntity> {
             return;
         }
 
-        final boolean entityWasSelected = chosenCounters.containsKey(player);
+        final boolean entityWasSelected = chosenObjects.contains(player);
         if (entityWasSelected) {
-            this.chosenCounters.remove(player);
+            this.chosenObjects.remove(player);
             getController().getGui().setHighlighted(PlayerView.get(player), false);
         } else {
-            final List<CounterType> choices = new ArrayList<CounterType>();
-
-            for (final CounterType ct : player.getCounters().keySet()) {
-                if (player.getCounters(ct) > 0) {
-                    choices.add(ct);
-                }
-            }
-            if (player.hasKeyword("You can't get poison counters")) {
-                choices.remove(CounterType.POISON);
-            }
-
-            final CounterType toAdd = choices.size() == 1 ? choices.get(0) : getController().getGui().one("Select counter type", choices);
-            this.chosenCounters.put(player, toAdd);
+            this.chosenObjects.add(player);
             getController().getGui().setHighlighted(PlayerView.get(player), true);
         }
 
         refresh();
     }
 
-    public Map<GameEntity, CounterType> getProliferationMap() {
-        return chosenCounters;
+    public List<GameEntity> getProliferation() {
+        return chosenObjects;
     }
 
 
@@ -130,12 +110,12 @@ public final class InputProliferate extends InputSelectManyBase<GameEntity> {
 
     @Override
     protected boolean hasAllTargets() {
-        return this.chosenCounters.size() == maxChosen;
+        return this.chosenObjects.size() == maxChosen;
     }
 
     @Override
     public Collection<GameEntity> getSelected() {
         // TODO Auto-generated method stub
-        return chosenCounters.keySet();
+        return chosenObjects;
     }
 }

@@ -9,8 +9,7 @@ import forge.game.player.Player;
 import forge.game.spellability.SpellAbility;
 import forge.game.zone.ZoneType;
 
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.List;
 
 public class CountersProliferateEffect extends SpellAbilityEffect {
     @Override
@@ -18,7 +17,7 @@ public class CountersProliferateEffect extends SpellAbilityEffect {
         final StringBuilder sb = new StringBuilder();
         sb.append("Proliferate.");
         sb.append(" (You choose any number of permanents and/or players with ");
-        sb.append("counters on them, then give each another counter of a kind already there.)");
+        sb.append("counters on them, then give each another counter of each kind already there.)");
 
         return sb.toString();
     }
@@ -43,7 +42,7 @@ public class CountersProliferateEffect extends SpellAbilityEffect {
         if (max == 0)
             return;
 
-        Map<GameEntity, CounterType> proliferateChoice = null;
+        List<GameEntity> proliferateChoice = null;
         do {
             proliferateChoice = controller.getController().chooseProliferation(sa, max);
             if (proliferateChoice != null && proliferateChoice.size() == 0) {
@@ -59,12 +58,12 @@ public class CountersProliferateEffect extends SpellAbilityEffect {
         if (proliferateChoice == null)
             return;
 
-        for(Entry<GameEntity, CounterType> ge: proliferateChoice.entrySet()) {
-            if( ge.getKey() instanceof Player )
-                ((Player) ge.getKey()).addCounter(ge.getValue(), 1, host, true);
-            else if( ge.getKey() instanceof Card) {
-                Card c = (Card) ge.getKey(); 
-                c.addCounter(ge.getValue(), 1, host, true);
+        for (final GameEntity ge : proliferateChoice) {
+            for (final CounterType ct : ge.getCounters().keySet()) {
+                ge.addCounter(ct, 1, host, true, true);
+            }
+            if (ge instanceof Card) {
+                Card c = (Card) ge;
                 game.updateLastStateForCard(c);
             }
         }

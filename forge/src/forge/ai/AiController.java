@@ -1573,8 +1573,8 @@ public class AiController {
         throw new UnsupportedOperationException("AI is not supposed to reach this code at the moment");
     }
 
-    public Map<GameEntity, CounterType> chooseProliferation(final SpellAbility sa) {
-        final Map<GameEntity, CounterType> result = Maps.newHashMap();  
+    public List<GameEntity> chooseProliferation(final SpellAbility sa) {
+        final List<GameEntity> result = new ArrayList<>();  
         
         final List<Player> allies = player.getAllies();
         allies.add(player);
@@ -1621,21 +1621,21 @@ public class AiController {
         for (Card c : game.getCardsIn(ZoneType.Battlefield)) {
             CounterType ct = predProliferate.apply(c);
             if (ct != null)
-                result.put(c, ct);
+                result.add(c);
         }
         
         for (Player e : enemies) {
             // TODO In the future check of enemies can get poison counters and give them some other bad counter type
             if (e.getCounters(CounterType.POISON) > 0) {
-                result.put(e, CounterType.POISON);
+                result.add(e);
             }
         }
 
         for (Player pl : allies) {
             if (pl.getCounters(CounterType.EXPERIENCE) > 0) {
-                result.put(pl, CounterType.EXPERIENCE);
+            	result.add(pl);
             } else if (pl.getCounters(CounterType.ENERGY) > 0) {
-                result.put(pl, CounterType.ENERGY);
+            	result.add(pl);
             }
         }
 
