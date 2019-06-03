@@ -1765,7 +1765,17 @@ public class Card extends GameEntity implements Comparable<Card> {
         final CardTypeView type = state.getType();
 
         final StringBuilder sb = new StringBuilder();
-        if (!mayPlay.isEmpty()) {
+        
+        List<CardPlayOption> payAltZeroMana = Lists.newArrayList();
+        if(!isInZone(ZoneType.Hand) && !isInZone(ZoneType.Command)) {
+	        for (CardPlayOption o : mayPlay.values()) {
+	            if ("0".equals(o.getAltManaCost())) {
+	            	payAltZeroMana.add(o);
+	            }
+	        }
+        }
+        
+        if (!mayPlay.isEmpty() && mayPlay.size() - payAltZeroMana.size() > 0) {
             sb.append("May be played by: ");
             sb.append(Lang.joinHomogenous(mayPlay.values()));
             sb.append("\r\n");
@@ -2599,6 +2609,15 @@ public class Card extends GameEntity implements Comparable<Card> {
         List<CardPlayOption> result = Lists.newArrayList();
         for (CardPlayOption o : mayPlay.values()) {
             if (o.getPlayer().equals(player)) {
+                result.add(o);
+            }
+        }
+        return result;
+    }
+    public final List<CardPlayOption> mayPlayCheckDontGrantZonePermissions(final Player player) {
+        List<CardPlayOption> result = Lists.newArrayList();
+        for (CardPlayOption o : mayPlay.values()) {
+            if (o.getPlayer().equals(player) && o.grantsZonePermissions()) {
                 result.add(o);
             }
         }

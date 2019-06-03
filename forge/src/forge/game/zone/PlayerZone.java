@@ -75,7 +75,7 @@ public class PlayerZone extends Zone {
                     return true;
                 }
 
-                if (sa.isSpell() && c.mayPlay(player).size() > 0) {
+                if (sa.isSpell() && c.mayPlayCheckDontGrantZonePermissions(player).size() > 0) {
                     return true;
                 }
 
