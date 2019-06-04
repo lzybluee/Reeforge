@@ -16,11 +16,13 @@ import forge.StaticData;
 import forge.card.CardRulesPredicates;
 import forge.card.CardStateName;
 import forge.game.Game;
+import forge.game.GameActionUtil;
 import forge.game.ability.AbilityFactory;
 import forge.game.ability.AbilityUtils;
 import forge.game.ability.SpellAbilityEffect;
 import forge.game.card.Card;
 import forge.game.card.CardCollection;
+import forge.game.card.CardPlayOption;
 import forge.game.cost.Cost;
 import forge.game.player.Player;
 import forge.game.replacement.ReplacementEffect;
@@ -251,8 +253,28 @@ public class PlayEffect extends SpellAbilityEffect {
             if(!noManaCost && tgtSA.hasParam("ActivationLimit")) {
             	activationLimit = tgtSA.getParam("ActivationLimit");
             }
+            
+            final List<SpellAbility> abilities = GameActionUtil.getAlternativeCosts(tgtSA, controller);
 
-            if (!"0".equals(activationLimit) && controller.getController().playSaFromPlayEffect(tgtSA)) {
+            List<SpellAbility> choose = Lists.newArrayList();
+            choose.add(tgtSA);
+            for(SpellAbility sab : abilities) {
+            	if(sab.getMayPlay() != null) {
+            		if(sab.getMayPlay().hasParam("MayPlayAltManaCost") && sab.getMayPlay().getParam("MayPlayAltManaCost").equals("0")) {
+            			choose.add(sab);
+            		}
+            	}
+            }
+
+            SpellAbility playSa = tgtSA;
+            if(choose.size() > 1) {
+            	playSa = controller.getController().chooseSingleSpellForEffect(choose, tgtSA, "Choose one");
+            }
+            if(abilities.contains(playSa)) {
+            	activationLimit = null;
+            }
+            
+            if (!"0".equals(activationLimit) && controller.getController().playSaFromPlayEffect(playSa)) {
                 if (remember) {
                     source.addRemembered(tgtSA.getHostCard());
                 }

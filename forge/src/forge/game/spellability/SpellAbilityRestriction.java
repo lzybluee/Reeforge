@@ -270,7 +270,7 @@ public class SpellAbilityRestriction extends SpellAbilityVariables {
                             // Special exclusion for Aftermath, useful for e.g. As Foretold
                             return true;
                         }
-                        if (!hasOtherGrantor) {
+                        if (!hasOtherGrantor && !sa.hasSVar("IsCastFromPlayEffect")) {
                             return false;
                         }
                     }
