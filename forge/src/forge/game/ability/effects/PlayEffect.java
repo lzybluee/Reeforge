@@ -246,8 +246,13 @@ public class PlayEffect extends SpellAbilityEffect {
             }
             
             tgtSA.setSVar("IsCastFromPlayEffect", "True");
+            
+            String activationLimit = null;
+            if(tgtSA.hasParam("ActivationLimit")) {
+            	activationLimit = tgtSA.getParam("ActivationLimit");
+            }
 
-            if (controller.getController().playSaFromPlayEffect(tgtSA)) {
+            if (!"0".equals(activationLimit) && controller.getController().playSaFromPlayEffect(tgtSA)) {
                 if (remember) {
                     source.addRemembered(tgtSA.getHostCard());
                 }
