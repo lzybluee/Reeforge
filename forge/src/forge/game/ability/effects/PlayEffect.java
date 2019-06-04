@@ -248,7 +248,7 @@ public class PlayEffect extends SpellAbilityEffect {
             tgtSA.setSVar("IsCastFromPlayEffect", "True");
             
             String activationLimit = null;
-            if(tgtSA.hasParam("ActivationLimit")) {
+            if(!noManaCost && tgtSA.hasParam("ActivationLimit")) {
             	activationLimit = tgtSA.getParam("ActivationLimit");
             }
 
