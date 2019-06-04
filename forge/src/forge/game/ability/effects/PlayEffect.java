@@ -254,23 +254,25 @@ public class PlayEffect extends SpellAbilityEffect {
             	activationLimit = tgtSA.getParam("ActivationLimit");
             }
             
-            final List<SpellAbility> abilities = GameActionUtil.getAlternativeCosts(tgtSA, controller);
-
             List<SpellAbility> choose = Lists.newArrayList();
             choose.add(tgtSA);
-            for(SpellAbility sab : abilities) {
-            	if(sab.getMayPlay() != null) {
-            		if(sab.getMayPlay().hasParam("MayPlayAltManaCost") && sab.getMayPlay().getParam("MayPlayAltManaCost").equals("0")) {
-            			choose.add(sab);
-            		}
-            	}
+            
+            if(!noManaCost) {
+            	final List<SpellAbility> abilities = GameActionUtil.getAlternativeCosts(tgtSA, controller);
+	            for(SpellAbility sab : abilities) {
+	            	if(sab.getMayPlay() != null) {
+	            		if(sab.getMayPlay().hasParam("MayPlayAltManaCost") && sab.getMayPlay().getParam("MayPlayAltManaCost").equals("0")) {
+	            			choose.add(sab);
+	            		}
+	            	}
+	            }
             }
 
             SpellAbility playSa = tgtSA;
             if(choose.size() > 1) {
             	playSa = controller.getController().chooseSingleSpellForEffect(choose, tgtSA, "Choose one");
             }
-            if(abilities.contains(playSa)) {
+            if(playSa != tgtSA) {
             	activationLimit = null;
             }
             
