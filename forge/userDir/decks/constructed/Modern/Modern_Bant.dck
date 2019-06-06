@@ -2,42 +2,41 @@
 Name=Modern_Bant
 [Main]
 3 Birds of Paradise|M12
-1 Botanical Sanctum|KLD
 1 Breeding Pool|GTC
 4 Collected Company|DTK
-2 Courser of Kruphix|BNG
-1 Flooded Strand|KTK
-3 Forest|DOM
+4 Deputy of Detention|RNA
+3 Flooded Strand|KTK
+2 Forest|DOM
 1 Gavony Township|ISD
 1 Ghost Quarter|ISD
 1 Hallowed Fountain|RTR
 1 Horizon Canopy|FUT
+1 Island|DOM
 1 Kessig Wolf Run|ISD
-1 Kitchen Finks|SHM
 4 Knight of the Reliquary|CFX
-4 Misty Rainforest|ZEN
+2 Misty Rainforest|ZEN
 4 Noble Hierarch|CFX
-4 Path to Exile|CFX
+2 Path to Exile|CFX
 1 Plains|DOM
-1 Qasali Pridemage|ARB
-2 Retreat to Coralhelm|BFZ
+3 Retreat to Coralhelm|BFZ
 2 Scavenging Ooze|M14
-2 Selfless Spirit|EMN
-3 Spell Queller|EMN
+1 Sejiri Steppe|WWK
+1 Selfless Spirit|EMN
+1 Shalai, Voice of Plenty|DOM
+4 Spell Queller|EMN
 1 Stomping Ground|GTC
-2 Temple Garden|RTR
+1 Temple Garden|RTR
+1 Thalia, Heretic Cathar|EMN
 2 Tireless Tracker|SOI
 3 Voice of Resurgence|DGM
 4 Windswept Heath|KTK
 [Sideboard]
-2 Blessed Alliance|EMN
-1 Eidolon of Rhetoric|JOU
-1 Elspeth, Sun's Champion|THS
-1 Izzet Staticaster|RTR
-2 Negate|RIX
-1 Phyrexian Revoker|M15
-1 Reclamation Sage|M15
-1 Reflector Mage|OGW
-2 Stony Silence|ISD
-2 Unified Will|ROE
-1 Worship|9ED
+2 Eidolon of Rhetoric|JOU
+1 Engineered Explosives|5DN
+3 Knight of Autumn|GRN
+2 Remorseful Cleric|M19
+1 Selfless Spirit|EMN
+1 Settle the Wreckage|XLN
+1 Surgical Extraction|NPH
+1 Tamiyo, Field Researcher|EMN
+3 Unified Will|ROE
