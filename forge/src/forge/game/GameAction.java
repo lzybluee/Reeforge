@@ -1085,6 +1085,8 @@ public class GameAction {
         } // for q=0;q<9
 
         game.getTracker().unfreeze();
+        
+        game.copyLastState();
 
         if (runEvents && !affectedCards.isEmpty()) {
             game.fireEvent(new GameEventCardStatsChanged(affectedCards));
