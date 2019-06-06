@@ -9,12 +9,12 @@ Name=Modern_Scapeshift Blue
 1 Damnation|PLC
 1 Farseek|M13
 1 Flooded Grove|EVE
-2 Forest|DOM|1
-3 Island|DOM|1
+2 Forest|DOM
+3 Island|DOM
 4 Lightning Bolt|M11
 1 Maelstrom Pulse|ARB
 4 Misty Rainforest|ZEN
-2 Mountain|DOM|1
+2 Mountain|DOM
 1 Opt|DOM
 1 Overgrown Tomb|RTR
 1 Quicken|M14
@@ -27,7 +27,7 @@ Name=Modern_Scapeshift Blue
 4 Steam Vents|RTR
 3 Stomping Ground|GTC
 1 Sunken Hollow|BFZ
-1 Swamp|DOM|1
+1 Swamp|DOM
 2 Valakut, the Molten Pinnacle|ZEN
 [Sideboard]
 1 Abrupt Decay|RTR

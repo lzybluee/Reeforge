@@ -1,32 +1,28 @@
 [metadata]
 Name=Modern_Affinity
 [Main]
-3 Ancient Stirrings|ROE
+4 Ancient Stirrings|ROE
+2 Animation Module|KLD
 4 Arcbound Ravager|DST
-4 Blinkmoth Nexus|DST
-4 Cranial Plating|5DN
+4 Arcbound Worker|DST
+1 Blinkmoth Nexus|DST
 4 Darksteel Citadel|M15
-3 Etched Champion|SOM
-1 Forest|DOM|1
-2 Galvanic Blast|SOM
+1 Dismember|NPH
+9 Forest|DOM
+4 Hangarback Walker|ORI
+4 Hardened Scales|KTK
+1 Horizon Canopy|FUT
 4 Inkmoth Nexus|MBS
-2 Karn, Scion of Urza|DOM
-2 Memnite|SOM
 4 Mox Opal|SOM
-4 Ornithopter|AER
-4 Signal Pest|MBS
-4 Spire of Industry|AER
-4 Springleaf Drum|BNG
-3 Steel Overseer|M11
-4 Vault Skirge|NPH
+1 Pendelhaven|TSB
+4 Steel Overseer|M11
+1 Throne of Geth|SOM
+4 Walking Ballista|AER
+4 Welding Jar|MRD
 [Sideboard]
-1 Ancient Grudge|ISD
-2 Damping Sphere|DOM
-2 Dispatch|NPH
-1 Etched Champion|SOM
-1 Galvanic Blast|SOM
-2 Ghirapur Aether Grid|ORI
-2 Rest in Peace|RTR
-1 Spell Pierce|XLN
-2 Thoughtseize|THS
-1 Wear // Tear|DGM
+3 Damping Sphere|DOM
+2 Dismember|NPH
+1 Evolutionary Leap|ORI
+4 Grafdigger's Cage|DKA
+2 Nature's Claim|WWK
+3 Pithing Needle|RTR

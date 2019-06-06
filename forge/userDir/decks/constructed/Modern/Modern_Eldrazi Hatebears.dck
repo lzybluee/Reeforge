@@ -2,7 +2,7 @@
 Name=Modern_Eldrazi Hatebears
 [Main]
 4 Aether Vial|DST
-2 Blade Splicer|NPH
+1 Blade Splicer|NPH
 4 Caves of Koilos|ORI
 4 Concealed Courtyard|KLD
 4 Eldrazi Displacer|OGW
@@ -12,20 +12,23 @@ Name=Modern_Eldrazi Hatebears
 1 Godless Shrine|GTC
 4 Leonin Arbiter|SOM
 4 Path to Exile|CFX
-2 Plains|DOM|1
+2 Plains|DOM
+1 Restoration Angel|AVR
 3 Shambling Vent|BFZ
-1 Swamp|DOM|1
+1 Swamp|DOM
 4 Thalia, Guardian of Thraben|DKA
 4 Thought-Knot Seer|OGW
 4 Tidehollow Sculler|ALA
 3 Wasteland Strangler|BFZ
 [Sideboard]
-2 Fatal Push|AER
-2 Gideon, Ally of Zendikar|BFZ
-1 Kambal, Consul of Allocation|KLD
-2 Kor Firewalker|WWK
-1 Orzhov Pontiff|GPT
-2 Rest in Peace|RTR
+2 Burrenton Forge-Tender|LRW
+1 Consulate Crackdown|AER
+1 Damping Sphere|DOM
+1 Dismember|NPH
+1 Fatal Push|AER
+1 Gideon, Ally of Zendikar|BFZ
+2 Kaya, Orzhov Usurper|RNA
+1 Leyline of the Void|M11
+2 Ravenous Trap|ZEN
 1 Settle the Wreckage|XLN
-3 Stony Silence|ISD
-1 Zealous Persecution|ARB
+2 Stony Silence|ISD

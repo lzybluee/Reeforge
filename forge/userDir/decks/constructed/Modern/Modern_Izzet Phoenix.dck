@@ -2,20 +2,23 @@
 Name=Modern_Izzet Phoenix
 [Main]
 4 Arclight Phoenix|GRN
-2 Crackling Drake|GRN
-1 Echoing Truth|DST
+1 Crackling Drake|GRN
 4 Faithless Looting|DKA
+1 Flame Slash|ROE
+1 Flooded Strand|KTK
+1 Gut Shot|NPH
 3 Island|DOM
-2 Lightning Axe|SOI
+1 Lightning Axe|SOI
 4 Lightning Bolt|M11
 4 Manamorphose|SHM
-1 Mission Briefing|GRN
 2 Mountain|DOM
-4 Opt|DOM
-2 Polluted Delta|KTK
+1 Polluted Delta|KTK
 2 Pyromancer Ascension|ZEN
 4 Scalding Tarn|ZEN
 4 Serum Visions|5DN
+1 Set Adrift|KTK
+4 Sleight of Hand|9ED
+1 Spell Pierce|XLN
 4 Spirebluff Canal|KLD
 3 Steam Vents|RTR
 2 Surgical Extraction|NPH
@@ -23,10 +26,13 @@ Name=Modern_Izzet Phoenix
 4 Thought Scour|DKA
 [Sideboard]
 2 Abrade|HOU
-2 Anger of the Gods|THS
-2 Beacon Bolt|GRN
-3 Blood Moon|9ED
-1 Ral, Izzet Viceroy|GRN
-2 Rending Volley|DTK
-2 Spell Pierce|XLN
-1 Surgical Extraction|NPH
+1 Alpine Moon|M19
+1 Anger of the Gods|THS
+2 Blood Moon|9ED
+2 Ceremonious Rejection|KLD
+1 Chandra, Torch of Defiance|KLD
+1 Crackling Drake|GRN
+1 Flame Slash|ROE
+2 Ravenous Trap|ZEN
+1 Shatterstorm|10E
+1 Spell Pierce|XLN

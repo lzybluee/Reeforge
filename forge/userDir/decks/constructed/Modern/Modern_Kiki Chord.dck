@@ -1,42 +1,42 @@
 [metadata]
 Name=Modern_Kiki Chord
 [Main]
-2 Arid Mesa|ZEN
 4 Birds of Paradise|M12
-4 Chord of Calling|M15
-1 Copperline Gorge|SOM
-1 Eidolon of Rhetoric|JOU
-2 Eldritch Evolution|EMN
-2 Eternal Witness|5DN
-3 Forest|DOM|1
+1 Breeding Pool|GTC
+3 Eldritch Evolution|EMN
+2 Flooded Strand|KTK
+2 Forest|DOM
+2 Grove of the Burnwillows|FUT
+1 Hanweir Battlements|EMN
 1 Horizon Canopy|FUT
-1 Kiki-Jiki, Mirror Breaker|CHK
+2 Kiki-Jiki, Mirror Breaker|CHK
+2 Kitchen Finks|SHM
+2 Knight of Autumn|GRN
 1 Magus of the Moon|FUT
-3 Noble Hierarch|CFX
-4 Path to Exile|CFX
-1 Pia and Kiran Nalaar|ORI
-2 Plains|DOM|1
-1 Qasali Pridemage|ARB
-1 Raging Ravine|WWK
-3 Restoration Angel|AVR
+4 Noble Hierarch|CFX
+2 Plains|DOM
+4 Prime Speaker Vannifar|RNA
+1 Renegade Rallier|AER
+2 Restoration Angel|AVR
 1 Sacred Foundry|GTC
-3 Scavenging Ooze|M14
-1 Selfless Spirit|EMN
-1 Shalai, Voice of Plenty|DOM
+2 Scavenging Ooze|M14
+1 Scryb Ranger|TSP
+1 Sigarda, Host of Herons|AVR
+2 Spellskite|NPH
 2 Stomping Ground|GTC
 1 Temple Garden|RTR
+1 Tireless Tracker|SOI
+1 Village Bell-Ringer|ISD
 4 Voice of Resurgence|DGM
-2 Wall of Omens|ROE
 4 Windswept Heath|KTK
 4 Wooded Foothills|KTK
 [Sideboard]
-1 Burrenton Forge-Tender|LRW
-2 Engineered Explosives|5DN
-3 Fiery Justice|TSB
-2 Gaddock Teeg|LRW
-1 Magus of the Moon|FUT
-1 Reclamation Sage|M15
-1 Reveillark|MOR
-1 Selfless Spirit|EMN
-2 Stony Silence|ISD
-1 Tireless Tracker|SOI
+1 Damping Sphere|DOM
+1 Eidolon of Rhetoric|JOU
+1 Eternal Witness|5DN
+2 Fiery Justice|TSB
+1 Goblin Cratermaker|GRN
+1 Knight of Autumn|GRN
+4 Path to Exile|CFX
+2 Surgical Extraction|NPH
+2 Tireless Tracker|SOI

@@ -1,14 +1,13 @@
 [metadata]
 Name=Modern_Red Deck Wins
 [Main]
-4 Bloodstained Mire|KTK
+2 Arid Mesa|ZEN
 4 Boros Charm|GTC
 4 Eidolon of the Great Revel|JOU
 4 Goblin Guide|ZEN
 1 Grim Lavamancer|M12
-3 Inspiring Vantage|KLD
+4 Inspiring Vantage|KLD
 4 Lava Spike|CHK
-2 Light Up the Stage|RNA
 4 Lightning Bolt|M11
 2 Lightning Helix|RAV
 4 Monastery Swiftspear|KTK
@@ -18,13 +17,13 @@ Name=Modern_Red Deck Wins
 4 Scalding Tarn|ZEN
 4 Searing Blaze|WWK
 4 Skewer the Critics|RNA
-1 Stomping Ground|GTC
-2 Wooded Foothills|KTK
+2 Skullcrack|GTC
+4 Wooded Foothills|KTK
 [Sideboard]
-1 Cindervines|RNA
-3 Destructive Revelry|THS
-1 Exquisite Firecraft|ORI
-2 Lightning Helix|RAV
+1 Dragon's Claw|M12
+1 Ensnaring Bridge|8ED
+1 Kor Firewalker|WWK
 3 Path to Exile|CFX
-2 Rest in Peace|RTR
-3 Skullcrack|GTC
+4 Rest in Peace|RTR
+3 Searing Blood|BNG
+2 Wear // Tear|DGM

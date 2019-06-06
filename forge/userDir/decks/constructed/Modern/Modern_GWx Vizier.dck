@@ -1,39 +1,40 @@
 [metadata]
 Name=Modern_GWx Vizier
 [Main]
-3 Birds of Paradise|M12
+4 Birds of Paradise|M12
+1 Blooming Marsh|KLD
 4 Chord of Calling|M15
 4 Collected Company|DTK
-1 Courser of Kruphix|BNG
 4 Devoted Druid|SHM
 3 Duskwatch Recruiter|SOI
-1 Eternal Witness|5DN
-2 Field of Ruin|XLN
-4 Forest|DOM|1
-2 Ghost Quarter|ISD
-1 Horizon Canopy|FUT
-4 Knight of the Reliquary|CFX
-4 Noble Hierarch|CFX
-1 Plains|DOM|1
-3 Renegade Rallier|AER
+3 Eternal Witness|5DN
+1 Fiend Hunter|ISD
+3 Forest|DOM
+2 Gavony Township|ISD
+1 Godless Shrine|GTC
+2 Horizon Canopy|FUT
+4 Kitchen Finks|SHM
+2 Noble Hierarch|CFX
+2 Overgrown Tomb|RTR
+1 Plains|DOM
 1 Scavenging Ooze|M14
-1 Tectonic Edge|WWK
+1 Shalai, Voice of Plenty|DOM
+1 Swamp|DOM
 2 Temple Garden|RTR
 1 Tireless Tracker|SOI
+3 Verdant Catacombs|ZEN
+1 Viscera Seer|M11
 4 Vizier of Remedies|AKH
-2 Walking Ballista|AER
+1 Walking Ballista|AER
 4 Windswept Heath|KTK
-4 Wooded Foothills|KTK
 [Sideboard]
-1 Bojuka Bog|WWK
+3 Assassin's Trophy|GRN
 1 Burrenton Forge-Tender|LRW
 1 Eidolon of Rhetoric|JOU
-1 Kataki, War's Wage|SOK
-3 Path to Exile|CFX
-1 Qasali Pridemage|ARB
-1 Remorseful Cleric|M19
+2 Knight of Autumn|GRN
+1 Maelstrom Pulse|ARB
+1 Path to Exile|CFX
 1 Scavenging Ooze|M14
-1 Sigarda, Host of Herons|AVR
-1 Spellskite|NPH
+1 Settle the Wreckage|XLN
+3 Tidehollow Sculler|ALA
 1 Tireless Tracker|SOI
-2 Worship|9ED

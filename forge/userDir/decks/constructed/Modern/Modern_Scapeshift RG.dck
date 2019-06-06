@@ -1,31 +1,34 @@
 [metadata]
 Name=Modern_Scapeshift RG
 [Main]
-4 Bloodbraid Elf|ARB
-3 Cinder Glade|BFZ
-3 Farseek|M13
-2 Forest|DOM|1
-2 Growth Spasm|ROE
-4 Lightning Bolt|M11
-6 Mountain|DOM|1
+1 Chandra, Torch of Defiance|KLD
+4 Cinder Glade|BFZ
+1 Engineered Explosives|5DN
+4 Farseek|M13
+2 Forest|DOM
+3 Lightning Bolt|M11
+6 Mountain|DOM
+3 Mwonvuli Acid-Moss|TSP
 4 Primeval Titan|M12
+3 Relic of Progenitus|ALA
 4 Sakura-Tribe Elder|CHK
-4 Scapeshift|MOR
+4 Scapeshift|M19
 4 Search for Tomorrow|TSP
-1 Sheltered Thicket|AKH
 4 Stomping Ground|GTC
 2 Summoner's Pact|FUT
-2 Sweltering Suns|AKH
 4 Valakut, the Molten Pinnacle|ZEN
 3 Windswept Heath|KTK
 4 Wooded Foothills|KTK
 [Sideboard]
-2 Ancient Grudge|ISD
-1 Anger of the Gods|THS
-1 Crumble to Dust|BFZ
-1 Damping Sphere|DOM
-1 Nature's Claim|WWK
-3 Obstinate Baloth|M11
-1 Reclamation Sage|M15
-3 Roast|DTK
-2 Tireless Tracker|SOI
+1 Ancient Grudge|ISD
+2 Anger of the Gods|THS
+1 Chandra, Torch of Defiance|KLD
+2 Damping Sphere|DOM
+1 Dragonlord Atarka|DTK
+1 Engineered Explosives|5DN
+1 Lightning Bolt|M11
+2 Obstinate Baloth|M11
+1 Reclamation Sage|M19
+1 Relic of Progenitus|ALA
+1 Shatterstorm|10E
+1 Tireless Tracker|SOI

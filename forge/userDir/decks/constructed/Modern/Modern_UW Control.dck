@@ -2,37 +2,39 @@
 Name=Modern_UW Control
 [Main]
 4 Celestial Colonnade|WWK
+1 Condemn|M11
 3 Cryptic Command|LRW
-1 Detention Sphere|RTR
-1 Entreat the Angels|AVR
+2 Detention Sphere|RTR
 4 Field of Ruin|XLN
 4 Flooded Strand|KTK
+2 Glacial Fortress|XLN
 2 Hallowed Fountain|RTR
-5 Island|DOM|1
-2 Jace, the Mind Sculptor|WWK
+6 Island|DOM
+3 Jace, the Mind Sculptor|WWK
 1 Logic Knot|FUT
-1 Mana Leak|M12
+2 Mana Leak|M12
 1 Negate|RIX
 4 Opt|DOM
+1 Oust|ROE
 4 Path to Exile|CFX
-3 Plains|DOM|1
-2 Polluted Delta|KTK
-2 Search for Azcanta|XLN
-4 Serum Visions|5DN
+2 Plains|DOM
+2 Serum Visions|5DN
 3 Snapcaster Mage|ISD
-1 Supreme Verdict|RTR
+1 Spell Pierce|XLN
+2 Supreme Verdict|RTR
+2 Surgical Extraction|NPH
 2 Teferi, Hero of Dominaria|DOM
-4 Terminus|AVR
-1 Timely Reinforcements|M12
-1 Vendilion Clique|MOR
+2 Vendilion Clique|MOR
 [Sideboard]
-1 Damping Sphere|DOM
+2 Celestial Purge|M12
+2 Ceremonious Rejection|KLD
+1 Day of Judgment|M12
 1 Disdainful Stroke|KTK
-1 Disenchant|TSB
 1 Dispel|BFZ
-1 Lyra Dawnbringer|DOM
-2 Negate|RIX
+1 Negate|RIX
+1 Relic of Progenitus|ALA
 2 Rest in Peace|RTR
-1 Runed Halo|SHM
-3 Spell Queller|EMN
-2 Stony Silence|ISD
+1 Stony Silence|ISD
+1 Surgical Extraction|NPH
+1 Timely Reinforcements|M12
+1 Wrath of God|10E

@@ -2,40 +2,34 @@
 Name=Modern_Jund
 [Main]
 1 Abrupt Decay|RTR
-4 Blackcleave Cliffs|SOM
+3 Blackcleave Cliffs|SOM
 1 Blood Crypt|RTR
 4 Bloodbraid Elf|ARB
-3 Bloodstained Mire|KTK
+4 Bloodstained Mire|KTK
+2 Blooming Marsh|KLD
 4 Dark Confidant|RAV
 2 Fatal Push|AER
-2 Forest|DOM|1
+1 Forest|DOM
 4 Inquisition of Kozilek|ROE
 2 Kolaghan's Command|DTK
 4 Lightning Bolt|M11
-3 Liliana of the Veil|ISD
-1 Liliana, the Last Hope|EMN
+4 Liliana of the Veil|ISD
 1 Maelstrom Pulse|ARB
+1 Mountain|DOM
 2 Overgrown Tomb|RTR
 3 Raging Ravine|WWK
-2 Scavenging Ooze|M14
+3 Scavenging Ooze|M14
 1 Stomping Ground|GTC
-2 Swamp|DOM|1
+2 Swamp|DOM
 4 Tarmogoyf|FUT
-1 Terminate|ARB
-2 Thoughtseize|THS
-1 Treetop Village|10E
-1 Twilight Mire|EVE
+3 Thoughtseize|THS
 4 Verdant Catacombs|ZEN
-1 Wooded Foothills|KTK
 [Sideboard]
 2 Ancient Grudge|ISD
-1 Back to Nature|M15
 1 Collective Brutality|EMN
-1 Damnation|PLC
+2 Engineered Explosives|5DN
 3 Fulminator Mage|SHM
-1 Grafdigger's Cage|DKA
-1 Huntmaster of the Fells|DKA
-2 Kitchen Finks|SHM
+1 Leyline of the Void|M11
 1 Liliana, the Last Hope|EMN
-1 Nihil Spellbomb|SOM
-1 Tireless Tracker|SOI
+1 Maelstrom Pulse|ARB
+4 Nihil Spellbomb|SOM

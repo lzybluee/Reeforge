@@ -3,29 +3,32 @@ Name=Modern_Dredge
 [Main]
 2 Blood Crypt|RTR
 4 Bloodghast|ZEN
-3 Bloodstained Mire|KTK
+1 Bloodstained Mire|KTK
 4 Cathartic Reunion|KLD
-1 City of Brass|8ED
-3 Conflagrate|TSP
+2 Conflagrate|TSP
 4 Copperline Gorge|SOM
 4 Creeping Chill|GRN
+1 Dakmor Salvage|FUT
+1 Darkblast|RAV
 4 Faithless Looting|DKA
+1 Forest|DOM
 1 Gemstone Mine|TSB
-1 Golgari Thug|RAV
+1 Ghost Quarter|ISD
+2 Golgari Thug|RAV
 4 Life from the Loam|RAV
-2 Mountain|DOM
+1 Mountain|DOM
 4 Narcomoeba|FUT
 4 Prized Amalgam|SOI
-4 Scalding Tarn|ZEN
 4 Shriekhorn|MBS
+1 Steam Vents|RTR
 4 Stinkweed Imp|RAV
-3 Stomping Ground|GTC
+2 Stomping Ground|GTC
+4 Wooded Foothills|KTK
 [Sideboard]
-2 Alpine Moon|M19
-1 Ancient Grudge|ISD
+3 Ancient Grudge|ISD
 1 Assassin's Trophy|GRN
-2 Damping Sphere|DOM
-1 Darkblast|RAV
-3 Lightning Axe|SOI
+1 Engineered Explosives|5DN
+2 Leyline of the Void|M11
+2 Lightning Axe|SOI
 4 Nature's Claim|WWK
-1 Vengeful Pharaoh|M12
+2 Surgical Extraction|NPH
