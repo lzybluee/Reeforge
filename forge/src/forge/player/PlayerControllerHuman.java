@@ -1624,6 +1624,22 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         		return re;
         	}
         }
+        String validStackSa = null;
+        for(ReplacementEffect re : possibleReplacers) {
+        	if(!re.hasParam("ValidStackSa")) {
+        		validStackSa = null;
+        		break;
+        	}
+        	if(validStackSa == null) {
+        		validStackSa = re.getParam("ValidStackSa");
+        	} else if(!re.getParam("ValidStackSa").equals(validStackSa)) {
+        		validStackSa = null;
+        		break;
+        	}
+        }
+        if(validStackSa != null) {
+        	return first;
+        }
         final String firstStr = first.toString();
         for (int i = 1; i < possibleReplacers.size(); i++) {
             // prompt user if there are multiple different options
