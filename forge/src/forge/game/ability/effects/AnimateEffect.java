@@ -229,7 +229,7 @@ public class AnimateEffect extends AnimateEffectBase {
             if (stAbs.size() > 0) {
                 for (final String s : stAbs) {
                     final String actualAbility = source.getSVar(s);
-                    addedStaticAbilities.add(c.addStaticAbility(actualAbility));
+                    addedStaticAbilities.add(c.addStaticAbility(actualAbility, false));
                 }
             }
 
