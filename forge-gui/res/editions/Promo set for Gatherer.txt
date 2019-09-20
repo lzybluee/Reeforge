@@ -8,808 +8,794 @@ MciCode=mbp
 Type=Other
 
 [cards]
-1 S Mana Crypt
-2 S Nalathni Dragon
-3 S Sewers of Estark
-4 S Windseeker Centaur
-5 S Abhorrent Overlord
-6 S Abrade
-7 S Abrupt Decay
-8 S Abzan Beastmaster
-9 S Acidic Slime
-10 S Acquire
-11 S Adorned Pouncer
-12 S Aether Hub
-13 S Ainok Tracker
-14 S Ajani Goldmane
-15 S Ajani Steadfast
-16 S Ajani Vengeant
-17 S Ajani, Caller of the Pride
-18 S Alhammarret, High Arbiter
-19 S All Is Dust
-20 S Allosaurus Rider
-21 S Altar of the Brood
-22 S Anathemancer
-23 S Ancestral Recall
-24 S Ancestral Recall
-25 S Ancient Grudge
-26 S Ancient Hellkite
-27 S Ancient Ziggurat
-28 S Angel of Deliverance
-29 S Anguished Unmaking
-30 S Ankle Shanker
-31 S Ant Queen
-32 S Anthousa, Setessan Hero
-33 S Anticipate
-34 S Arashin Sovereign
-35 S Arashin War Beast
-36 S Arbiter of the Ideal
-37 S Arc Lightning
-38 S Archfiend of Depravity
-39 S Archfiend of Ifnir
-40 S Archon of the Triumvirate
-41 S Arguel's Blood Fast
-42 S Arrest
-43 S Artisan of Kozilek
-44 S Assembled Alphas
-45 S Auramancer
-46 S Avacyn, Angel of Hope
-47 S Avacyn's Pilgrim
-48 S Avalanche Tusker
-49 S Avatar of Discord
-50 S Avatar of Woe
-51 S Badlands
-52 S Banisher Priest
-53 S Banishing Light
-54 S Barrage Tyrant
-55 S Batterskull
-56 S Bident of Thassa
-57 S Bile Blight
-58 S Birds of Paradise
-59 S Bishop of Rebirth
-60 S Bitterblossom
-61 S Bituminous Blast
-62 S Black Lotus
-63 S Black Lotus
-64 S Black Sun's Zenith
-65 S Blatant Thievery
-66 S Blight Herder
-67 S Blighted Fen
-68 S Blightning
-69 S Blood Knight
-70 S Bloodcrazed Neonate
-71 S Bloodlord of Vaasgoth
-72 S Boggart Ram-Gang
-73 S Boltwing Marauder
-74 S Bonescythe Sliver
-75 S Boneyard Wurm
-76 S Brain Maggot
-77 S Bramblewood Paragon
-78 S Brass's Bounty
-79 S Brave the Elements
-80 S Breaking // Entering
-81 S Breath of Malfegor
-82 S Briber's Purse
-83 S Bribery
-84 S Browbeat
-85 S Burning Sun's Avatar
-86 S Burning Wish
-87 S Burst Lightning
-88 S Calciderm
-89 S Call of the Conclave
-90 S Call of the Herd
-91 S Call the Bloodline
-92 S Cancel
-93 S Captain's Hook
-94 S Carnival Hellsteed
-95 S Cast Down
-96 S Cathedral of War
-97 S Celestial Archon
-98 S Celestial Colonnade
-99 S Celestial Purge
-100 S Cenn's Tactician
-101 S Chandra Nalaar
-102 S Chandra, Fire of Kaladesh
-103 S Chandra, Flamecaller
-104 S Chandra, Pyromaster
-105 S Chandra, Pyromaster
-106 S Chandra, Torch of Defiance
-107 S Chandra, Torch of Defiance
-108 S Chandra's Phoenix
-109 S Char
-110 S Chief Engineer
-111 S Chief of the Foundry
-112 S Chrome Mox
-113 S Circle of Flame
-114 S Clash of Wills
-115 S Cloudpost
-116 S Colossal Whale
-117 S Comet Storm
-118 S Conclave Naturalists
-119 S Condemn
-120 S Conqueror's Galleon
-121 S Consume Spirit
-122 S Consuming Aberration
-123 S Contagion Clasp
-124 S Corpsejack Menace
-125 S Corrupt
-126 S Corrupt
-127 S Courser of Kruphix
-128 S Cruel Edict
-129 S Crumbling Necropolis
-130 S Crumbling Vestige
-131 S Cryptborn Horror
-132 S Cryptic Command
-133 S Cultivate
-134 S Cultivator of Blades
-135 S Cunning Wish
-136 S Curse of the Bloody Tome
-137 S Curse of Thirst
-138 S Curse of Wizardry
-139 S Damnation
-140 S Dark Ritual
-141 S Dawnbringer Charioteers
-142 S Day of Judgment
-143 S Day of Judgment
-144 S Deadbridge Goliath
-145 S Death Baron
-146 S Deathbringer Regent
-147 S Deathless Angel
-148 S Debilitating Injury
-149 S Decree of Justice
-150 S Deepfathom Skulker
-151 S Deeproot Champion
-152 S Defense of the Heart
-153 S Defiant Bloodlord
-154 S Demigod of Revenge
-155 S Demon of Catastrophes
-156 S Demonic Tutor
-157 S Desecrated Tomb
-158 S Despise
-159 S Devil's Play
-160 S Dictate of Kruphix
-161 S Dictate of the Twin Gods
-162 S Dimir Charm
-163 S Diregraf Ghoul
-164 S Disdainful Stroke
-165 S Disenchant
-166 S Disenchant
-167 S Dismember
-168 S Dissolve
-169 S Djinn Illuminatus
-170 S Doom Blade
-171 S Doomwake Giant
-172 S Door of Destinies
-173 S Doran, the Siege Tower
-174 S Doran, the Siege Tower
-175 S Dowsing Dagger
-176 S Dragon Broodmother
-177 S Dragon Fodder
-178 S Dragonlord's Servant
-179 S Dragonscale Boon
-180 S Dragonscale General
-181 S Dread Defiler
-182 S Dreg Mangler
-183 S Drogskol Cavalry
-184 S Dromoka, the Eternal
-185 S Drowner of Hope
-186 S Dryad Militant
-187 S Duergar Hedge-Mage
-188 S Dungrove Elder
-189 S Duress
-190 S Dwynen, Gilt-Leaf Daen
-191 S Eater of Hope
-192 S Eidolon of Blossoms
-193 S Electrolyze
-194 S Electrolyze
-195 S Elesh Norn, Grand Cenobite
-196 S Elite Inquisitor
-197 S Elusive Tormentor
-198 S Elvish Champion
-199 S Elvish Mystic
-200 S Elvish Rejuvenator
-201 S Elvish Visionary
-202 S Ember Swallower
-203 S Emeria Angel
-204 S Emrakul, the Aeons Torn
-205 S Emrakul, the Aeons Torn
-206 S Encroaching Wastes
-207 S Endbringer
-208 S Essence Extraction
-209 S Eternal Witness
-210 S Everflowing Chalice
-211 S Evolving Wilds
-212 S Evolving Wilds
-213 S Evolving Wilds
-214 S Exalted Angel
-215 S Experiment One
-216 S Faithless Looting
-217 S Fanatic of Xenagos
-218 S Farseek
-219 S Fatal Push
-220 S Fated Conflagration
-221 S Fated Intervention
-222 S Fathom Mage
-223 S Feast of Blood
-224 S Fierce Invocation
-225 S Fiery Temper
-226 S Fiery Temper
-227 S Fireball
-228 S Fireball
-229 S Firemane Avenger
-230 S Flame Javelin
-231 S Flameblade Angel
-232 S Flamerush Rider
-233 S Flaying Tendrils
-234 S Fling
-235 S Flooded Strand
-236 S Foe-Razer Regent
-237 S Font of Fertility
-238 S Forbidden Alchemy
-239 S Forest
-240 S Forest
-241 S Forest
-242 S Forest
-243 S Forest
-244 S Forest
-245 S Forest
-246 S Forest
-247 S Forest
-248 S Forest
-249 S Forest
-250 S Forest
-251 S Forest
-252 S Forest
-253 S Forest
-254 S Forest
-255 S Forest
-256 S Forest
-257 S Forest
-258 S Forest
-259 S Forest
-260 S Forest
-261 S Forest
-262 S Forgestoker Dragon
-263 S Formless Nurturing
-264 S Fortune's Favor
-265 S Foundry Champion
-266 S Frenzied Goblin
-267 S Frost Titan
-268 S Frost Walker
-269 S Gaddock Teeg
-270 S Gaea's Cradle
-271 S Garruk Wildspeaker
-272 S Garruk, Apex Predator
-273 S Garruk, Caller of Beasts
-274 S Garruk's Horde
-275 S Gatekeeper of Malakir
-276 S Gather the Townsfolk
-277 S Gaze of Granite
-278 S Geist of Saint Traft
-279 S Ghalta, Primal Hunger
-280 S Ghor-Clan Rampager
-281 S Giant Badger
-282 S Giant Growth
-283 S Gideon of the Trials
-284 S Gideon of the Trials
-285 S Gideon, Ally of Zendikar
-286 S Gitaxian Probe
-287 S Gladehart Cavalry
-288 S Glissa, the Traitor
-289 S Glistener Elf
-290 S Glorious Anthem
-291 S Glorybringer
-292 S Go for the Throat
-293 S Goblin Dark-Dwellers
-294 S Goblin Diplomats
-295 S Goblin Guide
-296 S Goblin Rabblemaster
-297 S Goblin Warchief
-298 S Golem's Heart
-299 S Grave Titan
-300 S Gravecrawler
-301 S Greater Good
-302 S Grim Haruspex
-303 S Griselbrand
-304 S Grisly Salvage
-305 S Groundbreaker
-306 S Grove of the Guardian
-307 S Growing Rites of Itlimoc
-308 S Guttersnipe
-309 S Guul Draz Assassin
-310 S Hada Freeblade
-311 S Hall of Triumph
-312 S Harbinger of the Hunt
-313 S Harmonize
-314 S Harrow
-315 S Heir of the Wilds
-316 S Hellspark Elemental
-317 S Helm of Kaldra
-318 S Hero of Bladehold
-319 S Hero of Goma Fada
-320 S Heroes' Bane
-321 S Heron's Grace Champion
-322 S Hero's Downfall
-323 S Hewed Stone Retainers
-324 S High Tide
-325 S Hinder
-326 S Hive Stirrings
-327 S Hixus, Prison Warden
-328 S Honor of the Pure
-329 S Honored Hierarch
-330 S Hordeling Outburst
-331 S Hydra Broodmaster
-332 S Hypersonic Dragon
-333 S Identity Thief
-334 S Immolating Glare
-335 S Imperious Perfect
-336 S In Garruk's Wake
-337 S Incendiary Flow
-338 S Incinerate
-339 S Incorrigible Youths
-340 S Indulgent Tormentor
-341 S Inferno Titan
-342 S Infest
-343 S Ink-Eyes, Servant of Oni
-344 S Inkmoth Nexus
-345 S Island
-346 S Island
-347 S Island
-348 S Island
-349 S Island
-350 S Island
-351 S Island
-352 S Island
-353 S Island
-354 S Island
-355 S Island
-356 S Island
-357 S Island
-358 S Island
-359 S Island
-360 S Island
-361 S Island
-362 S Island
-363 S Island
-364 S Island
-365 S Island
-366 S Island
-367 S Island
-368 S Isochron Scepter
-369 S Ivorytusk Fortress
-370 S Jace Beleren
-371 S Jace Beleren
-372 S Jace, Cunning Castaway
-373 S Jace, Memory Adept
-374 S Jace, the Living Guildpact
-375 S Jace, Unraveler of Secrets
-376 S Jace, Unraveler of Secrets
-377 S Jace, Vryn's Prodigy
-378 S Jace's Ingenuity
-379 S Jeering Instigator
-380 S Jeskai Infiltrator
-381 S Joraga Warcaller
-382 S Jori En, Ruin Diver
-383 S Judge's Familiar
-384 S Jungle Shrine
-385 S Kalastria Highborn
-386 S Karametra's Acolyte
-387 S Killing Wave
-388 S Kiora's Follower
-389 S Kitchen Finks
-390 S Kiyomaro, First to Stand
-391 S Knight of New Alara
-392 S Kor Duelist
-393 S Kor Firewalker
-394 S Korlash, Heir to Blackblade
-395 S Kothophed, Soul Hoarder
-396 S Krosan Grip
-397 S Kytheon, Hero of Akros
-398 S Land Tax
-399 S Languish
-400 S Latch Seeker
-401 S Leatherback Baloth
-402 S Legion's Landing
-403 S Lightning Bolt
-404 S Lightning Greaves
-405 S Lightning Helix
-406 S Liliana of the Dark Realms
-407 S Liliana Vess
-408 S Liliana Vess
-409 S Liliana, Death's Majesty
-410 S Liliana, Heretical Healer
-411 S Liliana, the Last Hope
-412 S Liliana, Untouched by Death
-413 S Liliana's Specter
-414 S Llanowar Elves
-415 S Lord of Shatterskull Pass
-416 S Lotus Bloom
-417 S Lotus Cobra
-418 S Ludevic's Test Subject
-419 S Magister of Worth
-420 S Magma Jet
-421 S Magma Spray
-422 S Magmaquake
-423 S Mana Leak
-424 S Mana Tithe
-425 S Mardu Shadowspear
-426 S Marisi's Twinclaws
-427 S Markov Dreadknight
-428 S Mass Mutiny
-429 S Master's Call
-430 S Mastery of the Unseen
-431 S Maul Splicer
-432 S Mayor of Avabruck
-433 S Maze of Ith
-434 S Maze's End
-435 S Meddling Mage
-436 S Megantic Sliver
-437 S Melek, Izzet Paragon
-438 S Memnite
-439 S Memoricide
-440 S Mercurial Pretender
-441 S Merfolk Sovereign
-442 S Merrow Reejerey
-443 S Militia Bugler
-444 S Mind Control
-445 S Mind Stone
-446 S Mirran Crusader
-447 S Mitotic Slime
-448 S Mizzium Meddler
-449 S Mogg Fanatic
-450 S Mondronen Shaman
-451 S Moonsilver Spear
-452 S Mortify
-453 S Mountain
-454 S Mountain
-455 S Mountain
-456 S Mountain
-457 S Mountain
-458 S Mountain
-459 S Mountain
-460 S Mountain
-461 S Mountain
-462 S Mountain
-463 S Mountain
-464 S Mountain
-465 S Mountain
-466 S Mountain
-467 S Mountain
-468 S Mountain
-469 S Mountain
-470 S Mountain
-471 S Mountain
-472 S Mountain
-473 S Mountain
-474 S Mountain
-475 S Mountain
-476 S Mox Emerald
-477 S Mox Jet
-478 S Mox Pearl
-479 S Mox Ruby
-480 S Mox Sapphire
-481 S Mulldrifter
-482 S Munda's Vanguard
-483 S Murder
-484 S Murderous Redcap
-485 S Mutavault
-486 S Mutavault
-487 S Mwonvuli Beast Tracker
-488 S Mycoid Shepherd
-489 S Myr Superion
-490 S Mystic of the Hidden Way
-491 S Nameless Inversion
-492 S Naya Sojourners
-493 S Nearheath Stalker
-494 S Necromaster Dragon
-495 S Necropolis Fiend
-496 S Negate
-497 S Nephalia Moondrakes
-498 S Nessian Wilds Ravager
-499 S Niblis of Frost
-500 S Nicol Bolas, God-Pharaoh
-501 S Nighthowler
-502 S Nightveil Specter
-503 S Nissa, Steward of Elements
-504 S Nissa, Vastwood Seer
-505 S Nissa, Vital Force
-506 S Nissa, Voice of Zendikar
-507 S Nissa, Worldwaker
-508 S Nissa's Chosen
-509 S Nissa's Pilgrimage
-510 S Niv-Mizzet, the Firemind
-511 S Noble Hierarch
-512 S Noose Constrictor
-513 S Noosegraf Mob
-514 S Obelisk of Alara
-515 S Ogre Arsonist
-516 S Ogre Battledriver
-517 S Ojutai's Command
-518 S Oona's Blackguard
-519 S Opt
-520 S Oracle's Vault
-521 S Oran-Rief Hydra
-522 S Orator of Ojutai
-523 S Orim's Chant
-524 S Oros, the Avenger
-525 S Overbeing of Myth
-526 S Oxidize
-527 S Pain Seer
-528 S Path to Exile
-529 S Path to Exile
-530 S Pathrazer of Ulamog
-531 S Pendelhaven
-532 S Pernicious Deed
-533 S Phalanx Leader
-534 S Phyrexian Metamorph
-535 S Phytotitan
-536 S Pia and Kiran Nalaar
-537 S Pillar of Flame
-538 S Plague Myr
-539 S Plague Stinger
-540 S Plains
-541 S Plains
-542 S Plains
-543 S Plains
-544 S Plains
-545 S Plains
-546 S Plains
-547 S Plains
-548 S Plains
-549 S Plains
-550 S Plains
-551 S Plains
-552 S Plains
-553 S Plains
-554 S Plains
-555 S Plains
-556 S Plains
-557 S Plains
-558 S Plains
-559 S Plains
-560 S Plains
-561 S Plains
-562 S Plains
-563 S Plains
-564 S Ponder
-565 S Prey Upon
-566 S Priest of Urabrask
-567 S Primal Amulet
-568 S Primeval Titan
-569 S Primordial Hydra
-570 S Pristine Skywise
-571 S Prognostic Sphinx
-572 S Prophet of Kruphix
-573 S Psionic Blast
-574 S Putrefy
-575 S Pyroclasm
-576 S Qasali Pridemage
-577 S Quicksmith Rebel
-578 S Radiant Flames
-579 S Rakdos Cackler
-580 S Rakdos Guildmage
-581 S Rakshasa Vizier
-582 S Rampaging Baloths
-583 S Rampant Growth
-584 S Ramunap Excavator
-585 S Ratchet Bomb
-586 S Rattleclaw Mystic
-587 S Ravenous Bloodseeker
-588 S Ravenous Demon
-589 S Reality Shift
-590 S Reaper of the Wilds
-591 S Reciprocate
-592 S Reckless Wurm
-593 S Reclamation Sage
-594 S Recollect
-595 S Relic Seeker
-596 S Reliquary Tower
-597 S Reliquary Tower
-598 S Remand
-599 S Remove Soul
-600 S Render Silent
-601 S Renegade Rallier
-602 S Resolute Archangel
-603 S Resurrection
-604 S Reverse Engineer
-605 S Rhox War Monk
-606 S Rise from the Grave
-607 S Rise from the Tides
-608 S Roast
-609 S Rubblehulk
-610 S Ruinous Path
-611 S Ruthless Ripper
-612 S Ryusei, the Falling Star
-613 S Sage of the Inward Eye
-614 S Sage-Eye Avengers
-615 S Saheeli's Artistry
-616 S Sakura-Tribe Elder
-617 S Sanctifier of Souls
-618 S Sandsteppe Citadel
-619 S Sandsteppe Mastodon
-620 S Savage Lands
-621 S Savannah
-622 S Scaleguard Sentinels
-623 S Scavenging Ooze
-624 S Scent of Cinder
-625 S Scourge of Fleets
-626 S Scrap Trawler
-627 S Scrubland
-628 S Scythe Leopard
-629 S Search for Azcanta
-630 S Searing Blaze
-631 S Searing Spear
-632 S Seeker of the Way
-633 S Selkie Hedge-Mage
-634 S Serra Avatar
-635 S Serra Avenger
-636 S Serum Visions
-637 S Servo Exhibition
-638 S Shamanic Revelation
-639 S Shanna, Sisay's Legacy
-640 S Shard Phoenix
-641 S Sheoldred, Whispering One
-642 S Shield of Kaldra
-643 S Shipbreaker Kraken
-644 S Shrine of Burning Rage
-645 S Siege Dragon
-646 S Siege Rhino
-647 S Sign in Blood
-648 S Signal Pest
-649 S Silent Sentinel
-650 S Silverblade Paladin
-651 S Silvergill Adept
-652 S Sin Collector
-653 S Sinkhole
-654 S Skarrg Goliath
-655 S Skinrender
-656 S Skyship Stalker
-657 S Slave of Bolas
-658 S Smash to Smithereens
-659 S Smite the Monstrous
-660 S Snapcaster Mage
-661 S Soltari Priest
-662 S Soul of Ravnica
-663 S Soul of Zendikar
-664 S Soul Summons
-665 S Soul Swallower
-666 S Spatial Contortion
-667 S Spawn of Thraxes
-668 S Spellskite
-669 S Spellstutter Sprite
-670 S Sprouting Thrinax
-671 S Squelching Leeches
-672 S Staff of Nin
-673 S Staggershock
-674 S Standstill
-675 S Stasis Snare
-676 S Steel Hellkite
-677 S Steel Leaf Champion
-678 S Stoke the Flames
-679 S Stoneforge Mystic
-680 S Stormblood Berserker
-681 S Strangleroot Geist
-682 S Sultai Ascendancy
-683 S Sultai Charm
-684 S Sultai Emissary
-685 S Sun Titan
-686 S Supplant Form
-687 S Supreme Verdict
-688 S Surgical Extraction
-689 S Suspension Field
-690 S Swamp
-691 S Swamp
-692 S Swamp
-693 S Swamp
-694 S Swamp
-695 S Swamp
-696 S Swamp
-697 S Swamp
-698 S Swamp
-699 S Swamp
-700 S Swamp
-701 S Swamp
-702 S Swamp
-703 S Swamp
-704 S Swamp
-705 S Swamp
-706 S Swamp
-707 S Swamp
-708 S Swamp
-709 S Swamp
-710 S Swamp
-711 S Swamp
-712 S Swamp
-713 S Sword of Kaldra
-714 S Swords to Plowshares
-715 S Sylvan Caryatid
-716 S Sylvan Ranger
-717 S Sylvan Scrying
-718 S Taiga
-719 S Tectonic Edge
-720 S Teetering Peaks
-721 S Tempered Steel
-722 S Temple of Mystery
-723 S Temporal Manipulation
-724 S Temur War Shaman
-725 S Terminate
-726 S Terror
-727 S Thalia, Guardian of Thraben
-728 S Thalia, Heretic Cathar
-729 S Thaumatic Compass
-730 S Thirst for Knowledge
-731 S Thopter Assembly
-732 S Thunderbreak Regent
-733 S Tidehollow Sculler
-734 S Tidings
-735 S Timetwister
-736 S Tormented Hero
-737 S Tormented Soul
-738 S Treasure Hunt
-739 S Treasure Hunt
-740 S Treasure Mage
-741 S Treasure Map
-742 S Treasury Thrull
-743 S Treva, the Renewer
-744 S Tromokratis
-745 S Trophy Mage
-746 S Trostani's Summoner
-747 S Trueheart Duelist
-748 S Tundra
-749 S Turnabout
-750 S Tyrant of Valakut
-751 S Ugin, the Spirit Dragon
-752 S Ugin's Construct
-753 S Ultimate Price
-754 S Ulvenwald Observer
-755 S Umezawa's Jitte
-756 S Underground Sea
-757 S Unlicensed Disintegration
-758 S Unmake
-759 S Unsubstantiate
-760 S Urza's Factory
-761 S Utter End
-762 S Valakut, the Molten Pinnacle
-763 S Valorous Stance
-764 S Vampire Nighthawk
-765 S Vampire Nocturnus
-766 S Vampire Nocturnus
-767 S Vance's Blasting Cannons
-768 S Vault Skirge
-769 S Vendilion Clique
-770 S Vengevine
-771 S Vindicate
-772 S Voidmage Husher
-773 S Voidslime
-774 S Volcanic Fallout
-775 S Walk the Plank
-776 S Wall of Omens
-777 S Warleader's Helix
-778 S Wash Out
-779 S Wasteland
-780 S Wasteland
-781 S Watcher of the Roost
-782 S Watchwolf
-783 S Whip of Erebos
-784 S Whirling Dervish
-785 S Wild Nacatl
-786 S Wildcall
-787 S Wildfire Eternal
-788 S Wilt-Leaf Cavaliers
-789 S Woolly Thoctar
-790 S Wrath of God
-791 S Wren's Run Packmaster
-792 S Wren's Run Vanquisher
-793 S Write into Being
-794 S Wurmcoil Engine
-795 S Xathrid Gorgon
-796 S Yahenni's Expertise
-797 S Yixlid Jailer
-798 S Zahid, Djinn of the Lamp
-799 S Zameck Guildmage
-800 S Zealous Persecution
-801 S Zhalfirin Void
-802 S Zoetic Cavern
-803 S Zombie Apocalypse
-804 S Zombify
-805 S Zur the Enchanter
+S Mana Crypt
+S Nalathni Dragon
+S Sewers of Estark
+S Windseeker Centaur
+S Abhorrent Overlord
+S Abrade
+S Abrupt Decay
+S Abzan Beastmaster
+S Acidic Slime
+S Acquire
+S Adorned Pouncer
+S Aether Hub
+S Ainok Tracker
+S Ajani Goldmane
+S Ajani Steadfast
+S Ajani Vengeant
+S Ajani, Caller of the Pride
+S Alhammarret, High Arbiter
+S All Is Dust
+S Allosaurus Rider
+S Altar of the Brood
+S Anathemancer
+S Ancestral Recall
+S Ancestral Recall
+S Ancient Grudge
+S Ancient Hellkite
+S Ancient Ziggurat
+S Angel of Deliverance
+S Anguished Unmaking
+S Ankle Shanker
+S Ant Queen
+S Anthousa, Setessan Hero
+S Anticipate
+S Arashin Sovereign
+S Arashin War Beast
+S Arbiter of the Ideal
+S Arc Lightning
+S Archfiend of Depravity
+S Archfiend of Ifnir
+S Archon of the Triumvirate
+S Arguel's Blood Fast
+S Arrest
+S Artisan of Kozilek
+S Assembled Alphas
+S Auramancer
+S Avacyn, Angel of Hope
+S Avacyn's Pilgrim
+S Avalanche Tusker
+S Avatar of Discord
+S Avatar of Woe
+S Badlands
+S Banisher Priest
+S Banishing Light
+S Barrage Tyrant
+S Batterskull
+S Bident of Thassa
+S Bile Blight
+S Birds of Paradise
+S Bishop of Rebirth
+S Bitterblossom
+S Bituminous Blast
+S Black Lotus
+S Black Lotus
+S Black Sun's Zenith
+S Blight Herder
+S Blighted Fen
+S Blightning
+S Blood Knight
+S Bloodcrazed Neonate
+S Bloodlord of Vaasgoth
+S Boggart Ram-Gang
+S Boltwing Marauder
+S Bonescythe Sliver
+S Boneyard Wurm
+S Brain Maggot
+S Bramblewood Paragon
+S Brass's Bounty
+S Brave the Elements
+S Breaking // Entering
+S Breath of Malfegor
+S Briber's Purse
+S Bribery
+S Browbeat
+S Burning Sun's Avatar
+S Burning Wish
+S Burst Lightning
+S Calciderm
+S Call of the Conclave
+S Call of the Herd
+S Call the Bloodline
+S Cancel
+S Captain's Hook
+S Carnival Hellsteed
+S Cast Down
+S Cathedral of War
+S Celestial Archon
+S Celestial Colonnade
+S Celestial Purge
+S Cenn's Tactician
+S Chandra Nalaar
+S Chandra, Fire of Kaladesh
+S Chandra, Flamecaller
+S Chandra, Pyromaster
+S Chandra, Pyromaster
+S Chandra, Torch of Defiance
+S Chandra, Torch of Defiance
+S Chandra's Phoenix
+S Char
+S Chief Engineer
+S Chief of the Foundry
+S Chrome Mox
+S Circle of Flame
+S Clash of Wills
+S Cloudpost
+S Colossal Whale
+S Comet Storm
+S Conclave Naturalists
+S Condemn
+S Conqueror's Galleon
+S Consume Spirit
+S Consuming Aberration
+S Contagion Clasp
+S Corpsejack Menace
+S Corrupt
+S Corrupt
+S Courser of Kruphix
+S Cruel Edict
+S Crumbling Vestige
+S Cryptborn Horror
+S Cryptic Command
+S Cultivate
+S Cultivator of Blades
+S Cunning Wish
+S Curse of the Bloody Tome
+S Curse of Thirst
+S Curse of Wizardry
+S Damnation
+S Dark Ritual
+S Dawnbringer Charioteers
+S Day of Judgment
+S Day of Judgment
+S Deadbridge Goliath
+S Death Baron
+S Deathbringer Regent
+S Deathless Angel
+S Debilitating Injury
+S Decree of Justice
+S Deepfathom Skulker
+S Deeproot Champion
+S Defense of the Heart
+S Defiant Bloodlord
+S Demigod of Revenge
+S Demon of Catastrophes
+S Demonic Tutor
+S Desecrated Tomb
+S Despise
+S Devil's Play
+S Dictate of Kruphix
+S Dictate of the Twin Gods
+S Dimir Charm
+S Diregraf Ghoul
+S Disdainful Stroke
+S Disenchant
+S Disenchant
+S Dismember
+S Dissolve
+S Djinn Illuminatus
+S Doom Blade
+S Doomwake Giant
+S Door of Destinies
+S Doran, the Siege Tower
+S Doran, the Siege Tower
+S Dowsing Dagger
+S Dragon Broodmother
+S Dragon Fodder
+S Dragonlord's Servant
+S Dragonscale Boon
+S Dragonscale General
+S Dread Defiler
+S Dreg Mangler
+S Drogskol Cavalry
+S Dromoka, the Eternal
+S Drowner of Hope
+S Dryad Militant
+S Duergar Hedge-Mage
+S Dungrove Elder
+S Duress
+S Dwynen, Gilt-Leaf Daen
+S Eater of Hope
+S Eidolon of Blossoms
+S Electrolyze
+S Electrolyze
+S Elesh Norn, Grand Cenobite
+S Elite Inquisitor
+S Elusive Tormentor
+S Elvish Champion
+S Elvish Mystic
+S Elvish Visionary
+S Ember Swallower
+S Emeria Angel
+S Emrakul, the Aeons Torn
+S Emrakul, the Aeons Torn
+S Encroaching Wastes
+S Endbringer
+S Essence Extraction
+S Eternal Witness
+S Everflowing Chalice
+S Evolving Wilds
+S Evolving Wilds
+S Evolving Wilds
+S Exalted Angel
+S Experiment One
+S Faithless Looting
+S Fanatic of Xenagos
+S Farseek
+S Fatal Push
+S Fated Conflagration
+S Fated Intervention
+S Fathom Mage
+S Feast of Blood
+S Fierce Invocation
+S Fiery Temper
+S Fiery Temper
+S Fireball
+S Fireball
+S Firemane Avenger
+S Flame Javelin
+S Flameblade Angel
+S Flamerush Rider
+S Flaying Tendrils
+S Fling
+S Flooded Strand
+S Foe-Razer Regent
+S Font of Fertility
+S Forbidden Alchemy
+S Forest
+S Forest
+S Forest
+S Forest
+S Forest
+S Forest
+S Forest
+S Forest
+S Forest
+S Forest
+S Forest
+S Forest
+S Forest
+S Forest
+S Forest
+S Forest
+S Forest
+S Forest
+S Forest
+S Forest
+S Forest
+S Forest
+S Forest
+S Forgestoker Dragon
+S Formless Nurturing
+S Fortune's Favor
+S Foundry Champion
+S Frenzied Goblin
+S Frost Titan
+S Frost Walker
+S Gaddock Teeg
+S Gaea's Cradle
+S Garruk Wildspeaker
+S Garruk, Apex Predator
+S Garruk, Caller of Beasts
+S Garruk's Horde
+S Gatekeeper of Malakir
+S Gather the Townsfolk
+S Gaze of Granite
+S Geist of Saint Traft
+S Ghalta, Primal Hunger
+S Ghor-Clan Rampager
+S Giant Badger
+S Giant Growth
+S Gideon of the Trials
+S Gideon of the Trials
+S Gideon, Ally of Zendikar
+S Gitaxian Probe
+S Gladehart Cavalry
+S Glissa, the Traitor
+S Glistener Elf
+S Glorious Anthem
+S Glorybringer
+S Go for the Throat
+S Goblin Dark-Dwellers
+S Goblin Diplomats
+S Goblin Guide
+S Goblin Rabblemaster
+S Goblin Warchief
+S Golem's Heart
+S Grave Titan
+S Gravecrawler
+S Greater Good
+S Grim Haruspex
+S Griselbrand
+S Grisly Salvage
+S Groundbreaker
+S Grove of the Guardian
+S Growing Rites of Itlimoc
+S Guttersnipe
+S Guul Draz Assassin
+S Hada Freeblade
+S Hall of Triumph
+S Harbinger of the Hunt
+S Harmonize
+S Harrow
+S Heir of the Wilds
+S Hellspark Elemental
+S Helm of Kaldra
+S Hero of Bladehold
+S Hero of Goma Fada
+S Heroes' Bane
+S Heron's Grace Champion
+S Hero's Downfall
+S Hewed Stone Retainers
+S High Tide
+S Hinder
+S Hive Stirrings
+S Hixus, Prison Warden
+S Honor of the Pure
+S Honored Hierarch
+S Hordeling Outburst
+S Hydra Broodmaster
+S Hypersonic Dragon
+S Identity Thief
+S Immolating Glare
+S Imperious Perfect
+S In Garruk's Wake
+S Incendiary Flow
+S Incinerate
+S Incorrigible Youths
+S Indulgent Tormentor
+S Inferno Titan
+S Infest
+S Ink-Eyes, Servant of Oni
+S Inkmoth Nexus
+S Island
+S Island
+S Island
+S Island
+S Island
+S Island
+S Island
+S Island
+S Island
+S Island
+S Island
+S Island
+S Island
+S Island
+S Island
+S Island
+S Island
+S Island
+S Island
+S Island
+S Island
+S Island
+S Island
+S Isochron Scepter
+S Ivorytusk Fortress
+S Jace Beleren
+S Jace Beleren
+S Jace, Cunning Castaway
+S Jace, Memory Adept
+S Jace, the Living Guildpact
+S Jace, Unraveler of Secrets
+S Jace, Unraveler of Secrets
+S Jace, Vryn's Prodigy
+S Jace's Ingenuity
+S Jeering Instigator
+S Jeskai Infiltrator
+S Joraga Warcaller
+S Jori En, Ruin Diver
+S Judge's Familiar
+S Kalastria Highborn
+S Karametra's Acolyte
+S Killing Wave
+S Kiora's Follower
+S Kitchen Finks
+S Kiyomaro, First to Stand
+S Knight of New Alara
+S Kor Duelist
+S Kor Firewalker
+S Korlash, Heir to Blackblade
+S Kothophed, Soul Hoarder
+S Krosan Grip
+S Kytheon, Hero of Akros
+S Land Tax
+S Languish
+S Latch Seeker
+S Leatherback Baloth
+S Legion's Landing
+S Lightning Greaves
+S Lightning Helix
+S Liliana of the Dark Realms
+S Liliana Vess
+S Liliana Vess
+S Liliana, Death's Majesty
+S Liliana, Heretical Healer
+S Liliana, the Last Hope
+S Liliana, Untouched by Death
+S Liliana's Specter
+S Llanowar Elves
+S Lord of Shatterskull Pass
+S Lotus Bloom
+S Lotus Cobra
+S Ludevic's Test Subject
+S Magister of Worth
+S Magma Jet
+S Magma Spray
+S Magmaquake
+S Mana Leak
+S Mana Tithe
+S Mardu Shadowspear
+S Marisi's Twinclaws
+S Markov Dreadknight
+S Master's Call
+S Mastery of the Unseen
+S Maul Splicer
+S Mayor of Avabruck
+S Maze of Ith
+S Maze's End
+S Meddling Mage
+S Megantic Sliver
+S Melek, Izzet Paragon
+S Memnite
+S Memoricide
+S Mercurial Pretender
+S Merrow Reejerey
+S Mind Control
+S Mind Stone
+S Mirran Crusader
+S Mitotic Slime
+S Mizzium Meddler
+S Mogg Fanatic
+S Mondronen Shaman
+S Moonsilver Spear
+S Mortify
+S Mountain
+S Mountain
+S Mountain
+S Mountain
+S Mountain
+S Mountain
+S Mountain
+S Mountain
+S Mountain
+S Mountain
+S Mountain
+S Mountain
+S Mountain
+S Mountain
+S Mountain
+S Mountain
+S Mountain
+S Mountain
+S Mountain
+S Mountain
+S Mountain
+S Mountain
+S Mountain
+S Mox Emerald
+S Mox Jet
+S Mox Pearl
+S Mox Ruby
+S Mox Sapphire
+S Mulldrifter
+S Munda's Vanguard
+S Murderous Redcap
+S Mutavault
+S Mutavault
+S Mwonvuli Beast Tracker
+S Mycoid Shepherd
+S Myr Superion
+S Mystic of the Hidden Way
+S Nameless Inversion
+S Naya Sojourners
+S Nearheath Stalker
+S Necromaster Dragon
+S Necropolis Fiend
+S Nephalia Moondrakes
+S Nessian Wilds Ravager
+S Niblis of Frost
+S Nicol Bolas, God-Pharaoh
+S Nighthowler
+S Nightveil Specter
+S Nissa, Steward of Elements
+S Nissa, Vastwood Seer
+S Nissa, Vital Force
+S Nissa, Voice of Zendikar
+S Nissa, Worldwaker
+S Nissa's Chosen
+S Nissa's Pilgrimage
+S Niv-Mizzet, the Firemind
+S Noble Hierarch
+S Noose Constrictor
+S Noosegraf Mob
+S Obelisk of Alara
+S Ogre Arsonist
+S Ogre Battledriver
+S Ojutai's Command
+S Oona's Blackguard
+S Oracle's Vault
+S Oran-Rief Hydra
+S Orator of Ojutai
+S Orim's Chant
+S Oros, the Avenger
+S Overbeing of Myth
+S Oxidize
+S Pain Seer
+S Path to Exile
+S Path to Exile
+S Pathrazer of Ulamog
+S Pendelhaven
+S Pernicious Deed
+S Phalanx Leader
+S Phyrexian Metamorph
+S Phytotitan
+S Pia and Kiran Nalaar
+S Pillar of Flame
+S Plague Myr
+S Plague Stinger
+S Plains
+S Plains
+S Plains
+S Plains
+S Plains
+S Plains
+S Plains
+S Plains
+S Plains
+S Plains
+S Plains
+S Plains
+S Plains
+S Plains
+S Plains
+S Plains
+S Plains
+S Plains
+S Plains
+S Plains
+S Plains
+S Plains
+S Plains
+S Plains
+S Ponder
+S Priest of Urabrask
+S Primal Amulet
+S Primeval Titan
+S Primordial Hydra
+S Pristine Skywise
+S Prognostic Sphinx
+S Prophet of Kruphix
+S Psionic Blast
+S Putrefy
+S Pyroclasm
+S Qasali Pridemage
+S Quicksmith Rebel
+S Radiant Flames
+S Rakdos Cackler
+S Rakdos Guildmage
+S Rakshasa Vizier
+S Rampaging Baloths
+S Rampant Growth
+S Ramunap Excavator
+S Ratchet Bomb
+S Rattleclaw Mystic
+S Ravenous Bloodseeker
+S Ravenous Demon
+S Reality Shift
+S Reaper of the Wilds
+S Reciprocate
+S Reckless Wurm
+S Reclamation Sage
+S Recollect
+S Relic Seeker
+S Reliquary Tower
+S Reliquary Tower
+S Remand
+S Remove Soul
+S Render Silent
+S Renegade Rallier
+S Resolute Archangel
+S Resurrection
+S Reverse Engineer
+S Rhox War Monk
+S Rise from the Grave
+S Rise from the Tides
+S Roast
+S Rubblehulk
+S Ruinous Path
+S Ruthless Ripper
+S Ryusei, the Falling Star
+S Sage of the Inward Eye
+S Sage-Eye Avengers
+S Saheeli's Artistry
+S Sakura-Tribe Elder
+S Sanctifier of Souls
+S Sandsteppe Citadel
+S Sandsteppe Mastodon
+S Savage Lands
+S Savannah
+S Scaleguard Sentinels
+S Scavenging Ooze
+S Scent of Cinder
+S Scourge of Fleets
+S Scrap Trawler
+S Scrubland
+S Scythe Leopard
+S Search for Azcanta
+S Searing Blaze
+S Searing Spear
+S Seeker of the Way
+S Selkie Hedge-Mage
+S Serra Avatar
+S Serra Avenger
+S Serum Visions
+S Servo Exhibition
+S Shamanic Revelation
+S Shard Phoenix
+S Sheoldred, Whispering One
+S Shield of Kaldra
+S Shipbreaker Kraken
+S Shrine of Burning Rage
+S Siege Dragon
+S Siege Rhino
+S Sign in Blood
+S Signal Pest
+S Silent Sentinel
+S Silverblade Paladin
+S Silvergill Adept
+S Sin Collector
+S Sinkhole
+S Skarrg Goliath
+S Skinrender
+S Skyship Stalker
+S Slave of Bolas
+S Smash to Smithereens
+S Smite the Monstrous
+S Snapcaster Mage
+S Soltari Priest
+S Soul of Ravnica
+S Soul of Zendikar
+S Soul Summons
+S Soul Swallower
+S Spatial Contortion
+S Spawn of Thraxes
+S Spellskite
+S Spellstutter Sprite
+S Sprouting Thrinax
+S Squelching Leeches
+S Staff of Nin
+S Staggershock
+S Standstill
+S Stasis Snare
+S Steel Hellkite
+S Steel Leaf Champion
+S Stoke the Flames
+S Stoneforge Mystic
+S Stormblood Berserker
+S Strangleroot Geist
+S Sultai Ascendancy
+S Sultai Charm
+S Sultai Emissary
+S Sun Titan
+S Supplant Form
+S Supreme Verdict
+S Surgical Extraction
+S Suspension Field
+S Swamp
+S Swamp
+S Swamp
+S Swamp
+S Swamp
+S Swamp
+S Swamp
+S Swamp
+S Swamp
+S Swamp
+S Swamp
+S Swamp
+S Swamp
+S Swamp
+S Swamp
+S Swamp
+S Swamp
+S Swamp
+S Swamp
+S Swamp
+S Swamp
+S Swamp
+S Swamp
+S Sword of Kaldra
+S Swords to Plowshares
+S Sylvan Caryatid
+S Sylvan Ranger
+S Sylvan Scrying
+S Taiga
+S Tectonic Edge
+S Teetering Peaks
+S Tempered Steel
+S Temple of Mystery
+S Temporal Manipulation
+S Temur War Shaman
+S Terminate
+S Terror
+S Thalia, Guardian of Thraben
+S Thalia, Heretic Cathar
+S Thaumatic Compass
+S Thirst for Knowledge
+S Thopter Assembly
+S Thunderbreak Regent
+S Tidehollow Sculler
+S Tidings
+S Timetwister
+S Tormented Hero
+S Tormented Soul
+S Treasure Hunt
+S Treasure Hunt
+S Treasure Mage
+S Treasure Map
+S Treasury Thrull
+S Treva, the Renewer
+S Tromokratis
+S Trophy Mage
+S Trostani's Summoner
+S Trueheart Duelist
+S Tundra
+S Turnabout
+S Tyrant of Valakut
+S Ugin, the Spirit Dragon
+S Ugin's Construct
+S Ultimate Price
+S Ulvenwald Observer
+S Umezawa's Jitte
+S Underground Sea
+S Unlicensed Disintegration
+S Unmake
+S Unsubstantiate
+S Urza's Factory
+S Utter End
+S Valakut, the Molten Pinnacle
+S Valorous Stance
+S Vampire Nighthawk
+S Vampire Nocturnus
+S Vampire Nocturnus
+S Vance's Blasting Cannons
+S Vault Skirge
+S Vendilion Clique
+S Vengevine
+S Vindicate
+S Voidmage Husher
+S Voidslime
+S Volcanic Fallout
+S Walk the Plank
+S Wall of Omens
+S Warleader's Helix
+S Wash Out
+S Wasteland
+S Wasteland
+S Watcher of the Roost
+S Watchwolf
+S Whip of Erebos
+S Whirling Dervish
+S Wild Nacatl
+S Wildcall
+S Wildfire Eternal
+S Wilt-Leaf Cavaliers
+S Woolly Thoctar
+S Wrath of God
+S Wren's Run Packmaster
+S Wren's Run Vanquisher
+S Write into Being
+S Wurmcoil Engine
+S Xathrid Gorgon
+S Yahenni's Expertise
+S Yixlid Jailer
+S Zahid, Djinn of the Lamp
+S Zameck Guildmage
+S Zhalfirin Void
+S Zoetic Cavern
+S Zombie Apocalypse
+S Zombify
+S Zur the Enchanter
