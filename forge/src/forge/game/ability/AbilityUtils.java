@@ -438,7 +438,7 @@ public class AbilityUtils {
                 players.addAll(game.getPlayers());
                 val = CardFactoryUtil.playerXCount(players, calcX[1], card);
             }
-            else if (hType.equals("HasPermanentPlayers") || hType.equals("")) {
+            else if (hType.equals("HasPermanentPlayers")) {
                 for(Player p : game.getPlayers()) {
                 	CardCollectionView cards = p.getCardsIn(ZoneType.Battlefield);
                 	for(Card c : cards) {
