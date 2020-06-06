@@ -91,6 +91,7 @@ public class DeckStorage extends StorageReaderFolder<Deck> implements IItemSeria
 
         if (result != null) {
             result.setDirectory(file.getParent().substring(rootDir.length()));
+            result.setPath(file.getAbsolutePath());
         }
         return result;
     }

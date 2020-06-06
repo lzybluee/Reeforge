@@ -36,6 +36,7 @@ import java.util.regex.Pattern;
 
 public class CardPool extends ItemPool<PaperCard> {
     private static final long serialVersionUID = -5379091255613968393L;
+    boolean hasUnsupported = false;
 
     public CardPool() {
         super(PaperCard.class);
@@ -44,6 +45,10 @@ public class CardPool extends ItemPool<PaperCard> {
     public CardPool(final Iterable<Entry<PaperCard, Integer>> cards) {
         this();
         this.addAll(cards);
+    }
+
+    public boolean hasUnsupported() {
+    	return hasUnsupported;
     }
 
     public void add(final String cardName, final int amount) {
@@ -99,6 +104,7 @@ public class CardPool extends ItemPool<PaperCard> {
             cardName = paperCard.getName();
             artCount = isCommonCard ? StaticData.instance().getCommonCards().getArtCount(cardName, setCode) : 1;
         } else {
+        	hasUnsupported = true;
             System.err.print("An unsupported card was requested: \"" + cardName + "\" from \"" + setCode + "\". ");
             paperCard = StaticData.instance().getCommonCards().createUnsupportedCard(cardName);
         }

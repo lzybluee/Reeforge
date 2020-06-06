@@ -29,6 +29,7 @@ public abstract class DeckBase implements Serializable, Comparable<DeckBase>, In
     private final String name;
     private transient String directory;
     private String comment = null;
+    private String path;
 
     /**
      * Instantiates a new deck base.
@@ -76,6 +77,13 @@ public abstract class DeckBase implements Serializable, Comparable<DeckBase>, In
     }
     public void setDirectory(String directory0) {
         directory = directory0;
+    }
+
+    public String getPath() {
+        return path;
+    }
+    public void setPath(String path0) {
+    	path = path0;
     }
 
     public String getUniqueKey() {
