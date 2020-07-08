@@ -3,7 +3,7 @@ ManaCost:2
 Types:Artifact Equipment
 K:Equip:1
 S:Mode$ Continuous | Affected$ Creature.EquippedBy | AddKeyword$ Vigilance | Description$ Equipped creature has vigilance.
-T:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | TriggerZones$ Battlefield | Execute$ ThuneCounter | TriggerDescription$ At the beginning of your upkeep, put a +1/+1 counter on equipped creature if it's white.
+T:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | TriggerZones$ Battlefield | Execute$ ThuneCounter | CheckOnResolve$ True | TriggerDescription$ At the beginning of your upkeep, put a +1/+1 counter on equipped creature if it's white.
 SVar:ThuneCounter:DB$PutCounter | Defined$ Equipped | ConditionDefined$ Equipped | ConditionPresent$ Creature.White | ConditionCompare$ EQ1 | CounterType$ P1P1 | CounterNum$ 1
 SVar:RemRandomDeck:True
 SVar:AttachAi:AITgts$ Creature.White

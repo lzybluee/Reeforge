@@ -634,8 +634,10 @@ public class TriggerHandler {
             }
         }
 
-        if(!sa.getConditions().areMet(sa)) {
-        	return;
+        if(!triggerParams.containsKey("CheckOnResolve")) {
+            if(!sa.getConditions().areMet(sa)) {
+            	return;
+            }
         }
 
         if (triggerParams.containsKey("RememberController")) {
