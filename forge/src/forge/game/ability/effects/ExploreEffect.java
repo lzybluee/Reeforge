@@ -17,6 +17,8 @@ import forge.util.Lang;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+
 public class ExploreEffect extends SpellAbilityEffect {
 
     
@@ -61,12 +63,14 @@ public class ExploreEffect extends SpellAbilityEffect {
                     game.getAction().moveTo(ZoneType.Hand, r, sa);
                     revealedLand = true;
                 } else {
-                    // TODO find better way to choose optional send away
-                    final Card choosen = pc.chooseSingleCardForZoneChange(
-                            ZoneType.Graveyard, Lists.newArrayList(ZoneType.Library), sa, top, null,
-                            "Put this card in your graveyard?", true, pl);
-                    if (choosen != null) {
-                        game.getAction().moveTo(ZoneType.Graveyard, choosen, sa);
+                	CardCollection explored = new CardCollection();
+                	explored.add(r);
+                	final ImmutablePair<CardCollection, CardCollection> lists = pc.arrangeForSurveil(explored);
+                    final CardCollection toGrave = lists.getRight();
+                    if (toGrave != null) {
+                        for (Card tg : toGrave) {
+                        	game.getAction().moveTo(ZoneType.Graveyard, tg, sa);
+                        }
                     }
                 }
             }
