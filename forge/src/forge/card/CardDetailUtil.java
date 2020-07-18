@@ -573,6 +573,15 @@ public class CardDetailUtil {
             area.append(StringUtils.join(card.getExerted(), ", "));
         }
 
+        //show controller
+        if (card.getOwner() != card.getController()) {
+        	if (area.length() != 0) {
+                area.append("\n\n");
+            }
+        	area.append("[+Gain control from: " + card.getOwner().getName() + "+]");
+            area.append("\n");
+        }
+
         //show current card colors if enabled
         String curCardColors = formatCurrentCardColors(state);
         if (!curCardColors.isEmpty() && !card.isFaceDown()) {
