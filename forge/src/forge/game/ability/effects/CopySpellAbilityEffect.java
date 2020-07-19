@@ -13,6 +13,7 @@ import forge.game.card.CardLists;
 import forge.game.player.Player;
 import forge.game.spellability.AbilitySub;
 import forge.game.spellability.SpellAbility;
+import forge.game.zone.ZoneType;
 import forge.util.Lang;
 
 import java.util.ArrayList;
@@ -101,6 +102,12 @@ public class CopySpellAbilityEffect extends SpellAbilityEffect {
                 copiedSpell.getHostCard().setController(card.getController(), card.getGame().getNextTimestamp());
                 copiedSpell.setActivatingPlayer(controller);
                 copies.add(copiedSpell);
+
+                Card copiedCard = copiedSpell.getHostCard();
+                if(copiedCard != null) {
+                	copiedCard.setCastFrom(ZoneType.Exile);
+                }
+
                 Card c = chosen.getHostCard();
                 toRemove = new ArrayList<SpellAbility>();
                 for (SpellAbility s : tgtSpells) {
