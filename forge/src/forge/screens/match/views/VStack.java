@@ -169,6 +169,7 @@ public class VStack implements IVDoc<CStack> {
 
         private final StackItemView item;
         private final CachedCardImage cachedImage;
+        private StackInstanceTextArea lastItem;
 
         public StackItemView getItem() {
             return item;
@@ -202,12 +203,23 @@ public class VStack implements IVDoc<CStack> {
             setFont(FSkin.getFont(12));
             setWrapStyleWord(true);
             setMinimumSize(new Dimension(CARD_WIDTH + 2 * PADDING, CARD_HEIGHT + 2 * PADDING));
+            
+            // if the top of the stack is not assigned yet...
+            if (hoveredItem == null)
+            {
+            	// set things up to draw an arc from it...
+            	hoveredItem = StackInstanceTextArea.this;
+            	controller.getMatchUI().setPaperCard(item.getSourceCard());
+            }
 
             addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(final MouseEvent e) {
-                    hoveredItem = StackInstanceTextArea.this;
-                    CMatchUI matchUI = controller.getMatchUI();
+                	if(hoveredItem != null) {
+                		lastItem = hoveredItem;
+                	}
+                	hoveredItem = StackInstanceTextArea.this;
+                	CMatchUI matchUI = controller.getMatchUI();
                     if (matchUI != null) {
                         matchUI.clearPanelSelections();
                         if (item.getSourceCard() != null) {
@@ -219,13 +231,13 @@ public class VStack implements IVDoc<CStack> {
 
                 @Override
                 public void mouseExited(final MouseEvent e) {
-                    CMatchUI matchUI = controller.getMatchUI();
+                	CMatchUI matchUI = controller.getMatchUI();
                     if (matchUI != null) {
                         matchUI.clearPanelSelections();
                     }
-                    if (hoveredItem == StackInstanceTextArea.this) {
-                        hoveredItem = null;
-                    }
+            		if (hoveredItem == StackInstanceTextArea.this) {
+            			hoveredItem = lastItem;
+            		}
                 }
             });
 
