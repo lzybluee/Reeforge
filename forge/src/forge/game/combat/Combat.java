@@ -793,7 +793,14 @@ public class Combat {
     	CardDamageMap preventMap = new CardDamageMap();
 
         // This function handles both Regular and First Strike combat assignment
-        for (final Entry<Card, Integer> entry : defendingDamageMap.entrySet()) {
+        ArrayList<Entry<Card, Integer>> orderedDamage = new ArrayList<>(defendingDamageMap.entrySet());
+        Collections.sort(orderedDamage, new Comparator<Entry<Card, Integer>>() {
+			@Override
+			public int compare(Entry<Card, Integer> e1, Entry<Card, Integer> e2) {
+				return e2.getValue() - e1.getValue();
+			}
+		});
+        for (final Entry<Card, Integer> entry : orderedDamage) {
             GameEntity defender = getDefenderByAttacker(entry.getKey());
             if (defender instanceof Player) { // player
                 ((Player) defender).addCombatDamage(entry.getValue(), entry.getKey(), dealtDamageTo, preventMap);
