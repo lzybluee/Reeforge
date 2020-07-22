@@ -5829,10 +5829,12 @@ public class Card extends GameEntity implements Comparable<Card> {
 
     public final void addGoad(Long timestamp, final Player p) {
         goad.put(timestamp, p);
+        currentState.getView().updateAbilityText(this, currentState);
     }
     
     public final void removeGoad(Long timestamp) {
         goad.remove(timestamp);
+        currentState.getView().updateAbilityText(this, currentState);
     }
 
     public final boolean isGoaded() {
