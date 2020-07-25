@@ -796,7 +796,9 @@ public class GameAction {
         game.getReplacementHandler().cleanUpTemporaryReplacements();
 
         for (final Player p : game.getPlayers()) {
-            p.getManaPool().restoreColorReplacements();
+            if (game.costPaymentStack.peek() == null) {
+                p.getManaPool().restoreColorReplacements();
+            }
             p.clearStaticAbilities();
         }
 
