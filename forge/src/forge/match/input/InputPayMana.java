@@ -381,9 +381,9 @@ public abstract class InputPayMana extends InputSyncronizedBase {
             @Override
             public void run() {
                 chosen.setUsedToPayMana(InputPayMana.this.manaCost);
-                game.getTriggerHandler().setSkipRunWaitingTrigger(true);
+                game.getTriggerHandler().setSkipRunZoneChangeTrigger(true);
                 boolean b = HumanPlay.playSpellAbility(getController(), chosen.getActivatingPlayer(), chosen, false);
-                game.getTriggerHandler().setSkipRunWaitingTrigger(false);
+                game.getTriggerHandler().setSkipRunZoneChangeTrigger(false);
                 chosen.setUsedToPayMana(null);
                 chosen.setNeedChooseMana(false);
                 if (b) {
