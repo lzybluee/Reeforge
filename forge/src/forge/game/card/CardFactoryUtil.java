@@ -4517,7 +4517,7 @@ public class CardFactoryUtil {
             effect = "Mode$ CantBlockBy | ValidAttacker$ Creature.Self | ValidBlocker$ " + k[1]
                     + " | Description$ CARDNAME can't be blocked " + getTextForKwCantBeBlockedByType(keyword);
         } else if (keyword.equals("MayFlashSac")) {
-            effect = "Mode$ Continuous | EffectZone$ All | Affected$ Card.Self | Secondary$ True | MayPlay$ True"
+            effect = "Mode$ Continuous | EffectZone$ All | Affected$ Card.Self | Secondary$ True | MayPlay$ True | MayPlayDontGrantZonePermissions$ True"
                 + " | MayPlayNotSorcerySpeed$ True | MayPlayWithFlash$ True | MayPlayText$ Sacrifice at the next cleanup step"
                 + " | AffectedZone$ Exile,Graveyard,Hand,Library,Stack | Description$ " + inst.getReminderText();
         }
