@@ -214,7 +214,7 @@ public final class GameActionUtil {
                 if (!keyword.equals("Flashback")) {
                     flashback.setPayCosts(new Cost(keyword.substring(10), false));
                     flashback.setDescription(inst.getReminderText());
-                } else {
+                } else if(!flashback.getHostCard().isSplitCard()) {
                 	flashback.setDescription("You may cast this card from your graveyard by paying its mana cost. If you do, exile it as it resolves.");
                 }
 
