@@ -348,9 +348,6 @@ public class HumanPlaySpellAbility {
                             return false;
                         }
                         card.setXManaCostPaid(value);
-                        if(ability.hasParam("RememberPaidX")) {
-                        	card.setSVar("ChosenX", value.toString());
-                        }
                     }
                 }
             } else if (manaCost.getMana().isZero() && ability.isSpell()) {
