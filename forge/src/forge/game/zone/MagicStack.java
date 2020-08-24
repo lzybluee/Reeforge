@@ -404,9 +404,9 @@ public class MagicStack /* extends MyObservable */ implements Iterable<SpellAbil
 
             // Run Cycled triggers
             if (sp.isCycling()) {
-                runParams.clear();
-                runParams.put("Card", sp.getHostCard());
-                game.getTriggerHandler().runTrigger(TriggerType.Cycled, runParams, false);
+                Map<String, Object> params = Maps.newHashMap();
+                params.put("Card", sp.getHostCard());
+                game.getTriggerHandler().runTrigger(TriggerType.Cycled, params, false);
             }
             
             if (sp.hasParam("Crew")) {
