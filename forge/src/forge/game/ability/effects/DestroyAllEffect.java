@@ -68,6 +68,10 @@ public class DestroyAllEffect extends SpellAbilityEffect {
 
         list = AbilityUtils.filterListByType(list, valid, sa);
 
+        if (sa.hasParam("Defined")) {
+            list = AbilityUtils.getDefinedCards(sa.getHostCard(), sa.getParam("Defined"), sa);
+        }
+
         final boolean remDestroyed = sa.hasParam("RememberDestroyed");
         if (remDestroyed) {
             card.clearRemembered();

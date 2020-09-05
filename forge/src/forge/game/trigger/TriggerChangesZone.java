@@ -211,6 +211,9 @@ public class TriggerChangesZone extends Trigger {
     /** {@inheritDoc} */
     @Override
     public final void setTriggeringObjects(final SpellAbility sa) {
+    	if(sa.getHostCard().getEnchantingCard() != null) {
+    		sa.setTriggeringObject("Enchanted", sa.getHostCard().getEnchantingCard());
+    	}
         sa.setTriggeringObject("Card", this.getRunParams().get("Card"));
     }
 

@@ -145,6 +145,9 @@ public class AbilityUtils {
                 final Object crd = root.getTriggeringObject(defined.substring(9));
                 if (crd instanceof Card) {
                     c = game.getCardState((Card) crd);
+                	if("Enchanted".equals(defined.substring(9)) && c.getTimestamp() != ((Card) crd).getTimestamp()) {
+                		return cards;
+                	}
                 } else if (crd instanceof Iterable) {
                     for (final Card cardItem : Iterables.filter((Iterable<?>) crd, Card.class)) {
                         cards.add(cardItem);
