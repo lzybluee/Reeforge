@@ -201,8 +201,12 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
     }
 
     @Override
-    public void playSpellAbilityForFree(final SpellAbility copySA, final boolean mayChoseNewTargets) {
-        HumanPlay.playSaWithoutPayingManaCost(this, player.getGame(), copySA, mayChoseNewTargets);
+    public void playSpellAbilityForFree(final SpellAbility copySA, final boolean mayChooseNewTargets) {
+    	boolean chooseNewTargets = mayChooseNewTargets;
+    	if(chooseNewTargets && FModel.getPreferences().getPrefBoolean(FPref.UI_SKIP_AUTO_PAY)) {
+    		chooseNewTargets = InputConfirm.confirm(this, copySA, "Choose new targets?");
+    	}
+        HumanPlay.playSaWithoutPayingManaCost(this, player.getGame(), copySA, chooseNewTargets);
     }
 
     @Override
