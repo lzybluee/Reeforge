@@ -864,7 +864,7 @@ public class ChangeZoneEffect extends SpellAbilityEffect {
             fetchList = (CardCollection)AbilityUtils.filterListByType(fetchList, sa.getParam("ChangeType"), sa);
         }
 
-        if (sa.hasParam("NoShuffle")) {
+        if (sa.hasParam("NoShuffle") || (sa.hasParam("Shuffle") && "False".equals(sa.getParam("Shuffle")))) {
             shuffleMandatory = false;
         }
 
