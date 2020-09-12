@@ -36,7 +36,7 @@ public interface IDevModeCheats {
 
     void addCardToExile();
 
-    void castASpell();
+    void castASpell(boolean mostCommon);
 
     void repeatLastAddition();
 
@@ -126,7 +126,7 @@ public interface IDevModeCheats {
         public void addCardToExile() {
         }
         @Override
-        public void castASpell() {
+        public void castASpell(boolean mostCommon) {
         }
         @Override
         public void repeatLastAddition() {

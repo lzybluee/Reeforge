@@ -2650,8 +2650,8 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         * @see forge.player.IDevModeCheats#addCardToExile()
         */
         @Override
-        public void castASpell() {
-            addCardToZone(ZoneType.Battlefield, false, false);
+        public void castASpell(boolean mostCommon) {
+            addCardToZone(ZoneType.Battlefield, false, false, mostCommon);
         }
 
         /*
@@ -2668,6 +2668,10 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         }
 
         private void addCardToZone(ZoneType zone, final boolean repeatLast, final boolean noTriggers) {
+        	addCardToZone(zone, repeatLast, noTriggers, false);
+        }
+
+        private void addCardToZone(ZoneType zone, final boolean repeatLast, final boolean noTriggers, final boolean mostCommon) {
             final ZoneType targetZone = repeatLast ? lastAddedZone : zone;
             String zoneStr = targetZone != ZoneType.Battlefield ? "in " + targetZone.name().toLowerCase()
                     : noTriggers ? "on the battlefield" : "on the stack / in play";
@@ -2680,8 +2684,18 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
             }
 
             final CardDb carddb = FModel.getMagicDb().getCommonCards();
-            final List<ICardFace> faces = Lists.newArrayList(carddb.getAllFaces());
-            Collections.sort(faces);
+            List<ICardFace> faces = null;
+            if(mostCommon) {
+                faces = Lists.newArrayList(carddb.getFaceByName("Plains"), carddb.getFaceByName("Island"),
+                		carddb.getFaceByName("Swamp"), carddb.getFaceByName("Mountain"), carddb.getFaceByName("Forest"),
+                		carddb.getFaceByName("Murder"), carddb.getFaceByName("Cancel"), carddb.getFaceByName("Cloudshift"), 
+                		carddb.getFaceByName("Sinkhole"), carddb.getFaceByName("Naturalize"), carddb.getFaceByName("Lightning Bolt"),
+                		carddb.getFaceByName("Grizzly Bears"), carddb.getFaceByName("Mind Rot"), carddb.getFaceByName("Swords to Plowshares"),
+                		carddb.getFaceByName("Brainstorm"), carddb.getFaceByName("Wrath of God"), carddb.getFaceByName("Vindicate"));
+            } else {
+            	faces = Lists.newArrayList(carddb.getAllFaces());
+            	Collections.sort(faces);
+            }
 
             // use standard forge's list selection dialog
             final ICardFace f = repeatLast ? lastAdded : getGui().oneOrNone("Name the card", faces);

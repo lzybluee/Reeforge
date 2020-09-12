@@ -172,11 +172,11 @@ public final class CDev implements ICDoc {
     private final MouseListener madCastASpell = new MouseAdapter() {
         @Override
         public void mousePressed(final MouseEvent e) {
-            castASpell();
+        	castASpell(e.getButton() == MouseEvent.BUTTON3);
         }
     };
-    public void castASpell() {
-        getController().cheat().castASpell();
+    public void castASpell(boolean mostCommon) {
+        getController().cheat().castASpell(mostCommon);
     }
 
     private final MouseListener madRepeatAddCard = new MouseAdapter() {
