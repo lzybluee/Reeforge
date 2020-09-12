@@ -214,7 +214,8 @@ public class CardFactory {
      * @param bCopyDetails
      *            a boolean.
      */
-    public final static SpellAbility copySpellAbilityAndPossiblyHost(final Card source, final Card original, final SpellAbility sa, final boolean bCopyDetails) {
+    public final static SpellAbility copySpellAbilityAndPossiblyHost(final Card source, final Card original, final SpellAbility sa,
+    		final boolean bCopyDetails, final SpellAbility sourceSa) {
         Player controller = sa.getActivatingPlayer();
 
         //it is only necessary to copy the host card if the SpellAbility is a spell, not an ability
@@ -257,7 +258,7 @@ public class CardFactory {
             copySA.setPaidHash(sa.getPaidHash());
         }
         
-        if(!original.getZone().is(ZoneType.Stack)) {
+        if(sourceSa.hasParam("CanSelectCharmEffect")) {
             copySA.setSVar("CanSelectCharmEffect", "true");
         }
 
