@@ -244,6 +244,19 @@ public class GameAction {
                     copied.setCounters(c.getCounters());
                 }
 
+                for (final SpellAbility sa : copied.getAllSpellAbilities()) {
+                    sa.setTemporarilySuppressed(false);
+                }
+                for (final Trigger t : copied.getTriggers()) {
+                    t.setSuppressed(false);
+                }
+                for (final StaticAbility s : copied.getStaticAbilities()) {
+                    s.setTemporarilySuppressed(false);
+                }
+                for (final ReplacementEffect re : copied.getReplacementEffects()) {
+                    re.setTemporarilySuppressed(false);
+                }
+
                 // ensure that any leftover keyword/type changes are cleared in the state view
                 copied.updateStateForView();
             } else { //Token
