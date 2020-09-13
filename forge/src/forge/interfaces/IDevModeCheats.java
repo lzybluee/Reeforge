@@ -26,15 +26,15 @@ public interface IDevModeCheats {
 
     void winGame(boolean lose);
 
-    void addCardToHand();
+    void addCardToHand(boolean mostCommon);
 
-    void addCardToBattlefield();
+    void addCardToBattlefield(boolean mostCommon);
 
-    void addCardToLibrary();
+    void addCardToLibrary(boolean mostCommon);
 
-    void addCardToGraveyard();
+    void addCardToGraveyard(boolean mostCommon);
 
-    void addCardToExile();
+    void addCardToExile(boolean mostCommon);
 
     void castASpell(boolean mostCommon);
 
@@ -105,7 +105,7 @@ public interface IDevModeCheats {
         public void removeCountersFromPermanent(boolean player) {
         }
         @Override
-        public void addCardToHand() {
+        public void addCardToHand(boolean mostCommon) {
         }
         @Override
         public void exileCardsFromHand() {
@@ -114,16 +114,16 @@ public interface IDevModeCheats {
         public void exileCardsFromBattlefield() {
         }
         @Override
-        public void addCardToBattlefield() {
+        public void addCardToBattlefield(boolean mostCommon) {
         }
         @Override
-        public void addCardToLibrary() {
+        public void addCardToLibrary(boolean mostCommon) {
         }
         @Override
-        public void addCardToGraveyard() {
+        public void addCardToGraveyard(boolean mostCommon) {
         }
         @Override
-        public void addCardToExile() {
+        public void addCardToExile(boolean mostCommon) {
         }
         @Override
         public void castASpell(boolean mostCommon) {

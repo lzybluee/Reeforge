@@ -2600,8 +2600,8 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
          * @see forge.player.IDevModeCheats#addCardToHand()
          */
         @Override
-        public void addCardToHand() {
-            addCardToZone(ZoneType.Hand, false, false);
+        public void addCardToHand(boolean mostCommon) {
+            addCardToZone(ZoneType.Hand, false, false, mostCommon);
         }
 
         /*
@@ -2610,8 +2610,8 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
          * @see forge.player.IDevModeCheats#addCardToBattlefield()
          */
         @Override
-        public void addCardToBattlefield() {
-            addCardToZone(ZoneType.Battlefield, false, true);
+        public void addCardToBattlefield(boolean mostCommon) {
+            addCardToZone(ZoneType.Battlefield, false, true, mostCommon);
         }
 
         /*
@@ -2620,8 +2620,8 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
          * @see forge.player.IDevModeCheats#addCardToLibrary()
          */
         @Override
-        public void addCardToLibrary() {
-            addCardToZone(ZoneType.Library, false, false);
+        public void addCardToLibrary(boolean mostCommon) {
+            addCardToZone(ZoneType.Library, false, false, mostCommon);
         }
 
         /*
@@ -2630,8 +2630,8 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
          * @see forge.player.IDevModeCheats#addCardToGraveyard()
          */
         @Override
-        public void addCardToGraveyard() {
-            addCardToZone(ZoneType.Graveyard, false, false);
+        public void addCardToGraveyard(boolean mostCommon) {
+            addCardToZone(ZoneType.Graveyard, false, false, mostCommon);
         }
 
         /*
@@ -2640,8 +2640,8 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
          * @see forge.player.IDevModeCheats#addCardToExile()
          */
         @Override
-        public void addCardToExile() {
-            addCardToZone(ZoneType.Exile, false, false);
+        public void addCardToExile(boolean mostCommon) {
+            addCardToZone(ZoneType.Exile, false, false, mostCommon);
         }
 
         /*
@@ -2664,11 +2664,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
             if (lastAdded == null || lastAddedZone == null) {
                 return;
             }
-            addCardToZone(null, true, lastTrigs);
-        }
-
-        private void addCardToZone(ZoneType zone, final boolean repeatLast, final boolean noTriggers) {
-        	addCardToZone(zone, repeatLast, noTriggers, false);
+            addCardToZone(null, true, lastTrigs, false);
         }
 
         private void addCardToZone(ZoneType zone, final boolean repeatLast, final boolean noTriggers, final boolean mostCommon) {
@@ -2691,7 +2687,7 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
                 		carddb.getFaceByName("Murder"), carddb.getFaceByName("Cancel"), carddb.getFaceByName("Cloudshift"), 
                 		carddb.getFaceByName("Sinkhole"), carddb.getFaceByName("Naturalize"), carddb.getFaceByName("Lightning Bolt"),
                 		carddb.getFaceByName("Grizzly Bears"), carddb.getFaceByName("Mind Rot"), carddb.getFaceByName("Swords to Plowshares"),
-                		carddb.getFaceByName("Brainstorm"), carddb.getFaceByName("Wrath of God"), carddb.getFaceByName("Vindicate"));
+                		carddb.getFaceByName("Brainstorm"), carddb.getFaceByName("Act of Treason"), carddb.getFaceByName("Evolving Wilds"));
             } else {
             	faces = Lists.newArrayList(carddb.getAllFaces());
             	Collections.sort(faces);

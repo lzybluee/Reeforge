@@ -132,41 +132,41 @@ public final class CDev implements ICDoc {
     private final MouseListener madCardToHand = new MouseAdapter() {
         @Override
         public void mousePressed(final MouseEvent e) {
-            addCardToHand();
+            addCardToHand(e.getButton() == MouseEvent.BUTTON3);
         }
     };
-    public void addCardToHand() {
-        getController().cheat().addCardToHand();
+    public void addCardToHand(boolean mostCommon) {
+        getController().cheat().addCardToHand(mostCommon);
     }
 
     private final MouseListener madCardToLibrary = new MouseAdapter() {
         @Override
         public void mousePressed(final MouseEvent e) {
-            addCardToLibrary();
+            addCardToLibrary(e.getButton() == MouseEvent.BUTTON3);
         }
     };
-    public void addCardToLibrary() {
-        getController().cheat().addCardToLibrary();
+    public void addCardToLibrary(boolean mostCommon) {
+        getController().cheat().addCardToLibrary(mostCommon);
     }
 
     private final MouseListener madCardToGraveyard = new MouseAdapter() {
         @Override
         public void mousePressed(final MouseEvent e) {
-            addCardToGraveyard();
+            addCardToGraveyard(e.getButton() == MouseEvent.BUTTON3);
         }
     };
-    public void addCardToGraveyard() {
-        getController().cheat().addCardToGraveyard();
+    public void addCardToGraveyard(boolean mostCommon) {
+        getController().cheat().addCardToGraveyard(mostCommon);
     }
 
     private final MouseListener madCardToExile = new MouseAdapter() {
         @Override
         public void mousePressed(final MouseEvent e) {
-            addCardToExile();
+            addCardToExile(e.getButton() == MouseEvent.BUTTON3);
         }
     };
-    public void addCardToExile() {
-        getController().cheat().addCardToExile();
+    public void addCardToExile(boolean mostCommon) {
+        getController().cheat().addCardToExile(mostCommon);
     }
 
     private final MouseListener madCastASpell = new MouseAdapter() {
@@ -262,11 +262,11 @@ public final class CDev implements ICDoc {
     private final MouseListener madCardToBattlefield = new MouseAdapter() {
         @Override
         public void mousePressed(final MouseEvent e) {
-            addCardToBattlefield();
+            addCardToBattlefield(e.getButton() == MouseEvent.BUTTON3);
         }
     };
-    public void addCardToBattlefield() {
-        getController().cheat().addCardToBattlefield();
+    public void addCardToBattlefield(boolean mostCommon) {
+        getController().cheat().addCardToBattlefield(mostCommon);
     }
 
     private final MouseListener madExileFromPlay = new MouseAdapter() {
