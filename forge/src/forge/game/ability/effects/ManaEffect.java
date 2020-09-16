@@ -114,7 +114,7 @@ public class ManaEffect extends SpellAbilityEffect {
                                 } else if(new_colors.size() > 1) {
                                     chosenColor = activator.getController().chooseColor("Select Mana to Produce", sa, ColorSet.fromNames(new_colors));
                                 } else {
-                                    chosenColor = activator.getController().chooseColor("Select Mana to Produce", sa, colorOptions);
+                                    chosenColor = MagicColor.fromName(MagicColor.toLongString(colorOptions.iterator().next()));
                                 }
                             }
                             else {

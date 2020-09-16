@@ -115,7 +115,7 @@ public class ManaReflectedEffect extends SpellAbilityEffect {
                                 new_colors.add("colorless");
                             }
                         }
-                        
+
                         if(new_colors.size() == 1) {
                             baseMana = MagicColor.toShortString(new_colors.iterator().next());
                         } else if(new_colors.size() > 1) {
