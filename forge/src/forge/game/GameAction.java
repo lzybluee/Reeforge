@@ -254,7 +254,7 @@ public class GameAction {
                     s.setTemporarilySuppressed(false);
                 }
                 for (final ReplacementEffect re : copied.getReplacementEffects()) {
-                    re.setTemporarilySuppressed(false);
+                    re.setSuppressed(false);
                 }
 
                 // ensure that any leftover keyword/type changes are cleared in the state view

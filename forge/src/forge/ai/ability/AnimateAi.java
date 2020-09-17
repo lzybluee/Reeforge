@@ -561,14 +561,14 @@ public class AnimateAi extends SpellAbilityAi {
             }
         }
 
-        // suppress static abilities from the animated card
+        // suppress replacement effects from the animated card
         final List<ReplacementEffect> removedReplacements = Lists.newArrayList();
         if (sa.hasParam("OverwriteReplacements") || removeAll || removeIntrinsic) {
             for (final ReplacementEffect re : card.getReplacementEffects()) {
                 if (removeIntrinsic && !re.isIntrinsic()) {
                     continue;
                 }
-                re.setTemporarilySuppressed(true);
+                re.setSuppressed(true);
                 removedReplacements.add(re);
             }
         }
