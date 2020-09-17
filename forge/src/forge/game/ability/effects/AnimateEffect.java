@@ -266,7 +266,7 @@ public class AnimateEffect extends AnimateEffectBase {
                     if (removeIntrinsic && !re.isIntrinsic()) {
                         continue;
                     }
-                    re.setTemporarilySuppressed(true);
+                    re.setSuppressed(true);
                     removedReplacements.add(re);
                 }
             }
@@ -302,7 +302,7 @@ public class AnimateEffect extends AnimateEffectBase {
 
                     // give back suppressed replacement effects
                     for (final ReplacementEffect re : removedReplacements) {
-                        re.setTemporarilySuppressed(false);
+                        re.setSuppressed(false);
                     }
 
                     c.updateStateForView();
