@@ -1416,6 +1416,7 @@ public class ComputerUtilMana {
                 if (mp.isSnow()) {
                     manaMap.get(ManaAtom.IS_SNOW).add(m);
                 }
+                mp.setManaReplaceType("");
                 if (DEBUG_MANA_PAYMENT) {
                     System.out.println("DEBUG_MANA_PAYMENT: groupSourcesByManaColor manaMap  = " + manaMap);
                 }
