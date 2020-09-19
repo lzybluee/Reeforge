@@ -4506,7 +4506,7 @@ public class Card extends GameEntity implements Comparable<Card> {
     }
 
     protected int addCombatDamageBase(final int damage, final Card source, CardDamageMap damageMap) {
-        if (isInPlay()) {
+        if (isInPlay() && !isPhasedOut()) {
             return super.addCombatDamageBase(damage, source, damageMap);
         }
         return 0;
