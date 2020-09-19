@@ -249,7 +249,7 @@ public class CardFactory {
             copySA.setPayCosts(new Cost("", sa.isAbility()));
         }
         if (sa.getTargetRestrictions() != null) {
-            TargetRestrictions target = new TargetRestrictions(sa.getTargetRestrictions());
+            TargetRestrictions target = new TargetRestrictions(sa.getTargetRestrictions(), true);
             copySA.setTargetRestrictions(target);
         }
         copySA.setActivatingPlayer(controller);
