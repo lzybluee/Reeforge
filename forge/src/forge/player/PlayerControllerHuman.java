@@ -1007,6 +1007,10 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
         final TargetChoices oldTarget = sa.getTargets();
         final TargetSelection select = new TargetSelection(this, sa);
         sa.resetTargets();
+        final TargetRestrictions tg = sa.getTargetRestrictions();
+        if (tg != null) {
+            tg.calculateStillToDivide(sa.getParam("DividedAsYouChoose"), sa.getHostCard(), sa);
+        }
         if (select.chooseTargets(oldTarget.getNumTargeted(), true)) {
             return sa.getTargets();
         } else {
