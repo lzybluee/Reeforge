@@ -338,6 +338,12 @@ public class AbilityManaPart implements java.io.Serializable {
                 }
             }
 
+            if(restriction.equals("Card.Colorless")) {
+                if (sa.isSpell() && sa.getHostCard().isCreature() && sa.isCastFaceDown()) {
+                    return true;
+                }
+            }
+
             if (sa.isValid(restriction, this.getSourceCard().getController(), this.getSourceCard(), null)) {
                 return true;
             }
