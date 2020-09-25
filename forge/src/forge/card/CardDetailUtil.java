@@ -275,6 +275,13 @@ public class CardDetailUtil {
             area.append("\n");
         }
 
+        if(state.isPlaneswalker()) {
+        	if (area.length() != 0) {
+                area.append("\n");
+            }
+            area.append("Planeswalker ability activated this turn : " + card.getPwAbilityActivited());
+        }
+
         // card text
         if (area.length() != 0) {
             area.append("\n");
@@ -297,13 +304,6 @@ public class CardDetailUtil {
 
         if (area.length() != 0) {
             area.append("\n");
-        }
-
-        if(state.isPlaneswalker()) {
-        	if (area.length() != 0) {
-                area.append("\n");
-            }
-            area.append("Planeswalker ability activated this turn : " + card.getPwAbilityActivited());
         }
 
         if (card.isPhasedOut()) {
