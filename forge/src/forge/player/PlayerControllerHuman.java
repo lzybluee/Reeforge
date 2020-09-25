@@ -2688,11 +2688,10 @@ public class PlayerControllerHuman extends PlayerController implements IGameCont
             if(mostCommon) {
                 faces = Lists.newArrayList(carddb.getFaceByName("Plains"), carddb.getFaceByName("Island"),
                 		carddb.getFaceByName("Swamp"), carddb.getFaceByName("Mountain"), carddb.getFaceByName("Forest"),
-                		carddb.getFaceByName("Murder"), carddb.getFaceByName("Cancel"), carddb.getFaceByName("One with Nothing"),
-                		carddb.getFaceByName("Cloudshift"), carddb.getFaceByName("Sinkhole"), carddb.getFaceByName("Naturalize"),
-                		carddb.getFaceByName("Lightning Bolt"), carddb.getFaceByName("Unsummon"), carddb.getFaceByName("Act of Treason"),
-                		carddb.getFaceByName("Swords to Plowshares"), carddb.getFaceByName("Brainstorm"), carddb.getFaceByName("Grizzly Bears"),
-                		carddb.getFaceByName("Resurrection"), carddb.getFaceByName("Evolving Wilds"));
+                		carddb.getFaceByName("Vindicate"), carddb.getFaceByName("Cancel"), carddb.getFaceByName("One with Nothing"),
+                		carddb.getFaceByName("Cloudshift"), carddb.getFaceByName("Lightning Bolt"), carddb.getFaceByName("Unsummon"),
+                		carddb.getFaceByName("Regrowth"), carddb.getFaceByName("Swords to Plowshares"), carddb.getFaceByName("Brainstorm"),
+                		carddb.getFaceByName("Grizzly Bears"), carddb.getFaceByName("Act of Treason"), carddb.getFaceByName("Evolving Wilds"));
             } else {
             	faces = Lists.newArrayList(carddb.getAllFaces());
             	Collections.sort(faces);
