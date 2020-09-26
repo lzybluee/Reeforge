@@ -268,6 +268,7 @@ public class GameAction {
         if (toBattlefield && game.getStaticEffects().getGlobalRuleChange(GlobalRuleChange.noLandBattlefield)) {
             // something that is already a Land cant enter the battlefield
             if (c.isLand()) {
+            	game.addCard(c.getId(), c);
                 return c;
             }
             // check if something would be a land
@@ -328,9 +329,12 @@ public class GameAction {
     
                     if (game.getStack().isResolving(c) && !zoneTo.is(ZoneType.Graveyard) && repres == ReplacementResult.Prevented) {
                     	copied.getOwner().removeInboundToken(copied);
-                    	return moveToGraveyard(c, cause, params);
+                    	Card mc = moveToGraveyard(c, cause, params);
+	                    game.addCard(mc.getId(), mc);
+	                    return mc;
                     }
                     copied.getOwner().removeInboundToken(copied);
+                    game.addCard(c.getId(), c);
                     return c;
                 }
             }
