@@ -280,7 +280,7 @@ public class CardDetailUtil {
                 area.append("\n");
             }
             area.append("> Planeswalker ability activated this turn : " + card.getPwAbilityActivited());
-            area.append(".\n");
+            area.append("\n");
         }
 
         // card text
