@@ -268,6 +268,7 @@ public class GameAction {
         if (toBattlefield && game.getStaticEffects().getGlobalRuleChange(GlobalRuleChange.noLandBattlefield)) {
             // something that is already a Land cant enter the battlefield
             if (c.isLand()) {
+                game.addCard(c.getId(), c);
                 return c;
             }
             // check if something would be a land
