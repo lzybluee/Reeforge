@@ -271,7 +271,13 @@ public class TriggerSpellAbilityCast extends Trigger {
         sa.setTriggeringObject("Card", castSA.getHostCard());
         sa.setTriggeringObject("SpellAbility", castSA);
         sa.setTriggeringObject("StackInstance", si);
-        sa.setTriggeringObject("SpellAbilityTargetingCards", (si != null ? si.getSpellAbility(true) : castSA).getTargets().getTargetCards());
+        CardCollection targets = new CardCollection();
+        SpellAbility ability = (si != null ? si.getSpellAbility(true) : castSA);
+        while(ability != null) {
+        	targets.addAll(ability.getTargets().getTargetCards());
+        	ability = ability.getSubAbility();
+        }
+        sa.setTriggeringObject("SpellAbilityTargetingCards", targets);
         sa.setTriggeringObject("Player", getRunParams().get("Player"));
         sa.setTriggeringObject("Activator", getRunParams().get("Activator"));
         sa.setTriggeringObject("CurrentStormCount", getRunParams().get("CurrentStormCount"));
