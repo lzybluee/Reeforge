@@ -616,7 +616,13 @@ public class AiAttackController {
             // 2. attack planeswalkers
             List<Card> pwDefending = c.getDefendingPlaneswalkers();
             if (!pwDefending.isEmpty()) {
-                return pwDefending.get(0);
+            	Card pw = pwDefending.get(0);
+                for(Card p : pwDefending) {
+                	if(p != pw && p.getCurrentLoyalty() > pw.getCurrentLoyalty()) {
+                		pw = p;
+                	}
+                }
+                return pw;
             } else {
                 return prefDefender;
             }

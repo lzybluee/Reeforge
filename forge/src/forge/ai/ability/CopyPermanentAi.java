@@ -5,6 +5,7 @@ import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
 import forge.ai.*;
 import forge.game.Game;
+import forge.game.GameEntity;
 import forge.game.ability.AbilityUtils;
 import forge.game.card.*;
 import forge.game.card.CardPredicates.Presets;
@@ -192,4 +193,25 @@ public class CopyPermanentAi extends SpellAbilityAi {
         return chosen != null ? chosen.getController() : Iterables.getFirst(options, null);
     }
 
+    @Override
+    protected GameEntity chooseSinglePlayerOrPlaneswalker(Player ai, SpellAbility sa, Iterable<GameEntity> options) {
+    	if(sa.hasParam("CopyAttacking") && "True".equals(sa.getParam("CopyAttacking"))) {
+        	Card pw = null;
+        	for(GameEntity ge : options) {
+        		if(ge instanceof Card) {
+        			Card p = (Card)ge;
+        			if(!p.isPlaneswalker()) {
+        				continue;
+        			}
+        			if(pw == null || p.getCurrentLoyalty() > pw.getCurrentLoyalty()) {
+        				pw = p;
+        			}
+        		}
+        	}
+        	if(pw != null) {
+        		return pw;
+        	}
+    	}
+    	return Iterables.getFirst(options, null);
+    }
 }
