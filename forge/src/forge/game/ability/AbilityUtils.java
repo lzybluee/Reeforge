@@ -1269,7 +1269,7 @@ public class AbilityUtils {
                 s = (SpellAbility) o;
                 // if there is no target information in SA but targets are listed in SpellAbilityTargeting cards, copy that
                 // information so it's not lost if the calling code is interested in targets of the triggered SA.
-                if (triggeringType.equals("SpellAbility")) {
+                if (triggeringType.equals("SpellAbility") && s.getApi() != ApiType.Charm) {
                     final CardCollectionView tgtList = (CardCollectionView)root.getTriggeringObject("SpellAbilityTargetingCards");
                     if (s.getTargets() != null && s.getTargets().getNumTargeted() == 0) {
                         if (tgtList != null && tgtList.size() > 0) {
