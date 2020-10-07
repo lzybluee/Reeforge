@@ -153,6 +153,19 @@ public class CloneEffect extends SpellAbilityEffect {
             CardFactory.copyState(cardToCopy, CardStateName.Cloned, tgtCard, origState);
         }
 
+        for (final SpellAbility sp : tgtCard.getAllSpellAbilities()) {
+            sp.setTemporarilySuppressed(false);
+        }
+        for (final Trigger tr : tgtCard.getTriggers()) {
+            tr.setSuppressed(false);
+        }
+        for (final StaticAbility st : tgtCard.getStaticAbilities()) {
+            st.setTemporarilySuppressed(false);
+        }
+        for (final ReplacementEffect re : tgtCard.getReplacementEffects()) {
+            re.setSuppressed(false);
+        }
+
         // add extra abilities as granted by the copy effect
         addExtraCharacteristics(tgtCard, sa, origSVars);
 

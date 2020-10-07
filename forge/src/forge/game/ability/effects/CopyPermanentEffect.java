@@ -25,6 +25,7 @@ import forge.game.card.token.TokenInfo;
 import forge.game.combat.Combat;
 import forge.game.event.GameEventCombatChanged;
 import forge.game.player.Player;
+import forge.game.replacement.ReplacementEffect;
 import forge.game.spellability.SpellAbility;
 import forge.game.staticability.StaticAbility;
 import forge.game.trigger.Trigger;
@@ -194,6 +195,20 @@ public class CopyPermanentEffect extends SpellAbilityEffect {
                 for (int i = 0; i < result.getRight(); i++) {
                     final Card copy = CardFactory.copyCopiableCharacteristics(c, result.getLeft());
                     copy.setToken(true);
+
+                    for (final SpellAbility sp : copy.getAllSpellAbilities()) {
+                        sp.setTemporarilySuppressed(false);
+                    }
+                    for (final Trigger tr : copy.getTriggers()) {
+                        tr.setSuppressed(false);
+                    }
+                    for (final StaticAbility st : copy.getStaticAbilities()) {
+                        st.setTemporarilySuppressed(false);
+                    }
+                    for (final ReplacementEffect re : copy.getReplacementEffects()) {
+                        re.setSuppressed(false);
+                    }
+
                     copy.setCopiedPermanent(c);
                     // add keywords from sa
                     for (final String kw : keywords) {
