@@ -1,5 +1,7 @@
 package forge.game.ability.effects;
 
+import forge.GameCommand;
+import forge.game.Game;
 import forge.game.GameEntity;
 import forge.game.ability.AbilityUtils;
 import forge.game.ability.SpellAbilityEffect;
@@ -46,12 +48,14 @@ public class MustAttackEffect extends SpellAbilityEffect {
         return sb.toString();
     }
 
-    @Override
+    @SuppressWarnings("serial")
+	@Override
     public void resolve(SpellAbility sa) {
         final List<Player> tgtPlayers = getTargetPlayers(sa);
         final TargetRestrictions tgt = sa.getTargetRestrictions();
         final String defender = sa.getParam("Defender");
         final boolean thisTurn = sa.hasParam("ThisTurn");
+        final boolean nextTurn = sa.hasParam("NextTurn");
         GameEntity entity = null;
         if (defender.equals("Self")) {
             entity = sa.getHostCard();
@@ -73,6 +77,17 @@ public class MustAttackEffect extends SpellAbilityEffect {
             if (((tgt == null) || p.canBeTargetedBy(sa)) && p != entity) {
                 if (thisTurn) {
                     p.setMustAttackEntityThisTurn(entity);
+                } else if (nextTurn) {
+                	final Game game = sa.getActivatingPlayer().getGame();
+                	final GameEntity attackEntity = entity;
+                	game.getUntap().addUntil(p, new GameCommand() {
+                        @Override
+                        public void run() {
+                        	if(game.getPlayers().contains(p) && game.getPlayers().contains(attackEntity)) {
+                        		p.setMustAttackEntityThisTurn(attackEntity);
+                        	}
+                        }
+                    });
                 } else {
                     p.setMustAttackEntity(entity);
                 }

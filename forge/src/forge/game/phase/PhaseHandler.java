@@ -785,6 +785,7 @@ public class PhaseHandler implements java.io.Serializable {
         game.getStack().onNextTurn();
         // reset mustAttackEntity
         playerTurn.setMustAttackEntity(null);
+        playerTurn.setMustAttackEntityThisTurn(null);
 
         for (final Player p1 : game.getPlayers()) {
             for (final ZoneType z : Player.ALL_ZONES) {
