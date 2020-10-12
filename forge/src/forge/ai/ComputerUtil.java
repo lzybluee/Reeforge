@@ -2871,7 +2871,7 @@ public class ComputerUtil {
                 // at this point, we're assuming that card will be castable from whichever zone it's in by the AI player.
                 abTest.setActivatingPlayer(ai);
                 abTest.getRestrictions().setZone(c.getZone().getZoneType());
-                final boolean play = AiPlayDecision.WillPlay == aic.canPlaySa(abTest);
+                final boolean play = (AiPlayDecision.WillPlay == aic.canPlaySa(abTest)) || "Snapcaster".equals(sa.getParam("AILogic"));
                 final boolean pay = ComputerUtilCost.canPayCost(abTest, ai);
                 if (play && pay) {
                     targetSpellCard = c;
@@ -2880,6 +2880,10 @@ public class ComputerUtil {
             }
         }
         if (targetSpellCard == null) {
+        	if(!options.isEmpty() && "Snapcaster".equals(sa.getParam("AILogic"))) {
+        		sa.getTargets().add(options.get(0));
+        		return true;
+        	}
             return false;
         } else {
             sa.getTargets().add(targetSpellCard);
