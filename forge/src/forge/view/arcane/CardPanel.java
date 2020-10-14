@@ -27,6 +27,7 @@ import forge.game.card.CardView;
 import forge.game.card.CardView.CardStateView;
 import forge.game.keyword.Keyword;
 import forge.game.player.PlayerView;
+import forge.game.zone.ZoneType;
 import forge.game.card.CounterType;
 import forge.gui.CardContainer;
 import forge.item.PaperCard;
@@ -682,16 +683,18 @@ public class CardPanel extends SkinnedPanel implements CardContainer, IDisposabl
         damageText.setText(damage > 0 ? "\u00BB " + String.valueOf(damage) + " \u00AB" : "");
 
         // Card Id overlay
-        cardIdText.setText(card.getCurrentState().getDisplayId());
+        boolean sickness = card.getCurrentState().getCard().getZone() == ZoneType.Battlefield && card.getCurrentState().getCard().isFirstTurnControlled();
+        cardIdText.setText((sickness ? "(" : "") + card.getCurrentState().getDisplayId() + (sickness ? ")" : ""));
     }
 
     public final void updatePTOverlay() {
         // P/T overlay
         final CardStateView state = card.getCurrentState();
         String sPt = "";
+        boolean activated = state.getCard().getPwAbilityActivited() > 0;
         if (state.isCreature() && state.isPlaneswalker()) {
             sPt = state.getPower() + "/" + state.getToughness() +
-                    " (" + String.valueOf(state.getLoyalty()) + ")";
+            		(activated ? " \u00AB" : " (") + state.getLoyalty() + (activated ? "\u00BB" : ")");
         }
         else if (state.isCreature()) {
             sPt = state.getPower() + "/" + state.getToughness();
@@ -700,7 +703,7 @@ public class CardPanel extends SkinnedPanel implements CardContainer, IDisposabl
             sPt = "[" + state.getPower() + "/" + state.getToughness() + "]";
         }
         else if (state.isPlaneswalker()) {
-            sPt = String.valueOf(state.getLoyalty());
+            sPt = (activated ? "\u00AB" : "") + state.getLoyalty() + (activated ? "\u00BB" : "");
         }
         ptText.setText(sPt);
     }
