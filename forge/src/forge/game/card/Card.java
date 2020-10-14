@@ -5972,10 +5972,12 @@ public class Card extends GameEntity implements Comparable<Card> {
     public void resetPwAbilityActivited() {
     	pwAbilityActivated = 0;
     	view.updatePwAbilityActivited(pwAbilityActivated);
+    	game.fireEvent(new GameEventCardStatsChanged(this));
     }
 
     public void increasePwAbilityActivited() {
     	pwAbilityActivated++;
     	view.updatePwAbilityActivited(pwAbilityActivated);
+    	game.fireEvent(new GameEventCardStatsChanged(this));
     }
 }
