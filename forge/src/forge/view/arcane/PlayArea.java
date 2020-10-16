@@ -914,7 +914,56 @@ public class PlayArea extends CardPanelContainer implements CardPanelMouseListen
          * the same get stacked.
          */
         private void addAllOthers(final List<CardPanel> cardPanels, final RowType type) {
-            for (final CardPanel panel : cardPanels) {
+        	List<CardPanel> sortedPanels = new ArrayList<>();
+        	for (final CardPanel panel : cardPanels) {
+        		if(!sortedPanels.contains(panel) && panel.getCard().getCurrentState().isPlaneswalker() && !panel.getCard().isToken()) {
+        			sortedPanels.add(panel);
+        		}
+        	}
+        	for (final CardPanel panel : cardPanels) {
+        		if(!sortedPanels.contains(panel) && panel.getCard().getCurrentState().isArtifact() && !panel.getCard().getCurrentState().isEnchantment()
+        				&& !panel.getCard().isToken()) {
+        			sortedPanels.add(panel);
+        		}
+        	}
+        	for (final CardPanel panel : cardPanels) {
+        		if(!sortedPanels.contains(panel) && panel.getCard().getCurrentState().isArtifact() && panel.getCard().getCurrentState().isEnchantment()
+        				&& !panel.getCard().isToken()) {
+        			sortedPanels.add(panel);
+        		}
+        	}
+        	for (final CardPanel panel : cardPanels) {
+        		if(!sortedPanels.contains(panel) && panel.getCard().getCurrentState().isEnchantment() && !panel.getCard().isToken()) {
+        			sortedPanels.add(panel);
+        		}
+        	}
+        	for (final CardPanel panel : cardPanels) {
+        		if(!sortedPanels.contains(panel) && panel.getCard().getCurrentState().isPlaneswalker()) {
+        			sortedPanels.add(panel);
+        		}
+        	}
+        	for (final CardPanel panel : cardPanels) {
+        		if(!sortedPanels.contains(panel) && panel.getCard().getCurrentState().isArtifact() && !panel.getCard().getCurrentState().isEnchantment()) {
+        			sortedPanels.add(panel);
+        		}
+        	}
+        	for (final CardPanel panel : cardPanels) {
+        		if(!sortedPanels.contains(panel) && panel.getCard().getCurrentState().isArtifact() && panel.getCard().getCurrentState().isEnchantment()) {
+        			sortedPanels.add(panel);
+        		}
+        	}
+        	for (final CardPanel panel : cardPanels) {
+        		if(!sortedPanels.contains(panel) && panel.getCard().getCurrentState().isEnchantment()) {
+        			sortedPanels.add(panel);
+        		}
+        	}
+        	for (final CardPanel panel : cardPanels) {
+        		if(!sortedPanels.contains(panel)) {
+        			sortedPanels.add(panel);
+        		}
+        	}
+
+            for (final CardPanel panel : sortedPanels) {
                 if (!type.isGoodFor(panel.getCard().getCurrentState()) || (panel.getAttachedToPanel() != null)) {
                     continue;
                 }

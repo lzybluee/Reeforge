@@ -1019,6 +1019,12 @@ public class CardView extends GameEntityView {
         public boolean isPlaneswalker() {
             return getType().isPlaneswalker();
         }
+        public boolean isArtifact() {
+            return getType().isArtifact();
+        }
+        public boolean isEnchantment() {
+            return getType().isEnchantment();
+        }
     }
 
     //special methods for updating card and player properties as needed and returning the new collection
